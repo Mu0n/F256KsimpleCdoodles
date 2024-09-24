@@ -57,20 +57,20 @@
       30       30        0     1         __zp_data_start = .
       30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30       16     1 .zp.bss
+      30       30       18     1 .zp.bss
       30       30        0     1         __zp_bss_start = .
-      30       30       16     1         myTimer.lto.o:(.zp.bss)
+      30       30       18     1         myTimer.lto.o:(.zp.bss)
       30       30        7     1                 kernelEventData
       37       37        1     1                 _MAX_COL
       38       38        1     1                 _col
       39       39        1     1                 _row
       3a       3a        2     1                 __putchar.s
-      3c       3c        5     1                 animFrame
-      41       41        5     1                 delays
-      46       46        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      46       46        f     1 .zp
-      46       46        f     1         myTimer.lto.o:(.zp.noinit)
-     300      300      ab2     1 .text
+      3c       3c        6     1                 animFrame
+      42       42        6     1                 delays
+      48       48        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      48       48       10     1 .zp
+      48       48       10     1         myTimer.lto.o:(.zp.noinit)
+     300      300      af9     1 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -94,59 +94,59 @@
      627      627       a6     1                 textClear
      6cd      6cd        6     1         myTimer.lto.o:(.text.main)
      6cd      6cd        6     1                 main
-     6d3      6d3      285     1         myTimer.lto.o:(.text.f256main)
-     6d3      6d3      285     1                 f256main
-     958      958      201     1         myTimer.lto.o:(.text.textPrint)
-     958      958      201     1                 textPrint
-     b59      b59       bb     1         myTimer.lto.o:(.text.textPrintUInt)
-     b59      b59       bb     1                 textPrintUInt
-     c14      c14        5     1         myTimer.lto.o:(.text.exit)
-     c14      c14        5     1                 exit
-     c19      c19       20     1         myTimer.lto.o:(.text.__memset)
-     c19      c19       20     1                 __memset
-     c39      c39       32     1         myTimer.lto.o:(.text.__mulhi3)
-     c39      c39       32     1                 __mulhi3
-     c6b      c6b      147     1         myTimer.lto.o:(.text.__umodsi3)
-     c6b      c6b      147     1                 __umodsi3
-     db2      db2        0     1         __init_array_start = .
-     db2      db2        0     1         __init_array_end = .
-     db2      db2        0     1         __fini_array_start = .
-     db2      db2        0     1         __fini_array_end = .
-     db2      db2       86     1 .rodata
-     db2      db2       30     1         myTimer.lto.o:(.rodata.textColors)
-     db2      db2       30     1                 textColors
-     de2      de2       56     1         <internal>:(.rodata.str1.1)
-     e38      e38        0     1 .data
-     e38      e38        0     1         __data_start = .
-     e38      e38        0     1         __data_end = .
-     e38      e38        0     1 __data_load_start = LOADADDR(.data)
-     e38      e38        0     1 __data_size = SIZEOF(.data)
-     e38      e38       10     1 .bss
-     e38      e38        0     1         __bss_start = .
-     e38      e38        1     1         myTimer.lto.o:(.bss.kernelError)
-     e38      e38        1     1                 kernelError
-     e39      e39        f     1         myTimer.lto.o:(.bss.myTimers)
-     e39      e39        f     1                 myTimers
-     e48      e48        0     1         __bss_end = .
-     e48      e48        0     1 __bss_size = SIZEOF(.bss)
-     e48      e48        0     1 .noinit
-     e48      e48        0     1         __heap_start = ALIGN(., 2)
-     e48      e48        0     1 end_block8 = .
-     e48      e48        0     1 end_block9 = .
-     e48      e48        0     1 end_block10 = .
-     e48      e48        0     1 end_block11 = .
-     e48      e48        0     1 end_block12 = .
-     e48      e48        0     1 end_block13 = .
-     e48      e48        0     1 end_block14 = .
-     e48      e48        0     1 end_block15 = .
-     e48      e48        0     1 end_block16 = .
-     e48      e48        0     1 end_block17 = .
-     e48      e48        0     1 end_block18 = .
-     e48      e48        0     1 end_block19 = .
-     e48      e48        0     1 end_block20 = .
-     e48      e48        0     1 end_block21 = .
-     e48      e48        0     1 end_block22 = .
-     e48      e48        0     1 end_block23 = .
+     6d3      6d3      2cc     1         myTimer.lto.o:(.text.f256main)
+     6d3      6d3      2cc     1                 f256main
+     99f      99f      201     1         myTimer.lto.o:(.text.textPrint)
+     99f      99f      201     1                 textPrint
+     ba0      ba0       bb     1         myTimer.lto.o:(.text.textPrintUInt)
+     ba0      ba0       bb     1                 textPrintUInt
+     c5b      c5b        5     1         myTimer.lto.o:(.text.exit)
+     c5b      c5b        5     1                 exit
+     c60      c60       20     1         myTimer.lto.o:(.text.__memset)
+     c60      c60       20     1                 __memset
+     c80      c80       32     1         myTimer.lto.o:(.text.__mulhi3)
+     c80      c80       32     1                 __mulhi3
+     cb2      cb2      147     1         myTimer.lto.o:(.text.__umodsi3)
+     cb2      cb2      147     1                 __umodsi3
+     df9      df9        0     1         __init_array_start = .
+     df9      df9        0     1         __init_array_end = .
+     df9      df9        0     1         __fini_array_start = .
+     df9      df9        0     1         __fini_array_end = .
+     df9      df9       94     1 .rodata
+     df9      df9       30     1         myTimer.lto.o:(.rodata.textColors)
+     df9      df9       30     1                 textColors
+     e29      e29       64     1         <internal>:(.rodata.str1.1)
+     e8d      e8d        0     1 .data
+     e8d      e8d        0     1         __data_start = .
+     e8d      e8d        0     1         __data_end = .
+     e8d      e8d        0     1 __data_load_start = LOADADDR(.data)
+     e8d      e8d        0     1 __data_size = SIZEOF(.data)
+     e8d      e8d       13     1 .bss
+     e8d      e8d        0     1         __bss_start = .
+     e8d      e8d        1     1         myTimer.lto.o:(.bss.kernelError)
+     e8d      e8d        1     1                 kernelError
+     e8e      e8e       12     1         myTimer.lto.o:(.bss.myTimers)
+     e8e      e8e       12     1                 myTimers
+     ea0      ea0        0     1         __bss_end = .
+     ea0      ea0        0     1 __bss_size = SIZEOF(.bss)
+     ea0      ea0        0     1 .noinit
+     ea0      ea0        0     1         __heap_start = ALIGN(., 2)
+     ea0      ea0        0     1 end_block8 = .
+     ea0      ea0        0     1 end_block9 = .
+     ea0      ea0        0     1 end_block10 = .
+     ea0      ea0        0     1 end_block11 = .
+     ea0      ea0        0     1 end_block12 = .
+     ea0      ea0        0     1 end_block13 = .
+     ea0      ea0        0     1 end_block14 = .
+     ea0      ea0        0     1 end_block15 = .
+     ea0      ea0        0     1 end_block16 = .
+     ea0      ea0        0     1 end_block17 = .
+     ea0      ea0        0     1 end_block18 = .
+     ea0      ea0        0     1 end_block19 = .
+     ea0      ea0        0     1 end_block20 = .
+     ea0      ea0        0     1 end_block21 = .
+     ea0      ea0        0     1 end_block22 = .
+     ea0      ea0        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
        0        0      770     4 .symtab

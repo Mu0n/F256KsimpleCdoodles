@@ -1,5 +1,3 @@
-#include "D:\F256\llvm-mos\code\textClock\.builddir\trampoline.h"
-
 #define F256LIB_IMPLEMENTATION
 #include "f256lib.h"
 
@@ -20,7 +18,7 @@ int main(int argc, char *argv[]) {
 	while(true)
 		{
 		kernelCall(Clock.GetTime);
-	
+		
 		if(time_data.seconds != oldsec) //only update if different
 			{
 			if(time_data.seconds==0)kernelCall(Clock.GetTime);

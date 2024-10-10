@@ -14,16 +14,16 @@ int main(int argc, char *argv[]) {
 	struct time_t time_data;
 	byte oldsec=0; //keeps track to figure out if there's a change
 
-	POKEW(0x00f0,LOW_BYTE(&time_data));
 	textClear();
 	textSetDouble(true,true);
 	while(true)
 		{
+		kernelArgs->common.buf = &time_data;
+		kernelArgs->common.buflen = sizeof(struct time_t);
 		kernelCall(Clock.GetTime);
 	
 		if(time_data.seconds != oldsec) //only update if different
 			{
-			if(time_data.seconds==0)kernelCall(Clock.GetTime);
 			oldsec=time_data.seconds;
 			textGotoXY(10,10);
 			textPrint("                         ");
@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 								bcdToDec(time_data.hours),
 								bcdToDec(time_data.minutes),
 								bcdToDec(time_data.seconds));
+	
 			}
 		}
 	return 0;}

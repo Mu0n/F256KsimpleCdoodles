@@ -1,4 +1,4 @@
-#include "C:\F256\f256llvm-mos\code\openFile\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\openfile\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
 
@@ -41,4 +41,7 @@ int main(int argc, char *argv[]) {
 		fclose(theMIDIfile);
 	}
 	else textPrint("Can't open the file.");
+	
+	while(true);
+	
 	return 0;}

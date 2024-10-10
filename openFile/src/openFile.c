@@ -39,4 +39,7 @@ int main(int argc, char *argv[]) {
 		fclose(theMIDIfile);
 	}
 	else textPrint("Can't open the file.");
+	
+	while(true);
+	
 	return 0;}

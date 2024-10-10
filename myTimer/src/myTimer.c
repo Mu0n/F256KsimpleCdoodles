@@ -24,6 +24,13 @@ struct timer_t myTimers[6]; //timer_t structure for setting timers through the k
 uint8_t animFrame[6]; // keeps track of which frame it's at in the animation
 uint8_t delays[6]; // injects the TIMER_DELAY_x above into a const struct.
 	
+void injectChar(uint8_t x, uint8_t y, uint8_t theChar)
+{
+		POKE(0x0001,0x02); //set io_ctrl to 2 to access text screen
+		POKE(0xC000 + 40 * y + x, theChar);
+		POKE(0x0001,0x00);  //set it back to default
+}
+
 bool setTimer(const struct timer_t *timer)
 {
     *(uint8_t*)0xf3 = timer->units;
@@ -63,6 +70,8 @@ void timerSetup(void)
 	animFrame[4]=1;
 	animFrame[5]=1;
 	
+	
+	
 	delays[0]=TIMER_DELAY_A;
 	delays[1]=TIMER_DELAY_B;
 	delays[2]=TIMER_DELAY_C;
@@ -77,9 +86,11 @@ void timerSetup(void)
 	myTimers[4].units = TIMER_SECONDS;
     myTimers[5].units = TIMER_SECONDS;
 	
+	kernelNextEvent();
+	
 	for(i=0;i<6;i++)
 	{
-		myTimers[i].absolute = delays[i];
+		myTimers[i].absolute = kernelEventData.timer + delays[i];
 	}
 	
     myTimers[0].cookie = TIMER_QUERY_A;
@@ -109,11 +120,8 @@ int main(int argc, char *argv[]) {
         if(kernelEventData.type == kernelEvent(timer.EXPIRED))
             {
 			curTimer = kernelEventData.timer.cookie; // find out which timer expired through its cookie; use that as an index for everything
-			textGotoXY(1,1);
-			textPrint("  ");
-			textPrintInt(curTimer); //top corner sanity check debug
-            textGotoXY(8,3 + 2 * curTimer);
-            __putchar(animFrame[curTimer]++); //write the current frame character at the right spot
+
+            injectChar(8, 3 + 2 * curTimer, animFrame[curTimer]++); //write the current frame character at the right spot
             if(animFrame[curTimer] > 14) animFrame[curTimer] = 1; //loop back to first anim frame
 			myTimers[curTimer].absolute += delays[curTimer]; //prep the next timer 
             setTimer(&myTimers[curTimer]); // send it to system

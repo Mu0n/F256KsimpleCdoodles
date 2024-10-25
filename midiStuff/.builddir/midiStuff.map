@@ -57,17 +57,18 @@
       30       30        0     1         __zp_data_start = .
       30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30        a     1 .zp.bss
+      30       30        b     1 .zp.bss
       30       30        0     1         __zp_bss_start = .
-      30       30        a     1         midiStuff.lto.o:(.zp.bss)
+      30       30        b     1         midiStuff.lto.o:(.zp.bss)
       30       30        7     1                 kernelEventData
       37       37        1     1                 _col
       38       38        1     1                 _row
-      39       39        1     1                 myTimer.1
-      3a       3a        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3a       3a        b     1 .zp
-      3a       3a        b     1         midiStuff.lto.o:(.zp.noinit)
-     300      300      a71     1 .text
+      39       39        1     1                 midiTimer.1
+      3a       3a        1     1                 refTimer.1
+      3b       3b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      3b       3b        d     1 .zp
+      3b       3b        d     1         midiStuff.lto.o:(.zp.noinit)
+     300      300      abc     1 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -91,60 +92,60 @@
      625      625       9a     1                 textClear
      6bf      6bf        6     1         midiStuff.lto.o:(.text.main)
      6bf      6bf        6     1                 main
-     6c5      6c5      2cd     1         midiStuff.lto.o:(.text.f256main)
-     6c5      6c5      2cd     1                 f256main
-     992      992      1b8     1         midiStuff.lto.o:(.text.textPrint)
-     992      992      1b8     1                 textPrint
-     b4a      b4a       bb     1         midiStuff.lto.o:(.text.textPrintUInt)
-     b4a      b4a       bb     1                 textPrintUInt
-     c05      c05        5     1         midiStuff.lto.o:(.text.exit)
-     c05      c05        5     1                 exit
-     c0a      c0a       20     1         midiStuff.lto.o:(.text.__memset)
-     c0a      c0a       20     1                 __memset
-     c2a      c2a      147     1         midiStuff.lto.o:(.text.__umodsi3)
-     c2a      c2a      147     1                 __umodsi3
-     d71      d71        0     1         __init_array_start = .
-     d71      d71        0     1         __init_array_end = .
-     d71      d71        0     1         __fini_array_start = .
-     d71      d71        0     1         __fini_array_end = .
-     d71      d71       7c     1 .rodata
-     d71      d71       30     1         midiStuff.lto.o:(.rodata.textColors)
-     d71      d71       30     1                 textColors
-     da1      da1       4c     1         <internal>:(.rodata.str1.1)
-     ded      ded        0     1 .data
-     ded      ded        0     1         __data_start = .
-     ded      ded        0     1         __data_end = .
-     ded      ded        0     1 __data_load_start = LOADADDR(.data)
-     ded      ded        0     1 __data_size = SIZEOF(.data)
-     ded      ded        1     1 .bss
-     ded      ded        0     1         __bss_start = .
-     ded      ded        1     1         midiStuff.lto.o:(.bss.kernelError)
-     ded      ded        1     1                 kernelError
-     dee      dee        0     1         __bss_end = .
-     dee      dee        0     1 __bss_size = SIZEOF(.bss)
-     dee      dee        0     1 .noinit
-     dee      dee        0     1         __heap_start = ALIGN(., 2)
-     dee      dee        0     1 end_block8 = .
-     dee      dee        0     1 end_block9 = .
-     dee      dee        0     1 end_block10 = .
-     dee      dee        0     1 end_block11 = .
-     dee      dee        0     1 end_block12 = .
-     dee      dee        0     1 end_block13 = .
-     dee      dee        0     1 end_block14 = .
-     dee      dee        0     1 end_block15 = .
-     dee      dee        0     1 end_block16 = .
-     dee      dee        0     1 end_block17 = .
-     dee      dee        0     1 end_block18 = .
-     dee      dee        0     1 end_block19 = .
-     dee      dee        0     1 end_block20 = .
-     dee      dee        0     1 end_block21 = .
-     dee      dee        0     1 end_block22 = .
-     dee      dee        0     1 end_block23 = .
+     6c5      6c5      318     1         midiStuff.lto.o:(.text.f256main)
+     6c5      6c5      318     1                 f256main
+     9dd      9dd      1b8     1         midiStuff.lto.o:(.text.textPrint)
+     9dd      9dd      1b8     1                 textPrint
+     b95      b95       bb     1         midiStuff.lto.o:(.text.textPrintUInt)
+     b95      b95       bb     1                 textPrintUInt
+     c50      c50        5     1         midiStuff.lto.o:(.text.exit)
+     c50      c50        5     1                 exit
+     c55      c55       20     1         midiStuff.lto.o:(.text.__memset)
+     c55      c55       20     1                 __memset
+     c75      c75      147     1         midiStuff.lto.o:(.text.__umodsi3)
+     c75      c75      147     1                 __umodsi3
+     dbc      dbc        0     1         __init_array_start = .
+     dbc      dbc        0     1         __init_array_end = .
+     dbc      dbc        0     1         __fini_array_start = .
+     dbc      dbc        0     1         __fini_array_end = .
+     dbc      dbc       7c     1 .rodata
+     dbc      dbc       30     1         midiStuff.lto.o:(.rodata.textColors)
+     dbc      dbc       30     1                 textColors
+     dec      dec       4c     1         <internal>:(.rodata.str1.1)
+     e38      e38        0     1 .data
+     e38      e38        0     1         __data_start = .
+     e38      e38        0     1         __data_end = .
+     e38      e38        0     1 __data_load_start = LOADADDR(.data)
+     e38      e38        0     1 __data_size = SIZEOF(.data)
+     e38      e38        1     1 .bss
+     e38      e38        0     1         __bss_start = .
+     e38      e38        1     1         midiStuff.lto.o:(.bss.kernelError)
+     e38      e38        1     1                 kernelError
+     e39      e39        0     1         __bss_end = .
+     e39      e39        0     1 __bss_size = SIZEOF(.bss)
+     e39      e39        0     1 .noinit
+     e39      e39        0     1         __heap_start = ALIGN(., 2)
+     e39      e39        0     1 end_block8 = .
+     e39      e39        0     1 end_block9 = .
+     e39      e39        0     1 end_block10 = .
+     e39      e39        0     1 end_block11 = .
+     e39      e39        0     1 end_block12 = .
+     e39      e39        0     1 end_block13 = .
+     e39      e39        0     1 end_block14 = .
+     e39      e39        0     1 end_block15 = .
+     e39      e39        0     1 end_block16 = .
+     e39      e39        0     1 end_block17 = .
+     e39      e39        0     1 end_block18 = .
+     e39      e39        0     1 end_block19 = .
+     e39      e39        0     1 end_block20 = .
+     e39      e39        0     1 end_block21 = .
+     e39      e39        0     1 end_block22 = .
+     e39      e39        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      720     4 .symtab
-       0        0      720     4         <internal>:(.symtab)
+       0        0      730     4 .symtab
+       0        0      730     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      4ca     1 .strtab
-       0        0      4ca     1         <internal>:(.strtab)
+       0        0      4d7     1 .strtab
+       0        0      4d7     1         <internal>:(.strtab)

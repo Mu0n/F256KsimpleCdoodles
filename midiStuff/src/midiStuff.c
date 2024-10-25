@@ -6,14 +6,18 @@
 #define MIDI_RX_08_10 0xDDA3
 
 #define TIMER_FRAMES 0
-#define TIMER_COOKIE 0
 #define TIMER_SECONDS 1
+
+
+#define TIMER_COOKIE 0
+#define TIMER_REF_COOKIE 1
 #define TIMER_DELAY 10
+#define TIMER_REF_DELAY 1
 
 #define SCREENCORNER 0xC000
 
 #include "f256lib.h"
-struct timer_t myTimer; //timer_t structure for setting timer through the kernel
+struct timer_t midiTimer, refTimer; //timer_t structure for setting timer through the kernel
 
 bool setTimer(const struct timer_t *timer)
 {
@@ -39,10 +43,17 @@ void setup()
 	textGotoXY(0,8); textPrint("0xDDA6");
 	textGotoXY(0,9); textPrint("0xDDA7");
 	
-	myTimer.units = TIMER_FRAMES;
-	myTimer.absolute = TIMER_DELAY;
-    myTimer.cookie = TIMER_COOKIE;
-	setTimer(&myTimer);
+	midiTimer.units = TIMER_FRAMES;
+	midiTimer.absolute = TIMER_DELAY;
+    midiTimer.cookie = TIMER_COOKIE;
+	
+	refTimer.units = TIMER_FRAMES;
+	refTimer.absolute = TIMER_REF_DELAY;
+	refTimer.cookie = TIMER_REF_COOKIE;
+	
+	setTimer(&midiTimer);
+	setTimer(&refTimer);
+	
 
 }
 
@@ -59,24 +70,37 @@ void refreshPrints()
 }
 int main(int argc, char *argv[]) {
 	uint8_t note;
-	setup();
+	byte curTimer;
 	
+	setup();
+	POKE(1,0);
     while(true) 
         {
 		kernelNextEvent();
         if(kernelEventData.type == kernelEvent(timer.EXPIRED))
             {
-			POKE(MIDI_OUT, 0x80);
-			POKE(MIDI_OUT, note);
-			POKE(MIDI_OUT, 0x4F);
-			myTimer.absolute += TIMER_DELAY;
-            setTimer(&myTimer); // send it to system
-			POKE(1,0);
-			note = 0x20 + randomRead();
-			POKE(MIDI_OUT, 0x90);
-			POKE(MIDI_OUT, note);
-			POKE(MIDI_OUT, 0x4F);
-			refreshPrints();
+			curTimer = kernelEventData.timer.cookie; // find out which timer expired 
+			switch(curTimer)
+			{
+				case TIMER_COOKIE:
+					POKE(MIDI_OUT, 0x80);
+					POKE(MIDI_OUT, note);
+					POKE(MIDI_OUT, 0x4F);
+					midiTimer.absolute += TIMER_DELAY;
+					setTimer(&midiTimer); // send it to system
+			
+					note = 0x20 + randomRead();
+					POKE(MIDI_OUT, 0x90);
+					POKE(MIDI_OUT, note);
+					POKE(MIDI_OUT, 0x4F);
+					break;
+				case TIMER_REF_COOKIE:
+					refreshPrints();
+					refTimer.absolute += TIMER_REF_DELAY;
+					setTimer(&refTimer); // send it to system
+					break;
+			}				
+
             }
         }
 return 0;}

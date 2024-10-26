@@ -53,99 +53,118 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30       30        0     1 .zp.data
-      30       30        0     1         __zp_data_start = .
-      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30        b     1 .zp.bss
-      30       30        0     1         __zp_bss_start = .
-      30       30        b     1         midiStuff.lto.o:(.zp.bss)
-      30       30        7     1                 kernelEventData
-      37       37        1     1                 _col
-      38       38        1     1                 _row
-      39       39        1     1                 midiTimer.1
-      3a       3a        1     1                 refTimer.1
-      3b       3b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3b       3b        d     1 .zp
-      3b       3b        d     1         midiStuff.lto.o:(.zp.noinit)
-     300      300      abc     1 .text
-     300      300        0     1         _init = .
-     300      300        0     1         _start = .
-     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     300      300        0     1                 __do_init_stack
-     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     308      308        0     1                 __do_zero_bss
-     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30b      30b        0     1                 __do_zero_zp_bss
-     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     311      311        0     1                 __after_main
-     314      314        0     1         _fini = .
-     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     315      315       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     315      315       13     1                 __zero_bss
-     328      328       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     328      328       13     1                 __zero_zp_bss
-     33b      33b      2ea     1         midiStuff.lto.o:(.text.f256Init)
-     33b      33b      2ea     1                 f256Init
-     625      625       9a     1         midiStuff.lto.o:(.text.textClear)
-     625      625       9a     1                 textClear
-     6bf      6bf        6     1         midiStuff.lto.o:(.text.main)
-     6bf      6bf        6     1                 main
-     6c5      6c5      318     1         midiStuff.lto.o:(.text.f256main)
-     6c5      6c5      318     1                 f256main
-     9dd      9dd      1b8     1         midiStuff.lto.o:(.text.textPrint)
-     9dd      9dd      1b8     1                 textPrint
-     b95      b95       bb     1         midiStuff.lto.o:(.text.textPrintUInt)
-     b95      b95       bb     1                 textPrintUInt
-     c50      c50        5     1         midiStuff.lto.o:(.text.exit)
-     c50      c50        5     1                 exit
-     c55      c55       20     1         midiStuff.lto.o:(.text.__memset)
-     c55      c55       20     1                 __memset
-     c75      c75      147     1         midiStuff.lto.o:(.text.__umodsi3)
-     c75      c75      147     1                 __umodsi3
-     dbc      dbc        0     1         __init_array_start = .
-     dbc      dbc        0     1         __init_array_end = .
-     dbc      dbc        0     1         __fini_array_start = .
-     dbc      dbc        0     1         __fini_array_end = .
-     dbc      dbc       7c     1 .rodata
-     dbc      dbc       30     1         midiStuff.lto.o:(.rodata.textColors)
-     dbc      dbc       30     1                 textColors
-     dec      dec       4c     1         <internal>:(.rodata.str1.1)
-     e38      e38        0     1 .data
-     e38      e38        0     1         __data_start = .
-     e38      e38        0     1         __data_end = .
-     e38      e38        0     1 __data_load_start = LOADADDR(.data)
-     e38      e38        0     1 __data_size = SIZEOF(.data)
-     e38      e38        1     1 .bss
-     e38      e38        0     1         __bss_start = .
-     e38      e38        1     1         midiStuff.lto.o:(.bss.kernelError)
-     e38      e38        1     1                 kernelError
-     e39      e39        0     1         __bss_end = .
-     e39      e39        0     1 __bss_size = SIZEOF(.bss)
-     e39      e39        0     1 .noinit
-     e39      e39        0     1         __heap_start = ALIGN(., 2)
-     e39      e39        0     1 end_block8 = .
-     e39      e39        0     1 end_block9 = .
-     e39      e39        0     1 end_block10 = .
-     e39      e39        0     1 end_block11 = .
-     e39      e39        0     1 end_block12 = .
-     e39      e39        0     1 end_block13 = .
-     e39      e39        0     1 end_block14 = .
-     e39      e39        0     1 end_block15 = .
-     e39      e39        0     1 end_block16 = .
-     e39      e39        0     1 end_block17 = .
-     e39      e39        0     1 end_block18 = .
-     e39      e39        0     1 end_block19 = .
-     e39      e39        0     1 end_block20 = .
-     e39      e39        0     1 end_block21 = .
-     e39      e39        0     1 end_block22 = .
-     e39      e39        0     1 end_block23 = .
+      30      300        2     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300        2     1         midiStuff.lto.o:(.zp.data)
+      30      300        2     1                 note
+      32      302        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      32      302        0     1 __zp_data_size = SIZEOF(.zp.data)
+      32       32       11     1 .zp.bss
+      32       32        0     1         __zp_bss_start = .
+      32       32       11     1         midiStuff.lto.o:(.zp.bss)
+      32       32        7     1                 kernelEventData
+      39       39        1     1                 _col
+      3a       3a        1     1                 _row
+      3b       3b        2     1                 __putchar.s
+      3d       3d        2     1                 prgInst
+      3f       3f        1     1                 midiTimer.1
+      40       40        1     1                 refTimer.1
+      41       41        2     1                 oldnote
+      43       43        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      43       43       63     1 .zp
+      43       43       63     1         midiStuff.lto.o:(.zp.noinit)
+     302      302     178d     1 .text
+     302      302        0     1         _init = .
+     302      302        0     1         _start = .
+     302      302        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     302      302        0     1                 __do_init_stack
+     30a      30a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     30a      30a        0     1                 __do_zero_bss
+     30d      30d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30d      30d        0     1                 __do_zero_zp_bss
+     310      310        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     310      310        0     1                 __do_copy_zp_data
+     313      313        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     316      316        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     316      316        0     1                 __after_main
+     319      319        0     1         _fini = .
+     319      319        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     31a      31a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     31a      31a       13     1                 __zero_bss
+     32d      32d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     32d      32d       13     1                 __zero_zp_bss
+     340      340       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     340      340       17     1                 __copy_zp_data
+     357      357      2ea     1         midiStuff.lto.o:(.text.f256Init)
+     357      357      2ea     1                 f256Init
+     641      641       9a     1         midiStuff.lto.o:(.text.textClear)
+     641      641       9a     1                 textClear
+     6db      6db        6     1         midiStuff.lto.o:(.text.main)
+     6db      6db        6     1                 main
+     6e1      6e1      40a     1         midiStuff.lto.o:(.text.f256main)
+     6e1      6e1      40a     1                 f256main
+     aeb      aeb      1b8     1         midiStuff.lto.o:(.text.textPrint)
+     aeb      aeb      1b8     1                 textPrint
+     ca3      ca3        d     1         midiStuff.lto.o:(.text.__putchar)
+     ca3      ca3        d     1                 __putchar
+     cb0      cb0        5     1         midiStuff.lto.o:(.text.exit)
+     cb0      cb0        5     1                 exit
+     cb5      cb5       d1     1         midiStuff.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+     cb5      cb5       d1     1                 (anonymous namespace)::put(char, Status*)
+     d86      d86      10d     1         midiStuff.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+     d86      d86      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
+     e93      e93      bb0     1         midiStuff.lto.o:(.text.printf)
+     e93      e93      bb0     1                 printf
+    1a43     1a43       2c     1         midiStuff.lto.o:(.text.memcpy)
+    1a43     1a43       2c     1                 memcpy
+    1a6f     1a6f       20     1         midiStuff.lto.o:(.text.__memset)
+    1a6f     1a6f       20     1                 __memset
+    1a8f     1a8f        0     1         __init_array_start = .
+    1a8f     1a8f        0     1         __init_array_end = .
+    1a8f     1a8f        0     1         __fini_array_start = .
+    1a8f     1a8f        0     1         __fini_array_end = .
+    1a8f     1a8f      110     1 .rodata
+    1a8f     1a8f        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    1a8f     1a8f        0     1                 __set_v
+    1a90     1a90        8     1         midiStuff.lto.o:(.rodata.f256main)
+    1a98     1a98       3a     1         midiStuff.lto.o:(.rodata.printf)
+    1ad2     1ad2       30     1         midiStuff.lto.o:(.rodata.textColors)
+    1ad2     1ad2       30     1                 textColors
+    1b02     1b02       9d     1         <internal>:(.rodata.str1.1)
+    1b9f     1b9f        0     1 .data
+    1b9f     1b9f        0     1         __data_start = .
+    1b9f     1b9f        0     1         __data_end = .
+    1b9f     1b9f        0     1 __data_load_start = LOADADDR(.data)
+    1b9f     1b9f        0     1 __data_size = SIZEOF(.data)
+    1b9f     1b9f        1     1 .bss
+    1b9f     1b9f        0     1         __bss_start = .
+    1b9f     1b9f        1     1         midiStuff.lto.o:(.bss.kernelError)
+    1b9f     1b9f        1     1                 kernelError
+    1ba0     1ba0        0     1         __bss_end = .
+    1ba0     1ba0        0     1 __bss_size = SIZEOF(.bss)
+    1ba0     1ba0        0     1 .noinit
+    1ba0     1ba0        0     1         __heap_start = ALIGN(., 2)
+    1ba0     1ba0        0     1 end_block8 = .
+    1ba0     1ba0        0     1 end_block9 = .
+    1ba0     1ba0        0     1 end_block10 = .
+    1ba0     1ba0        0     1 end_block11 = .
+    1ba0     1ba0        0     1 end_block12 = .
+    1ba0     1ba0        0     1 end_block13 = .
+    1ba0     1ba0        0     1 end_block14 = .
+    1ba0     1ba0        0     1 end_block15 = .
+    1ba0     1ba0        0     1 end_block16 = .
+    1ba0     1ba0        0     1 end_block17 = .
+    1ba0     1ba0        0     1 end_block18 = .
+    1ba0     1ba0        0     1 end_block19 = .
+    1ba0     1ba0        0     1 end_block20 = .
+    1ba0     1ba0        0     1 end_block21 = .
+    1ba0     1ba0        0     1 end_block22 = .
+    1ba0     1ba0        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      730     4 .symtab
-       0        0      730     4         <internal>:(.symtab)
+       0        0      7e0     4 .symtab
+       0        0      7e0     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      4d7     1 .strtab
-       0        0      4d7     1         <internal>:(.strtab)
+       0        0      57c     1 .strtab
+       0        0      57c     1         <internal>:(.strtab)

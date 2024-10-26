@@ -40,14 +40,14 @@ void setup()
 {
 	textClear();
 	textDefineForegroundColor(0,0xff,0xff,0xff);
-    textGotoXY(0,0); textPrint("running a MIDI test - LEFT/RIGHT changes note pitch; UP/DOWN changes instrument");
-	textGotoXY(0,2); textPrint("0xDDA0");
-	textGotoXY(0,3); textPrint("0xDDA1");
-	textGotoXY(0,4); textPrint("0xDDA2");
-	textGotoXY(0,5); textPrint("0xDDA3");
+    textGotoXY(0,0); textPrint("running a MIDI test\nLEFT/RIGHT changes note pitch; UP/DOWN changes instrument; Space to play a note");
+	textGotoXY(0,3); textPrint("0xDDA0");
+	textGotoXY(0,4); textPrint("0xDDA1");
+	textGotoXY(0,5); textPrint("0xDDA2");
+	textGotoXY(0,6); textPrint("0xDDA3");
 	
-	textGotoXY(0,7); textPrint("Instrument: ");
-	textGotoXY(0,8); textPrint("Note: ");
+	textGotoXY(0,8); textPrint("Instrument: ");
+	textGotoXY(0,9); textPrint("Note: ");
 	
 	midiTimer.units = TIMER_SECONDS;
 	midiTimer.absolute = TIMER_NOTE_DELAY;
@@ -66,13 +66,13 @@ void setup()
 
 void refreshPrints()
 {
-	textGotoXY(10,2); printf("%d",PEEK(0xDDA0));
-	textGotoXY(10,3); printf("%d",PEEK(0xDDA1));
-	textGotoXY(10,4); printf("%d",PEEK(0xDDA2));
-	textGotoXY(10,5); printf("%d",PEEK(0xDDA3));
+	textGotoXY(10,3); printf("%d",PEEK(0xDDA0));
+	textGotoXY(10,4); printf("%d",PEEK(0xDDA1));
+	textGotoXY(10,5); printf("%d",PEEK(0xDDA2));
+	textGotoXY(10,6); printf("%d",PEEK(0xDDA3));
 	
-	textGotoXY(13,7); printf(" %d",prgInst);
-	textGotoXY(13,8); printf(" %d",note);
+	textGotoXY(13,8); printf(" %d",prgInst);
+	textGotoXY(13,9); printf(" %d",note);
 }
 
 void midiNoteOff()

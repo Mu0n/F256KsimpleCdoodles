@@ -7,6 +7,12 @@ attempt to play a musical piece with the notes falling down into a piano
 picture, in time. See if your playing gets the approval of Johaness Sebastian Bach!
 */
 
+
+/* key codes
+113 119 101 114 116
+ Q   W   E   R   T
+
+*/
 #define F256LIB_IMPLEMENTATION
 
 #define MIDI_CTRL 0xDDA0

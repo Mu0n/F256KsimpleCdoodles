@@ -53,6 +53,10 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __bmbach_lma = 0x10000
+       0        0        0     1 __bmbach_size = 0x12c00
+       0        0        0     1 __palbach_lma = 0x7800
+       0        0        0     1 __palbach_size = 0x400
       30      300        2     1 .zp.data
       30      300        0     1         __zp_data_start = .
       30      300        2     1         BachHero.lto.o:(.zp.data)
@@ -156,11 +160,21 @@
     1877     1877        0     1 end_block21 = .
     1877     1877        0     1 end_block22 = .
     1877     1877        0     1 end_block23 = .
+   10000    10000    12c00    16 .bmbach
+   10000    10000    12c00    16         BachHero.lto.o:(.bmbach)
+   10000    10000        0     1                 bmbach_start
+   22c00    22c00        0     1                 bmbach_end
+   22c00    22c00        0     1 end_bmbach = .
+    7800     7800      400    16 .palbach
+    7800     7800      400    16         BachHero.lto.o:(.palbach)
+    7800     7800        0     1                 palbach_start
+    7c00     7c00        0     1                 palbach_end
+    7c00     7c00        0     1 end_palbach = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      7c0     4 .symtab
-       0        0      7c0     4         <internal>:(.symtab)
-       0        0       5a     1 .shstrtab
-       0        0       5a     1         <internal>:(.shstrtab)
-       0        0      56a     1 .strtab
-       0        0      56a     1         <internal>:(.strtab)
+       0        0      860     4 .symtab
+       0        0      860     4         <internal>:(.symtab)
+       0        0       6b     1 .shstrtab
+       0        0       6b     1         <internal>:(.shstrtab)
+       0        0      5eb     1 .strtab
+       0        0      5eb     1         <internal>:(.strtab)

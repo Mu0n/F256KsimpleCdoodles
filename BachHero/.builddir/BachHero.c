@@ -14,6 +14,7 @@ picture, in time. See if your playing gets the approval of Johaness Sebastian Ba
 
 */
 #define F256LIB_IMPLEMENTATION
+#include "f256lib.h"
 
 #define MIDI_CTRL 0xDDA0
 #define MIDI_OUT 0xDDA1
@@ -30,7 +31,10 @@ picture, in time. See if your playing gets the approval of Johaness Sebastian Ba
 #define TIMER_TEXT_DELAY 1
 #define TIMER_NOTE_DELAY 2
 
-#include "f256lib.h"
+EMBED(bmbach, "../assets/bachbm.fbmp", 0x10000);
+EMBED(palbach, "../assets/bachbm.pal", 0x07800);
+
+
 struct timer_t midiTimer, refTimer; //timer_t structure for setting timer through the kernel
 
 uint16_t note = 0x36, oldnote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called*/

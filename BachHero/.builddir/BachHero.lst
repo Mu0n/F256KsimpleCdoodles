@@ -24,6 +24,10 @@ SYMBOL TABLE:
 00000a2a l     F .text	000000d1 _ZN12_GLOBAL__N_13putEcP6Status
 00000afb l     F .text	0000010d _ZN12_GLOBAL__N_112print_stringEPKcP6Status
 000006db g     F .text	00000006 main
+00007c00 g       .palbach	00000000 palbach_end
+00022c00 g       .bmbach	00000000 bmbach_end
+00010000 g       .bmbach	00000000 bmbach_start
+00007800 g       .palbach	00000000 palbach_start
 00000316 g       .text	00000000 __after_main
 00000302 g       .text	00000000 __do_init_stack
 00000310 g       .text	00000000 __do_copy_zp_data
@@ -76,7 +80,13 @@ SYMBOL TABLE:
 1500a000 g       *ABS*	00000000 __block21_lma
 1600a000 g       *ABS*	00000000 __block22_lma
 1700a000 g       *ABS*	00000000 __block23_lma
+00010000 g       *ABS*	00000000 __bmbach_lma
+00012c00 g       *ABS*	00000000 __bmbach_size
+00007800 g       *ABS*	00000000 __palbach_lma
+00000400 g       *ABS*	00000000 __palbach_size
 00001876 g       .bss	00000000 __bss_start
+00022c00 g       .bmbach	00000000 end_bmbach
+00007c00 g       .palbach	00000000 end_palbach
 00000302 g       .text	00000000 _start
 0000002d g       *ABS*	00000000 __rc29
 0000002b g       *ABS*	00000000 __rc27
@@ -189,7 +199,7 @@ Disassembly of section .text:
      357: 64 12        	stz	$12                     ; 0x2012 <__heap_start+0x79a>
      359: 64 01        	stz	$1                      ; 0x2001 <__heap_start+0x789>
      35b: a2 3f        	ldx	#$3f
-     35d: 8e 00 d0     	stx	$d000                   ; 0xd000 <__heap_start+0xb788>
+     35d: 8e 00 d0     	stx	$d000                   ; 0xd000 <palbach_end+0x5400>
      360: a2 b3        	ldx	#$b3
      362: 86 00        	stx	$0                      ; 0x2000 <__heap_start+0x788>
      364: 64 08        	stz	$8                      ; 0x2008 <__heap_start+0x790>
@@ -273,21 +283,21 @@ Disassembly of section .text:
      3f2: e0 04        	cpx	#$4
      3f4: f0 03        	beq	$3f9 <f256Init+0xa2>
      3f6: 4c 80 03     	jmp	$380 <f256Init+0x29>
-     3f9: ad 02 d0     	lda	$d002                   ; 0xd002 <__heap_start+0xb78a>
+     3f9: ad 02 d0     	lda	$d002                   ; 0xd002 <palbach_end+0x5402>
      3fc: 29 f0        	and	#$f0
-     3fe: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xb78a>
-     401: ad 02 d0     	lda	$d002                   ; 0xd002 <__heap_start+0xb78a>
+     3fe: 8d 02 d0     	sta	$d002                   ; 0xd002 <palbach_end+0x5402>
+     401: ad 02 d0     	lda	$d002                   ; 0xd002 <palbach_end+0x5402>
      404: 29 0f        	and	#$f
      406: 09 10        	ora	#$10
-     408: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xb78a>
+     408: 8d 02 d0     	sta	$d002                   ; 0xd002 <palbach_end+0x5402>
      40b: a2 02        	ldx	#$2
-     40d: 8e 03 d0     	stx	$d003                   ; 0xd003 <__heap_start+0xb78b>
-     410: ad 01 d0     	lda	$d001                   ; 0xd001 <__heap_start+0xb789>
+     40d: 8e 03 d0     	stx	$d003                   ; 0xd003 <palbach_end+0x5403>
+     410: ad 01 d0     	lda	$d001                   ; 0xd001 <palbach_end+0x5401>
      413: 29 f9        	and	#$f9
      415: 09 04        	ora	#$4
-     417: 8d 01 d0     	sta	$d001                   ; 0xd001 <__heap_start+0xb789>
+     417: 8d 01 d0     	sta	$d001                   ; 0xd001 <palbach_end+0x5401>
      41a: 64 12        	stz	$12                     ; 0x2012 <__heap_start+0x79a>
-     41c: 9c 10 d0     	stz	$d010                   ; 0xd010 <__heap_start+0xb798>
+     41c: 9c 10 d0     	stz	$d010                   ; 0xd010 <palbach_end+0x5410>
      41f: a2 00        	ldx	#$0
      421: 64 13        	stz	$13                     ; 0x2013 <__heap_start+0x79b>
      423: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x79e>
@@ -299,17 +309,17 @@ Disassembly of section .text:
      431: be 44 18     	ldx	$1844,y                 ; 0x1844 <textColors+0x2>
      434: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x7a1>
      436: a6 13        	ldx	$13                     ; 0x2013 <__heap_start+0x79b>
-     438: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xc588>
+     438: 8e 00 de     	stx	$de00                   ; 0xde00 <palbach_end+0x6200>
      43b: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x79d>
-     43d: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xc589>
+     43d: 9c 01 de     	stz	$de01                   ; 0xde01 <palbach_end+0x6201>
      440: a2 04        	ldx	#$4
-     442: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     445: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     448: ad 10 de     	lda	$de10                   ; 0xde10 <__heap_start+0xc598>
-     44b: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xc599>
+     442: 8e 02 de     	stx	$de02                   ; 0xde02 <palbach_end+0x6202>
+     445: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     448: ad 10 de     	lda	$de10                   ; 0xde10 <palbach_end+0x6210>
+     44b: ac 11 de     	ldy	$de11                   ; 0xde11 <palbach_end+0x6211>
      44e: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x79b>
-     450: ac 12 de     	ldy	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     453: ac 13 de     	ldy	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     450: ac 12 de     	ldy	$de12                   ; 0xde12 <palbach_end+0x6212>
+     453: ac 13 de     	ldy	$de13                   ; 0xde13 <palbach_end+0x6213>
      456: 18           	clc
      457: 65 12        	adc	$12                     ; 0x2012 <__heap_start+0x79a>
      459: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x79c>
@@ -328,14 +338,14 @@ Disassembly of section .text:
      472: c8           	iny
      473: a9 ff        	lda	#$ff
      475: 91 14        	sta	($14),y                 ; 0x2014 <__heap_start+0x79c>
-     477: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xc588>
-     47a: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xc589>
+     477: 8e 00 de     	stx	$de00                   ; 0xde00 <palbach_end+0x6200>
+     47a: 9c 01 de     	stz	$de01                   ; 0xde01 <palbach_end+0x6201>
      47d: c8           	iny
-     47e: 8c 02 de     	sty	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     481: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     484: ad 10 de     	lda	$de10                   ; 0xde10 <__heap_start+0xc598>
+     47e: 8c 02 de     	sty	$de02                   ; 0xde02 <palbach_end+0x6202>
+     481: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     484: ad 10 de     	lda	$de10                   ; 0xde10 <palbach_end+0x6210>
      487: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x79b>
-     489: ad 11 de     	lda	$de11                   ; 0xde11 <__heap_start+0xc599>
+     489: ad 11 de     	lda	$de11                   ; 0xde11 <palbach_end+0x6211>
      48c: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x79c>
      48e: a9 40        	lda	#$40
      490: 18           	clc
@@ -345,8 +355,8 @@ Disassembly of section .text:
      496: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x79c>
      498: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x79d>
      49a: 84 14        	sty	$14                     ; 0x2014 <__heap_start+0x79c>
-     49c: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     49f: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     49c: ad 12 de     	lda	$de12                   ; 0xde12 <palbach_end+0x6212>
+     49f: ad 13 de     	lda	$de13                   ; 0xde13 <palbach_end+0x6213>
      4a2: a5 19        	lda	$19                     ; 0x2019 <__heap_start+0x7a1>
      4a4: 92 14        	sta	($14)                   ; 0x2014 <__heap_start+0x79c>
      4a6: a5 18        	lda	$18                     ; 0x2018 <__heap_start+0x7a0>
@@ -369,19 +379,19 @@ Disassembly of section .text:
      4c3: 4c 23 04     	jmp	$423 <f256Init+0xcc>
      4c6: 20 41 06     	jsr	$641 <textClear>
      4c9: a2 40        	ldx	#$40
-     4cb: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xc588>
+     4cb: 8e 00 de     	stx	$de00                   ; 0xde00 <palbach_end+0x6200>
      4ce: a2 01        	ldx	#$1
-     4d0: 8e 01 de     	stx	$de01                   ; 0xde01 <__heap_start+0xc589>
+     4d0: 8e 01 de     	stx	$de01                   ; 0xde01 <palbach_end+0x6201>
      4d3: a2 f0        	ldx	#$f0
-     4d5: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     4d8: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     4db: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
+     4d5: 8e 02 de     	stx	$de02                   ; 0xde02 <palbach_end+0x6202>
+     4d8: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     4db: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
      4de: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x79f>
-     4e0: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xc599>
+     4e0: ae 11 de     	ldx	$de11                   ; 0xde11 <palbach_end+0x6211>
      4e3: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x79a>
-     4e5: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xc59a>
+     4e5: ae 12 de     	ldx	$de12                   ; 0xde12 <palbach_end+0x6212>
      4e8: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x79b>
-     4ea: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     4ea: ae 13 de     	ldx	$de13                   ; 0xde13 <palbach_end+0x6213>
      4ed: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x79c>
      4ef: a4 12        	ldy	$12                     ; 0x2012 <__heap_start+0x79a>
      4f1: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x79d>
@@ -397,18 +407,18 @@ Disassembly of section .text:
      503: 2a           	rol
      504: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x79e>
      506: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x79d>
-     508: 8d 00 de     	sta	$de00                   ; 0xde00 <__heap_start+0xc588>
+     508: 8d 00 de     	sta	$de00                   ; 0xde00 <palbach_end+0x6200>
      50b: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x79e>
-     50d: 8d 01 de     	sta	$de01                   ; 0xde01 <__heap_start+0xc589>
-     510: 9c 02 de     	stz	$de02                   ; 0xde02 <__heap_start+0xc58a>
+     50d: 8d 01 de     	sta	$de01                   ; 0xde01 <palbach_end+0x6201>
+     510: 9c 02 de     	stz	$de02                   ; 0xde02 <palbach_end+0x6202>
      513: a2 20        	ldx	#$20
-     515: 8e 03 de     	stx	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     518: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
+     515: 8e 03 de     	stx	$de03                   ; 0xde03 <palbach_end+0x6203>
+     518: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
      51b: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x79e>
-     51d: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xc599>
+     51d: ae 11 de     	ldx	$de11                   ; 0xde11 <palbach_end+0x6211>
      520: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x7a0>
-     522: ac 12 de     	ldy	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     525: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     522: ac 12 de     	ldy	$de12                   ; 0xde12 <palbach_end+0x6212>
+     525: ae 13 de     	ldx	$de13                   ; 0xde13 <palbach_end+0x6213>
      528: e4 14        	cpx	$14                     ; 0x2014 <__heap_start+0x79c>
      52a: d0 14        	bne	$540 <f256Init+0x1e9>
      52c: c4 13        	cpy	$13                     ; 0x2013 <__heap_start+0x79b>
@@ -425,16 +435,16 @@ Disassembly of section .text:
      542: e8           	inx
      543: d0 01        	bne	$546 <f256Init+0x1ef>
      545: 1a           	inc
-     546: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xc588>
-     549: 8d 01 de     	sta	$de01                   ; 0xde01 <__heap_start+0xc589>
-     54c: 9c 02 de     	stz	$de02                   ; 0xde02 <__heap_start+0xc58a>
+     546: 8e 00 de     	stx	$de00                   ; 0xde00 <palbach_end+0x6200>
+     549: 8d 01 de     	sta	$de01                   ; 0xde01 <palbach_end+0x6201>
+     54c: 9c 02 de     	stz	$de02                   ; 0xde02 <palbach_end+0x6202>
      54f: a2 20        	ldx	#$20
-     551: 8e 03 de     	stx	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     554: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
+     551: 8e 03 de     	stx	$de03                   ; 0xde03 <palbach_end+0x6203>
+     554: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
      557: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x79a>
-     559: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xc599>
+     559: ae 11 de     	ldx	$de11                   ; 0xde11 <palbach_end+0x6211>
      55c: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x79b>
-     55e: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xc59a>
+     55e: ae 12 de     	ldx	$de12                   ; 0xde12 <palbach_end+0x6212>
      561: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x79c>
      563: 38           	sec
      564: a9 00        	lda	#$0
@@ -467,30 +477,30 @@ Disassembly of section .text:
      593: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x79b>
      595: 98           	tya
      596: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x79c>
-     598: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     598: ae 13 de     	ldx	$de13                   ; 0xde13 <palbach_end+0x6213>
      59b: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x79f>
-     59d: 8e 01 d1     	stx	$d101                   ; 0xd101 <__heap_start+0xb889>
+     59d: 8e 01 d1     	stx	$d101                   ; 0xd101 <palbach_end+0x5501>
      5a0: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x79d>
-     5a2: 8e 02 d1     	stx	$d102                   ; 0xd102 <__heap_start+0xb88a>
+     5a2: 8e 02 d1     	stx	$d102                   ; 0xd102 <palbach_end+0x5502>
      5a5: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x7a1>
-     5a7: 8e 03 d1     	stx	$d103                   ; 0xd103 <__heap_start+0xb88b>
+     5a7: 8e 03 d1     	stx	$d103                   ; 0xd103 <palbach_end+0x5503>
      5aa: a6 16        	ldx	$16                     ; 0x2016 <__heap_start+0x79e>
-     5ac: 8e 09 d1     	stx	$d109                   ; 0xd109 <__heap_start+0xb891>
+     5ac: 8e 09 d1     	stx	$d109                   ; 0xd109 <palbach_end+0x5509>
      5af: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x7a0>
-     5b1: 8e 0a d1     	stx	$d10a                   ; 0xd10a <__heap_start+0xb892>
-     5b4: 8c 0b d1     	sty	$d10b                   ; 0xd10b <__heap_start+0xb893>
+     5b1: 8e 0a d1     	stx	$d10a                   ; 0xd10a <palbach_end+0x550a>
+     5b4: 8c 0b d1     	sty	$d10b                   ; 0xd10b <palbach_end+0x550b>
      5b7: a6 12        	ldx	$12                     ; 0x2012 <__heap_start+0x79a>
-     5b9: 8e 11 d1     	stx	$d111                   ; 0xd111 <__heap_start+0xb899>
+     5b9: 8e 11 d1     	stx	$d111                   ; 0xd111 <palbach_end+0x5511>
      5bc: a6 13        	ldx	$13                     ; 0x2013 <__heap_start+0x79b>
-     5be: 8e 12 d1     	stx	$d112                   ; 0xd112 <__heap_start+0xb89a>
-     5c1: 8d 13 d1     	sta	$d113                   ; 0xd113 <__heap_start+0xb89b>
-     5c4: 9c 00 d1     	stz	$d100                   ; 0xd100 <__heap_start+0xb888>
-     5c7: 9c 08 d1     	stz	$d108                   ; 0xd108 <__heap_start+0xb890>
-     5ca: 9c 10 d1     	stz	$d110                   ; 0xd110 <__heap_start+0xb898>
+     5be: 8e 12 d1     	stx	$d112                   ; 0xd112 <palbach_end+0x5512>
+     5c1: 8d 13 d1     	sta	$d113                   ; 0xd113 <palbach_end+0x5513>
+     5c4: 9c 00 d1     	stz	$d100                   ; 0xd100 <palbach_end+0x5500>
+     5c7: 9c 08 d1     	stz	$d108                   ; 0xd108 <palbach_end+0x5508>
+     5ca: 9c 10 d1     	stz	$d110                   ; 0xd110 <palbach_end+0x5510>
      5cd: a2 10        	ldx	#$10
-     5cf: 8e 00 d2     	stx	$d200                   ; 0xd200 <__heap_start+0xb988>
-     5d2: 8e 0c d2     	stx	$d20c                   ; 0xd20c <__heap_start+0xb994>
-     5d5: 8e 18 d2     	stx	$d218                   ; 0xd218 <__heap_start+0xb9a0>
+     5cf: 8e 00 d2     	stx	$d200                   ; 0xd200 <palbach_end+0x5600>
+     5d2: 8e 0c d2     	stx	$d20c                   ; 0xd20c <palbach_end+0x560c>
+     5d5: 8e 18 d2     	stx	$d218                   ; 0xd218 <palbach_end+0x5618>
      5d8: a0 d9        	ldy	#$d9
      5da: a2 40        	ldx	#$40
      5dc: 64 12        	stz	$12                     ; 0x2012 <__heap_start+0x79a>
@@ -521,40 +531,40 @@ Disassembly of section .text:
      609: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x79c>
      60b: a2 18        	ldx	#$18
      60d: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x79d>
-     60f: 20 dc ff     	jsr	$ffdc <__heap_start+0xe764>
+     60f: 20 dc ff     	jsr	$ffdc <palbach_end+0x83dc>
      612: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x79a>
      614: a9 00        	lda	#$0
      616: 6a           	ror
      617: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x79c>
      619: a6 47        	ldx	$47                     ; 0x2047 <__heap_start+0x7cf>
      61b: a4 48        	ldy	$48                     ; 0x2048 <__heap_start+0x7d0>
-     61d: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xc588>
-     620: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xc589>
-     623: 8c 02 de     	sty	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     626: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     629: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
-     62c: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xc599>
-     62f: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     632: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xc59b>
-     635: 8e a4 d6     	stx	$d6a4                   ; 0xd6a4 <__heap_start+0xbe2c>
-     638: 8c a5 d6     	sty	$d6a5                   ; 0xd6a5 <__heap_start+0xbe2d>
+     61d: 8e 00 de     	stx	$de00                   ; 0xde00 <palbach_end+0x6200>
+     620: 9c 01 de     	stz	$de01                   ; 0xde01 <palbach_end+0x6201>
+     623: 8c 02 de     	sty	$de02                   ; 0xde02 <palbach_end+0x6202>
+     626: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     629: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
+     62c: ac 11 de     	ldy	$de11                   ; 0xde11 <palbach_end+0x6211>
+     62f: ad 12 de     	lda	$de12                   ; 0xde12 <palbach_end+0x6212>
+     632: ad 13 de     	lda	$de13                   ; 0xde13 <palbach_end+0x6213>
+     635: 8e a4 d6     	stx	$d6a4                   ; 0xd6a4 <palbach_end+0x5aa4>
+     638: 8c a5 d6     	sty	$d6a5                   ; 0xd6a5 <palbach_end+0x5aa5>
      63b: a2 03        	ldx	#$3
-     63d: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xbe2e>
+     63d: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <palbach_end+0x5aa6>
      640: 60           	rts
 
 00000641 <textClear>:
      641: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x789>
      643: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x7a0>
      645: a2 50        	ldx	#$50
-     647: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xc588>
-     64a: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xc589>
+     647: 8e 00 de     	stx	$de00                   ; 0xde00 <palbach_end+0x6200>
+     64a: 9c 01 de     	stz	$de01                   ; 0xde01 <palbach_end+0x6201>
      64d: a2 1e        	ldx	#$1e
-     64f: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     652: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     655: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
-     658: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xc599>
-     65b: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     65e: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     64f: 8e 02 de     	stx	$de02                   ; 0xde02 <palbach_end+0x6202>
+     652: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     655: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
+     658: ac 11 de     	ldy	$de11                   ; 0xde11 <palbach_end+0x6211>
+     65b: ad 12 de     	lda	$de12                   ; 0xde12 <palbach_end+0x6212>
+     65e: ad 13 de     	lda	$de13                   ; 0xde13 <palbach_end+0x6213>
      661: a9 02        	lda	#$2
      663: 85 01        	sta	$1                      ; 0x2001 <__heap_start+0x789>
      665: e0 01        	cpx	#$1
@@ -611,11 +621,11 @@ Disassembly of section .text:
      6c6: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x7a0>
      6c8: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x789>
      6ca: 64 39        	stz	$39                     ; 0x2039 <__heap_start+0x7c1>
-     6cc: 9c 14 d0     	stz	$d014                   ; 0xd014 <__heap_start+0xb79c>
-     6cf: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xb79d>
+     6cc: 9c 14 d0     	stz	$d014                   ; 0xd014 <palbach_end+0x5414>
+     6cf: 9c 15 d0     	stz	$d015                   ; 0xd015 <palbach_end+0x5415>
      6d2: 64 3a        	stz	$3a                     ; 0x203a <__heap_start+0x7c2>
-     6d4: 9c 16 d0     	stz	$d016                   ; 0xd016 <__heap_start+0xb79e>
-     6d7: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xb79f>
+     6d4: 9c 16 d0     	stz	$d016                   ; 0xd016 <palbach_end+0x5416>
+     6d7: 9c 17 d0     	stz	$d017                   ; 0xd017 <palbach_end+0x5417>
      6da: 60           	rts
 
 000006db <main>:
@@ -631,17 +641,17 @@ Disassembly of section .text:
      6ea: 69 ff        	adc	#$ff
      6ec: 85 11        	sta	$11                     ; 0x2011 <__heap_start+0x799>
      6ee: 20 41 06     	jsr	$641 <textClear>
-     6f1: 9c 00 de     	stz	$de00                   ; 0xde00 <__heap_start+0xc588>
-     6f4: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xc589>
+     6f1: 9c 00 de     	stz	$de00                   ; 0xde00 <palbach_end+0x6200>
+     6f4: 9c 01 de     	stz	$de01                   ; 0xde01 <palbach_end+0x6201>
      6f7: a2 04        	ldx	#$4
-     6f9: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     6fc: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     6ff: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
+     6f9: 8e 02 de     	stx	$de02                   ; 0xde02 <palbach_end+0x6202>
+     6fc: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     6ff: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
      702: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x79a>
-     704: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xc599>
+     704: ae 11 de     	ldx	$de11                   ; 0xde11 <palbach_end+0x6211>
      707: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x79b>
-     709: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     70c: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     709: ae 12 de     	ldx	$de12                   ; 0xde12 <palbach_end+0x6212>
+     70c: ae 13 de     	ldx	$de13                   ; 0xde13 <palbach_end+0x6213>
      70f: 18           	clc
      710: a9 00        	lda	#$0
      712: 65 12        	adc	$12                     ; 0x2012 <__heap_start+0x79a>
@@ -658,9 +668,9 @@ Disassembly of section .text:
      727: c8           	iny
      728: 91 12        	sta	($12),y                 ; 0x2012 <__heap_start+0x79a>
      72a: a2 c0        	ldx	#$c0
-     72c: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     72c: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      72f: a2 13        	ldx	#$13
-     731: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     731: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      734: 64 01        	stz	$1                      ; 0x2001 <__heap_start+0x789>
      736: a2 45        	ldx	#$45
      738: a0 00        	ldy	#$0
@@ -712,11 +722,11 @@ Disassembly of section .text:
      796: a6 12        	ldx	$12                     ; 0x2012 <__heap_start+0x79a>
      798: 4c 10 08     	jmp	$810 <f256main+0x12f>
      79b: a2 80        	ldx	#$80
-     79d: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     79d: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7a0: a6 3d        	ldx	$3d                     ; 0x203d <__heap_start+0x7c5>
-     7a2: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7a2: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7a5: a2 4f        	ldx	#$4f
-     7a7: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7a7: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7aa: 4c 1f 08     	jmp	$81f <f256main+0x13e>
      7ad: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x7b8>
      7af: a4 31        	ldy	$31                     ; 0x2031 <__heap_start+0x7b9>
@@ -724,14 +734,14 @@ Disassembly of section .text:
      7b3: e0 7f        	cpx	#$7f
      7b5: 80 51        	bra	$808 <f256main+0x127>
      7b7: a2 80        	ldx	#$80
-     7b9: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7b9: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7bc: a6 3d        	ldx	$3d                     ; 0x203d <__heap_start+0x7c5>
-     7be: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7be: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7c1: a0 4f        	ldy	#$4f
-     7c3: 8c a1 dd     	sty	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7c3: 8c a1 dd     	sty	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7c6: a2 81        	ldx	#$81
      7c8: 86 f3        	stx	$f3                     ; 0x20f3 <__heap_start+0x87b>
-     7ca: 20 f0 ff     	jsr	$fff0 <__heap_start+0xe778>
+     7ca: 20 f0 ff     	jsr	$fff0 <palbach_end+0x83f0>
      7cd: 92 28        	sta	($28)                   ; 0x2028 <__heap_start+0x7b0>
      7cf: a9 00        	lda	#$0
      7d1: 6a           	ror
@@ -744,16 +754,16 @@ Disassembly of section .text:
      7dd: a6 3f        	ldx	$3f                     ; 0x203f <__heap_start+0x7c7>
      7df: 86 f4        	stx	$f4                     ; 0x20f4 <__heap_start+0x87c>
      7e1: 64 f5        	stz	$f5                     ; 0x20f5 <__heap_start+0x87d>
-     7e3: 20 f0 ff     	jsr	$fff0 <__heap_start+0xe778>
+     7e3: 20 f0 ff     	jsr	$fff0 <palbach_end+0x83f0>
      7e6: 92 2a        	sta	($2a)                   ; 0x202a <__heap_start+0x7b2>
      7e8: a9 00        	lda	#$0
      7ea: 6a           	ror
      7eb: 85 26        	sta	$26                     ; 0x2026 <__heap_start+0x7ae>
      7ed: a2 90        	ldx	#$90
-     7ef: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7ef: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7f2: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x7b8>
-     7f4: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <__heap_start+0xc529>
-     7f7: 8c a1 dd     	sty	$dda1                   ; 0xdda1 <__heap_start+0xc529>
+     7f4: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
+     7f7: 8c a1 dd     	sty	$dda1                   ; 0xdda1 <palbach_end+0x61a1>
      7fa: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x7b8>
      7fc: 86 3d        	stx	$3d                     ; 0x203d <__heap_start+0x7c5>
      7fe: a6 31        	ldx	$31                     ; 0x2031 <__heap_start+0x7b9>
@@ -774,7 +784,7 @@ Disassembly of section .text:
      81a: 91 10        	sta	($10),y                 ; 0x2010 <__heap_start+0x798>
      81c: 20 08 0c     	jsr	$c08 <printf>
      81f: 64 32        	stz	$32                     ; 0x2032 <__heap_start+0x7ba>
-     821: 20 00 ff     	jsr	$ff00 <__heap_start+0xe688>
+     821: 20 00 ff     	jsr	$ff00 <palbach_end+0x8300>
      824: 92 24        	sta	($24)                   ; 0x2024 <__heap_start+0x7ac>
      826: a9 00        	lda	#$0
      828: 6a           	ror
@@ -793,7 +803,7 @@ Disassembly of section .text:
      842: d0 db        	bne	$81f <f256main+0x13e>
      844: a2 80        	ldx	#$80
      846: 86 f3        	stx	$f3                     ; 0x20f3 <__heap_start+0x87b>
-     848: 20 f0 ff     	jsr	$fff0 <__heap_start+0xe778>
+     848: 20 f0 ff     	jsr	$fff0 <palbach_end+0x83f0>
      84b: 92 2c        	sta	($2c)                   ; 0x202c <__heap_start+0x7b4>
      84d: a9 00        	lda	#$0
      84f: 6a           	ror
@@ -805,7 +815,7 @@ Disassembly of section .text:
      859: a6 40        	ldx	$40                     ; 0x2040 <__heap_start+0x7c8>
      85b: 86 f4        	stx	$f4                     ; 0x20f4 <__heap_start+0x87c>
      85d: 64 f5        	stz	$f5                     ; 0x20f5 <__heap_start+0x87d>
-     85f: 20 f0 ff     	jsr	$fff0 <__heap_start+0xe778>
+     85f: 20 f0 ff     	jsr	$fff0 <palbach_end+0x83f0>
      862: 92 2e        	sta	($2e)                   ; 0x202e <__heap_start+0x7b6>
      864: a9 00        	lda	#$0
      866: 6a           	ror
@@ -818,22 +828,22 @@ Disassembly of section .text:
      86f: 86 22        	stx	$22                     ; 0x2022 <__heap_start+0x7aa>
      871: a6 3a        	ldx	$3a                     ; 0x203a <__heap_start+0x7c2>
      873: a0 50        	ldy	#$50
-     875: 8c 00 de     	sty	$de00                   ; 0xde00 <__heap_start+0xc588>
-     878: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xc589>
-     87b: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xc58a>
-     87e: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xc58b>
-     881: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xc598>
-     884: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xc599>
+     875: 8c 00 de     	sty	$de00                   ; 0xde00 <palbach_end+0x6200>
+     878: 9c 01 de     	stz	$de01                   ; 0xde01 <palbach_end+0x6201>
+     87b: 8e 02 de     	stx	$de02                   ; 0xde02 <palbach_end+0x6202>
+     87e: 9c 03 de     	stz	$de03                   ; 0xde03 <palbach_end+0x6203>
+     881: ae 10 de     	ldx	$de10                   ; 0xde10 <palbach_end+0x6210>
+     884: ac 11 de     	ldy	$de11                   ; 0xde11 <palbach_end+0x6211>
      887: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x79b>
-     889: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xc59a>
-     88c: ac 13 de     	ldy	$de13                   ; 0xde13 <__heap_start+0xc59b>
+     889: ad 12 de     	lda	$de12                   ; 0xde12 <palbach_end+0x6212>
+     88c: ac 13 de     	ldy	$de13                   ; 0xde13 <palbach_end+0x6213>
      88f: 84 1a        	sty	$1a                     ; 0x201a <__heap_start+0x7a2>
-     891: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xc590>
+     891: 9c 08 de     	stz	$de08                   ; 0xde08 <palbach_end+0x6208>
      894: a0 c0        	ldy	#$c0
-     896: 8c 09 de     	sty	$de09                   ; 0xde09 <__heap_start+0xc591>
-     899: 9c 0a de     	stz	$de0a                   ; 0xde0a <__heap_start+0xc592>
-     89c: 9c 0b de     	stz	$de0b                   ; 0xde0b <__heap_start+0xc593>
-     89f: 8e 0c de     	stx	$de0c                   ; 0xde0c <__heap_start+0xc594>
+     896: 8c 09 de     	sty	$de09                   ; 0xde09 <palbach_end+0x6209>
+     899: 9c 0a de     	stz	$de0a                   ; 0xde0a <palbach_end+0x620a>
+     89c: 9c 0b de     	stz	$de0b                   ; 0xde0b <palbach_end+0x620b>
+     89f: 8e 0c de     	stx	$de0c                   ; 0xde0c <palbach_end+0x620c>
      8a2: 64 12        	stz	$12                     ; 0x2012 <__heap_start+0x79a>
      8a4: a2 00        	ldx	#$0
      8a6: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x79c>
@@ -848,14 +858,14 @@ Disassembly of section .text:
      8b8: a2 c9        	ldx	#$c9
      8ba: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x7a1>
      8bc: a6 13        	ldx	$13                     ; 0x2013 <__heap_start+0x79b>
-     8be: 8e 0d de     	stx	$de0d                   ; 0xde0d <__heap_start+0xc595>
-     8c1: 8d 0e de     	sta	$de0e                   ; 0xde0e <__heap_start+0xc596>
+     8be: 8e 0d de     	stx	$de0d                   ; 0xde0d <palbach_end+0x620d>
+     8c1: 8d 0e de     	sta	$de0e                   ; 0xde0e <palbach_end+0x620e>
      8c4: a6 1a        	ldx	$1a                     ; 0x201a <__heap_start+0x7a2>
-     8c6: 8e 0f de     	stx	$de0f                   ; 0xde0f <__heap_start+0xc597>
-     8c9: ac 18 de     	ldy	$de18                   ; 0xde18 <__heap_start+0xc5a0>
-     8cc: ad 19 de     	lda	$de19                   ; 0xde19 <__heap_start+0xc5a1>
-     8cf: ae 1a de     	ldx	$de1a                   ; 0xde1a <__heap_start+0xc5a2>
-     8d2: ae 1b de     	ldx	$de1b                   ; 0xde1b <__heap_start+0xc5a3>
+     8c6: 8e 0f de     	stx	$de0f                   ; 0xde0f <palbach_end+0x620f>
+     8c9: ac 18 de     	ldy	$de18                   ; 0xde18 <palbach_end+0x6218>
+     8cc: ad 19 de     	lda	$de19                   ; 0xde19 <palbach_end+0x6219>
+     8cf: ae 1a de     	ldx	$de1a                   ; 0xde1a <palbach_end+0x621a>
+     8d2: ae 1b de     	ldx	$de1b                   ; 0xde1b <palbach_end+0x621b>
      8d5: 84 1a        	sty	$1a                     ; 0x201a <__heap_start+0x7a2>
      8d7: 85 1b        	sta	$1b                     ; 0x201b <__heap_start+0x7a3>
      8d9: 64 13        	stz	$13                     ; 0x2013 <__heap_start+0x79b>
@@ -993,20 +1003,20 @@ Disassembly of section .text:
      9d9: e0 00        	cpx	#$0
      9db: d0 e3        	bne	$9c0 <__putchar+0x155>
      9dd: c6 3a        	dec	$3a                     ; 0x203a <__heap_start+0x7c2>
-     9df: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xc590>
+     9df: 9c 08 de     	stz	$de08                   ; 0xde08 <palbach_end+0x6208>
      9e2: a2 c0        	ldx	#$c0
-     9e4: 8e 09 de     	stx	$de09                   ; 0xde09 <__heap_start+0xc591>
-     9e7: 9c 0a de     	stz	$de0a                   ; 0xde0a <__heap_start+0xc592>
-     9ea: 9c 0b de     	stz	$de0b                   ; 0xde0b <__heap_start+0xc593>
+     9e4: 8e 09 de     	stx	$de09                   ; 0xde09 <palbach_end+0x6209>
+     9e7: 9c 0a de     	stz	$de0a                   ; 0xde0a <palbach_end+0x620a>
+     9ea: 9c 0b de     	stz	$de0b                   ; 0xde0b <palbach_end+0x620b>
      9ed: a2 1d        	ldx	#$1d
-     9ef: 8e 0c de     	stx	$de0c                   ; 0xde0c <__heap_start+0xc594>
-     9f2: 9c 0d de     	stz	$de0d                   ; 0xde0d <__heap_start+0xc595>
-     9f5: 9c 0e de     	stz	$de0e                   ; 0xde0e <__heap_start+0xc596>
-     9f8: 9c 0f de     	stz	$de0f                   ; 0xde0f <__heap_start+0xc597>
-     9fb: ae 18 de     	ldx	$de18                   ; 0xde18 <__heap_start+0xc5a0>
-     9fe: ac 19 de     	ldy	$de19                   ; 0xde19 <__heap_start+0xc5a1>
-     a01: ad 1a de     	lda	$de1a                   ; 0xde1a <__heap_start+0xc5a2>
-     a04: ad 1b de     	lda	$de1b                   ; 0xde1b <__heap_start+0xc5a3>
+     9ef: 8e 0c de     	stx	$de0c                   ; 0xde0c <palbach_end+0x620c>
+     9f2: 9c 0d de     	stz	$de0d                   ; 0xde0d <palbach_end+0x620d>
+     9f5: 9c 0e de     	stz	$de0e                   ; 0xde0e <palbach_end+0x620e>
+     9f8: 9c 0f de     	stz	$de0f                   ; 0xde0f <palbach_end+0x620f>
+     9fb: ae 18 de     	ldx	$de18                   ; 0xde18 <palbach_end+0x6218>
+     9fe: ac 19 de     	ldy	$de19                   ; 0xde19 <palbach_end+0x6219>
+     a01: ad 1a de     	lda	$de1a                   ; 0xde1a <palbach_end+0x621a>
+     a04: ad 1b de     	lda	$de1b                   ; 0xde1b <palbach_end+0x621b>
      a07: 86 1a        	stx	$1a                     ; 0x201a <__heap_start+0x7a2>
      a09: 84 1b        	sty	$1b                     ; 0x201b <__heap_start+0x7a3>
      a0b: 4c ea 08     	jmp	$8ea <__putchar+0x7f>
@@ -1014,11 +1024,11 @@ Disassembly of section .text:
      a10: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x789>
      a12: a6 39        	ldx	$39                     ; 0x2039 <__heap_start+0x7c1>
      a14: a4 3a        	ldy	$3a                     ; 0x203a <__heap_start+0x7c2>
-     a16: 8e 14 d0     	stx	$d014                   ; 0xd014 <__heap_start+0xb79c>
-     a19: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xb79d>
+     a16: 8e 14 d0     	stx	$d014                   ; 0xd014 <palbach_end+0x5414>
+     a19: 9c 15 d0     	stz	$d015                   ; 0xd015 <palbach_end+0x5415>
      a1c: 84 3a        	sty	$3a                     ; 0x203a <__heap_start+0x7c2>
-     a1e: 8c 16 d0     	sty	$d016                   ; 0xd016 <__heap_start+0xb79e>
-     a21: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xb79f>
+     a1e: 8c 16 d0     	sty	$d016                   ; 0xd016 <palbach_end+0x5416>
+     a21: 9c 17 d0     	stz	$d017                   ; 0xd017 <palbach_end+0x5417>
      a24: 60           	rts
 
 00000a25 <exit>:

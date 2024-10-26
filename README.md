@@ -41,3 +41,9 @@ The full list of timers used is:
 4) every second
 5) every 3 seconds
 6) every minute
+
+## midiStuff
+
+![midStuff2](https://github.com/user-attachments/assets/6c89f4dd-bee8-4a22-86d8-e7407d4dfcf5)
+
+This is meant for the F256K2 (and Jr. "the Second") since it targets the SAM2695 Dream IC found on those machines only. Use the arrow keys left/right to select the note to be played, use the up/down to select the instrument (from 0 to 128) and play a short test note with the space bar.

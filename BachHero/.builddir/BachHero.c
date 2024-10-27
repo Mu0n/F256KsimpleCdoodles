@@ -9,11 +9,23 @@ picture, in time. See if your playing gets the approval of Johaness Sebastian Ba
 
 
 /* key codes
-113 119 101 114 116
- Q   W   E   R   T
+  50  51      53  54  55      57  48      61
+   2   3       5   6   7       9   0       =
+113 119 101 114 116 121 117 105 111 112  91  93
+ Q   W   E   R   T   Y   U   I   O   P   [   ]
+97  115 100     103 104    107 108 59
+ A   S   D       G  H       K   L   ;
+  122 120  99 118 98 110 109 44  46  47
+   Z   X    C  V   B  N   M   ,   .   /
+*/
 
+
+/* scrolling notes positions
+
+about to hit piano: x=175 y=163
 */
 #define F256LIB_IMPLEMENTATION
+#include "f256lib.h"
 
 #define MIDI_CTRL 0xDDA0
 #define MIDI_OUT 0xDDA1
@@ -25,17 +37,89 @@ picture, in time. See if your playing gets the approval of Johaness Sebastian Ba
 
  //TIMER_TEXT for the 1-frame long text refresh timer for data display
  //TIMER_NOTE is for a midi note timer
-#define TIMER_TEXT_COOKIE 0
+#define TIMER_GUI_COOKIE 0
 #define TIMER_NOTE_COOKIE 1
-#define TIMER_TEXT_DELAY 1
-#define TIMER_NOTE_DELAY 2
 
-#include "f256lib.h"
-struct timer_t midiTimer, refTimer; //timer_t structure for setting timer through the kernel
+#define TIMER_GUI_DELAY 1
+#define TIMER_NOTE_DELAY 30
+#define INIT_NOTE_DELAY 120
 
-uint16_t note = 0x36, oldnote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called*/
-uint16_t prgInst = 0; /* program change value, the MIDI instrument number */
+#define REF_MIDI_CHAN 0
+#define PLY_MIDI_CHAN 1
 
+#define MAX_SONG_INDEX 82
+#define SPR_NOTE_DATA  0x30000
+
+#define CURSOR_END_SONG 73
+
+EMBED(xaa, "../assets/xaa", 0x10000);
+EMBED(xab, "../assets/xab", 0x18000);
+EMBED(xac, "../assets/xac", 0x20000);
+EMBED(palbach, "../assets/bachbm.pal", 0x28000);
+EMBED(ntespr, "../assets/note.spr", 0x30000);
+
+struct timer_t midiTimer, GUITimer; //timer_t structure for setting timer through the kernel
+
+uint16_t note, oldnote, refnote,songrefnote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called. refnote is the correct song playing*/
+uint8_t score=0;
+uint16_t reticX=179, reticY=159;
+
+uint8_t MIDINotesToKeyCodes[128] = {0,0,0,0,0,0,0,0,  //0-7
+									0,0,0,0,0,0,0,0,  //8-15
+									0,0,0,0,0,0,0,0,  //16-23
+									0,0,0,0,0,0,0,0,  //24-31
+									0,0,0,0,0,0,0,0,  //32-39
+									0,0,0,0,0,0,0,0,  //40-47
+									0,0,0,0,0,0,0,0,  //48-55
+									0,0,0,0,113,50,119,51,  //56-63
+									101,114,53,116,54,121,55,117,  //64-71
+									105,57,111,48,112,91,61,93,  //72-79
+									0,0,0,0,0,0,0,0,  //80-87
+									0,0,0,0,0,0,0,0,  //88-95
+									0,0,0,0,0,0,0,0,  //96-103
+									0,0,0,0,0,0,0,0,  //104-111
+									0,0,0,0,0,0,0,0,  //112-119
+									0,0,0,0,0,0,0,0}; //120-127
+	
+uint8_t KeyCodesToMIDINotes[123] = {0,0,0,0,0,0,0,0,  //0-7
+									0,0,0,0,0,0,0,0,  //8-15
+									0,0,0,0,0,0,0,0,  //16-23
+									0,0,0,0,0,0,0,0,  //24-31
+									0,0,0,0,0,0,0,0,  //32-39
+									0,0,0,0,55,0,57,59,  //40-47
+									75,0,61,63,0,66,68,70,  //48-55
+									0,73,0,58,0,78,0,0,  //56-63
+									0,0,0,0,0,0,0,0,  //64-71
+									0,0,0,0,0,0,0,0,  //72-79
+									0,0,0,0,0,0,0,0,  //80-87
+									0,0,0,77,0,79,0,0,  //88-95
+									0,42,50,47,46,64,0,49,  //96-103
+									51,72,0,54,56,53,52,74,  //104-111
+									76,60,65,44,67,71,48,62,  //112-119
+									45,69,43}; //120-122
+uint16_t NoteXPosition[80] =       { 0,0,0,0,0,0,0,0,  //0-7
+								    0,0,0,0,0,0,0,0,  //8-15
+									0,0,0,0,0,0,0,0,  //16-23
+									0,0,0,0,0,0,0,0,  //24-31
+									0,0,0,0,0,0,0,0,  //32-39
+									0,0,163,167,171,175,179,183,  //40-47
+									191,194,199,204,207,215,218,223,  //48-55
+									227,231,236,239,247,250,255,259,  //56-63
+									263,271,274,279,283,287,292,295,  //64-71
+									303,306,311,315,319,327,330,335,  //72-79
+									};
+	
+uint8_t songNotes[82]={0, 55,67,69,71,74,72,72,76,74,  //0-8
+					   74,79,78,79,74,71,67,69,71,  //9-17
+					   72,74,76,74,72,71,69,71,67,  //18-24
+					   66,67,69,62,66,69,72,71,69,  //25-33
+					   71,67,69,71,74,72,72,76,74,  //34-42
+					   74,79,78,79,74,71,67,69,71,  //43-51
+					   62,74,72,71,69,67,62,67,66,  //52-60
+					   67,71,74,79,74,71,67,71,74,  //61-69
+					   79,0 , 0, 0, 0, 0, 0, 0, 0  //70-78
+};
+	
 bool setTimer(const struct timer_t *timer)
 {
     *(uint8_t*)0xf3 = timer->units;
@@ -51,66 +135,72 @@ uint8_t getTimerAbsolute(uint8_t units)
     return kernelCall(Clock.SetTimer);
 }
 
-void setupPiano()
-{
-	
-}
-
 void setupNewGame()
 {
-	setupPiano();
 }
 
-
-void setupBach()
+void setInstruments()
 {
-	
-}
-
-void setup()
-{
-	textClear();
-	textDefineForegroundColor(0,0xff,0xff,0xff);
+	POKE(MIDI_OUT,123);
+	POKE(MIDI_OUT,0);
+	POKE(MIDI_OUT,0xFF);
 	//prep the MIDI organ instrument 19
 	POKE(MIDI_OUT, 0xC0);
 	POKE(MIDI_OUT, 19);
-	
-	setupBach();
+	POKE(MIDI_OUT, 0xC1);
+	POKE(MIDI_OUT, 19);
 }
+//sets the text mode, the organ MIDI instrument and the midi timer, sets up the bitmap for Bach+piano gfx
+void setup()
+{
+	uint16_t c;
+	textClear();
+	textDefineForegroundColor(0,0xff,0xff,0xff);
 
-
-
+	setInstruments();
+	
+	GUITimer.units = TIMER_FRAMES;
+	GUITimer.absolute = TIMER_GUI_DELAY;
+	GUITimer.cookie = TIMER_GUI_COOKIE;
+	
+	midiTimer.units = TIMER_FRAMES;
+	midiTimer.absolute = TIMER_NOTE_DELAY;
+    midiTimer.cookie = TIMER_NOTE_COOKIE;
+	
+	POKE(1,1); //prep to copy over the palette to the CLUT
+	for(c=0;c<1023;c++) POKE(0xD000+c, FAR_PEEK(0x28000+c));
+	POKE(1,0);
+	bitmapSetAddress(2,0x10000);
+	bitmapSetActive(2);
+	bitmapSetVisible(2,true);
+}
 
 void refreshPrints()
 {
-
+	textGotoXY(60,4);
+	printf("score: %d ",score);
 }
 
-void midiNoteOff()
+void midiNoteOff(uint8_t wantNote, uint8_t chan)
 {
 	//Send a Note_Off midi command for the previously ongoing note
-    POKE(MIDI_OUT, 0x80);
-	POKE(MIDI_OUT, oldnote);
+    POKE(MIDI_OUT, 0x80 | chan);
+	POKE(MIDI_OUT, wantNote);
     POKE(MIDI_OUT, 0x4F);
 }
-void midiNoteOn()
+void midiNoteOn(uint8_t wantNote, uint8_t chan)
 {
 	//Send a Note_On midi command on channel 0
-	POKE(MIDI_OUT, 0x90);
-	POKE(MIDI_OUT, note);
-	POKE(MIDI_OUT, 0x4F);
+	POKE(MIDI_OUT, 0x90 | chan);
+	POKE(MIDI_OUT, wantNote);
+	POKE(MIDI_OUT, 0x7F);
+	//printf("%d ",wantNote);
 	//keep track of that note so we can Note_Off it when needed
-	oldnote = note;
 }
-void commandNote()
+void commandNote(uint8_t wantNote, uint8_t chan)
 {
-	uint8_t result;
-	midiNoteOff();
-	//Prepare the next note timer
-	result = getTimerAbsolute(TIMER_SECONDS);
-	midiTimer.absolute = result + TIMER_NOTE_DELAY;
-	setTimer(&midiTimer);
-	midiNoteOn();
+	midiNoteOff(oldnote, chan);
+	midiNoteOn(wantNote, chan);
 }
 
 void titleScreenLoop()
@@ -122,10 +212,72 @@ void gameLoop()
 void endGameLoop()
 {}
 
-int main(int argc, char *argv[]) {
+void prepDrawingNotes()
+{
+	uint8_t i=0;
+	for(i=0;i<9;i++)
+	{
+		spriteDefine(i, SPR_NOTE_DATA, 8, 0, 0); //id, addr, size, clut, layer
+	}
+}
+void drawIncomingNotes(uint8_t curNote, bool isRef)
+{
+	uint8_t value1; //where the timer is at right now
+	uint8_t value2; //where the timer will end
+	uint16_t finalValue; //used to compute how high the falling note sprite will be drawn
+	uint16_t finalX,finalY;
+	
+	finalX = NoteXPosition[curNote];
+	value1 = getTimerAbsolute(TIMER_FRAMES);
+	value2 = midiTimer.absolute;
+	if(value1 > value2) finalValue = ((uint16_t)(value1)+0xFF) - ((uint16_t)value1);
+	else finalValue = (uint16_t)value2 - (uint16_t)value1;
+	
+	finalY=reticY-(4*finalValue);
+	
+	if(isRef)
+	{
+	spriteSetVisible(1,true);
+	spriteSetPosition(1,finalX, 192);
+	}
+	else{
+	spriteSetVisible(0,true);
+	spriteSetPosition(0,finalX, 192);
+	}
+	/*
+	textGotoXY(4,10);
+	printf("N: %d X: %d Y: %d     ",curNote,finalX,finalY);
+	*/
+	/*
+	for(i=0;i<3;i++)
+	{
+	spriteSetVisible(i,true);
+	spriteSetPosition(i,finalX, finalY);
+	//spriteSetPosition(i,finalX,finalY-8*i);
+	
+	}*/
+}
 
+void writePianoKeyHelp()
+{
+	textGotoXY(5,0); printf("Game Jam Oct 25 to 27 2024");
+	textGotoXY(5,1); printf("Bach's MIDI Hero by Mu0n aka 1Bit Fever Dreams");
+	textGotoXY(5,3); printf("Press F1 to Start!");
+	textGotoXY(33,16); printf("A S D   G H   K L ;   2 3   5 6 7   9 0   +");
+	textGotoXY(34,23); printf("Z X C V B N M , . / Q W E R T Y U I O P [ ]");
+	textGotoXY(12,23); printf("J. S.  Bach");
+}
+int main(int argc, char *argv[]) {
+	uint8_t noteCursor=0;
+	bool isSongActive = false; //real time mode
+	bool isTutorialAfterFirst = false; // after first automatic note
+	bool isTutorial = false; //tutorial mode
 	setup();
 	POKE(1,0);
+	setTimer(&GUITimer);
+	
+	prepDrawingNotes();
+	writePianoKeyHelp();
     while(true)
         {
 		kernelNextEvent();
@@ -133,13 +285,28 @@ int main(int argc, char *argv[]) {
             {
 			switch(kernelEventData.timer.cookie)
 				{
-				case TIMER_TEXT_COOKIE:
+				case TIMER_GUI_COOKIE:
 					refreshPrints();
-					refTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_TEXT_DELAY;
-					setTimer(&refTimer);
+					GUITimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_GUI_DELAY;
+					setTimer(&GUITimer);
 					break;
 				case TIMER_NOTE_COOKIE:
-					midiNoteOff();
+					midiNoteOff(songrefnote, REF_MIDI_CHAN);
+					if(isSongActive && noteCursor<CURSOR_END_SONG)
+						{
+						midiTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_NOTE_DELAY;
+						noteCursor++;
+						songrefnote = songNotes[noteCursor];
+						setTimer(&midiTimer);
+						midiNoteOn(songrefnote, REF_MIDI_CHAN);
+						}
+					else if(isTutorialAfterFirst==false && isTutorial==true)
+					{
+						isTutorialAfterFirst=true;
+						noteCursor++;
+						songrefnote = songNotes[noteCursor];
+						drawIncomingNotes(songrefnote,true);
+					}
 					break;
 				}
             }
@@ -147,24 +314,92 @@ int main(int argc, char *argv[]) {
 			{
 				switch(kernelEventData.key.raw)
 				{
+					case 146: // top left backspace
+						setInstruments();
+						noteCursor=128;
+						isSongActive = false;
+						break;
 					case 0xb6: //up
-	
+						reticY--;
 						break;
 					case 0xb7: //down
-	
+						reticY++;
 						break;
 					case 0xb8: //left
-						if(note > 0) note--;
+						reticX--;
 						break;
 					case 0xb9: //right
-						if(note < 127) note++;
+						reticX++;
 						break;
+						/*
 					case 32: //space
-						commandNote();
+						score=0;
+						noteCursor=0;
+						isSongActive = true;
+						midiTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + INIT_NOTE_DELAY;
+						songrefnote = songNotes[noteCursor];
+						setTimer(&midiTimer);
+						midiNoteOn(songrefnote, REF_MIDI_CHAN);
+						break;
+						*/
+					case 129: //F1
+						score=0;
+						noteCursor=1;
+						midiTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_NOTE_DELAY;
+						songrefnote = songNotes[noteCursor];
+						setTimer(&midiTimer);
+						midiNoteOn(songrefnote, REF_MIDI_CHAN);
+						isTutorial=true;
+						isTutorialAfterFirst=false;
+	
+						textGotoXY(25,8);printf(" ");
+						textGotoXY(26,7);
+						printf("                      ");
+						break;
+					default:
+						drawIncomingNotes(KeyCodesToMIDINotes[kernelEventData.key.raw], false);
+						midiNoteOn(KeyCodesToMIDINotes[kernelEventData.key.raw], PLY_MIDI_CHAN);
+	
+						if(KeyCodesToMIDINotes[kernelEventData.key.raw] == songNotes[noteCursor] && isTutorial)
+						{
+							score++;
+							isTutorialAfterFirst = true;
+						}
+						else if(isTutorial && score>0)score--;
+	
 						break;
 				}
+	
+				//printf("%d %d ",KeyCodesToMIDINotes[kernelEventData.key.raw],songNotes[noteCursor]);
+	
+	
+	
 				//the following line can be used to get keyboard codes
-				printf(" %d",kernelEventData.key.raw);
+				//printf(" %d",kernelEventData.key.raw);
 			}
+		else if(kernelEventData.type == kernelEvent(key.RELEASED))
+			{
+				midiNoteOff(KeyCodesToMIDINotes[kernelEventData.key.raw], PLY_MIDI_CHAN);
+				spriteSetVisible(0,false);
+				if(isTutorial && isTutorialAfterFirst && noteCursor < (CURSOR_END_SONG+1))
+					{
+					isTutorialAfterFirst=false;
+					noteCursor++;
+					songrefnote = songNotes[noteCursor];
+					drawIncomingNotes(songrefnote,true);
+					}
+			    if(noteCursor==(CURSOR_END_SONG+1) && isTutorial)
+					{
+					isTutorial = false;
+					isTutorialAfterFirst = false;
+					textGotoXY(25,8); printf("/");
+					textGotoXY(26,7);
+					if(score>71) printf("Ausgezeichnet!          ");
+					else printf("Sehr Schlecht! Wieder!");
+					}
+	
+			}
+	
+
         }
 return 0;}

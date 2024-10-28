@@ -459,6 +459,8 @@ int main(int argc, char *argv[]) {
 						
 						break;				
 					case 131: //F3 Toggle MIDI and PSG
+					
+							POKE(0xD608,0x9F);
 						if(midiPSG){
 							textGotoXY(60,2); printf("F3:  MIDI  [PSG]");
 							midiPSG = false;

@@ -5,3 +5,5 @@
   xac : ORIGIN = __xac_lma, LENGTH = __xac_size
   palbach : ORIGIN = __palbach_lma, LENGTH = __palbach_size
   ntespr : ORIGIN = __ntespr_lma, LENGTH = __ntespr_size
+  glasses1 : ORIGIN = __glasses1_lma, LENGTH = __glasses1_size
+  glasses2 : ORIGIN = __glasses2_lma, LENGTH = __glasses2_size

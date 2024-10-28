@@ -15,3 +15,9 @@
   __ntespr_lma  = 0x30000;
   __ntespr_size = 0x40;
 
+  __glasses1_lma  = 0x38000;
+  __glasses1_size = 0x400;
+
+  __glasses2_lma  = 0x40000;
+  __glasses2_size = 0x400;
+

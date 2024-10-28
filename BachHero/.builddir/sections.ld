@@ -5,3 +5,5 @@
   .xac : { *(.xac .xac*) } >xac end_xac = .;
   .palbach : { *(.palbach .palbach*) } >palbach end_palbach = .;
   .ntespr : { *(.ntespr .ntespr*) } >ntespr end_ntespr = .;
+  .glasses1 : { *(.glasses1 .glasses1*) } >glasses1 end_glasses1 = .;
+  .glasses2 : { *(.glasses2 .glasses2*) } >glasses2 end_glasses2 = .;

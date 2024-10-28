@@ -30,3 +30,15 @@
   BYTE((end_ntespr - __ntespr_lma)>>16)
   TRIM(ntespr)
 
+  SHORT(ORIGIN(glasses1))
+  BYTE(ORIGIN(glasses1)>>16)
+  SHORT(end_glasses1 - __glasses1_lma)
+  BYTE((end_glasses1 - __glasses1_lma)>>16)
+  TRIM(glasses1)
+
+  SHORT(ORIGIN(glasses2))
+  BYTE(ORIGIN(glasses2)>>16)
+  SHORT(end_glasses2 - __glasses2_lma)
+  BYTE((end_glasses2 - __glasses2_lma)>>16)
+  TRIM(glasses2)
+

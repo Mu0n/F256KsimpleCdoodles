@@ -47,3 +47,10 @@ The full list of timers used is:
 ![midStuff2](https://github.com/user-attachments/assets/6c89f4dd-bee8-4a22-86d8-e7407d4dfcf5)
 
 This is meant for the F256K2 (and Jr. "the Second") since it targets the SAM2695 Dream IC found on those machines only. Use the arrow keys left/right to select the note to be played, use the up/down to select the instrument (from 0 to 128) and play a short test note with the space bar.
+
+## Bach's MIDI Hero
+
+![image](https://github.com/user-attachments/assets/f721fd45-dbf1-4660-a6fc-2d9ce965399e)
+
+This is my game entry to the Foenix community's Game Jam for Oct 25-27 in 2024.
+It's a musical game where you can freely play notes using the keys on your keyboard (white row of keys from Z to / and Q to ], black keys from A to ; and 2 to +). By default, it can use the MIDI chip in the K2 and Jr.2 since they come equipped with a sam2695 IC from Dream. A toggle to PSG sound can be done so that the original K and Jr. can also participate, albeit with simpler sound. A demo mode of the tune can be activated with F5. Win with a perfect score while you play the main mode (F1) and get a special reward!

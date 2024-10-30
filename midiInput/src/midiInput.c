@@ -73,6 +73,81 @@ void midiNoteOn(uint8_t wantNote, uint8_t chan)
 	POKE(MIDI_OUT, 0x7F);
 }
 
+
+
+/*
+VIRQ = $FFFE
+INT_PEND_0 = $D660 ; Pending register for interrupts 0 - 7
+INT_PEND_1 = $D661 ; Pending register for interrupts 8 - 15
+INT_MASK_0 = $D66C ; Mask register for interrupts 0 - 7
+INT_MASK_1 = $D66D ; Mask register for interrupts 8 - 15
+start: ; Disable IRQ handling
+sei
+; Load my IRQ handler into the IRQ vector
+; NOTE: this code just takes over IRQs completely. It could save
+; the pointer to the old handler and chain to it when it has
+; handled its interrupt. But what is proper really depends on
+; what the program is trying to do.
+lda #<my_handler
+sta VIRQ
+lda #>my_handler
+sta VIRQ+1
+; Mask off all but the SOF interrupt
+lda #$ff
+sta INT_MASK_1
+and #~INT00_VKY_SOF
+sta INT_MASK_0
+; Clear all pending interrupts
+lda #$ff
+sta INT_PEND_0
+sta INT_PEND_1
+; Put a character in the upper right of the screen
+lda #SYS_CTRL_TEXT_PG
+sta SYS_CTRL_1
+lda #’@’
+sta $c000
+; Set the color of the character
+lda #SYS_CTRL_COLOR_PG
+sta SYS_CTRL_1
+lda #$F0
+sta $c000
+; Go back to I/O page 0
+stz SYS_CTRL_1
+; Make sure we’re in text mode
+lda #$01 ; enable TEXT
+sta $D000 ; Save that to VICKY master control register 0
+stz $D001
+; Re-enable IRQ handling
+cli
+
+
+SYS_CTRL_1 = $0001
+SYS_CTRL_TEXT_PG = $02
+my_handler: pha
+; Save the system control register
+lda SYS_CTRL_1
+pha
+; Switch to I/O page 0
+stz SYS_CTRL_1
+; Check for SOF flag
+lda #INT00_VKY_SOF
+bit INT_PEND_0
+beq return ; If it’s zero, exit the handler
+; Yes: clear the flag for SOF
+sta INT_PEND_0
+; Move to the text screen page
+lda #SYS_CTRL_TEXT_PG
+sta SYS_CTRL_1
+; Increment the character at position 0
+inc $c000
+; Restore the system control register
+return: pla
+sta SYS_CTRL_1
+; Return to the original code
+pla
+rti
+
+*/
 int main(int argc, char *argv[]) {
 	bool disa = false;
 	setup();

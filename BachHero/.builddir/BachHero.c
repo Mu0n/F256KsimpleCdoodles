@@ -221,6 +221,7 @@ void setup()
 	bitmapSetAddress(2,0x10000);
 	bitmapSetActive(2);
 	bitmapSetVisible(2,true);
+	//POKE(0xD000,0x4F);
 }
 
 void refreshPrints()

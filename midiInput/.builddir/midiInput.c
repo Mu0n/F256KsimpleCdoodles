@@ -17,6 +17,9 @@
 #define TIMER_RX_DELAY 1
 #define TIMER_GUI_DELAY 1
 
+#define SYS_CTRL_TEXT_PG 2
+#define SYS_CTRL_1 0x0001
+#define SYS_CTRL_COLOR_PG 0
 #include "f256lib.h"
 struct timer_t midiRxTimer, GUITimer; //timer_t structure for setting timer through the kernel
 
@@ -75,12 +78,45 @@ void midiNoteOn(uint8_t wantNote, uint8_t chan)
 	POKE(MIDI_OUT, 0x7F);
 }
 
-int main(int argc, char *argv[]) {
-	bool disa = false;
-	setup();
-	POKE(1,0);
-    while(true)
-        {
+
+void irqHandler()
+{
+	uint8_t var,keepCtrl;
 	
+	keepCtrl = PEEK(1);
+	POKE(SYS_CTRL_1,0);
+	var = CHECK_BIT(INT_PEND_0,INT00_VKY_SOF);
+	if(var==1)
+	{
+		POKE(INT_PEND_0,var);
+		POKE(SYS_CTRL_1,SYS_CTRL_TEXT_PG);
+		POKE(0xC000,PEEK(0xC000)+1);
+	}
+	POKE(1,keepCtrl);
+}
+
+
+int main(int argc, char *argv[]) {
+	//setup();
+
+	while(true)
+        {
+	asm("sei");
+	POKE(VIRQ, LOW_BYTE((uint16_t)&irqHandler));
+	POKE(VIRQ+1, HIGH_BYTE(&irqHandler));
+	POKE(INT_MASK_1,0xFF); //mask all except SOF interrupt
+	POKE(INT_MASK_0,(0xFF) & (~INT00_VKY_SOF));
+	POKE(INT_PEND_0,0xFF); //clear both pending interrupts
+	POKE(INT_PEND_1,0xFF);
+	
+	POKE(SYS_CTRL_1,SYS_CTRL_TEXT_PG);
+	POKE(0xC000,0x70);
+	POKE(SYS_CTRL_1,MMU_IO_COLOR);
+	POKE(0xC000, 0x0C);
+	
+	POKE(SYS_CTRL_1, 0);
+	POKE(0xD000,1); //text overlay
+	POKE(0xD001,0); //font mode 80x80
+	asm("cli");
         }
 return 0;}

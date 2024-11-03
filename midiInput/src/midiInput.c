@@ -15,6 +15,9 @@
 #define TIMER_RX_DELAY 1
 #define TIMER_GUI_DELAY 1
 
+#define SYS_CTRL_TEXT_PG 2
+#define SYS_CTRL_1 0x0001
+
 #include "f256lib.h"
 struct timer_t midiRxTimer, GUITimer; //timer_t structure for setting timer through the kernel
 
@@ -74,86 +77,44 @@ void midiNoteOn(uint8_t wantNote, uint8_t chan)
 }
 
 
-
-/*
-VIRQ = $FFFE
-INT_PEND_0 = $D660 ; Pending register for interrupts 0 - 7
-INT_PEND_1 = $D661 ; Pending register for interrupts 8 - 15
-INT_MASK_0 = $D66C ; Mask register for interrupts 0 - 7
-INT_MASK_1 = $D66D ; Mask register for interrupts 8 - 15
-start: ; Disable IRQ handling
-sei
-; Load my IRQ handler into the IRQ vector
-; NOTE: this code just takes over IRQs completely. It could save
-; the pointer to the old handler and chain to it when it has
-; handled its interrupt. But what is proper really depends on
-; what the program is trying to do.
-lda #<my_handler
-sta VIRQ
-lda #>my_handler
-sta VIRQ+1
-; Mask off all but the SOF interrupt
-lda #$ff
-sta INT_MASK_1
-and #~INT00_VKY_SOF
-sta INT_MASK_0
-; Clear all pending interrupts
-lda #$ff
-sta INT_PEND_0
-sta INT_PEND_1
-; Put a character in the upper right of the screen
-lda #SYS_CTRL_TEXT_PG
-sta SYS_CTRL_1
-lda #’@’
-sta $c000
-; Set the color of the character
-lda #SYS_CTRL_COLOR_PG
-sta SYS_CTRL_1
-lda #$F0
-sta $c000
-; Go back to I/O page 0
-stz SYS_CTRL_1
-; Make sure we’re in text mode
-lda #$01 ; enable TEXT
-sta $D000 ; Save that to VICKY master control register 0
-stz $D001
-; Re-enable IRQ handling
-cli
+void irqHandler()
+{
+	uint8_t var,keepCtrl;
+	
+	keepCtrl = PEEK(1);
+	POKE(SYS_CTRL_1,0);
+	var = CHECK_BIT(INT_PEND_0,INT00_VKY_SOF);
+	if(var==1)
+	{
+		POKE(INT_PEND_0,var);
+		POKE(SYS_CTRL_1,SYS_CTRL_TEXT_PG);
+		POKE(0xC000,PEEK(0xC000)+1);
+	}
+	POKE(1,keepCtrl);
+}
 
 
-SYS_CTRL_1 = $0001
-SYS_CTRL_TEXT_PG = $02
-my_handler: pha
-; Save the system control register
-lda SYS_CTRL_1
-pha
-; Switch to I/O page 0
-stz SYS_CTRL_1
-; Check for SOF flag
-lda #INT00_VKY_SOF
-bit INT_PEND_0
-beq return ; If it’s zero, exit the handler
-; Yes: clear the flag for SOF
-sta INT_PEND_0
-; Move to the text screen page
-lda #SYS_CTRL_TEXT_PG
-sta SYS_CTRL_1
-; Increment the character at position 0
-inc $c000
-; Restore the system control register
-return: pla
-sta SYS_CTRL_1
-; Return to the original code
-pla
-rti
-
-*/
 int main(int argc, char *argv[]) {
-	bool disa = false;
-	setup();
-	POKE(1,0);
-    while(true) 
+	//setup();
+
+	while(true) 
         {
-		
+	asm("sei");
+	POKE(VIRQ, LOW_BYTE((uint16_t)&irqHandler));
+	POKE(VIRQ+1, HIGH_BYTE(&irqHandler));
+	POKE(INT_MASK_1,0xFF); //mask all except SOF interrupt
+	POKE(INT_MASK_0,(0xFF) & (~INT00_VKY_SOF));
+	POKE(INT_PEND_0,0xFF); //clear both pending interrupts
+	POKE(INT_PEND_1,0xFF);
+	
+	POKE(SYS_CTRL_1,SYS_CTRL_TEXT_PG);
+	POKE(0xC000,0x70);
+	POKE(SYS_CTRL_1,MMU_IO_COLOR);
+	POKE(0xC000, 0x0C);
+	
+	POKE(SYS_CTRL_1, 0);
+	POKE(0xD000,1); //text overlay
+	POKE(0xD001,0); //font mode 80x80
+	asm("cli");
         }
 return 0;}

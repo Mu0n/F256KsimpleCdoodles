@@ -4,6 +4,11 @@
   xab : ORIGIN = __xab_lma, LENGTH = __xab_size
   xac : ORIGIN = __xac_lma, LENGTH = __xac_size
   palbach : ORIGIN = __palbach_lma, LENGTH = __palbach_size
+  paltile : ORIGIN = __paltile_lma, LENGTH = __paltile_size
   ntespr : ORIGIN = __ntespr_lma, LENGTH = __ntespr_size
   glasses1 : ORIGIN = __glasses1_lma, LENGTH = __glasses1_size
   glasses2 : ORIGIN = __glasses2_lma, LENGTH = __glasses2_size
+  tilemap : ORIGIN = __tilemap_lma, LENGTH = __tilemap_size
+  psgmap : ORIGIN = __psgmap_lma, LENGTH = __psgmap_size
+  tileset1 : ORIGIN = __tileset1_lma, LENGTH = __tileset1_size
+  tileset2 : ORIGIN = __tileset2_lma, LENGTH = __tileset2_size

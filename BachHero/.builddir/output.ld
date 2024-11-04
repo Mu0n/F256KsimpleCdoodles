@@ -24,6 +24,12 @@
   BYTE((end_palbach - __palbach_lma)>>16)
   TRIM(palbach)
 
+  SHORT(ORIGIN(paltile))
+  BYTE(ORIGIN(paltile)>>16)
+  SHORT(end_paltile - __paltile_lma)
+  BYTE((end_paltile - __paltile_lma)>>16)
+  TRIM(paltile)
+
   SHORT(ORIGIN(ntespr))
   BYTE(ORIGIN(ntespr)>>16)
   SHORT(end_ntespr - __ntespr_lma)
@@ -41,4 +47,28 @@
   SHORT(end_glasses2 - __glasses2_lma)
   BYTE((end_glasses2 - __glasses2_lma)>>16)
   TRIM(glasses2)
+
+  SHORT(ORIGIN(tilemap))
+  BYTE(ORIGIN(tilemap)>>16)
+  SHORT(end_tilemap - __tilemap_lma)
+  BYTE((end_tilemap - __tilemap_lma)>>16)
+  TRIM(tilemap)
+
+  SHORT(ORIGIN(psgmap))
+  BYTE(ORIGIN(psgmap)>>16)
+  SHORT(end_psgmap - __psgmap_lma)
+  BYTE((end_psgmap - __psgmap_lma)>>16)
+  TRIM(psgmap)
+
+  SHORT(ORIGIN(tileset1))
+  BYTE(ORIGIN(tileset1)>>16)
+  SHORT(end_tileset1 - __tileset1_lma)
+  BYTE((end_tileset1 - __tileset1_lma)>>16)
+  TRIM(tileset1)
+
+  SHORT(ORIGIN(tileset2))
+  BYTE(ORIGIN(tileset2)>>16)
+  SHORT(end_tileset2 - __tileset2_lma)
+  BYTE((end_tileset2 - __tileset2_lma)>>16)
+  TRIM(tileset2)
 

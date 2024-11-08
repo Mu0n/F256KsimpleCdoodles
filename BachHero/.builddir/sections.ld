@@ -4,6 +4,11 @@
   .xab : { *(.xab .xab*) } >xab end_xab = .;
   .xac : { *(.xac .xac*) } >xac end_xac = .;
   .palbach : { *(.palbach .palbach*) } >palbach end_palbach = .;
+  .paltile : { *(.paltile .paltile*) } >paltile end_paltile = .;
   .ntespr : { *(.ntespr .ntespr*) } >ntespr end_ntespr = .;
   .glasses1 : { *(.glasses1 .glasses1*) } >glasses1 end_glasses1 = .;
   .glasses2 : { *(.glasses2 .glasses2*) } >glasses2 end_glasses2 = .;
+  .tilemap : { *(.tilemap .tilemap*) } >tilemap end_tilemap = .;
+  .psgmap : { *(.psgmap .psgmap*) } >psgmap end_psgmap = .;
+  .tileset1 : { *(.tileset1 .tileset1*) } >tileset1 end_tileset1 = .;
+  .tileset2 : { *(.tileset2 .tileset2*) } >tileset2 end_tileset2 = .;

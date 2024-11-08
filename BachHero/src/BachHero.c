@@ -38,30 +38,44 @@ about to hit piano: x=175 y=163
 #define TIMER_GUI_COOKIE 0
 #define TIMER_NOTE_COOKIE 1
 #define TIMER_GLASSES_COOKIE 2
+#define TIMER_SCROLL_COOKIE 3
 
 #define TIMER_GUI_DELAY 1
 #define TIMER_NOTE_DELAY 30
 #define INIT_NOTE_DELAY 25
 #define TIMER_GLASSES_DELAY 3
 
+#define TIMER_SCROLL_DELAY 3
+
+
 #define REF_MIDI_CHAN 0
 #define PLY_MIDI_CHAN 1
 
 #define MAX_SONG_INDEX 82
-#define SPR_NOTE_DATA  0x30000
+#define SPR_BACH       0x10000
+#define SPR_NOTE_DATA  0x28800
 #define GLASSES_ADDR_1 0x38000
-#define GLASSES_ADDR_2 0x40000
+#define GLASSES_ADDR_2 0x38400
+#define TILESET_ADDR   0x40000
+#define MAP_MIDI  0x38800
+#define  MAP_PSG  0x38F20
 #define CURSOR_END_SONG 73
 
 EMBED(xaa, "../assets/xaa", 0x10000);
 EMBED(xab, "../assets/xab", 0x18000);
 EMBED(xac, "../assets/xac", 0x20000);
 EMBED(palbach, "../assets/bachbm.pal", 0x28000);
-EMBED(ntespr, "../assets/note.spr", 0x30000);
+EMBED(paltile, "../assets/tileset.pal", 0x28400);
+EMBED(ntespr, "../assets/note.spr", 0x28800);
 EMBED(glasses1, "../assets/glasses1.spr", 0x38000);
-EMBED(glasses2, "../assets/glasses2.spr", 0x40000);
+EMBED(glasses2, "../assets/glasses2.spr", 0x38400);
+EMBED(tilemap, "../assets/midimap1.map", 0x38800);
+EMBED(psgmap, "../assets/psgmap1.map", 0x38F20);
+EMBED(tileset1, "../assets/tileset1.tile", 0x40000);
+EMBED(tileset2, "../assets/tileset2.tile", 0x48000);
 
-struct timer_t midiTimer, GUITimer, glassesTimer; //timer_t structure for setting timer through the kernel
+
+struct timer_t midiTimer, GUITimer, glassesTimer, scrollTimer; //timer_t structure for setting timer through the kernel
 
 uint16_t note, oldnote, refnote,songrefnote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called. refnote is the correct song playing*/
 uint8_t score=0;
@@ -156,6 +170,41 @@ uint8_t songNotes[82]={0, 55,67,69,71,74,72,72,76,74,  //0-8
 					   67,71,74,79,74,71,67,71,74,  //61-69
 					   79,0 , 0, 0, 0, 0, 0, 0, 0  //70-78
 };
+
+int16_t SIN[] = {
+       0,    1,    3,    4,    6,    7,    9,   10,
+      12,   14,   15,   17,   18,   20,   21,   23,
+      24,   25,   27,   28,   30,   31,   32,   34,
+      35,   36,   38,   39,   40,   41,   42,   44,
+      45,   46,   47,   48,   49,   50,   51,   52,
+      53,   54,   54,   55,   56,   57,   57,   58,
+      59,   59,   60,   60,   61,   61,   62,   62,
+      62,   63,   63,   63,   63,   63,   63,   63,
+      64,   63,   63,   63,   63,   63,   63,   63,
+      62,   62,   62,   61,   61,   60,   60,   59,
+      59,   58,   57,   57,   56,   55,   54,   54,
+      53,   52,   51,   50,   49,   48,   47,   46,
+      45,   44,   42,   41,   40,   39,   38,   36,
+      35,   34,   32,   31,   30,   28,   27,   25,
+      24,   23,   21,   20,   18,   17,   15,   14,
+      12,   10,    9,    7,    6,    4,    3,    1,
+       0,   -1,   -3,   -4,   -6,   -7,   -9,  -10,
+     -12,  -14,  -15,  -17,  -18,  -20,  -21,  -23,
+     -24,  -25,  -27,  -28,  -30,  -31,  -32,  -34,
+     -35,  -36,  -38,  -39,  -40,  -41,  -42,  -44,
+     -45,  -46,  -47,  -48,  -49,  -50,  -51,  -52,
+     -53,  -54,  -54,  -55,  -56,  -57,  -57,  -58,
+     -59,  -59,  -60,  -60,  -61,  -61,  -62,  -62,
+     -62,  -63,  -63,  -63,  -63,  -63,  -63,  -63,
+     -64,  -63,  -63,  -63,  -63,  -63,  -63,  -63,
+     -62,  -62,  -62,  -61,  -61,  -60,  -60,  -59,
+     -59,  -58,  -57,  -57,  -56,  -55,  -54,  -54,
+     -53,  -52,  -51,  -50,  -49,  -48,  -47,  -46,
+     -45,  -44,  -42,  -41,  -40,  -39,  -38,  -36,
+     -35,  -34,  -32,  -31,  -30,  -28,  -27,  -25,
+     -24,  -23,  -21,  -20,  -18,  -17,  -15,  -14,
+     -12,  -10,   -9,   -7,   -6,   -4,   -3,   -1,
+};
 									
 bool setTimer(const struct timer_t *timer)
 {
@@ -196,8 +245,6 @@ void setInstruments()
 void setup()
 {
 	uint16_t c;
-	textClear();
-	textDefineForegroundColor(0,0xff,0xff,0xff);
 
 	setInstruments();
 	
@@ -213,12 +260,59 @@ void setup()
 	glassesTimer.absolute = TIMER_GLASSES_DELAY;
 	glassesTimer.cookie = TIMER_GLASSES_COOKIE;
 	
-	POKE(1,1); //prep to copy over the palette to the CLUT
-	for(c=0;c<1023;c++) POKE(0xD000+c, FAR_PEEK(0x28000+c));
-	POKE(1,0);
-	bitmapSetAddress(2,0x10000);
-	bitmapSetActive(2);
-	bitmapSetVisible(2,true);
+	
+	POKE(MMU_IO_CTRL, 0x00);
+	POKE(VKY_MSTR_CTRL_0, 0x3F); //graphics and tile enabled
+	POKE(VKY_MSTR_CTRL_1, 0x14); //320x240 at 60 Hz; double height text
+	POKE(VKY_LAYER_CTRL_0, 0x01); //bitmap 0 in layer 1, bitmap 1 in layer 0
+	POKE(VKY_LAYER_CTRL_1, 0x04); //tile 0 in layer 2
+	
+	
+	POKE(MMU_IO_CTRL,1);  //MMU I/O to page 1
+	//prep to copy over the palette to the CLUT
+	for(c=0;c<1023;c++) 
+	{
+		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(0x28000+c));
+		POKE(VKY_GR_CLUT_1+c, FAR_PEEK(0x28400+c));
+	}
+	
+	//Bach Bitmap at layer 0
+	POKE(MMU_IO_CTRL,0);
+	bitmapSetAddress(0,SPR_BACH);
+	
+	for(c=182;c<193;c++)
+	{
+		bitmapLine( 40, c, 100, c);
+	}
+	for(c=6;c<40;c++)
+		{
+		bitmapLine( 240, c, 320, c);
+		}
+
+	bitmapSetVisible(0,true);
+	bitmapSetVisible(1,false);
+	bitmapSetVisible(2,false);
+	bitmapSetCLUT(0);
+	bitmapSetActive(1);
+
+	textClear();
+	textDefineForegroundColor(0,0xff,0xff,0xff);
+	textEnableBackgroundColors(false);
+	
+	//tiles setting
+	tileDefineTileMap(0,MAP_MIDI,16,23,19);
+	tileDefineTileMap(1,MAP_PSG,16,23,19);
+	tileDefineTileSet(0,TILESET_ADDR, false);
+	
+	
+	tileSetVisible(0,true);
+	tileSetVisible(1,false);
+	tileSetVisible(2,false);
+	
+	scrollTimer.units = TIMER_FRAMES;
+	scrollTimer.absolute = TIMER_SCROLL_DELAY;
+	scrollTimer.cookie = TIMER_SCROLL_COOKIE;
+	
 }
 
 void refreshPrints()
@@ -312,8 +406,8 @@ void drawIncomingNotes(uint8_t curNote, bool isRef)
 
 void writePianoKeyHelp()
 {
-	textGotoXY(5,0); printf("Game Jam Oct 25 to 27 2024");
-	textGotoXY(5,1); printf("Bach's MIDI Hero by Mu0n aka 1Bit Fever Dreams");
+	//textGotoXY(5,0); printf("Game Jam Oct 25 to 27 2024");
+	//textGotoXY(5,1); printf("Bach's MIDI Hero by Mu0n aka 1Bit Fever Dreams");
 	textGotoXY(60,1); printf("F1: Begin Game!");
 	textGotoXY(33,16); printf("A S D   G H   K L ;   2 3   5 6 7   9 0   +");
 	textGotoXY(34,23); printf("Z X C V B N M , . / Q W E R T Y U I O P [ ]");
@@ -322,6 +416,8 @@ void writePianoKeyHelp()
 	textGotoXY(60,3); printf("F5: Hear Demo ");
 }
 int main(int argc, char *argv[]) {
+	uint8_t offX=0, offY=128;
+	uint8_t sinx=0, siny=0;
 	uint8_t noteCursor=0;
 	bool isSongActive = false; //real time mode
 	bool isTutorialAfterFirst = false; // after first automatic note
@@ -329,11 +425,12 @@ int main(int argc, char *argv[]) {
 	uint8_t midiInstr = 19;
 	int8_t octaveShift=0;
 	setup();
-	POKE(1,0);
 	setTimer(&GUITimer);
-	
 	prepSprites();
 	writePianoKeyHelp();
+	
+	scrollTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_SCROLL_DELAY;setTimer(&scrollTimer);
+	POKE(MMU_IO_CTRL,0);
     while(true) 
         {
 		kernelNextEvent();
@@ -341,6 +438,13 @@ int main(int argc, char *argv[]) {
             {
 			switch(kernelEventData.timer.cookie)
 				{
+				case TIMER_SCROLL_COOKIE:
+					offX++; offY+=2;
+					sinx = SIN[offX]>>1; siny = SIN[offY]>>1;
+					tileSetScroll(0, (sinx)%32,0, (siny)%32,0);
+					scrollTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_SCROLL_DELAY;
+					setTimer(&scrollTimer); 
+					break;
 				case TIMER_GUI_COOKIE:
 					refreshPrints();
 					GUITimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_GUI_DELAY;
@@ -462,12 +566,14 @@ int main(int argc, char *argv[]) {
 					
 							POKE(0xD608,0x9F);
 						if(midiPSG){
+							tileDefineTileMap(0,MAP_PSG,16,23,19);
 							textGotoXY(60,2); printf("F3:  MIDI  [PSG]");
 							midiPSG = false;
 							textGotoXY(33,16); printf("    D   G H   K L ;   2 3   5 6 7   9 0   +");
 							textGotoXY(34,23); printf("  X C V B N M , . / Q W E R T Y U I O P [ ]");
 						}
 						else{
+							tileDefineTileMap(0,MAP_MIDI,16,23,19);
 							textGotoXY(60,2); printf("F3: [MIDI]  PSG ");
 							midiPSG = true;
 							textGotoXY(33,16); printf("A S D   G H   K L ;   2 3   5 6 7   9 0   +");

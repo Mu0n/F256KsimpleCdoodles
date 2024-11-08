@@ -12,12 +12,27 @@
   __palbach_lma  = 0x28000;
   __palbach_size = 0x400;
 
-  __ntespr_lma  = 0x30000;
+  __paltile_lma  = 0x28400;
+  __paltile_size = 0x400;
+
+  __ntespr_lma  = 0x28800;
   __ntespr_size = 0x40;
 
   __glasses1_lma  = 0x38000;
   __glasses1_size = 0x400;
 
-  __glasses2_lma  = 0x40000;
+  __glasses2_lma  = 0x38400;
   __glasses2_size = 0x400;
+
+  __tilemap_lma  = 0x38800;
+  __tilemap_size = 0x720;
+
+  __psgmap_lma  = 0x38f20;
+  __psgmap_size = 0x720;
+
+  __tileset1_lma  = 0x40000;
+  __tileset1_size = 0x8000;
+
+  __tileset2_lma  = 0x48000;
+  __tileset2_size = 0x7f00;
 

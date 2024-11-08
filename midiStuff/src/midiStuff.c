@@ -1,9 +1,11 @@
 #define F256LIB_IMPLEMENTATION
 
-#define MIDI_CTRL 0xDDA0
-#define MIDI_OUT 0xDDA1
-#define MIDI_RX_00_07 0xDDA2
-#define MIDI_RX_08_10 0xDDA3
+#define MIDI_CTRL 	   0xDDA0
+#define MIDI_FIFO 	   0xDDA1
+#define MIDI_RXD 	   0xDDA2
+#define MIDI_RXD_COUNT 0xDDA3
+#define MIDI_TXD       0xDDA4
+#define MIDI_TXD_COUNT 0xDDA5
 
 #define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
@@ -20,6 +22,13 @@ struct timer_t midiTimer, refTimer; //timer_t structure for setting timer throug
 
 uint16_t note = 0x36, oldnote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called*/
 uint16_t prgInst = 0; /* program change value, the MIDI instrument number */
+
+struct midi_uart {
+	uint8_t status;
+	uint8_t data;
+	uint16_t bytes_in_rx;
+	uint16_t bytes_in_tx;
+} myMIDIsnapshot, *myMIDIptr;
 
 bool setTimer(const struct timer_t *timer)
 {
@@ -45,9 +54,11 @@ void setup()
 	textGotoXY(0,4); textPrint("0xDDA1");
 	textGotoXY(0,5); textPrint("0xDDA2");
 	textGotoXY(0,6); textPrint("0xDDA3");
+	textGotoXY(0,7); textPrint("0xDDA4");
+	textGotoXY(0,8); textPrint("0xDDA5");
 	
-	textGotoXY(0,8); textPrint("Instrument: ");
-	textGotoXY(0,9); textPrint("Note: ");
+	textGotoXY(0,10); textPrint("Instrument: ");
+	textGotoXY(0,11); textPrint("Note: ");
 	
 	midiTimer.units = TIMER_SECONDS;
 	midiTimer.absolute = TIMER_NOTE_DELAY;
@@ -60,34 +71,39 @@ void setup()
 	setTimer(&midiTimer);
 	setTimer(&refTimer);
 	
-	POKE(MIDI_OUT, 0xC0);
-	POKE(MIDI_OUT, 0);
+	POKE(MIDI_FIFO, 0xC0);
+	POKE(MIDI_FIFO, 0);
 }
 
 void refreshPrints()
 {
-	textGotoXY(10,3); printf("%d",PEEK(0xDDA0));
-	textGotoXY(10,4); printf("%d",PEEK(0xDDA1));
-	textGotoXY(10,5); printf("%d",PEEK(0xDDA2));
-	textGotoXY(10,6); printf("%d",PEEK(0xDDA3));
 	
-	textGotoXY(13,8); printf(" %d",prgInst);
-	textGotoXY(13,9); printf(" %d",note);
+	textGotoXY(10,3); printf("%02x  ",PEEK(0xDDA0));
+	//textGotoXY(10,4); printf("%02x  ",PEEK(0xDDA1));
+	POKE(0xDDA1, PEEK(0xDDA1));
+	
+	textGotoXY(10,5); printf("%02x  ",PEEK(0xDDA2));
+	textGotoXY(10,6); printf("%02x  ",PEEK(0xDDA3));
+	textGotoXY(10,7); printf("%02x  ",PEEK(0xDDA4));
+	textGotoXY(10,8); printf("%02x  ",PEEK(0xDDA5));
+	
+	textGotoXY(13,10); printf(" %d",prgInst);
+	textGotoXY(13,11); printf(" %d",note);
 }
 
 void midiNoteOff()
 {
 	//Send a Note_Off midi command for the previously ongoing note
-    POKE(MIDI_OUT, 0x80);
-	POKE(MIDI_OUT, oldnote);
-    POKE(MIDI_OUT, 0x4F);
+    POKE(MIDI_FIFO, 0x80);
+	POKE(MIDI_FIFO, oldnote);
+    POKE(MIDI_FIFO, 0x4F);
 }
 void midiNoteOn()
 {
 	//Send a Note_On midi command on channel 0		
-	POKE(MIDI_OUT, 0x90);
-	POKE(MIDI_OUT, note);
-	POKE(MIDI_OUT, 0x4F);
+	POKE(MIDI_FIFO, 0x90);
+	POKE(MIDI_FIFO, note);
+	POKE(MIDI_FIFO, 0x4F);
 	//keep track of that note so we can Note_Off it when needed
 	oldnote = note;
 }
@@ -107,15 +123,39 @@ void prgChange(bool wantUpOrDown)
 {
 	if(wantUpOrDown) prgInst++;
 	else prgInst--;
-	POKE(MIDI_OUT, 0xC0);
-	POKE(MIDI_OUT, prgInst);
+	POKE(MIDI_FIFO, 0xC0);
+	POKE(MIDI_FIFO, prgInst);
 }
 int main(int argc, char *argv[]) {
-
+	
 	setup();
 	POKE(1,0);
+	myMIDIptr = (struct midi_uart *) MIDI_CTRL;
     while(true) 
         {
+			/*
+		if(myMIDIptr->status != 0x02)
+		{
+			while(myMIDIptr->bytes_in_rx > 0)
+			{
+				POKE(MIDI_FIFO, myMIDIptr->data);
+			}
+		
+		}
+		*/
+		
+	
+	
+	/*#
+define MIDI_CTRL 	   0xDDA0
+#define MIDI_FIFO 	   0xDDA1
+#define MIDI_RXD 	   0xDDA2
+#define MIDI_RXD_COUNT 0xDDA3
+#define MIDI_TXD       0xDDA4
+#define MIDI_TXD_COUNT 0xDDA5
+*/
+
+		
 		kernelNextEvent();
         if(kernelEventData.type == kernelEvent(timer.EXPIRED))
             {
@@ -154,5 +194,6 @@ int main(int argc, char *argv[]) {
 				//the following line can be used to get keyboard codes
 				//printf(" %d",kernelEventData.key.raw);
 			}
+			
         }
 return 0;}

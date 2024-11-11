@@ -50,15 +50,16 @@ void setup()
 	textClear();
 	textDefineForegroundColor(0,0xff,0xff,0xff);
     textGotoXY(0,0); textPrint("running a MIDI test\nLEFT/RIGHT changes note pitch; UP/DOWN changes instrument; Space to play a note");
-	textGotoXY(0,3); textPrint("0xDDA0");
-	textGotoXY(0,4); textPrint("0xDDA1");
-	textGotoXY(0,5); textPrint("0xDDA2");
-	textGotoXY(0,6); textPrint("0xDDA3");
-	textGotoXY(0,7); textPrint("0xDDA4");
-	textGotoXY(0,8); textPrint("0xDDA5");
+	textGotoXY(0,2); textPrint("Plug in a midi controller in the MIDI in port and play!");
+	textGotoXY(0,4); textPrint("0xDDA0");
+	textGotoXY(0,5); textPrint("0xDDA1");
+	textGotoXY(0,6); textPrint("0xDDA2");
+	textGotoXY(0,7); textPrint("0xDDA3");
+	textGotoXY(0,8); textPrint("0xDDA4");
+	textGotoXY(0,9); textPrint("0xDDA5");
 	
-	textGotoXY(0,10); textPrint("Instrument: ");
-	textGotoXY(0,11); textPrint("Note: ");
+	textGotoXY(0,11); textPrint("Instrument: ");
+	textGotoXY(0,12); textPrint("Note: ");
 	
 	midiTimer.units = TIMER_SECONDS;
 	midiTimer.absolute = TIMER_NOTE_DELAY;
@@ -78,17 +79,12 @@ void setup()
 void refreshPrints()
 {
 	
-	textGotoXY(10,3); printf("%02x  ",PEEK(0xDDA0));
-	//textGotoXY(10,4); printf("%02x  ",PEEK(0xDDA1));
-	POKE(0xDDA1, PEEK(0xDDA1));
+	textGotoXY(10,4); printf("%02x  ",PEEK(0xDDA0));
+	textGotoXY(10,6); printf("%02x  ",PEEK(0xDDA2));
+	textGotoXY(10,9); printf("%02x  ",PEEK(0xDDA5) & 0x0F);
 	
-	textGotoXY(10,5); printf("%02x  ",PEEK(0xDDA2));
-	textGotoXY(10,6); printf("%02x  ",PEEK(0xDDA3));
-	textGotoXY(10,7); printf("%02x  ",PEEK(0xDDA4));
-	textGotoXY(10,8); printf("%02x  ",PEEK(0xDDA5));
-	
-	textGotoXY(13,10); printf(" %d",prgInst);
-	textGotoXY(13,11); printf(" %d",note);
+	textGotoXY(13,11); printf(" %d",prgInst);
+	textGotoXY(13,12); printf(" %d",note);
 }
 
 void midiNoteOff()
@@ -126,35 +122,43 @@ void prgChange(bool wantUpOrDown)
 	POKE(MIDI_FIFO, 0xC0);
 	POKE(MIDI_FIFO, prgInst);
 }
-int main(int argc, char *argv[]) {
-	
-	setup();
-	POKE(1,0);
-	myMIDIptr = (struct midi_uart *) MIDI_CTRL;
-    while(true) 
-        {
-			/*
-		if(myMIDIptr->status != 0x02)
-		{
-			while(myMIDIptr->bytes_in_rx > 0)
-			{
-				POKE(MIDI_FIFO, myMIDIptr->data);
-			}
-		
-		}
-		*/
-		
-	
-	
-	/*#
-define MIDI_CTRL 	   0xDDA0
-#define MIDI_FIFO 	   0xDDA1
-#define MIDI_RXD 	   0xDDA2
-#define MIDI_RXD_COUNT 0xDDA3
-#define MIDI_TXD       0xDDA4
-#define MIDI_TXD_COUNT 0xDDA5
-*/
 
+void injectChar(uint8_t x, uint8_t y, uint8_t theChar)
+{
+		POKE(0x0001,0x02); //set io_ctrl to 2 to access text screen
+		POKE(0xC000 + 40 * y + x, theChar);
+		POKE(0x0001,0x00);  //set it back to default
+}
+
+
+int main(int argc, char *argv[]) {
+	uint16_t toDo;
+	uint8_t x=0,y=2,i;
+	uint8_t recByte, activity=0;
+	//setup();
+	textClear();
+	POKE(1,0);
+    
+	printf("e0 received activity: "); //x=22 y=0
+	setup();
+	textGotoXY(x,y);
+	while(true) 
+        {
+		if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
+			{
+				toDo = PEEKW(MIDI_RXD) & 0x0FFF; //discard top 4 bits of MIDI_RXD+1
+				textGotoXY(10,7); printf("%02x  ",PEEK(0xDDA3) & 0x0F);
+				textGotoXY(10,8); printf("%02x  ",PEEK(0xDDA4));
+				textGotoXY(10,5); 
+				printf("                                 ");
+				textGotoXY(10,5); 
+				for(i=0; i<toDo; i++)
+				{
+					recByte=PEEK(MIDI_FIFO);
+					printf("%02x  ",recByte);
+					POKE(MIDI_FIFO, recByte);
+				}
+			}
 		
 		kernelNextEvent();
         if(kernelEventData.type == kernelEvent(timer.EXPIRED))

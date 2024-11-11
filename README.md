@@ -44,7 +44,7 @@ The full list of timers used is:
 
 ## midiStuff
 
-![midStuff2](https://github.com/user-attachments/assets/6c89f4dd-bee8-4a22-86d8-e7407d4dfcf5)
+![Screenshot 2024-11-11 10-27-28](https://github.com/user-attachments/assets/70ff66e5-73a5-4fbc-b671-1087199a1108)
 
 This is meant for the F256K2 (and Jr. "the Second") since it targets the SAM2695 Dream IC found on those machines only. Use the arrow keys left/right to select the note to be played, use the up/down to select the instrument (from 0 to 128) and play a short test note with the space bar. If you plug in a MIDI controller in the MIDI in port, you can also play that way (much easier and faster for tests). The relevant MIDI uart register addresses will try to display in real time the data that passes through them. 
 

@@ -53,108 +53,189 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30       30        0     1 .zp.data
-      30       30        0     1         __zp_data_start = .
-      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30        d     1 .zp.bss
-      30       30        0     1         __zp_bss_start = .
-      30       30        d     1         Aero.lto.o:(.zp.bss)
-      30       30        7     1                 kernelEventData
-      37       37        1     1                 _col
-      38       38        1     1                 _row
-      39       39        2     1                 __putchar.s
-      3b       3b        1     1                 midiTimer.1
-      3c       3c        1     1                 refTimer.1
-      3d       3d        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3d       3d       6c     1 .zp
-      3d       3d       6c     1         Aero.lto.o:(.zp.noinit)
-     300      300     16f9     1 .text
-     300      300        0     1         _init = .
-     300      300        0     1         _start = .
-     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     300      300        0     1                 __do_init_stack
-     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     308      308        0     1                 __do_zero_bss
-     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30b      30b        0     1                 __do_zero_zp_bss
-     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     311      311        0     1                 __after_main
-     314      314        0     1         _fini = .
-     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     315      315       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     315      315       13     1                 __zero_bss
-     328      328       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     328      328       13     1                 __zero_zp_bss
-     33b      33b      2ea     1         Aero.lto.o:(.text.f256Init)
-     33b      33b      2ea     1                 f256Init
-     625      625       9a     1         Aero.lto.o:(.text.textClear)
-     625      625       9a     1                 textClear
-     6bf      6bf        6     1         Aero.lto.o:(.text.main)
-     6bf      6bf        6     1                 main
-     6c5      6c5      39b     1         Aero.lto.o:(.text.f256main)
-     6c5      6c5      39b     1                 f256main
-     a60      a60      1ba     1         Aero.lto.o:(.text.__putchar)
-     a60      a60      1ba     1                 __putchar
-     c1a      c1a        5     1         Aero.lto.o:(.text.exit)
-     c1a      c1a        5     1                 exit
-     c1f      c1f       d1     1         Aero.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-     c1f      c1f       d1     1                 (anonymous namespace)::put(char, Status*)
-     cf0      cf0      10d     1         Aero.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-     cf0      cf0      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
-     dfd      dfd      bb0     1         Aero.lto.o:(.text.printf)
-     dfd      dfd      bb0     1                 printf
-    19ad     19ad       2c     1         Aero.lto.o:(.text.memcpy)
-    19ad     19ad       2c     1                 memcpy
-    19d9     19d9       20     1         Aero.lto.o:(.text.__memset)
-    19d9     19d9       20     1                 __memset
-    19f9     19f9        0     1         __init_array_start = .
-    19f9     19f9        0     1         __init_array_end = .
-    19f9     19f9        0     1         __fini_array_start = .
-    19f9     19f9        0     1         __fini_array_end = .
-    19f9     19f9       9c     1 .rodata
-    19f9     19f9        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    19f9     19f9        0     1                 __set_v
-    19fa     19fa        8     1         Aero.lto.o:(.rodata.f256main)
-    1a02     1a02       3a     1         Aero.lto.o:(.rodata.printf)
-    1a3c     1a3c       30     1         Aero.lto.o:(.rodata.textColors)
-    1a3c     1a3c       30     1                 textColors
-    1a6c     1a6c       29     1         <internal>:(.rodata.str1.1)
-    1a95     1a95        0     1 .data
-    1a95     1a95        0     1         __data_start = .
-    1a95     1a95        0     1         __data_end = .
-    1a95     1a95        0     1 __data_load_start = LOADADDR(.data)
-    1a95     1a95        0     1 __data_size = SIZEOF(.data)
-    1a95     1a95        1     1 .bss
-    1a95     1a95        0     1         __bss_start = .
-    1a95     1a95        1     1         Aero.lto.o:(.bss.kernelError)
-    1a95     1a95        1     1                 kernelError
-    1a96     1a96        0     1         __bss_end = .
-    1a96     1a96        0     1 __bss_size = SIZEOF(.bss)
-    1a96     1a96        0     1 .noinit
-    1a96     1a96        0     1         __heap_start = ALIGN(., 2)
-    1a96     1a96        0     1 end_block8 = .
-    1a96     1a96        0     1 end_block9 = .
-    1a96     1a96        0     1 end_block10 = .
-    1a96     1a96        0     1 end_block11 = .
-    1a96     1a96        0     1 end_block12 = .
-    1a96     1a96        0     1 end_block13 = .
-    1a96     1a96        0     1 end_block14 = .
-    1a96     1a96        0     1 end_block15 = .
-    1a96     1a96        0     1 end_block16 = .
-    1a96     1a96        0     1 end_block17 = .
-    1a96     1a96        0     1 end_block18 = .
-    1a96     1a96        0     1 end_block19 = .
-    1a96     1a96        0     1 end_block20 = .
-    1a96     1a96        0     1 end_block21 = .
-    1a96     1a96        0     1 end_block22 = .
-    1a96     1a96        0     1 end_block23 = .
+       0        0        0     1 __daft1_lma = 0x10000
+       0        0        0     1 __daft1_size = 0x8000
+       0        0        0     1 __daft2_lma = 0x18000
+       0        0        0     1 __daft2_size = 0x8000
+       0        0        0     1 __daft3_lma = 0x20000
+       0        0        0     1 __daft3_size = 0x2c00
+       0        0        0     1 __palpiano_lma = 0x28000
+       0        0        0     1 __palpiano_size = 0x3fc
+       0        0        0     1 __paldaft_lma = 0x28400
+       0        0        0     1 __paldaft_size = 0x400
+       0        0        0     1 __pia1_lma = 0x30000
+       0        0        0     1 __pia1_size = 0x8000
+       0        0        0     1 __pia2_lma = 0x38000
+       0        0        0     1 __pia2_size = 0x8000
+       0        0        0     1 __pia3_lma = 0x40000
+       0        0        0     1 __pia3_size = 0x2c00
+      30      300       58     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       58     1         Aero.lto.o:(.zp.data)
+      30      300       58     1                 noteColors
+      88      358        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      88      358        0     1 __zp_data_size = SIZEOF(.zp.data)
+      88       88       11     1 .zp.bss
+      88       88        0     1         __zp_bss_start = .
+      88       88       11     1         Aero.lto.o:(.zp.bss)
+      88       88        7     1                 kernelEventData
+      8f       8f        1     1                 _col
+      90       90        1     1                 _row
+      91       91        1     1                 _active
+      92       92        2     1                 __putchar.s
+      94       94        1     1                 midiTimer.1
+      95       95        1     1                 refTimer.1
+      96       96        1     1                 bassTimer.1
+      97       97        1     1                 snareTimer.1
+      98       98        1     1                 kickTimer.1
+      99       99        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      99       99       57     1 .zp
+      99       99       57     1         Aero.lto.o:(.zp.noinit)
+     358      358     1c3d     1 .text
+     358      358        0     1         _init = .
+     358      358        0     1         _start = .
+     358      358        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     358      358        0     1                 __do_init_stack
+     360      360        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     360      360        0     1                 __do_zero_bss
+     363      363        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     363      363        0     1                 __do_zero_zp_bss
+     366      366        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     366      366        0     1                 __do_copy_zp_data
+     369      369        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     36c      36c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     36c      36c        0     1                 __after_main
+     36f      36f        0     1         _fini = .
+     36f      36f        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     370      370       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     370      370       13     1                 __zero_bss
+     383      383       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     383      383       13     1                 __zero_zp_bss
+     396      396       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     396      396       17     1                 __copy_zp_data
+     3ad      3ad      328     1         Aero.lto.o:(.text.f256Init)
+     3ad      3ad      328     1                 f256Init
+     6d5      6d5       9a     1         Aero.lto.o:(.text.textClear)
+     6d5      6d5       9a     1                 textClear
+     76f      76f        6     1         Aero.lto.o:(.text.main)
+     76f      76f        6     1                 main
+     775      775      887     1         Aero.lto.o:(.text.f256main)
+     775      775      887     1                 f256main
+     ffc      ffc      1ba     1         Aero.lto.o:(.text.__putchar)
+     ffc      ffc      1ba     1                 __putchar
+    11b6     11b6        5     1         Aero.lto.o:(.text.exit)
+    11b6     11b6        5     1                 exit
+    11bb     11bb       d1     1         Aero.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    11bb     11bb       d1     1                 (anonymous namespace)::put(char, Status*)
+    128c     128c      10d     1         Aero.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    128c     128c      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1399     1399      bb0     1         Aero.lto.o:(.text.printf)
+    1399     1399      bb0     1                 printf
+    1f49     1f49       2c     1         Aero.lto.o:(.text.memcpy)
+    1f49     1f49       2c     1                 memcpy
+    1f75     1f75       20     1         Aero.lto.o:(.text.__memset)
+    1f75     1f75       20     1                 __memset
+    1f95     1f95        0     1         __init_array_start = .
+    1f95     1f95        0     1         __init_array_end = .
+    1f95     1f95        0     1         __fini_array_start = .
+    1f95     1f95        0     1         __fini_array_end = .
+    1f95     1f95       b0     1 .rodata
+    1f95     1f95        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    1f95     1f95        0     1                 __set_v
+    1f96     1f96       12     1         Aero.lto.o:(.rodata.f256main)
+    1fa8     1fa8       3a     1         Aero.lto.o:(.rodata.printf)
+    1fe2     1fe2       30     1         Aero.lto.o:(.rodata.textColors)
+    1fe2     1fe2       30     1                 textColors
+    2012     2012        c     1         Aero.lto.o:(.rodata.bassNotes)
+    2012     2012        c     1                 bassNotes
+    201e     201e        c     1         Aero.lto.o:(.rodata.bassDelays)
+    201e     201e        c     1                 bassDelays
+    202a     202a        4     1         <internal>:(.rodata.cst4)
+    202e     202e        5     1         Aero.lto.o:(.rodata.kickNotes)
+    202e     202e        5     1                 kickNotes
+    2033     2033        5     1         Aero.lto.o:(.rodata.kickDelays)
+    2033     2033        5     1                 kickDelays
+    2038     2038        d     1         <internal>:(.rodata.str1.1)
+    2045     2045        0     1 .data
+    2045     2045        0     1         __data_start = .
+    2045     2045        0     1         __data_end = .
+    2045     2045        0     1 __data_load_start = LOADADDR(.data)
+    2045     2045        0     1 __data_size = SIZEOF(.data)
+    2045     2045        c     1 .bss
+    2045     2045        0     1         __bss_start = .
+    2045     2045        1     1         Aero.lto.o:(.bss.kernelError)
+    2045     2045        1     1                 kernelError
+    2046     2046        4     1         Aero.lto.o:(.bss._BITMAP_BASE.0)
+    2046     2046        4     1                 _BITMAP_BASE.0
+    204a     204a        4     1         Aero.lto.o:(.bss._BITMAP_BASE.1)
+    204a     204a        4     1                 _BITMAP_BASE.1
+    204e     204e        3     1         Aero.lto.o:(.bss._BITMAP_CLUT)
+    204e     204e        3     1                 _BITMAP_CLUT
+    2051     2051        0     1         __bss_end = .
+    2051     2051        0     1 __bss_size = SIZEOF(.bss)
+    2051     2051        0     1 .noinit
+    2051     2051        0     1         __heap_start = ALIGN(., 2)
+    2051     2051        0     1 end_block8 = .
+    2051     2051        0     1 end_block9 = .
+    2051     2051        0     1 end_block10 = .
+    2051     2051        0     1 end_block11 = .
+    2051     2051        0     1 end_block12 = .
+    2051     2051        0     1 end_block13 = .
+    2051     2051        0     1 end_block14 = .
+    2051     2051        0     1 end_block15 = .
+    2051     2051        0     1 end_block16 = .
+    2051     2051        0     1 end_block17 = .
+    2051     2051        0     1 end_block18 = .
+    2051     2051        0     1 end_block19 = .
+    2051     2051        0     1 end_block20 = .
+    2051     2051        0     1 end_block21 = .
+    2051     2051        0     1 end_block22 = .
+    2051     2051        0     1 end_block23 = .
+   10000    10000     8000    16 .daft1
+   10000    10000     8000    16         Aero.lto.o:(.daft1)
+   10000    10000        0     1                 daft1_start
+   18000    18000        0     1                 daft1_end
+   18000    18000        0     1 end_daft1 = .
+   18000    18000     8000    16 .daft2
+   18000    18000     8000    16         Aero.lto.o:(.daft2)
+   18000    18000        0     1                 daft2_start
+   20000    20000        0     1                 daft2_end
+   20000    20000        0     1 end_daft2 = .
+   20000    20000     2c00    16 .daft3
+   20000    20000     2c00    16         Aero.lto.o:(.daft3)
+   20000    20000        0     1                 daft3_start
+   22c00    22c00        0     1                 daft3_end
+   22c00    22c00        0     1 end_daft3 = .
+   28000    28000      3fc    16 .palpiano
+   28000    28000      3fc    16         Aero.lto.o:(.palpiano)
+   28000    28000        0     1                 palpiano_start
+   283fc    283fc        0     1                 palpiano_end
+   283fc    283fc        0     1 end_palpiano = .
+   28400    28400      400    16 .paldaft
+   28400    28400      400    16         Aero.lto.o:(.paldaft)
+   28400    28400        0     1                 paldaft_start
+   28800    28800        0     1                 paldaft_end
+   28800    28800        0     1 end_paldaft = .
+   30000    30000     8000    16 .pia1
+   30000    30000     8000    16         Aero.lto.o:(.pia1)
+   30000    30000        0     1                 pia1_start
+   38000    38000        0     1                 pia1_end
+   38000    38000        0     1 end_pia1 = .
+   38000    38000     8000    16 .pia2
+   38000    38000     8000    16         Aero.lto.o:(.pia2)
+   38000    38000        0     1                 pia2_start
+   40000    40000        0     1                 pia2_end
+   40000    40000        0     1 end_pia2 = .
+   40000    40000     2c00    16 .pia3
+   40000    40000     2c00    16         Aero.lto.o:(.pia3)
+   40000    40000        0     1                 pia3_start
+   42c00    42c00        0     1                 pia3_end
+   42c00    42c00        0     1 end_pia3 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      770     4 .symtab
-       0        0      770     4         <internal>:(.symtab)
-       0        0       5a     1 .shstrtab
-       0        0       5a     1         <internal>:(.shstrtab)
-       0        0      52d     1 .strtab
-       0        0      52d     1         <internal>:(.strtab)
+       0        0      af0     4 .symtab
+       0        0      af0     4         <internal>:(.symtab)
+       0        0       94     1 .shstrtab
+       0        0       94     1         <internal>:(.shstrtab)
+       0        0      7c7     1 .strtab
+       0        0      7c7     1         <internal>:(.strtab)

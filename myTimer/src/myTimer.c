@@ -30,7 +30,11 @@ void injectChar(uint8_t x, uint8_t y, uint8_t theChar)
 		POKE(0xC000 + 40 * y + x, theChar);
 		POKE(0x0001,0x00);  //set it back to default
 }
-
+uint8_t getTimerAbsolute(uint8_t units)
+{
+    *(uint8_t*)0xf3 = units | 0x80;
+    return kernelCall(Clock.SetTimer);
+}
 bool setTimer(const struct timer_t *timer)
 {
     *(uint8_t*)0xf3 = timer->units;
@@ -88,17 +92,22 @@ void timerSetup(void)
 	
 	kernelNextEvent();
 	
-	for(i=0;i<6;i++)
-	{
-		myTimers[i].absolute = kernelEventData.timer + delays[i];
-	}
 	
-    myTimers[0].cookie = TIMER_QUERY_A;
+	myTimers[0].cookie = TIMER_QUERY_A;
     myTimers[1].cookie = TIMER_QUERY_B;
     myTimers[2].cookie = TIMER_QUERY_C;
     myTimers[3].cookie = TIMER_QUERY_D;
     myTimers[4].cookie = TIMER_QUERY_E;
     myTimers[5].cookie = TIMER_QUERY_F;
+	
+
+	myTimers[0].absolute = getTimerAbsolute(TIMER_FRAMES) + delays[i];
+	myTimers[1].absolute = getTimerAbsolute(TIMER_FRAMES) + delays[i];
+	myTimers[2].absolute = getTimerAbsolute(TIMER_FRAMES) + delays[i];
+	myTimers[3].absolute = getTimerAbsolute(TIMER_SECONDS) + delays[i];
+	myTimers[4].absolute = getTimerAbsolute(TIMER_SECONDS) + delays[i];
+	myTimers[5].absolute = getTimerAbsolute(TIMER_SECONDS) + delays[i];
+
 	
 	setTimer(&myTimers[0]);
     setTimer(&myTimers[1]);
@@ -122,7 +131,7 @@ int main(int argc, char *argv[]) {
 			curTimer = kernelEventData.timer.cookie; // find out which timer expired through its cookie; use that as an index for everything
 
             injectChar(8, 3 + 2 * curTimer, animFrame[curTimer]++); //write the current frame character at the right spot
-            if(animFrame[curTimer] > 14) animFrame[curTimer] = 1; //loop back to first anim frame
+            if(animFrame[curTimer] > 14) animFrame[curTimer] = 2; //loop back to first anim frame
 			myTimers[curTimer].absolute += delays[curTimer]; //prep the next timer 
             setTimer(&myTimers[curTimer]); // send it to system
             }

@@ -13,10 +13,11 @@
  //TIMER_TEXT for the 1-frame long text refresh timer for data display
  //TIMER_NOTE is for a midi note timer
 #define TIMER_TEXT_COOKIE 0
+#define TIMER_SNARE_COOKIE 3
 #define TIMER_SPACENOTE_COOKIE 50 //will be 50-99
 
 #define TIMER_TEXT_DELAY 1
-#define TIMER_SPACENOTE_DELAY 1
+#define TIMER_SPACENOTE_DELAY 60
 
 #define textColorGreen  0x04
 #define textColorOrange 0x09
@@ -24,7 +25,8 @@
 #define textColorBlue   0x07
 #define textColorGray   0x05
 
-
+#include "../src/muUtils.h" //contains helper functions I often use
+#include "../src/muMidi.h"  //contains basic MIDI functions I often use
 #include "f256lib.h"
 
 
@@ -33,10 +35,18 @@ EMBED(pia1, "../assets/piaa", 0x18000);
 EMBED(pia2, "../assets/piab", 0x20000);
 EMBED(pia3, "../assets/piac", 0x28000);
 
-struct timer_t spaceNotetimer, refTimer; //spaceNotetimer: used when you hit space, produces a 1s delay before NoteOff comes in
-//refTimer: is 1 frame long, used to display updated text when you hit keys on a midi controller
+typedef struct aBeat 
+{
+	
+	uint8_t notes[];
+	uint8_t delays[];
+} theBeats[4];
 
-uint16_t note = 0x36, oldnote, oldCursorNote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called*/
+struct timer_t spaceNotetimer, refTimer, snareTimer; //spaceNotetimer: used when you hit space, produces a 1s delay before NoteOff comes in
+//refTimer: is 1 frame long, used to display updated text when you hit keys on a midi controller
+//snareTimer is a pre-programmed beat at 30 frames
+
+uint16_t note = 0x36, oldNote, oldCursorNote; /*note is the current midi hex note code to send. oldNote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called*/
 uint16_t prgInst[10] = {0,0, 0,0,0,0,0,0,0 ,0}; /* program change value, the MIDI instrument number, for chan 0, 1 and 9=percs */
 
 uint8_t chSelect = 0; //restricted to channel 0, 1 or 9 (for percs)
@@ -45,6 +55,8 @@ uint8_t chSelect = 0; //restricted to channel 0, 1 or 9 (for percs)
 
 bool noteColors[88]={1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1};
 
+uint8_t snareNotes[4] = {0x00, 0x26, 0x00, 0x26};
+uint8_t snareDelays[4] = {30, 30, 30, 30};
 const char *midi_instruments[] = {
     "Ac. Grand Piano",
     "Bright Ac. Piano",
@@ -176,56 +188,7 @@ const char *midi_instruments[] = {
     "Gunshot"
 };
 
-struct midi_uart {
-	uint8_t status;
-	uint8_t data;
-	uint16_t bytes_in_rx;
-	uint16_t bytes_in_tx;
-} myMIDIsnapshot, *myMIDIptr;
-
-bool setTimer(const struct timer_t *timer)
-{
-    *(uint8_t*)0xf3 = timer->units;
-    *(uint8_t*)0xf4 = timer->absolute;
-    *(uint8_t*)0xf5 = timer->cookie;
-    kernelCall(Clock.SetTimer);
-	return !kernelError;
-}
-
-uint8_t getTimerAbsolute(uint8_t units)
-{
-    *(uint8_t*)0xf3 = units | 0x80;
-    return kernelCall(Clock.SetTimer);
-}
-
-void shutUp()
-{
-	POKE(MIDI_FIFO, 0xFF);
-}
-
-void resetInstruments()
-{
-	POKE(MIDI_FIFO, 0xC0);
-	POKE(MIDI_FIFO, 0);
-	POKE(MIDI_FIFO, 0xC1);
-	POKE(MIDI_FIFO, 0);
-	POKE(MIDI_FIFO, 0xC9);
-	POKE(MIDI_FIFO, 0);
-	prgInst[0]=0;prgInst[1]=0;prgInst[9]=0;
-	shutUp();
-}
-
-void realTextClear()
-{
-	uint16_t c;
-	POKE(MMU_IO_CTRL,0x02);
-	for(c=0;c<4800;c++)
-	{
-		POKE(0xC000+c,0x20);
-	}
-	POKE(MMU_IO_CTRL,0x00);
-}
-
+//This is part of the text instructions and interface during regular play mode
 void refreshInstrumentText()
 {
 	textGotoXY(5,30); textPrint("                                                     ");
@@ -259,6 +222,7 @@ void refreshInstrumentText()
 	}
 }
 
+//This is part of the text instructions and interface during regular play mode
 void channelTextMenu()
 {
 	textSetColor(textColorGreen,0x00);
@@ -271,6 +235,22 @@ void channelTextMenu()
 	textGotoXY(2,32);textPrint("9: ");
 	refreshInstrumentText();
 }
+
+//This is part of the text instructions and interface during regular play mode
+void beatsTextMenu()
+{
+	textSetColor(textColorGreen,0x00);
+	
+	textGotoXY(0,26);textPrint("[F1] to pick an instrument from a list");
+	textGotoXY(0,27);textPrint("[F3] to change your output channel");
+	textGotoXY(1,29);textPrint("CH  Instrument");
+	textGotoXY(2,30);textPrint("0: ");
+	textGotoXY(2,31);textPrint("1: ");
+	textGotoXY(2,32);textPrint("9: ");
+}
+
+
+//This restores the full text instructions and interface during regular play mode
 void textTitle()
 {
 	uint16_t c;
@@ -284,16 +264,20 @@ void textTitle()
 	textGotoXY(0,2); textPrint("Plug in a midi controller in the MIDI IN port and play!");
 	channelTextMenu();
 	textSetColor(textColorBlue,0x00);
+
+	beatsTextMenu();
+
 	//Instrument selection instructions
 	textGotoXY(0,35);printf("[%c] / [%c] to change the instrument",0xF8,0xFB);
 	textGotoXY(0,36);printf("[Shift-%c] / [Shift-%c] to move by 10 - [Alt-%c] / [Alt-%c] go to the ends ",0xF8,0xFB,0xF8,0xFB);
-
 
 	//Note play through spacebar instructions
 	textGotoXY(0,40);textPrint("[Space] to play a short note under the red line cursor");
 	textGotoXY(0,41);printf("[%c] / [%c] to move the cursor",0xF9,0xFA);
 	textGotoXY(0,42);printf("[Shift-%c] / [Shift-%c] to move an octave - [Alt-%c] / [Alt-%c] go to the ends ",0xF9,0xFA,0xF9,0xFA);
 }
+
+//setup is called just once during initial launching of the program
 void setup()
 {
 	uint16_t c;
@@ -324,8 +308,7 @@ void setup()
 
 	//Prep all the kernel timers
 
-	spaceNotetimer.units = TIMER_SECONDS;
-	spaceNotetimer.absolute = getTimerAbsolute(TIMER_SECONDS) + TIMER_SPACENOTE_DELAY;
+	spaceNotetimer.units = TIMER_FRAMES;
     spaceNotetimer.cookie = TIMER_SPACENOTE_COOKIE;
 	
 	refTimer.units = TIMER_FRAMES;
@@ -333,23 +316,15 @@ void setup()
 	refTimer.cookie = TIMER_TEXT_COOKIE;
 	setTimer(&refTimer);
 	
+	snareTimer.units = TIMER_FRAMES;
+	snareTimer.cookie = TIMER_SNARE_COOKIE;
+	
 	resetInstruments();
+	prgInst[0]=0;prgInst[1]=0;prgInst[9]=0;
 	textSetColor(textColorOrange,0x00);
 }
 
-void prgChange(uint8_t prg, uint8_t chan)
-{
-	POKE(MIDI_FIFO, 0xC0 | chan);
-	POKE(MIDI_FIFO, prg);
-}
-
-void injectChar(uint8_t x, uint8_t y, uint8_t theChar)
-{
-		POKE(0x0001,0x02); //set io_ctrl to 2 to access text screen
-		POKE(0xC000 + 40 * y + x, theChar);
-		POKE(0x0001,0x00);  //set it back to default
-}
-
+//This function highlights or de-highlights a choice in Instrument Picking mode
 void highLightInstChoice(bool isNew)
 {
 	uint8_t x, y;
@@ -359,27 +334,25 @@ void highLightInstChoice(bool isNew)
 	textGotoXY(x,y);printf("%003d %s",prgInst[chSelect],midi_instruments[prgInst[chSelect]]);
 }
 
+//These four next functions are for moving around your selection in Instrument Picking mode
 void modalMoveUp(bool shift)
 {
 	highLightInstChoice(false);
 	prgInst[chSelect] -= (3 + shift*27);
 	highLightInstChoice(true);
 }
-
 void modalMoveDown(bool shift)
 {
 	highLightInstChoice(false);
 	prgInst[chSelect] += (3 + shift*27);
 	highLightInstChoice(true);
 }
-
 void modalMoveLeft()
 {
 	highLightInstChoice(false);
 	prgInst[chSelect] -= 1;
 	highLightInstChoice(true); 
 }
-
 void modalMoveRight()
 {
 	highLightInstChoice(false);
@@ -387,15 +360,16 @@ void modalMoveRight()
 	highLightInstChoice(true);
 }
 
-void instListModal()
+//In this Instrument Picking mode called by hitting [F1], display all General MIDI instruments in 3 columns
+//and highlight the currently activated one for the selected channel
+void instListShow()
 {
-	bool shiftHit = false;
 	uint8_t i, y=1;
-	shutUp();
+	midiShutUp();
 	realTextClear();
 	
 	textSetColor(textColorOrange,0x00);
-	textGotoXY(0,0);textPrint("Select your instrument for channel");printf(" %d",chSelect);textPrint(". Back to Cancel");
+	textGotoXY(0,0);textPrint("Select your instrument for channel");printf(" %d",chSelect);textPrint(". [Arrows] [Enter] [Space] [Back]");
 	textSetColor(textColorGray,0x00);
 	for(i=0; i<128; i++)
 	{
@@ -406,72 +380,23 @@ void instListModal()
 		textGotoXY(52,y);printf("%003d %s ",i,midi_instruments[i]);
 		y++;
 	}
-	
 	highLightInstChoice(true);
-	while(true) 
-        {
-		kernelNextEvent();
-        if(kernelEventData.type == kernelEvent(key.PRESSED))
-			{
-				switch(kernelEventData.key.raw)
-				{
-					case 146: // top left backspace, meant as reset
-							resetInstruments();
-							realTextClear();
-							textTitle();
-							return;
-					case 129: //F1
-							realTextClear();
-							textTitle();
-							prgChange(prgInst[chSelect],chSelect);
-							return;					
-					case 0xb6: //up arrow		
-						if(prgInst[chSelect] > (shiftHit?29:2)) modalMoveUp(shiftHit);
-						break;
-					case 0xb7: //down arrow
-						if(prgInst[chSelect] < (shiftHit?98:125)) modalMoveDown(shiftHit);
-						break;
-					case 0xb8: //left arrow
-						if(prgInst[chSelect] > 0) modalMoveLeft();
-						break;
-					case 0xb9: //right arrow
-						if(prgInst[chSelect] < 127) modalMoveRight();
-						break;
-					case 148: //enter
-							prgChange(prgInst[chSelect],chSelect);
-							realTextClear();
-							textTitle();
-							return;	
-					case 1: //shift modifier
-						shiftHit = true;
-						break;
-				}
-			}
-		if(kernelEventData.type == kernelEvent(key.RELEASED))
-		{
-			switch(kernelEventData.key.raw)
-			{
-				case 1: //shift modifier
-					shiftHit = false;
-					break;
-			}
-		}
-		}
 }
 int main(int argc, char *argv[]) {
 	uint16_t toDo;
-	uint8_t x=0,y=2,i;
+	uint8_t i;
 	uint8_t recByte, detectedNote, detectedColor;
 	bool nextIsNote = false; //detect a 0x9? or 0x8? command, the next is a note byte, used for coloring the keyboard note-rects
 	bool isHit = false; // true is hit, false is released
 	bool altHit = false, shiftHit = false; //keyboard modifiers
 	uint8_t spaceNoteCookieOffset =0; //used to pile on cookies for spacebar activated notes
-
-
+	bool instSelectMode = false;
+	bool autoSnare = false; //first preprogrammed simple beat
+	uint8_t sIndex = 0; //snare index
 	POKE(1,0);
     
 	setup();
-	textGotoXY(x,y);
+	textGotoXY(0,2);
 	note=39;
 	oldCursorNote=39;
 	
@@ -484,15 +409,18 @@ int main(int argc, char *argv[]) {
 				toDo = PEEKW(MIDI_RXD) & 0x0FFF; //discard top 4 bits of MIDI_RXD+1
 				
 				//erase the region where the last midi bytes received are shown
-				textGotoXY(5,4);textPrint("                                                                                ");textGotoXY(5,4);
-				
+				if(instSelectMode==false){
+					textGotoXY(5,4);textPrint("                                                                                ");textGotoXY(5,4);
+				}
 				//deal with the MIDI bytes and exhaust the FIFO buffer
 				for(i=0; i<toDo; i++)
 				{
 					//get and print byte by byte
 					recByte=PEEK(MIDI_FIFO);
-					textSetColor(textColorOrange,0x00);printf("%02x ",recByte);
-					
+					if(instSelectMode==false)
+					{
+						textSetColor(textColorOrange,0x00);printf("%02x ",recByte);
+					}
 					if(nextIsNote) //this block triggers if the previous byte was a NoteOn or NoteOff (0x90,0x80) command previously
 					{
 						//figure out which note on the graphic is going to be highlighted
@@ -519,7 +447,6 @@ int main(int argc, char *argv[]) {
 						}
 					else POKE(MIDI_FIFO, recByte); //all other bytes are sent normally
 						//analysis of the byte is done, send it back for consumption
-
 				}
 			}
 		
@@ -540,12 +467,24 @@ int main(int argc, char *argv[]) {
 							{
 							//Send a Note_Off midi command for the previously ongoing note
 							POKE(MIDI_FIFO, 0x80 | chSelect);
-							POKE(MIDI_FIFO, oldnote);
+							POKE(MIDI_FIFO, oldNote);
 							POKE(MIDI_FIFO, 0x4F);
-							textGotoXY(0,59);printf("%d    ",spaceNoteCookieOffset);
 							}
-
-
+					break;
+				case TIMER_SNARE_COOKIE:
+					if(autoSnare)
+						{
+						POKE(MIDI_FIFO, 0x89);
+						POKE(MIDI_FIFO, snareNotes[sIndex]);
+						POKE(MIDI_FIFO, 0x4F);
+						sIndex++;
+						if(sIndex==4)sIndex=0;
+						POKE(MIDI_FIFO, 0x99);
+						POKE(MIDI_FIFO, snareNotes[sIndex]);
+						POKE(MIDI_FIFO, 0x7F);
+						snareTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + snareDelays[sIndex];
+						setTimer(&snareTimer);
+						}
 					break;
 				}	
             }				
@@ -553,12 +492,29 @@ int main(int argc, char *argv[]) {
 			{
 				switch(kernelEventData.key.raw)
 				{
+					case 148: //enter
+							if(instSelectMode){
+								prgChange(prgInst[chSelect],chSelect);
+								realTextClear();
+								textTitle();
+							}
+							break;	
 					case 146: // top left backspace, meant as reset
-						resetInstruments();
+						resetInstruments();	
+						prgInst[0]=0;prgInst[1]=0;prgInst[9]=0;						
+						realTextClear();
 						refreshInstrumentText();
+						textTitle();
+						instSelectMode=false; //returns to default mode
 						break;
 					case 129: //F1
-						instListModal();
+						instSelectMode = !instSelectMode; //toggle this mode
+						if(instSelectMode == true) instListShow();
+						else if(instSelectMode==false) {
+							realTextClear();
+							textTitle();
+							prgChange(prgInst[chSelect],chSelect);
+							}
 						break;
 					case 131: //F3
 						chSelect++;
@@ -566,64 +522,96 @@ int main(int argc, char *argv[]) {
 						if(chSelect == 10) chSelect = 0;
 						channelTextMenu();
 						refreshInstrumentText();
-						shutUp();
+						midiShutUp();
 						prgChange(prgInst[chSelect],chSelect);
 						break;
 					case 133: //F5
-						realTextClear();
 						break;
 					case 135: //F7
+						autoSnare = !autoSnare;
+						if(autoSnare == true)
+						{
+							snareTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + snareDelays[0];
+							setTimer(&snareTimer);
+						}
 						break;
 					case 0xb6: //up arrow
-						if(prgInst[chSelect] < 127 - shiftHit*9) prgInst[chSelect] = prgInst[chSelect] + 1 + shiftHit *9;
-						if(altHit) prgInst[chSelect] = 127;
-						prgChange(prgInst[chSelect],chSelect);
-						refreshInstrumentText();
+						if(instSelectMode==false)
+							{
+								if(prgInst[chSelect] < 127 - shiftHit*9) prgInst[chSelect] = prgInst[chSelect] + 1 + shiftHit *9; //go up 10 instrument ticks if shift is on, otherwise just 1
+								if(altHit) prgInst[chSelect] = 127; //go to highest instrument, 127
+								prgChange(prgInst[chSelect],chSelect);
+								refreshInstrumentText();
+							}
+							else if(instSelectMode==true)
+							{
+								if(prgInst[chSelect] > (shiftHit?29:2)) modalMoveUp(shiftHit);
+								prgChange(prgInst[chSelect],chSelect);
+							}	
 						break;
 					case 0xb7: //down arrow
-						if(prgInst[chSelect] > 0 + shiftHit*9) prgInst[chSelect] = prgInst[chSelect] - 1 - shiftHit *9;
-						if(altHit) prgInst[chSelect] = 0;
-						prgChange(prgInst[chSelect],chSelect);
-						refreshInstrumentText();
+						if(instSelectMode==false)
+								{
+								if(prgInst[chSelect] > 0 + shiftHit*9) prgInst[chSelect] = prgInst[chSelect] - 1 - shiftHit *9; //go down 10 instrument ticks if shift is on, otherwise just 1
+								if(altHit) prgInst[chSelect] = 0; //go to lowest instrument, 0
+								prgChange(prgInst[chSelect],chSelect);
+								refreshInstrumentText();
+								}
+							else if(instSelectMode==true)
+							{
+								if(prgInst[chSelect] < (shiftHit?98:125)) modalMoveDown(shiftHit);
+								prgChange(prgInst[chSelect],chSelect);
+							}	
 						break;
 					case 0xb8: //left arrow
-						if(note > (0 + shiftHit*11)) note = note - 1 - shiftHit * 11;
-						if(altHit) note = 0;
-						graphicsDefineColor(0, oldCursorNote+0x61,0x00,0x00,0x00); 
-						graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); 
-						oldCursorNote = note;
+						if(instSelectMode==false)
+								{
+								if(note > (0 + shiftHit*11)) note = note - 1 - shiftHit * 11;
+								if(altHit) note = 0; //go to the leftmost note
+								graphicsDefineColor(0, oldCursorNote+0x61,0x00,0x00,0x00); //remove old cursor position
+								graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); //set new cursor position
+								oldCursorNote = note;
+								}
+						else if(instSelectMode==true)
+							{
+							if(prgInst[chSelect] > 0) modalMoveLeft();
+							prgChange(prgInst[chSelect],chSelect);
+							}
 						break;
 					case 0xb9: //right arrow
-						if(note < 87 - shiftHit*11) note = note + 1 + shiftHit * 11;
-						if(altHit) note = 87;
-												
-						graphicsDefineColor(0, oldCursorNote+0x61,0x00,0x00,0x00);
-						graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); 
-						oldCursorNote = note;
+						if(instSelectMode==false)
+							{
+							if(note < 87 - shiftHit*11) note = note + 1 + shiftHit * 11;
+							if(altHit) note = 87; //go to the rightmost note
+													
+							graphicsDefineColor(0, oldCursorNote+0x61,0x00,0x00,0x00);//remove old cursor position
+							graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); //set new cursor position
+							oldCursorNote = note;
+							}
+						else if(instSelectMode==true)
+							{
+							if(prgInst[chSelect] < 127) modalMoveRight();
+							prgChange(prgInst[chSelect],chSelect);
+							}
 						break;
 					case 32: //space
 							//this command will send a programmed note of the current instrument on channel 0, of note value from the global
 							//a timer will expire and auto-dial in its NoteOff command
 
 							//Send a Note_Off midi command for the previously ongoing note
-							
-							POKE(MIDI_FIFO, 0x80 | chSelect);
-							POKE(MIDI_FIFO, oldnote);
-							POKE(MIDI_FIFO, 0x4F);
-							
-							//Send a Note_On midi command on channel 0		
-							POKE(MIDI_FIFO, 0x90 | chSelect);
-							POKE(MIDI_FIFO, note+0x15);
-							POKE(MIDI_FIFO, 0x7F);
+							midiNoteOff(0x80 | chSelect, oldNote, 0x4F);
+							//Send a Note_On midi command on channel 0	
+							midiNoteOn(0x90 | chSelect, note+0x15, 0x7F);							
+
 							//keep track of that note so we can Note_Off it when needed
-							oldnote = note+0x15; //make it possible to do the proper NoteOff when the timer expires
+							oldNote = note+0x15; //make it possible to do the proper NoteOff when the timer expires
 							
 							//Prepare the next note timer
-							spaceNoteCookieOffset++;
 							spaceNotetimer.cookie = TIMER_SPACENOTE_COOKIE + spaceNoteCookieOffset; //possible pile up of number used to represent the cookie
-							spaceNotetimer.absolute = getTimerAbsolute(TIMER_SECONDS) + TIMER_SPACENOTE_DELAY;
+							spaceNotetimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_SPACENOTE_DELAY;
 							setTimer(&spaceNotetimer);
-							textGotoXY(0,59);printf("%d    ",spaceNoteCookieOffset);
+							
+							spaceNoteCookieOffset++;
 						break;
 					case 5: //alt modifier
 						altHit = true;
@@ -646,7 +634,7 @@ int main(int argc, char *argv[]) {
 					shiftHit = false;
 					break;
 			}
-		}
-			
+		}		
         }
 return 0;}
+}

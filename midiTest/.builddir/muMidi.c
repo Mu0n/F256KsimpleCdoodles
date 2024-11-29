@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
+#include "C:\F256\f256llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muMidi.h"

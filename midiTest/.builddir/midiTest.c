@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
+#include "C:\F256\f256llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
 
@@ -36,6 +36,14 @@ EMBED(palpiano, "../assets/pian.pal", 0x10000);
 EMBED(pia1, "../assets/piaa", 0x18000);
 EMBED(pia2, "../assets/piab", 0x20000);
 EMBED(pia3, "../assets/piac", 0x28000);
+
+typedef struct aBeat
+{
+	/*
+	uint8_t notes[];
+	uint8_t delays[];
+	*/
+} theBeats[4];
 
 struct timer_t spaceNotetimer, refTimer, snareTimer; //spaceNotetimer: used when you hit space, produces a 1s delay before NoteOff comes in
 //refTimer: is 1 frame long, used to display updated text when you hit keys on a midi controller
@@ -236,12 +244,14 @@ void beatsTextMenu()
 {
 	textSetColor(textColorGreen,0x00);
 	
-	textGotoXY(0,26);textPrint("[F1] to pick an instrument from a list");
-	textGotoXY(0,27);textPrint("[F3] to change your output channel");
-	textGotoXY(1,29);textPrint("CH  Instrument");
-	textGotoXY(2,30);textPrint("0: ");
-	textGotoXY(2,31);textPrint("1: ");
-	textGotoXY(2,32);textPrint("9: ");
+	textGotoXY(45,26);textPrint("[F5] to cycle preset beats");
+	textGotoXY(45,27);textPrint("[F7] play/stop toggle the beat");
+	
+	textSetColor(textColorOrange,0x00);
+	textGotoXY(45,29); textPrint("[Beat1] ");
+	textSetColor(textColorGreen,0x00);
+	textPrint("	Beat2   Beat3   Beat4 ");
+	
 }
 
 
@@ -388,6 +398,7 @@ int main(int argc, char *argv[]) {
 	bool instSelectMode = false;
 	bool autoSnare = false; //first preprogrammed simple beat
 	uint8_t sIndex = 0; //snare index
+	uint8_t selectBeat = 0; //selected beat preset from 0 to 3
 	POKE(1,0);
  
 	setup();
@@ -521,6 +532,38 @@ int main(int argc, char *argv[]) {
 						prgChange(prgInst[chSelect],chSelect);
 						break;
 					case 133: //F5
+						selectBeat+=1;
+						if(selectBeat==4)selectBeat=0;
+						switch(selectBeat)
+						{
+							case 0: //beat1
+								textSetColor(textColorOrange,0x00);
+								textGotoXY(45,29); textPrint("[Beat1] ");
+								textSetColor(textColorGreen,0x00);textPrint(" Beat2   Beat3   Beat4 ");
+								break;
+							case 1: //beat2
+								textSetColor(textColorGreen,0x00);
+								textGotoXY(45,29); textPrint(" Beat1  ");
+								textSetColor(textColorOrange,0x00);
+								textPrint("[Beat2] ");
+								textSetColor(textColorGreen,0x00);
+								textPrint(" Beat3   Beat4 ");
+								break;
+							case 2: //beat3
+								textSetColor(textColorGreen,0x00);
+								textGotoXY(45,29); textPrint(" Beat1   Beat2  ");
+								textSetColor(textColorOrange,0x00);
+								textPrint("[Beat3] ");
+								textSetColor(textColorGreen,0x00);
+								textPrint(" Beat4 ");
+								break;
+							case 3: //beat4
+								textSetColor(textColorGreen,0x00);
+								textGotoXY(45,29); textPrint(" Beat1   Beat2   Beat3  ");
+								textSetColor(textColorGreen,0x00);
+								textPrint("[Beat4]");
+								break;
+						}
 						break;
 					case 135: //F7
 						autoSnare = !autoSnare;

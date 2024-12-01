@@ -53,172 +53,212 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-       0        0        0     1 __palpiano_lma = 0x10000
+       0        0        0     1 __palpiano_lma = 0x20000
        0        0        0     1 __palpiano_size = 0x3fc
-       0        0        0     1 __pia1_lma = 0x18000
+       0        0        0     1 __pia1_lma = 0x28000
        0        0        0     1 __pia1_size = 0x8000
-       0        0        0     1 __pia2_lma = 0x20000
+       0        0        0     1 __pia2_lma = 0x30000
        0        0        0     1 __pia2_size = 0x8000
-       0        0        0     1 __pia3_lma = 0x28000
+       0        0        0     1 __pia3_lma = 0x38000
        0        0        0     1 __pia3_size = 0x2c00
-      30      300        7     1 .zp.data
+      30      300       16     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300        7     1         midiTest.lto.o:(.zp.data)
+      30      300       16     1         midiTest.lto.o:(.zp.data)
       30      300        1     1                 _ccolor
       31      301        2     1                 note
-      33      303        4     1                 snareNotes
-      37      307        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      37      307        0     1 __zp_data_size = SIZEOF(.zp.data)
-      37       37       28     1 .zp.bss
-      37       37        0     1         __zp_bss_start = .
-      37       37       28     1         midiTest.lto.o:(.zp.bss)
-      37       37        7     1                 kernelEventData
-      3e       3e        1     1                 _col
-      3f       3f        1     1                 _row
-      40       40        2     1                 __putchar.s
-      42       42       14     1                 prgInst
-      56       56        1     1                 chSelect
-      57       57        1     1                 spaceNotetimer.1
-      58       58        1     1                 spaceNotetimer.2
-      59       59        1     1                 refTimer.1
-      5a       5a        1     1                 snareTimer.1
-      5b       5b        2     1                 oldCursorNote
-      5d       5d        2     1                 oldNote
-      5f       5f        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      5f       5f       5b     1 .zp
-      5f       5f       5b     1         midiTest.lto.o:(.zp.noinit)
-     307      307     2a55     1 .text
-     307      307        0     1         _init = .
-     307      307        0     1         _start = .
-     307      307        8     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     307      307        0     1                 __do_init_stack
-     30f      30f        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     30f      30f        0     1                 __do_zero_bss
-     312      312        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     312      312        0     1                 __do_zero_zp_bss
-     315      315        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     315      315        0     1                 __do_copy_zp_data
-     318      318        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     31b      31b        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     31b      31b        0     1                 __after_main
-     31e      31e        0     1         _fini = .
-     31e      31e        1     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     31f      31f       13     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     31f      31f       13     1                 __zero_bss
-     332      332       13     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     332      332       13     1                 __zero_zp_bss
-     345      345       17     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     345      345       17     1                 __copy_zp_data
-     35c      35c      3a0     1         midiTest.lto.o:(.text.f256Init)
-     35c      35c      3a0     1                 f256Init
-     6fc      6fc        6     1         midiTest.lto.o:(.text.main)
-     6fc      6fc        6     1                 main
-     702      702      ede     1         midiTest.lto.o:(.text.f256main)
-     702      702      ede     1                 f256main
-    15e0     15e0      1b8     1         midiTest.lto.o:(.text.textPrint)
-    15e0     15e0      1b8     1                 textPrint
-    1798     1798      2a7     1         midiTest.lto.o:(.text.textTitle)
-    1798     1798      2a7     1                 textTitle
-    1a3f     1a3f      25a     1         midiTest.lto.o:(.text.refreshInstrumentText)
-    1a3f     1a3f      25a     1                 refreshInstrumentText
-    1c99     1c99       bd     1         midiTest.lto.o:(.text.channelTextMenu)
-    1c99     1c99       bd     1                 channelTextMenu
-    1d56     1d56       e0     1         midiTest.lto.o:(.text.highLightInstChoice)
-    1d56     1d56       e0     1                 highLightInstChoice
-    1e36     1e36        d     1         midiTest.lto.o:(.text.__putchar)
-    1e36     1e36        d     1                 __putchar
-    1e43     1e43        5     1         midiTest.lto.o:(.text.exit)
-    1e43     1e43        5     1                 exit
-    1e48     1e48       d1     1         midiTest.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    1e48     1e48       d1     1                 (anonymous namespace)::put(char, Status*)
-    1f19     1f19      10d     1         midiTest.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1f19     1f19      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
-    2026     2026      bb6     1         midiTest.lto.o:(.text.printf)
-    2026     2026      bb6     1                 printf
-    2bdc     2bdc        c     1         midiTest.lto.o:(.text.putchar)
-    2bdc     2bdc        c     1                 putchar
-    2be8     2be8       2c     1         midiTest.lto.o:(.text.memcpy)
-    2be8     2be8       2c     1                 memcpy
-    2c14     2c14       20     1         midiTest.lto.o:(.text.__memset)
-    2c14     2c14       20     1                 __memset
-    2c34     2c34       1b     1         midiTest.lto.o:(.text.__mulqi3)
-    2c34     2c34       1b     1                 __mulqi3
-    2c4f     2c4f       32     1         midiTest.lto.o:(.text.__mulhi3)
-    2c4f     2c4f       32     1                 __mulhi3
-    2c81     2c81       db     1         midiTest.lto.o:(.text.__udivmodhi4)
-    2c81     2c81       db     1                 __udivmodhi4
-    2d5c     2d5c        0     1         __init_array_start = .
-    2d5c     2d5c        0     1         __init_array_end = .
-    2d5c     2d5c        0     1         __fini_array_start = .
-    2d5c     2d5c        0     1         __fini_array_end = .
-    2d5c     2d5c      bea     1 .rodata
-    2d5c     2d5c        1     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2d5c     2d5c        0     1                 __set_v
-    2d5d     2d5d       20     1         midiTest.lto.o:(.rodata.f256main)
-    2d7d     2d7d       3a     1         midiTest.lto.o:(.rodata.printf)
-    2db7     2db7       30     1         midiTest.lto.o:(.rodata.textColors)
-    2db7     2db7       30     1                 textColors
-    2de7     2de7       58     1         midiTest.lto.o:(.rodata.noteColors)
-    2de7     2de7       58     1                 noteColors
-    2e3f     2e3f      a07     1         <internal>:(.rodata.str1.1)
-    3846     3846      100     1         midiTest.lto.o:(.rodata.midi_instruments)
-    3846     3846      100     1                 midi_instruments
-    3946     3946        0     1 .data
-    3946     3946        0     1         __data_start = .
-    3946     3946        0     1         __data_end = .
-    3946     3946        0     1 __data_load_start = LOADADDR(.data)
-    3946     3946        0     1 __data_size = SIZEOF(.data)
-    3946     3946        5     1 .bss
-    3946     3946        0     1         __bss_start = .
-    3946     3946        4     1         midiTest.lto.o:(.bss._BITMAP_BASE.0)
-    3946     3946        4     1                 _BITMAP_BASE.0
-    394a     394a        1     1         midiTest.lto.o:(.bss.kernelError)
-    394a     394a        1     1                 kernelError
-    394b     394b        0     1         __bss_end = .
-    394b     394b        0     1 __bss_size = SIZEOF(.bss)
-    394b     394b        0     1 .noinit
-    394b     394b        0     1         __heap_start = ALIGN(., 2)
-    394b     394b        0     1 end_block8 = .
-    394b     394b        0     1 end_block9 = .
-    394b     394b        0     1 end_block10 = .
-    394b     394b        0     1 end_block11 = .
-    394b     394b        0     1 end_block12 = .
-    394b     394b        0     1 end_block13 = .
-    394b     394b        0     1 end_block14 = .
-    394b     394b        0     1 end_block15 = .
-    394b     394b        0     1 end_block16 = .
-    394b     394b        0     1 end_block17 = .
-    394b     394b        0     1 end_block18 = .
-    394b     394b        0     1 end_block19 = .
-    394b     394b        0     1 end_block20 = .
-    394b     394b        0     1 end_block21 = .
-    394b     394b        0     1 end_block22 = .
-    394b     394b        0     1 end_block23 = .
-   10000    10000      3fc    16 .palpiano
-   10000    10000      3fc    16         midiTest.lto.o:(.palpiano)
-   10000    10000        0     1                 palpiano_start
-   103fc    103fc        0     1                 palpiano_end
-   103fc    103fc        0     1 end_palpiano = .
-   18000    18000     8000    16 .pia1
-   18000    18000     8000    16         midiTest.lto.o:(.pia1)
-   18000    18000        0     1                 pia1_start
-   20000    20000        0     1                 pia1_end
-   20000    20000        0     1 end_pia1 = .
-   20000    20000     8000    16 .pia2
-   20000    20000     8000    16         midiTest.lto.o:(.pia2)
-   20000    20000        0     1                 pia2_start
-   28000    28000        0     1                 pia2_end
-   28000    28000        0     1 end_pia2 = .
-   28000    28000     2c00    16 .pia3
-   28000    28000     2c00    16         midiTest.lto.o:(.pia3)
-   28000    28000        0     1                 pia3_start
-   2ac00    2ac00        0     1                 pia3_end
-   2ac00    2ac00        0     1 end_pia3 = .
+      33      303       12     1                 tempoLUTRef
+      45      315        1     1                 mainTempo
+      46      316        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      46      316        0     1 __zp_data_size = SIZEOF(.zp.data)
+      46       46       40     1 .zp.bss
+      46       46        0     1         __zp_bss_start = .
+      46       46       40     1         midiTest.lto.o:(.zp.bss)
+      46       46        7     1                 kernelEventData
+      4d       4d        1     1                 _col
+      4e       4e        1     1                 _row
+      4f       4f        2     1                 __putchar.s
+      51       51        1     1                 selectBeat
+      52       52       14     1                 prgInst
+      66       66        1     1                 chSelect
+      67       67        1     1                 isTwinLinked
+      68       68       12     1                 mainTempoLUT
+      7a       7a        1     1                 spaceNotetimer.1
+      7b       7b        1     1                 spaceNotetimer.2
+      7c       7c        1     1                 refTimer.1
+      7d       7d        2     1                 oldCursorNote
+      7f       7f        2     1                 oldNote
+      81       81        1     1                 (anonymous namespace)::initialized
+      82       82        2     1                 (anonymous namespace)::free_size
+      84       84        2     1                 (anonymous namespace)::free_list
+      86       86        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      86       86       5c     1 .zp
+      86       86       5c     1         midiTest.lto.o:(.zp.noinit)
+     316      316     6a2d     2 .text
+     316      316        0     1         _init = .
+     316      316        0     1         _start = .
+     316      316        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     316      316        0     1                 __do_init_stack
+     31e      31e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     31e      31e        0     1                 __do_zero_bss
+     321      321        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     321      321        0     1                 __do_zero_zp_bss
+     324      324        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     324      324        0     1                 __do_copy_zp_data
+     327      327        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     32a      32a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     32a      32a        0     1                 __after_main
+     32d      32d        0     1         _fini = .
+     32d      32d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     32e      32e      133     2         midiTest.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     32e      32e      133     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     461      461       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     461      461       13     1                 __zero_bss
+     474      474       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     474      474       13     1                 __zero_zp_bss
+     487      487       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     487      487       17     1                 __copy_zp_data
+     49e      49e      3a0     1         midiTest.lto.o:(.text.f256Init)
+     49e      49e      3a0     1                 f256Init
+     83e      83e        6     1         midiTest.lto.o:(.text.main)
+     83e      83e        6     1                 main
+     844      844     2cde     1         midiTest.lto.o:(.text.f256main)
+     844      844     2cde     1                 f256main
+    3522     3522      1b8     1         midiTest.lto.o:(.text.textPrint)
+    3522     3522      1b8     1                 textPrint
+    36da     36da       64     1         midiTest.lto.o:(.text.prepTempoLUT)
+    36da     36da       64     1                 prepTempoLUT
+    373e     373e       58     1         midiTest.lto.o:(.text.updateTempoText)
+    373e     373e       58     1                 updateTempoText
+    3796     3796      27b     1         midiTest.lto.o:(.text.textTitle)
+    3796     3796      27b     1                 textTitle
+    3a11     3a11      31d     1         midiTest.lto.o:(.text.refreshInstrumentText)
+    3a11     3a11      31d     1                 refreshInstrumentText
+    3d2e     3d2e       da     1         midiTest.lto.o:(.text.channelTextMenu)
+    3d2e     3d2e       da     1                 channelTextMenu
+    3e08     3e08       ef     1         midiTest.lto.o:(.text.refreshBeatTextChoice)
+    3e08     3e08       ef     1                 refreshBeatTextChoice
+    3ef7     3ef7       e0     1         midiTest.lto.o:(.text.highLightInstChoice)
+    3ef7     3ef7       e0     1                 highLightInstChoice
+    3fd7     3fd7       bb     1         midiTest.lto.o:(.text.textPrintUInt)
+    3fd7     3fd7       bb     1                 textPrintUInt
+    4092     4092        d     1         midiTest.lto.o:(.text.__putchar)
+    4092     4092        d     1                 __putchar
+    409f     409f        5     1         midiTest.lto.o:(.text.exit)
+    409f     409f        5     1                 exit
+    40a4     40a4       d1     1         midiTest.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    40a4     40a4       d1     1                 (anonymous namespace)::put(char, Status*)
+    4175     4175      10d     1         midiTest.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    4175     4175      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
+    4282     4282      bb0     1         midiTest.lto.o:(.text.printf)
+    4282     4282      bb0     1                 printf
+    4e32     4e32        c     1         midiTest.lto.o:(.text.putchar)
+    4e32     4e32        c     1                 putchar
+    4e3e     4e3e      2ad     1         midiTest.lto.o:(.text.malloc)
+    4e3e     4e3e      2ad     1                 malloc
+    50eb     50eb       2c     1         midiTest.lto.o:(.text.memcpy)
+    50eb     50eb       2c     1                 memcpy
+    5117     5117       20     1         midiTest.lto.o:(.text.__memset)
+    5117     5117       20     1                 __memset
+    5137     5137       17     1         midiTest.lto.o:(.text.__ashlsi3)
+    5137     5137       17     1                 __ashlsi3
+    514e     514e       17     1         midiTest.lto.o:(.text.__lshrsi3)
+    514e     514e       17     1                 __lshrsi3
+    5165     5165       1b     1         midiTest.lto.o:(.text.__mulqi3)
+    5165     5165       1b     1                 __mulqi3
+    5180     5180       32     1         midiTest.lto.o:(.text.__mulhi3)
+    5180     5180       32     1                 __mulhi3
+    51b2     51b2       70     1         midiTest.lto.o:(.text.__mulsi3)
+    51b2     51b2       70     1                 __mulsi3
+    5222     5222       f8     1         midiTest.lto.o:(.text.__muldi3)
+    5222     5222       f8     1                 __muldi3
+    531a     531a      147     1         midiTest.lto.o:(.text.__umodsi3)
+    531a     531a      147     1                 __umodsi3
+    5461     5461       db     1         midiTest.lto.o:(.text.__udivmodhi4)
+    5461     5461       db     1                 __udivmodhi4
+    553c     553c      8b8     1         midiTest.lto.o:(.text.__mulsf3)
+    553c     553c      8b8     1                 __mulsf3
+    5df4     5df4      b80     1         midiTest.lto.o:(.text.__divsf3)
+    5df4     5df4      b80     1                 __divsf3
+    6974     6974       7c     1         midiTest.lto.o:(.text.__fixunssfsi)
+    6974     6974       7c     1                 __fixunssfsi
+    69f0     69f0      353     1         midiTest.lto.o:(.text.__floatunsisf)
+    69f0     69f0      353     1                 __floatunsisf
+    6d43     6d43        0     1         __init_array_start = .
+    6d43     6d43        0     1         __init_array_end = .
+    6d43     6d43        0     1         __fini_array_start = .
+    6d43     6d43        0     1         __fini_array_end = .
+    6d43     6d43      cdc     1 .rodata
+    6d43     6d43        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    6d43     6d43        0     1                 __set_v
+    6d44     6d44       de     1         midiTest.lto.o:(.rodata.f256main)
+    6e22     6e22        8     1         midiTest.lto.o:(.rodata.refreshBeatTextChoice)
+    6e2a     6e2a       3a     1         midiTest.lto.o:(.rodata.printf)
+    6e64     6e64       30     1         midiTest.lto.o:(.rodata.textColors)
+    6e64     6e64       30     1                 textColors
+    6e94     6e94       58     1         midiTest.lto.o:(.rodata.noteColors)
+    6e94     6e94       58     1                 noteColors
+    6eec     6eec      a2d     1         <internal>:(.rodata.str1.1)
+    7919     7919      100     1         midiTest.lto.o:(.rodata.midi_instruments)
+    7919     7919      100     1                 midi_instruments
+    7a19     7a19        6     1         midiTest.lto.o:(.rodata..Lswitch.table.f256main)
+    7a1f     7a1f        0     1 .data
+    7a1f     7a1f        0     1         __data_start = .
+    7a1f     7a1f        0     1         __data_end = .
+    7a1f     7a1f        0     1 __data_load_start = LOADADDR(.data)
+    7a1f     7a1f        0     1 __data_size = SIZEOF(.data)
+    7a1f     7a1f       51     1 .bss
+    7a1f     7a1f        0     1         __bss_start = .
+    7a1f     7a1f        4     1         midiTest.lto.o:(.bss._BITMAP_BASE.0)
+    7a1f     7a1f        4     1                 _BITMAP_BASE.0
+    7a23     7a23       4c     1         midiTest.lto.o:(.bss.theBeats)
+    7a23     7a23       4c     1                 theBeats
+    7a6f     7a6f        1     1         midiTest.lto.o:(.bss.kernelError)
+    7a6f     7a6f        1     1                 kernelError
+    7a70     7a70        0     1         __bss_end = .
+    7a70     7a70        0     1 __bss_size = SIZEOF(.bss)
+    7a70     7a70        0     1 .noinit
+    7a70     7a70        0     1         __heap_start = ALIGN(., 2)
+    7a70     7a70        0     1 end_block8 = .
+    7a70     7a70        0     1 end_block9 = .
+    7a70     7a70        0     1 end_block10 = .
+    7a70     7a70        0     1 end_block11 = .
+    7a70     7a70        0     1 end_block12 = .
+    7a70     7a70        0     1 end_block13 = .
+    7a70     7a70        0     1 end_block14 = .
+    7a70     7a70        0     1 end_block15 = .
+    7a70     7a70        0     1 end_block16 = .
+    7a70     7a70        0     1 end_block17 = .
+    7a70     7a70        0     1 end_block18 = .
+    7a70     7a70        0     1 end_block19 = .
+    7a70     7a70        0     1 end_block20 = .
+    7a70     7a70        0     1 end_block21 = .
+    7a70     7a70        0     1 end_block22 = .
+    7a70     7a70        0     1 end_block23 = .
+   20000    20000      3fc    16 .palpiano
+   20000    20000      3fc    16         midiTest.lto.o:(.palpiano)
+   20000    20000        0     1                 palpiano_start
+   203fc    203fc        0     1                 palpiano_end
+   203fc    203fc        0     1 end_palpiano = .
+   28000    28000     8000    16 .pia1
+   28000    28000     8000    16         midiTest.lto.o:(.pia1)
+   28000    28000        0     1                 pia1_start
+   30000    30000        0     1                 pia1_end
+   30000    30000        0     1 end_pia1 = .
+   30000    30000     8000    16 .pia2
+   30000    30000     8000    16         midiTest.lto.o:(.pia2)
+   30000    30000        0     1                 pia2_start
+   38000    38000        0     1                 pia2_end
+   38000    38000        0     1 end_pia2 = .
+   38000    38000     2c00    16 .pia3
+   38000    38000     2c00    16         midiTest.lto.o:(.pia3)
+   38000    38000        0     1                 pia3_start
+   3ac00    3ac00        0     1                 pia3_end
+   3ac00    3ac00        0     1 end_pia3 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      a20     4 .symtab
-       0        0      a20     4         <internal>:(.symtab)
+       0        0      b80     4 .symtab
+       0        0      b80     4         <internal>:(.symtab)
        0        0       76     1 .shstrtab
        0        0       76     1         <internal>:(.shstrtab)
-       0        0      739     1 .strtab
-       0        0      739     1         <internal>:(.strtab)
+       0        0      88b     1 .strtab
+       0        0      88b     1         <internal>:(.strtab)

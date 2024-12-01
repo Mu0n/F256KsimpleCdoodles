@@ -5,6 +5,7 @@
 #include "f256lib.h"
 
 void resetInstruments(void);
+void midiShutAChannel(uint8_t chan);
 void midiShutUp(void);
 void prgChange(uint8_t prg, uint8_t chan);
 void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed);

@@ -1,8 +1,14 @@
-#include "C:\F256\f256llvm-mos\code\midiTest\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muMidi.h"
 
+void midiShutAChannel(uint8_t chan)
+{
+	POKE(MIDI_FIFO, 0xB0 | chan); // control change message
+	POKE(MIDI_FIFO, 0x7B); // all notes off command
+	POKE(MIDI_FIFO, 000);
+}
 //Stop all ongoing sounds (ie MIDI panic button)
 void midiShutUp()
 	{

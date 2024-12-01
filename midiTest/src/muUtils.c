@@ -1,7 +1,6 @@
 #include "f256lib.h"
 #include "../src/muUtils.h"
 
-
 //realTextClear: manually changes to MMU page 2 and covers the whole 80x60 text layer
 //blank characters. the f256lib.h's textClear seems to only erase part of the screen only.
 void realTextClear()

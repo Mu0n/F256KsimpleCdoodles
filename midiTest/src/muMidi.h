@@ -1,14 +1,22 @@
 #ifndef MUMIDI_H
 #define MUMIDI_H
 
+#define MIDI_CTRL 	   0xDDA0
 #define MIDI_FIFO 	   0xDDA1
+#define MIDI_RXD 	   0xDDA2
+#define MIDI_RXD_COUNT 0xDDA3
+#define MIDI_TXD       0xDDA4
+#define MIDI_TXD_COUNT 0xDDA5
+
+#define MIDI_FIFO_ALT  0xDDC1 //VS1053b midi
+
 #include "f256lib.h"
 
-void resetInstruments(void);
-void midiShutAChannel(uint8_t chan);
-void midiShutUp(void);
-void prgChange(uint8_t prg, uint8_t chan);
-void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed);
-void midiNoteOn(uint8_t chan, uint8_t note, uint8_t speed);
+void resetInstruments(bool wantAlt);
+void midiShutAChannel(uint8_t chan, bool wantAlt);
+void midiShutUp(bool wantAlt);
+void prgChange(uint8_t prg, uint8_t chan, bool wantAlt);
+void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
+void midiNoteOn(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
 
 #endif // MUMIDI_H

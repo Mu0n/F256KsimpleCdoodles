@@ -2,8 +2,11 @@
 Code by Michael Juneau - January 2025 for the F256Jr, F256K, F256Jr2 and F256K2
 
 simple timer0 example where we just watch the counter fill up from 0 to 0xFFFFFF,
-observe its value in a dedicated loop and react out of it when the threshold breaking 
-has been observed for the first time.
+observe its value in a dedicated loop and react out of it when the timer0 pending bit
+is set in the T0_PEND register
+
+In this current iteration, the kernel interrupts are completely disabled with asm("sei") to
+avoid an occasional glitch (that happens roughly every 50ish give or take 20, loop iteration
 
 Another more advanced usage of timer0 not done here is to let it trigger interrupts, react to those
 by having edited the irq vector to handle them. 

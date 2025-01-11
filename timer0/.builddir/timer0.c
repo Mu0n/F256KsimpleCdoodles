@@ -65,8 +65,7 @@ void writeStars()
 void setTimer0()
 {
 	resetTimer0();
-	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
-	POKE(T0_CMP_CTR, T0_CMP_CTR_RELOAD); //when the target is reached, bring it back to value 0x000000
+	POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR); //when the target is reached, bring it back to value 0x000000
 	POKE(T0_CMP_L,0xFF);POKE(T0_CMP_M,0xFF);POKE(T0_CMP_H,0xFF); //inject the compare value as max value
 }
 
@@ -89,7 +88,7 @@ uint8_t isTimerDone()
 
 int main(int argc, char *argv[]) {
 
-
+asm("sei");
 setTimer0();
 while(true)
 {

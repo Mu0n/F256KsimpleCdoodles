@@ -615,13 +615,14 @@ Disassembly of section .text:
      6e2: 20 e5 06     	jsr	$6e5 <f256main>
 
 000006e5 <f256main>:
-     6e5: a2 02        	ldx	#$2
-     6e7: 8e 50 d6     	stx	$d650                   ; 0xd650 <end_block9+0xccc2>
-     6ea: a0 09        	ldy	#$9
-     6ec: 8c 50 d6     	sty	$d650                   ; 0xd650 <end_block9+0xccc2>
-     6ef: a9 10        	lda	#$10
-     6f1: 8d 60 d6     	sta	$d660                   ; 0xd660 <end_block9+0xccd2>
-     6f4: 8c 50 d6     	sty	$d650                   ; 0xd650 <end_block9+0xccc2>
+     6e5: 78           	sei
+     6e6: a2 02        	ldx	#$2
+     6e8: 8e 50 d6     	stx	$d650                   ; 0xd650 <end_block9+0xccc2>
+     6eb: a2 09        	ldx	#$9
+     6ed: 8e 50 d6     	stx	$d650                   ; 0xd650 <end_block9+0xccc2>
+     6f0: a2 10        	ldx	#$10
+     6f2: 8e 60 d6     	stx	$d660                   ; 0xd660 <end_block9+0xccd2>
+     6f5: a2 01        	ldx	#$1
      6f7: 8e 54 d6     	stx	$d654                   ; 0xd654 <end_block9+0xccc6>
      6fa: a2 ff        	ldx	#$ff
      6fc: 8e 55 d6     	stx	$d655                   ; 0xd655 <end_block9+0xccc7>

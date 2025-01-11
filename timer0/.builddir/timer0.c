@@ -1,5 +1,16 @@
 #include "D:\F256\llvm-mos\code\timer0\.builddir\trampoline.h"
 
+/*
+Code by Michael Juneau - January 2025 for the F256Jr, F256K, F256Jr2 and F256K2
+
+simple timer0 example where we just watch the counter fill up from 0 to 0xFFFFFF,
+observe its value in a dedicated loop and react out of it when the threshold breaking
+has been observed for the first time.
+
+Another more advanced usage of timer0 not done here is to let it trigger interrupts, react to those
+by having edited the irq vector to handle them.
+*/
+
 #define F256LIB_IMPLEMENTATION
 
 #include "f256lib.h"
@@ -30,36 +41,62 @@
 
 
 #define MIDI 0xDDA1 //sam2695 to hear that timer0 is working
-bool noteOnOff = true;
 
-void toggleMIDI()
+uint8_t color = 1; //used for text color for when we write ** on screen
+
+void noteOnMIDI(void);
+void writeStars(void);
+void setTimer0(void);
+void resetTimer0(void);
+uint32_t readTimer0(void);
+uint8_t isTimerDone(void);
+
+void noteOnMIDI()
 {
-	noteOnOff?POKE(MIDI,0x90):POKE(MIDI,0x80);POKE(MIDI,0x39);POKE(MIDI,0x4F); //alternates between note on and note off
-	noteOnOff = !noteOnOff; //flip the note on/off
+	POKE(MIDI,0x90);POKE(MIDI,0x39);POKE(MIDI,0x4F); //alternates between note on and note off
 }
+
+void writeStars()
+{
+	color= color?0:1; //flip the color between 2 values
+	textSetColor(color+10,0);textPrint("**"); //do something visually for machines who can't deal MIDI
+}
+
+void setTimer0()
+{
+	resetTimer0();
+	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
+	POKE(T0_CMP_CTR, T0_CMP_CTR_RELOAD); //when the target is reached, bring it back to value 0x000000
+	POKE(T0_CMP_L,0xFF);POKE(T0_CMP_M,0xFF);POKE(T0_CMP_H,0xFF); //inject the compare value as max value
+}
+
+void resetTimer0()
+{
+	POKE(T0_CTR, CTR_CLEAR);
+	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
+	POKE(T0_PEND,0x10); //clear pending timer0
+}
+uint32_t readTimer0()
+{
+	return (uint32_t)((PEEK(T0_VAL_H)))<<16 | (uint32_t)((PEEK(T0_VAL_M)))<<8 | (uint32_t)((PEEK(T0_VAL_L)));
+}
+
+uint8_t isTimerDone()
+{
+	return PEEK(T0_PEND)&0x10;
+}
+
 
 int main(int argc, char *argv[]) {
-uint32_t check;
 
 
-POKE(T0_CTR, CTR_CLEAR);
-POKE(T0_CTR, CTR_ENABLE | CTR_UPDOWN);
-POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR);
-POKE(T0_CMP_L,0xFF);POKE(T0_CMP_M,0xFF);POKE(T0_CMP_H,0xFF); //inject the compare value
+setTimer0();
 while(true)
 {
-	while(true)
-	{
-		check = (uint32_t)((PEEK(T0_VAL_H)))<<16 | (uint32_t)((PEEK(T0_VAL_M)))<<8 | (uint32_t)((PEEK(T0_VAL_L)));
-		printf("%08lx  ",check);
-		if(check > 0x00FFFF) break;
-
-	}
-	printf("**********");
-toggleMIDI();
-POKE(T0_CTR, CTR_CLEAR);
-POKE(T0_CTR, CTR_ENABLE | CTR_UPDOWN);
-POKE(T0_CMP_L,0x0F);POKE(T0_CMP_M,0x00);POKE(T0_CMP_H,0x00); //inject the compare value
+	while(isTimerDone()==0);
+	
+	noteOnMIDI();
+	writeStars();
+	POKE(T0_PEND,0x10); //clear timer0 at 0x10
 }
-
 return 0;}

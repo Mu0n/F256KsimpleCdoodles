@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\ParseNPlayMidi\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\parsenplaymidi\.builddir\trampoline.h"
 
 
 //DEFINES
@@ -20,6 +20,38 @@
 #define PREVIEW_LIMITER 30
 #define MIDI_EVENT_FAR_SIZE 8
 
+
+
+
+#define T0_PEND     0xD660
+#define T0_MASK     0xD66C
+
+#define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
+#define T0_STAT     0xD650 //master control register for timer0, read bit0 set = reached target val
+
+#define CTR_INTEN   0x80  //present only for timer1? or timer0 as well?
+#define CTR_ENABLE  0x01
+#define CTR_CLEAR   0x02
+#define CTR_LOAD    0x04
+#define CTR_UPDOWN  0x08
+
+#define T0_VAL_L    0xD651 //current 24 bit value of the timer
+#define T0_VAL_M    0xD652
+#define T0_VAL_H    0xD653
+
+#define T0_CMP_CTR  0xD654 //b0: t0 returns 0 on reaching target. b1: CMP = last value written to T0_VAL
+#define T0_CMP_L    0xD655 //24 bit target value for comparison
+#define T0_CMP_M    0xD656
+#define T0_CMP_H    0xD657
+
+#define T0_CMP_CTR_RECLEAR 0x01
+#define T0_CMP_CTR_RELOAD  0x02
+
+
+
+
+
+
 //INCLUDES
 #include "f256lib.h"
 #include <stdlib.h>
@@ -29,7 +61,7 @@
 
 
 //EMBEDS
-EMBED(human2, "../assets/Bumble.mid", 0x10000);
+EMBED(human2, "../assets/canyon.mid", 0x10000);
 
 //STRUCTS
 struct timer_t midiNoteTimer;
@@ -59,6 +91,9 @@ void wipeBigList(void);
 uint32_t getTotalLeft(void);
 void playmidi(void);
 void adjustOffsets(void);
+void resetTimer0(void);
+uint32_t readTimer0(void);
+void goToPrison(uint16_t);
 
 //the workhorse of MIDIPlay, "send A MIDI Event" sends a string of MIDI bytes into the midi FIFO
 
@@ -279,6 +314,8 @@ void playmiditype0(void)
 	uint16_t currentIndex=0;
 	uint16_t localTotalLeft=0;
 	uint32_t whereTo; //in far memory, keeps adress of event to send
+	uint8_t prisonCount=0;
+	uint8_t k;
 	aME msgGo;
 
 	bool exitFlag = false, prison= false;
@@ -303,26 +340,38 @@ void playmiditype0(void)
 			msgGo.msgToSend[1] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG+1);
 			msgGo.msgToSend[2] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG+2);
 
-			sendAME(&msgGo);
-
+/*
 			midiNoteTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + 2;
 			setTimer(&midiNoteTimer);
 	
 			prison=false;
-			while(!prison)
+			if(msgGo.deltaToGo != 0)
 			{
-			kernelNextEvent();
-			if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+				if(msgGo.deltaToGo > 0x00FFFFFF)
 				{
-				switch(kernelEventData.timer.cookie)
+					while(msgGo.deltaToGo - k * 0x00FFFFFF > 0x00FFFFFF)
 					{
-					//all user interface related to text update through a 1 frame timer is managed here
-					case TIMER_MIDI_COOKIE:
-						prison = true;
-						break;
+						k++;
+						msgGo.deltaToGo -= 0x00FFFFFF;
 					}
+					goToPrison(k);
 				}
+	
 			}
+			*/
+			k=0;
+			resetTimer0();
+			if(msgGo.deltaToGo >0)
+			{
+			while(true)
+			{
+				//printf("%08lx %08lx\n", readTimer0(), msgGo.deltaToGo);
+				if((((uint32_t)readTimer0())) > (msgGo.deltaToGo)) break;
+	
+			}
+			}
+			sendAME(&msgGo);
+			/*
 				textGotoXY(0,25);
 				printf("from data: %d %02x %02x %02x |  ",FAR_PEEK(MIDI_PARSED + whereTo + AME_BYTECOUNT),
 												  FAR_PEEK(MIDI_PARSED + whereTo + AME_MSG),
@@ -330,10 +379,33 @@ void playmiditype0(void)
 												  FAR_PEEK(MIDI_PARSED + whereTo + AME_MSG+2));
 				printf("msg to send: %d %02x %02x %02x", msgGo.bytecount, msgGo.msgToSend[0], msgGo.msgToSend[1], msgGo.msgToSend[2]);
 				printf(" addr=%08lx",MIDI_PARSED + whereTo);
+				*/
 			(theBigList).TrackEventList[0].eventleft--;
 			localTotalLeft--;
 	}
 }
+
+void goToPrison(uint16_t prisonTime)
+{
+	midiNoteTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + prisonTime;
+	setTimer(&midiNoteTimer);
+	while(true)
+	{
+		kernelNextEvent();
+		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+			{
+			switch(kernelEventData.timer.cookie)
+				{
+				//all user interface related to text update through a 1 frame timer is managed here
+				case TIMER_MIDI_COOKIE:
+					return;
+					break;
+				}
+			}
+		}
+	}
+	
+
 void playmidi(void)
 {
 	uint16_t i;
@@ -430,12 +502,14 @@ void playmidi(void)
 			msgGo.msgToSend[1] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG+(uint32_t) 1);
 			msgGo.msgToSend[2] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG+(uint32_t) 2);
 			sendAME(&msgGo);
+			/*
 			textGotoXY(0,25);
 			printf("from data: %d %02x %02x %02x |  ",FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_BYTECOUNT),
 												  FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG),
 												  FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG+(uint32_t) 1),
 												  FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG+(uint32_t) 2));
 			printf("msg to send: %d %02x %02x %02x\n", msgGo.bytecount, msgGo.msgToSend[0], msgGo.msgToSend[1], msgGo.msgToSend[2]);
+			*/
 			/*
 			if(prev2 < PREVIEW_LIMITER)
 				{
@@ -733,7 +807,7 @@ printf(" filesize=%08lx\n",gFileSize);
 					bpm = 6E7/(    ( ((uint32_t)data_byte2)<<16 ) |
 								   ( ((uint32_t)data_byte3)<<8  ) |
 								     ((uint32_t)data_byte4)         );
-					tick = (uint32_t)6E7/(uint32_t)bpm;
+					tick = (uint32_t)6E8/(uint32_t)bpm;
 					tick = (uint32_t)tick/(uint32_t)tdiv;
 	
 					}
@@ -880,6 +954,16 @@ void adjustOffsets()
 	}
 }
 
+void resetTimer0()
+{
+	POKE(T0_CTR, CTR_CLEAR);
+	POKE(T0_CTR, CTR_ENABLE | CTR_UPDOWN);
+}
+
+uint32_t readTimer0()
+{
+	return (uint32_t)((PEEK(T0_VAL_H)))<<16 | (uint32_t)((PEEK(T0_VAL_M)))<<8 | (uint32_t)((PEEK(T0_VAL_L)));
+}
 int main(int argc, char *argv[]) {
 	bool isDone = false;
 	int16_t indexStart = 0;
@@ -904,6 +988,10 @@ resetInstruments(false);
 	midiNoteTimer.cookie = TIMER_MIDI_COOKIE;
 
 	indexStart = getAndAnalyzeMIDI();
+	
+	
+	POKE(T0_CMP_CTR, T0_CMP_CTR_RELOAD);
+	POKE(T0_CMP_L,0xFF);POKE(T0_CMP_M,0xFF);POKE(T0_CMP_H,0xFF); //inject the compare value
 	
 	if(indexStart!= -1)
 	{

@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\ParseNPlayMidi\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\parsenplaymidi\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muUtils.h"

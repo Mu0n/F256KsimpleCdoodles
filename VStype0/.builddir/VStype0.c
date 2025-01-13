@@ -11,7 +11,7 @@
 #define VS_FIFO_DATA 0xD707
 
 
-EMBED(human2, "../assets/Bumble.mid", 0x10000);
+EMBED(human2, "../assets/human2.mid", 0x10000);
 uint32_t fileSize = 33876;
 
 int main(int argc, char *argv[]) {
@@ -20,13 +20,13 @@ uint16_t howManySoFar=0;
 uint8_t pass = 0;
 
 asm("sei");
-
+/*
 //codec enable all lines
 POKE(0xD620, 0x1F);
 POKE(0xD621, 0x2A);
 POKE(0xD622, 0x01);
 while(PEEK(0xD622) & 0x01);
-
+*/
 
 
 

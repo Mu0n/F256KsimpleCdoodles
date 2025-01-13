@@ -1,6 +1,14 @@
 #include "D:\F256\llvm-mos\code\vsrtmidi\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
+
+#define MIDI_CTRL 	   0xDDA0
+#define MIDI_FIFO 	   0xDDA1
+#define MIDI_RXD 	   0xDDA2
+#define MIDI_RXD_COUNT 0xDDA3
+#define MIDI_TXD       0xDDA4
+#define MIDI_TXD_COUNT 0xDDA5
+
 //VS1053b midi
 #define MIDI_CTRL_ALT 	    0xDDB0
 #define MIDI_FIFO_ALT 	    0xDDB1
@@ -27,20 +35,26 @@ void initVS1053MIDI(void) {
   while (i<sizeof(plugin)/sizeof(plugin[0])) {
     addr = plugin[i++];
     n = plugin[i++];
-    if (n & 0x8000U) { /* RLE run, replicate n samples */
+    if (n & 0x8000) { /* RLE run, replicate n samples */
       n &= 0x7FFF;
       val = plugin[i++];
       while (n--) {
         //WriteVS10xxRegister(addr, val);
         POKE(0xD701,addr);
-        POKE(0xD701,val);
+        POKEW(0xD702,val);
+        POKE(0xD700,1);
+        POKE(0xD700,0);
+		while (PEEK(0xd700) & 0x80);
       }
     } else {           /* Copy run, copy n samples */
       while (n--) {
         val = plugin[i++];
         //WriteVS10xxRegister(addr, val);
         POKE(0xD701,addr);
-        POKE(0xD701,val);
+        POKEW(0xD702,val);
+        POKE(0xD700,1);
+        POKE(0xD700,0);
+		while (PEEK(0xd700) & 0x80);
       }
     }
   }
@@ -58,16 +72,19 @@ int main(int argc, char *argv[]) {
 	while(PEEK(0xD622) & 0x01);
 	
 	initVS1053MIDI();
-	
+
+	POKE(MIDI_FIFO_ALT, 0x90);
+	POKE(MIDI_FIFO_ALT, 0x39);
+	POKE(MIDI_FIFO_ALT, 0x4F);
 	
 	while(true)
         {
-		if(!(PEEK(MIDI_CTRL_ALT) & 0x02)) //rx not empty
+		if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
 			{
-				howMany= PEEKW(MIDI_RXD_ALT) & 0x0FFF;
+				howMany= PEEKW(MIDI_RXD) & 0x0FFF;
 				for(i=0; i<howMany; i++)
 				{
-					detected = (uint8_t)PEEK(MIDI_FIFO_ALT);
+					detected = (uint8_t)PEEK(MIDI_FIFO);
 					POKE(MIDI_FIFO_ALT ,detected);
 				}
 			}

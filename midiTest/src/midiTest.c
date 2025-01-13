@@ -22,8 +22,17 @@
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 #include "../src/musid.h"   //contains SID chip functions
 #include "../src/mupsg.h"   //contains PSG chip functions
-#include "../src/beats.h"   //contains hard coded beats
+#define TIMER_BEAT_0 5
+#define TIMER_BEAT_1A 6
+#define TIMER_BEAT_1B 7
+#define TIMER_BEAT_2A 8
+#define TIMER_BEAT_2B 9
+#define TIMER_BEAT_3A 10
+#define TIMER_BEAT_3B 11
 
+
+#define TIMER_FRAMES 0
+#define TIMER_SECONDS 1
 #define WITHOUT_TILE
 #define WITHOUT_SPRITE
 #include "f256lib.h"
@@ -33,7 +42,26 @@ EMBED(pia1, "../assets/piaa", 0x28000);
 EMBED(pia2, "../assets/piab", 0x30000);
 EMBED(pia3, "../assets/piac", 0x38000);
 
+struct aBeat 
+{
+	bool isActive; //false= no
+	bool pendingRelaunch; //for when you change tempo while it's playing. die down the beat first, then relaunch.
+	uint8_t activeCount; //will increment when a note is sent, decrement when a note is died down
+	uint8_t suggTempo; //suggested tempo it will switch to when switched on
+	uint8_t howMany; //howMany is the 2nd dimension axis of the following arrays, ie if set as 2, you could keep a snare beat along with a bass track
+	uint8_t *channel;//channel is used to indicate which of the 16 MIDI channel is used for this beat
+	uint8_t *index; //index is used during playback to keep track where it's at, per track
+	uint8_t **notes; //contains the midi notes to be sent out
+	uint8_t *noteCount; //lets the loop be easy to detect
+	uint8_t *instruments; //contains the 0xC? parameter for program change, ie setting the instrument; every track gets one
+	uint8_t **delays; //contains the delays to wait until the next note
+	struct timer_t *timers; //timers to deal with these tracks' delays
+};
 
+
+struct aBeat theBeats[4];
+
+void setupBeats(void);
 uint8_t selectBeat = 0; //selected beat preset from 0 to 3
 
 struct timer_t spaceNotetimer, refTimer, snareTimer; //spaceNotetimer: used when you hit space, produces a 1s delay before NoteOff comes in
@@ -336,8 +364,267 @@ const char *midi_instruments[] = {
     "Gunshot"
 };
 
+void setupBeats()
+{
+	//Beat 0, simple kick drum + snare beat
+	theBeats[0].isActive = false;
+	theBeats[0].activeCount=0;
+	theBeats[0].suggTempo = 90;
+	theBeats[0].howMany = 1;
+	theBeats[0].channel = malloc(sizeof(uint8_t) * 1);
+	theBeats[0].channel[0] = 0x09; //percussion
+	theBeats[0].index = malloc(sizeof(uint8_t) * 1);
+	theBeats[0].index[0] = 0;
+	theBeats[0].timers = malloc(sizeof(struct timer_t) * 1);
+	theBeats[0].timers[0].units = TIMER_FRAMES;
+	theBeats[0].timers[0].cookie = TIMER_BEAT_0;
+	theBeats[0].notes = (uint8_t **)malloc(1 * sizeof(uint8_t *)); //1 track
+	theBeats[0].delays = (uint8_t **)malloc(1 * sizeof(uint8_t *));//1 track
+	theBeats[0].notes[0] = 	malloc(sizeof(uint8_t) * 2); //just 2 notes!
+	theBeats[0].delays[0] = malloc(sizeof(uint8_t) * 2); //just 2 notes!
+	theBeats[0].notes[0][0] = 0x24; //kick drum
+	theBeats[0].notes[0][1] = 0x26; //snare drum
+	theBeats[0].delays[0][0] = 3; //3rd element of tempo LUT, quarter notes
+	theBeats[0].delays[0][1] = 3;	
+	theBeats[0].noteCount = malloc(sizeof(uint8_t) * 1);
+	theBeats[0].noteCount[0] = 2;
+	
+	//Beat 1, famous casio beat used in Da Da Da
+	theBeats[1].isActive = false;
+	theBeats[1].activeCount=0;
+	theBeats[1].suggTempo = 128;
+	theBeats[1].howMany = 2;
+	theBeats[1].channel = malloc(sizeof(uint8_t) * 2); // percs and woodblock, 2 channels
+	theBeats[1].channel[0] = 0x09; //percussion
+	theBeats[1].channel[1] = 0x02; //woodblock
+	theBeats[1].index = malloc(sizeof(uint8_t) * 2);
+	theBeats[1].index[0] = theBeats[1].index[1] = 0;
+	theBeats[1].timers = malloc(sizeof(struct timer_t) * 2);
+	theBeats[1].timers[0].units = TIMER_FRAMES;
+	theBeats[1].timers[1].units = TIMER_FRAMES;
+	theBeats[1].timers[0].cookie = TIMER_BEAT_1A;
+	theBeats[1].timers[1].cookie = TIMER_BEAT_1B;
+	theBeats[1].notes = (uint8_t **)malloc(2 * sizeof(uint8_t *)); // 2 tracks
+	theBeats[1].delays = (uint8_t **)malloc(2 * sizeof(uint8_t *)); // 2 tracks
+	theBeats[1].notes[0] = malloc(sizeof(uint8_t) * 5);
+	theBeats[1].delays[0] = malloc(sizeof(uint8_t) * 5);
+	
+	theBeats[1].notes[1] = malloc(sizeof(uint8_t) * 8);
+	theBeats[1].delays[1] = malloc(sizeof(uint8_t) * 8);
+	
+	theBeats[1].noteCount = malloc(sizeof(uint8_t) * 2);
+	theBeats[1].noteCount[0]=5;
+	theBeats[1].noteCount[1]=8;
+	
+	theBeats[1].notes[0][0] =  0x24; //kick drum
+	theBeats[1].notes[0][1] =  0x28; //snare drum
+	theBeats[1].notes[0][2] =  0x28;
+	theBeats[1].notes[0][3] =  0x24;
+	theBeats[1].notes[0][4] =  0x28;
+	
+	theBeats[1].delays[0][0] =  3;
+	theBeats[1].delays[0][1] =  2;
+	theBeats[1].delays[0][2] =  2;
+	theBeats[1].delays[0][3] =  3;
+	theBeats[1].delays[0][4] =  3;
+	
+	theBeats[1].noteCount[0] = 5;
+	
+	theBeats[1].notes[1][0] =  0x4B;
+	theBeats[1].notes[1][1] =  0x63;
+	theBeats[1].notes[1][2] =  0x00;
+	theBeats[1].notes[1][3] =  0x63;
+	theBeats[1].notes[1][4] =  0x4B; 
+	theBeats[1].notes[1][5] =  0x63; 
+	theBeats[1].notes[1][6] =  0x4B; 
+	theBeats[1].notes[1][7] =  0x63; 
+	
+	theBeats[1].delays[1][0] =  2;
+	theBeats[1].delays[1][1] =  2;
+	theBeats[1].delays[1][2] =  2;
+	theBeats[1].delays[1][3] =  2;
+	theBeats[1].delays[1][4] =  2; 
+	theBeats[1].delays[1][5] =  2; 
+	theBeats[1].delays[1][6] =  2; 
+	theBeats[1].delays[1][7] =  2; 
+	
+	theBeats[1].noteCount[1] = 8;
+	
+	
+	//Beat 2, jazz cymbal ride
+	theBeats[2].isActive = false;
+	theBeats[2].activeCount=0;
+	theBeats[2].suggTempo = 100;
+	theBeats[2].howMany = 2;
+	theBeats[2].channel = malloc(sizeof(uint8_t) * 2); // 2 tracks all percs
+	theBeats[2].channel[0] = 0x09; //cymbal
+	theBeats[2].channel[1] = 0x09; //kick snare
+	theBeats[2].index = malloc(sizeof(uint8_t) * 2);
+	theBeats[2].index[0] = 0;
+	theBeats[2].index[1] = 0;
+	theBeats[2].timers = malloc(sizeof(struct timer_t) * 2);
+	theBeats[2].timers[0].units = TIMER_FRAMES;
+	theBeats[2].timers[0].cookie = TIMER_BEAT_2A;
+	theBeats[2].timers[1].units = TIMER_FRAMES;
+	theBeats[2].timers[1].cookie = TIMER_BEAT_2B;
+	theBeats[2].notes = (uint8_t **)malloc(2 * sizeof(uint8_t *)); //2 track
+	theBeats[2].delays = (uint8_t **)malloc(2 * sizeof(uint8_t *));//2 track
+	theBeats[2].noteCount = malloc(sizeof(uint8_t) * 2);//2 track
+	
+	theBeats[2].notes[0] = 	malloc(sizeof(uint8_t) * 6); //6 notes!
+	theBeats[2].notes[1] = 	malloc(sizeof(uint8_t) * 4); //4 notes!
+	theBeats[2].delays[0] = malloc(sizeof(uint8_t) * 4); //6 notes!
+	theBeats[2].delays[1] = malloc(sizeof(uint8_t) * 6); //6 notes!
+	
+	theBeats[2].noteCount[0] = 4;	
+	theBeats[2].notes[0][0] = 0x24; 
+	theBeats[2].notes[0][1] = 0x26; 
+	theBeats[2].notes[0][2] = 0x24;
+	theBeats[2].notes[0][3] = 0x26;
+	theBeats[2].delays[0][0] = 3;
+	theBeats[2].delays[0][1] = 3;
+	theBeats[2].delays[0][2] = 3;
+	theBeats[2].delays[0][3] = 3;	
+	
+	theBeats[2].noteCount[1] = 6;
+	theBeats[2].notes[1][0] = 0x39; 
+	theBeats[2].notes[1][1] = 0x39; 
+	theBeats[2].notes[1][2] = 0x39;
+	theBeats[2].notes[1][3] = 0x39;
+	theBeats[2].notes[1][4] = 0x39;
+	theBeats[2].notes[1][5] = 0x39;
+	theBeats[2].delays[1][0] = 3; 
+	theBeats[2].delays[1][1] = 13;
+	theBeats[2].delays[1][2] = 12;
+	theBeats[2].delays[1][3] = 3;
+	theBeats[2].delays[1][4] = 13;
+	theBeats[2].delays[1][5] = 12;
+	
+	
+	//Beat 3, funk swung 16th note
+	theBeats[3].isActive = false;
+	theBeats[3].activeCount=0;
+	theBeats[3].suggTempo = 80;
+	theBeats[3].howMany = 2;
+	theBeats[3].channel = malloc(sizeof(uint8_t) * 2); // 2 tracks all percs
+	theBeats[3].channel[0] = 0x09; //hit hat
+	theBeats[3].channel[1] = 0x09; //kick, rim
+	theBeats[3].index = malloc(sizeof(uint8_t) * 2);
+	theBeats[3].index[0] = 0;
+	theBeats[3].index[1] = 0;
+	theBeats[3].timers = malloc(sizeof(struct timer_t) * 2);
+	theBeats[3].timers[0].units = TIMER_FRAMES;
+	theBeats[3].timers[0].cookie = TIMER_BEAT_3A;
+	theBeats[3].timers[1].units = TIMER_FRAMES;
+	theBeats[3].timers[1].cookie = TIMER_BEAT_3B;
+	theBeats[3].notes = (uint8_t **)malloc(2 * sizeof(uint8_t *)); //2 track
+	theBeats[3].delays = (uint8_t **)malloc(2 * sizeof(uint8_t *));//2 track
+	theBeats[3].noteCount = malloc(sizeof(uint8_t) * 2); //2 track
+
+	theBeats[3].notes[0] = 	malloc(sizeof(uint8_t) * 32); //32 notes!
+	theBeats[3].notes[1] = 	malloc(sizeof(uint8_t) * 12); //8 notes!
+	theBeats[3].delays[0] = malloc(sizeof(uint8_t) * 32); //32 notes!
+	theBeats[3].delays[1] = malloc(sizeof(uint8_t) * 12); //8 notes!
+	
+	theBeats[3].noteCount[0] = 32;	
+	theBeats[3].notes[0][0]  = 0x2C; 
+	theBeats[3].notes[0][1]  = 0x2C; 
+	theBeats[3].notes[0][2]  = 0x2C;
+	theBeats[3].notes[0][3]  = 0x2C;
+	theBeats[3].notes[0][4]  = 0x2C; 
+	theBeats[3].notes[0][5]  = 0x2C; 
+	theBeats[3].notes[0][6]  = 0x2C;
+	theBeats[3].notes[0][7]  = 0x2C;
+	theBeats[3].notes[0][8]  = 0x2C; 
+	theBeats[3].notes[0][9]  = 0x2C; 
+	theBeats[3].notes[0][10] = 0x2C;
+	theBeats[3].notes[0][11] = 0x2C;
+	theBeats[3].notes[0][12] = 0x2C; 
+	theBeats[3].notes[0][13] = 0x2C; 
+	theBeats[3].notes[0][14] = 0x2C;
+	theBeats[3].notes[0][15] = 0x2C;
+	
+	theBeats[3].notes[0][16] = 0x2C; 
+	theBeats[3].notes[0][17] = 0x2C; 
+	theBeats[3].notes[0][18] = 0x2C;
+	theBeats[3].notes[0][19] = 0x2C;
+	theBeats[3].notes[0][20] = 0x2C; 
+	theBeats[3].notes[0][21] = 0x2C; 
+	theBeats[3].notes[0][22] = 0x2C;
+	theBeats[3].notes[0][23] = 0x2C;
+	theBeats[3].notes[0][24] = 0x2C; 
+	theBeats[3].notes[0][25] = 0x2C; 
+	theBeats[3].notes[0][26] = 0x2E;
+	theBeats[3].notes[0][27] = 0x2E;
+	theBeats[3].notes[0][28] = 0x2C; 
+	theBeats[3].notes[0][29] = 0x2C; 
+	theBeats[3].notes[0][30] = 0x2C;
+	theBeats[3].notes[0][31] = 0x2C;
+	
+	theBeats[3].delays[0][0]  = 16; 
+	theBeats[3].delays[0][1]  = 15; 
+	theBeats[3].delays[0][2]  = 16;
+	theBeats[3].delays[0][3]  = 15;
+	theBeats[3].delays[0][4]  = 16; 
+	theBeats[3].delays[0][5]  = 15; 
+	theBeats[3].delays[0][6]  = 16;
+	theBeats[3].delays[0][7]  = 15;
+	theBeats[3].delays[0][8]  = 16; 
+	theBeats[3].delays[0][9]  = 15; 
+	theBeats[3].delays[0][10] = 16;
+	theBeats[3].delays[0][11] = 15;
+	theBeats[3].delays[0][12] = 16; 
+	theBeats[3].delays[0][13] = 15; 
+	theBeats[3].delays[0][14] = 16;
+	theBeats[3].delays[0][15] = 15;
+	
+	theBeats[3].delays[0][16] = 16; 
+	theBeats[3].delays[0][17] = 15; 
+	theBeats[3].delays[0][18] = 16;
+	theBeats[3].delays[0][19] = 15;
+	theBeats[3].delays[0][20] = 16; 
+	theBeats[3].delays[0][21] = 15; 
+	theBeats[3].delays[0][22] = 16;
+	theBeats[3].delays[0][23] = 15;
+	theBeats[3].delays[0][24] = 16; 
+	theBeats[3].delays[0][25] = 15; 
+	theBeats[3].delays[0][26] = 16;
+	theBeats[3].delays[0][27] = 15;
+	theBeats[3].delays[0][28] = 16; 
+	theBeats[3].delays[0][29] = 15; 
+	theBeats[3].delays[0][30] = 16;
+	theBeats[3].delays[0][31] = 15;	
+	
+	theBeats[3].noteCount[1] = 12; //alt: floor tom:0x2D or kick drum 0x24; rim: 0x25 snare 0x26
+	theBeats[3].notes[1][0]  = 0x24; 
+	theBeats[3].notes[1][1]  = 0x00; 
+	theBeats[3].notes[1][2]  = 0x24;
+	theBeats[3].notes[1][3]  = 0x26;
+	theBeats[3].notes[1][4]  = 0x00;
+	theBeats[3].notes[1][5]  = 0x24;
+	theBeats[3].notes[1][6]  = 0x00;
+	theBeats[3].notes[1][7]  = 0x24;
+	theBeats[3].notes[1][8]  = 0x24;
+	theBeats[3].notes[1][9]  = 0x26;
+	theBeats[3].notes[1][10] = 0x00;
+	theBeats[3].notes[1][11] = 0x24;
+	theBeats[3].delays[1][0]  = 17; 
+	theBeats[3].delays[1][1]  = 16;
+	theBeats[3].delays[1][2]  = 15;
+	theBeats[3].delays[1][3]  = 17;
+	theBeats[3].delays[1][4]  = 16;
+	theBeats[3].delays[1][5]  = 15;
+	theBeats[3].delays[1][6]  = 16;
+	theBeats[3].delays[1][7]  = 15;
+	theBeats[3].delays[1][8]  = 17;
+	theBeats[3].delays[1][9]  = 17;
+	theBeats[3].delays[1][10] = 16;
+	theBeats[3].delays[1][11] = 15;
+}
 //this is a small code to enable the VS1053b's midi mode; present on the Jr2 and K2. It is necessary for the first revs of these 2 machines
 void initVS1053MIDI(void) {
+	
+	printf("iN HEAH");
     uint8_t n;
 	uint16_t addr, val, i=0;
 
@@ -351,6 +638,7 @@ void initVS1053MIDI(void) {
         //WriteVS10xxRegister(addr, val);
 		POKE(0xD701,addr);
 		POKE(0xD701,val);
+		while (PEEK(0xd700) & 0x80);//wait till it's done
       }
     } else {           /* Copy run, copy n samples */
       while (n--) {
@@ -358,6 +646,7 @@ void initVS1053MIDI(void) {
         //WriteVS10xxRegister(addr, val);
 		POKE(0xD701,addr);
 		POKE(0xD701,val);
+		while (PEEK(0xd700) & 0x80);//wait till it's done
       }
     }
   }
@@ -719,7 +1008,14 @@ void setup()
 	prepSIDinstruments();
 	
 	printf("Initiating VS1053b ");
+	//codec enable all lines
+	POKE(0xD620, 0x1F);
+	POKE(0xD621, 0x2A);
+	POKE(0xD622, 0x01);
+	while(PEEK(0xD622) & 0x01);
+	
 	initVS1053MIDI();
+
 	
 }
 

@@ -83,7 +83,7 @@ uint8_t tempoLUTRef[18] = {4, 8, 16, 32, 64, 128, //         32nd, 16th, 8th, 4t
 uint8_t mainTempo = 120;
 uint8_t mainTempoLUT[18];
 bool isTwinLinked = false; //when true, sends out midi notes to both channels when using a midi controller or space bar
-bool wantVS1053 = false; //false = SAM2695, true = VS1053b
+bool wantVS1053 = true; //false = SAM2695, true = VS1053b
 uint8_t chipChoice = 0; //0=MIDI, 1=SID, 2=PSG, 3=OPL3
 
 uint8_t sidChoiceToVoice[6] = {0x00, 0x07, 0x0E, 0x00, 0x07, 0x0E};
@@ -166,19 +166,6 @@ uint8_t sidLow[] = {
 
 
 
-
-/*
-uint8_t sidLow[] = {  //corrected values
-}
-uint8_t sidHigh[] = { //corrected values
-}
-*/
-const uint16_t plugin[28] = { /* Compressed plugin */
-  0x0007, 0x0001, 0x8050, 0x0006, 0x0014, 0x0030, 0x0715, 0xb080, /*    0 */
-  0x3400, 0x0007, 0x9255, 0x3d00, 0x0024, 0x0030, 0x0295, 0x6890, /*    8 */
-  0x3400, 0x0030, 0x0495, 0x3d00, 0x0024, 0x2908, 0x4d40, 0x0030, /*   10 */
-  0x0200, 0x000a, 0x0001, 0x0050
-};
 
 /*
 uint8_t psgLow[] = {
@@ -621,37 +608,6 @@ void setupBeats()
 	theBeats[3].delays[1][10] = 16;
 	theBeats[3].delays[1][11] = 15;
 }
-//this is a small code to enable the VS1053b's midi mode; present on the Jr2 and K2. It is necessary for the first revs of these 2 machines
-void initVS1053MIDI(void) {
-	
-	printf("iN HEAH");
-    uint8_t n;
-	uint16_t addr, val, i=0;
-
-  while (i<sizeof(plugin)/sizeof(plugin[0])) {
-    addr = plugin[i++];
-    n = plugin[i++];
-    if (n & 0x8000U) { /* RLE run, replicate n samples */
-      n &= 0x7FFF;
-      val = plugin[i++];
-      while (n--) {
-        //WriteVS10xxRegister(addr, val);
-		POKE(0xD701,addr);
-		POKE(0xD701,val);
-		while (PEEK(0xd700) & 0x80);//wait till it's done
-      }
-    } else {           /* Copy run, copy n samples */
-      while (n--) {
-        val = plugin[i++];
-        //WriteVS10xxRegister(addr, val);
-		POKE(0xD701,addr);
-		POKE(0xD701,val);
-		while (PEEK(0xd700) & 0x80);//wait till it's done
-      }
-    }
-  }
-}
-
 
 //This is part of the text instructions and interface during regular play mode
 void refreshInstrumentText()
@@ -998,7 +954,8 @@ void setup()
 	refTimer.cookie = TIMER_TEXT_COOKIE;
 	setTimer(&refTimer);
 
-	resetInstruments(wantVS1053);
+	resetInstruments(false);
+	resetInstruments(true);
 	POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0xC2);
 	POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0x73);//woodblock
 	prgInst[0]=0;prgInst[1]=0;prgInst[9]=0;
@@ -1007,7 +964,6 @@ void setup()
 	clearSIDRegisters();
 	prepSIDinstruments();
 	
-	printf("Initiating VS1053b ");
 	//codec enable all lines
 	POKE(0xD620, 0x1F);
 	POKE(0xD621, 0x2A);
@@ -1015,7 +971,6 @@ void setup()
 	while(PEEK(0xD622) & 0x01);
 	
 	initVS1053MIDI();
-
 	
 }
 
@@ -1172,7 +1127,8 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 
 int main(int argc, char *argv[]) {
 	uint16_t toDo, sidPitchBend;
-	uint8_t i,j;
+	uint16_t i;
+	uint8_t j;
 	uint8_t recByte, detectedNote, detectedColor;
 	bool nextIsNote = false; //detect a 0x9? or 0x8? command, the next is a note byte, used for coloring the keyboard note-rects
 	bool nextIsSpeed = false; //detects if we're at the end of a note on or off trio of bytes
@@ -1184,6 +1140,8 @@ int main(int argc, char *argv[]) {
 	uint8_t storedNote; //stored values when twinlinked
     bool needsToWaitExpiration = false;  //when tempo is changed, must wait to expire all pending timers before sounding again.
 
+
+	emptyFIFO_ALT();
 	setup();
 	textGotoXY(0,2);
 	note=39;
@@ -1191,11 +1149,19 @@ int main(int argc, char *argv[]) {
 	
 	graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); 
 	
+	
+			//codec enable all lines
+			POKE(0xD620, 0x1F);
+			POKE(0xD621, 0x2A);
+			POKE(0xD622, 0x01);
+			while(PEEK(0xD622) & 0x01);	
+	
+	initVS1053MIDI();
 	while(true) 
         {
-		if(!(PEEK(wantVS1053?MIDI_CTRL_ALT:MIDI_CTRL) & 0x02)) //rx not empty
+		if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
 			{
-				toDo = PEEKW(wantVS1053?MIDI_RXD_ALT:MIDI_RXD) & 0x0FFF; //discard top 4 bits of MIDI_RXD+1
+				toDo = PEEKW(MIDI_RXD) & 0x0FFF; //discard top 4 bits of MIDI_RXD+1
 				
 				//erase the region where the last midi bytes received are shown
 				if(instSelectMode==false){
@@ -1205,12 +1171,12 @@ int main(int argc, char *argv[]) {
 				for(i=0; i<toDo; i++)
 				{
 					//get the next MIDI in FIFO buffer byte
-					recByte=PEEK(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO);
+					recByte=PEEK(MIDI_FIFO);
 					if(instSelectMode==false)
 					{
 						textSetColor(textColorOrange,0x00);printf("%02x ",recByte); //output midi byte on screen at the top
 					}
-					if(nextIsSpeed) //this block activates when a note is getting finished on the 3rd byte ie 0x90 0x39 0x80 (noteOn middleC midSpeed)
+					if(nextIsSpeed) //this block activates when a note is getting finished on the 3rd byte ie 0x90 0x39 0x40 (noteOn middleC midSpeed)
 					{
 						nextIsSpeed = false;
 						if(isHit) {
@@ -1250,7 +1216,7 @@ int main(int argc, char *argv[]) {
 					if((recByte & 0xF0 )== 0x90) { //we know it's a 'NoteOn', get ready to analyze the note byte, which is next
 						nextIsNote = true;
 						isHit=true;
-						if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, ((recByte & 0xF0 ) | chSelect)); //send it to the chosen channel, only the first byte, and reroute
+						//if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, ((recByte & 0xF0 ) | chSelect)); //send it to the chosen channel, only the first byte, and reroute
 						
 
 						
@@ -1258,12 +1224,13 @@ int main(int argc, char *argv[]) {
 					else if((recByte & 0xF0  )== 0x80) { //we know it's a 'NoteOff', get ready to analyze the note byte, which is next
 						nextIsNote = true;
 						isHit=false;
-						if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, ((recByte & 0xF0 ) | chSelect)); //send it to the chosen channel, only the first byte, and reroute
+						//if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, ((recByte & 0xF0 ) | chSelect)); //send it to the chosen channel, only the first byte, and reroute
 						}
+						/*
 					else if((recByte & 0xF0) == 0xE0 && chipChoice == 1) { //we know it's a pitch bend incoming
 						nextIsBend = true;
-					}
-					else if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, recByte); //all other bytes are sent normally
+					}*/
+					else if(chipChoice==0 && nextIsNote == false && nextIsSpeed == false) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, recByte); //all other bytes are sent normally
 				}
 			}
 		
@@ -1408,7 +1375,8 @@ int main(int argc, char *argv[]) {
 						}
 					break;
 				}	
-            }				
+            }
+			
 		else if(kernelEventData.type == kernelEvent(key.PRESSED))
 			{
 				switch(kernelEventData.key.raw)
@@ -1515,8 +1483,11 @@ int main(int argc, char *argv[]) {
 							{
 								if(chipChoice==0)
 								{
-									if(prgInst[chSelect] > (shiftHit?29:2)) modalMoveUp(shiftHit);
-									prgChange(prgInst[chSelect],chSelect, wantVS1053);
+									if(prgInst[chSelect] > (shiftHit?29:2))
+									{
+										modalMoveUp(shiftHit);
+										prgChange(prgInst[chSelect],chSelect, wantVS1053);
+									}
 								}
 								if(chipChoice==1 && sidInstChoice>0) modalMoveUp(shiftHit);
 							}	
@@ -1527,8 +1498,11 @@ int main(int argc, char *argv[]) {
 								if(chipChoice==0)
 									{
 									if(prgInst[chSelect] > 0 + shiftHit*9) prgInst[chSelect] = prgInst[chSelect] - 1 - shiftHit *9; //go down 10 instrument ticks if shift is on, otherwise just 1
-									if(altHit) prgInst[chSelect] = 0; //go to lowest instrument, 0
-									prgChange(prgInst[chSelect],chSelect, wantVS1053);
+									if(altHit) 
+										{	
+										prgInst[chSelect] = 0; //go to lowest instrument, 0
+										prgChange(prgInst[chSelect],chSelect, wantVS1053);
+										}
 									}
 								if(chipChoice==1)
 									{
@@ -1540,8 +1514,11 @@ int main(int argc, char *argv[]) {
 							{
 								if(chipChoice==0)
 									{
-										if(prgInst[chSelect] < (shiftHit?98:125)) modalMoveDown(shiftHit);
-										prgChange(prgInst[chSelect],chSelect, wantVS1053);
+										if(prgInst[chSelect] < (shiftHit?98:125))
+										{
+											modalMoveDown(shiftHit);
+											prgChange(prgInst[chSelect],chSelect, wantVS1053);
+										}
 									}
 								if(chipChoice==1 && sidInstChoice<5) modalMoveDown(shiftHit);
 							}	
@@ -1672,7 +1649,12 @@ int main(int argc, char *argv[]) {
 						}
 						break;
 					case 109: // M - toggle the MIDI chip between default SAM2695 to VS1053b
-						wantVS1053 = !wantVS1053;
+						
+						midiShutAChannel(0, wantVS1053);
+						midiShutAChannel(1, wantVS1053);
+						midiShutAChannel(9, wantVS1053);
+						wantVS1053 = wantVS1053?false:true;
+						
 						showMidiChoiceText();
 						break;
 					case 99: // C - chip select mode: 0=MIDI, 1=SID, (todo) 2= PSG, (todo) 3=OPL3

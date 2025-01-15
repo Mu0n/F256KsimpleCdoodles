@@ -89,7 +89,6 @@ uint8_t isTimerDone()
 
 int main(int argc, char *argv[]) {
 
-asm("sei");
 setTimer0();
 while(true)
 {

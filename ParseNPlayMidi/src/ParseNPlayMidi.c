@@ -2,9 +2,10 @@
 //DEFINES
 #define F256LIB_IMPLEMENTATION
 #define SCREENCORNER 0xC000
-#define MIDI_BASE 0x10000 //gives a nice 128kb until the parsed version happens
+#define MIDI_BASE 0x20000 //gives a nice 128kb until the parsed version happens
 
-#define MIDI_PARSED 0x30000 //end of ram is 0x7FFFF
+#define SAMPLECOUNT 30
+#define MIDI_PARSED 0x40000 //end of ram is 0x7FFFF
 //offsets from MIDI_PARSED
 #define AME_DELTA 0
 #define AME_BYTECOUNT 4
@@ -17,9 +18,6 @@
 
 #define PREVIEW_LIMITER 30
 #define MIDI_EVENT_FAR_SIZE 8
-
-
-
 
 #define T0_PEND     0xD660
 #define T0_MASK     0xD66C
@@ -45,11 +43,6 @@
 #define T0_CMP_CTR_RECLEAR 0x01
 #define T0_CMP_CTR_RELOAD  0x02
 
-
-
-
-
-
 //INCLUDES
 #include "f256lib.h"
 #include <stdlib.h>
@@ -57,17 +50,14 @@
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 
-
-//EMBEDS
-EMBED(human2, "../assets/asayake.mid", 0x10000);
-
+EMBED(human2, "../assets/Asayake.mid", 0x20000);
 //STRUCTS
 struct timer_t midiNoteTimer;
 
 
 //GLOBALS
 bigParsed theBigList;
-bool gVerbo = false; //global verbose flag, gives more info throughout operations when set true
+bool gVerbo = true; //global verbose flag, gives more info throughout operations when set true
 FILE *theMIDIfile;
 uint16_t gFormat = 0; //holds the format type for the info provided after loading 0=single track, 1=multitrack
 uint16_t trackcount = 0; // #number of tracks detected
@@ -79,7 +69,8 @@ uint16_t tempAddr; //used to compute addresses for pokes
 uint16_t previewCount = 0; //used to preview count the tracks data
 double fudge = 25.1658; //fudge factor when calculating time delays
 uint16_t *parsers; //indices for the various type 1 tracks during playback
-
+uint32_t *targetParse; //will pick the default 0x20000 if the file doesn't load
+uint8_t nn=4, dd=2, cc=24, bb=8; //nn numerator of time signature, dd= denom. cc=nb of midi clocks in metro click. bb = nb of 32nd notes in a beat
 //FUNCTION PROTOTYPES
 void sendAME(aMEPtr midiEvent); //sends a MIDI event message, either a 2-byte or 3-byte one
 int16_t findPositionOfHeader(void);  //this opens a .mid file and ignores everything until 'MThd' is encountered	
@@ -97,6 +88,14 @@ uint32_t readTimer0(void);
 uint8_t isTimer0Done(void);
 
 void goToPrison(uint16_t);
+
+uint32_t samplesTicks[30];
+uint32_t samplesUs[30];
+uint32_t samplesT0[30];
+uint8_t where1=0;
+uint8_t where2=0;
+uint8_t where3=0;
+
 
 //the workhorse of MIDIPlay, "send A MIDI Event" sends a string of MIDI bytes into the midi FIFO
 
@@ -128,40 +127,42 @@ void detectStructure(uint16_t startIndex)
     i+=4;
     
     if(gVerbo) printf("size: ");
-    size =  (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+3));
-    size += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+2))<<8;
-    size += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+1))<<16;
-    size += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i))<<24;
+    size =  (uint32_t)FAR_PEEK(MIDI_BASE+i+3);
+    size += (uint32_t)(FAR_PEEK(MIDI_BASE+i+2))<<8;
+    size += (uint32_t)(FAR_PEEK(MIDI_BASE+i+1))<<16;
+    size += (uint32_t)(FAR_PEEK(MIDI_BASE+i))<<24;
     if(gVerbo) printf("%lu\n",size);
 	i+=4;
 
     if(gVerbo) printf("format type (0=single track, 1=multitrack): ");
-    gFormat = (uint16_t)(
-     	           (uint8_t) (FAR_PEEK(MIDI_BASE+i+1))
-    			  +(uint8_t) (FAR_PEEK(MIDI_BASE+i)<<8)
-    			  );
+    gFormat = 
+     	           (uint16_t) (FAR_PEEK(MIDI_BASE+i+1))
+    			  |(uint16_t) (FAR_PEEK(MIDI_BASE+i)<<8)
+    			  ;
     if(gVerbo) printf("%d\n",gFormat);
     i+=2;
  
     if(gVerbo) printf("Track count: ");
-    trackcount = (uint16_t)(
-     	           (uint8_t)(FAR_PEEK(MIDI_BASE+i+1))  
-    			  +(uint8_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
-    			  );
+    trackcount = 
+     	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))  
+    			  |(uint16_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
+    			  ;
     if(gVerbo) printf("%d\n",trackcount);
     i+=2;
     
     if(gVerbo) printf("Time in ticks per division: ");
-    tdiv = (uint16_t)(
-     	           (uint8_t)(FAR_PEEK(MIDI_BASE+i+1))  
-    			  +(uint8_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
-    			  );
+    tdiv = 
+     	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))  
+    			  |(uint16_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
+    			  ;
     if(gVerbo) printf("%d\n",tdiv);
     i+=2;
     
+	/*
 	gFileSize = (uint32_t)human2_end - (uint32_t)human2_start;
     if(gVerbo) printf("total length in bytes= %lu\n",gFileSize);
-    currentTrack=0;
+    */
+	currentTrack=0;
    
    
         //start defining overal sizes in the big list, now that trackcount is known
@@ -182,10 +183,10 @@ void detectStructure(uint16_t startIndex)
 	    	currentTrack++;
 	    	i+=4; //skips the MTrk string
 	    	
-	    	trackLength =  (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+3));
-	    	trackLength += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+2))<<8;
-	    	trackLength += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+1))<<16;
-	    	trackLength += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i))<<24;
+	    	trackLength =  (uint32_t)(FAR_PEEK(MIDI_BASE+i+3));
+	    	trackLength += (uint32_t)(FAR_PEEK(MIDI_BASE+i+2))<<8;
+	    	trackLength += (uint32_t)(FAR_PEEK(MIDI_BASE+i+1))<<16;
+	    	trackLength += (uint32_t)(FAR_PEEK(MIDI_BASE+i))<<24;
 	        i+=4;
 	        
 	        i+=trackLength;
@@ -214,7 +215,7 @@ int16_t findPositionOfHeader(void)
 	char buffer[400];
 	uint16_t i=0;
 	
-	for(i=0;i<400;i++) buffer[i] = FAR_PEEK(0x10000 + i);
+	for(i=0;i<400;i++) buffer[i] = FAR_PEEK(MIDI_BASE + i);
 	
     position = strstr(buffer, targetSequence);
 	
@@ -230,13 +231,20 @@ int16_t findPositionOfHeader(void)
 //high level function that directs the reading and parsing of the MIDI file     
 int16_t getAndAnalyzeMIDI(void)
 	{
+	uint8_t result;
+		
 	int16_t indexToStart=0; //MThd should be at position 0, but it might not, so we'll find it
+	
 	
 	//result = loadSMFile("human2.mid"); //actual process of asking for a midi file through std mac dialog
 	
+	
+	if(result ==1) return -1;
+	
 	indexToStart = findPositionOfHeader(); //find the start index of 'MThd'
+	
 	if(gVerbo) printf("Had to skip %d bytes to find MIDI Header tag\n",indexToStart);
-	if(indexToStart == -1)
+	if(indexToStart == -1)	
 		{
 		printf("ERROR: couldn't find a MIDI header in your file; it might be invalid\n");
 		return -1;
@@ -250,11 +258,15 @@ int16_t getAndAnalyzeMIDI(void)
 //Opens the std MIDI file
 uint8_t loadSMFile(char *name)
 {
-	uint32_t fileSize=0;
-	char buffer[1024];
-	size_t bytesRead;
+	char *buffer;
+	size_t bufferSize = 25600; //initial buffer size
+	size_t bytesRead = 0;
+	size_t totalBytesRead = 0;
+	
 
 	if(gVerbo) printf("Opening file: %s\n",name);
+	
+	
 	theMIDIfile = fopen(name,"rb"); // open file in read mode
 	if(theMIDIfile == NULL)
 	{
@@ -262,12 +274,23 @@ uint8_t loadSMFile(char *name)
 		return 1;
 	}
 	
-	while ((bytesRead = fread(buffer, 1, sizeof(buffer), theMIDIfile)) > 0) 
-	{ 
-	fileSize += bytesRead;
-	}
+	buffer = (char *) malloc(bufferSize);
 	
-	if(gVerbo) printf("size of file: %lu\n",fileSize);
+		if(gVerbo) printf("%s will now be read\n",name);
+	while ((bytesRead = fread(buffer + totalBytesRead, 1, 2, theMIDIfile)) > 0) 
+		{ 
+		totalBytesRead += bytesRead;
+		FAR_POKE((uint32_t)(MIDI_BASE + totalBytesRead), buffer[totalBytesRead-1]);
+		if(totalBytesRead >= bufferSize) 
+			{
+			bufferSize *= 2;
+			buffer = (char *) realloc(buffer, bufferSize);
+			}
+		}
+	fclose(theMIDIfile);
+	
+	
+	if(gVerbo) printf("size of file: %ld\n",(uint32_t)totalBytesRead);
 	
 	return 0;
 }
@@ -316,6 +339,7 @@ void hitspace()
 
 void playmiditype0(void)
 {
+	uint8_t i;
 	uint16_t currentIndex=0;
 	uint16_t localTotalLeft=0;
 	uint32_t whereTo; //in far memory, keeps adress of event to send
@@ -323,7 +347,15 @@ void playmiditype0(void)
 	aME msgGo;
 	bool exitFlag = false;
 
-	asm("sei");
+	textSetColor(12,0);
+	printf("\nSamples\n   ticks microsec timer0       ticks microsec timer0\n");
+	for(i=0;i<SAMPLECOUNT;i++)
+	{
+	printf("%08lx %08lx %08lx    %08lu %08lu %08lu\n",samplesTicks[i],samplesUs[i],samplesT0[i],samplesTicks[i],samplesUs[i],samplesT0[i]);
+		
+	}
+	printf("\n");
+	
 	printf("\nCurrently playing type 0 standard midi file\n");
 	
 	localTotalLeft = getTotalLeft();
@@ -347,7 +379,6 @@ void playmiditype0(void)
 					overFlow = msgGo.deltaToGo;
 					while(overFlow > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
 					{
-						printf("overflow");
 						setTimer0(0xFF,0xFF,0xFF);
 						while(isTimer0Done()==0);
 						POKE(T0_PEND,0x10); //clear timer0 at 0x10
@@ -364,8 +395,6 @@ void playmiditype0(void)
 			parsers[0]++;
 			localTotalLeft--;
 	}
-	
-	asm("cli");
 }
 
 void goToPrison(uint16_t prisonTime)
@@ -402,7 +431,7 @@ void playmidi(void)
 	aME msgGo;
 
 
-	asm("sei");
+	
 	trackcount = theBigList.trackcount;
 
 	printf("\nCurrently playing type 1 standard midi file\n");
@@ -496,9 +525,103 @@ void playmidi(void)
 		lowestTimeFound = 50000000; //make it easy to find lower for next pass
 		localTotalLeft--;
 		}
-	asm("cli");
 	}
 
+void playmidiND(void) //non-destructive version
+{
+	uint16_t i;
+	uint16_t lowestTrack=0, currentIndex=0;
+	uint16_t localTotalLeft=0;
+	uint32_t lowestTimeFound = 0xFFFFFFFF;
+	uint32_t whereTo, whereToLowest; //in far memory, keeps adress of event to send
+	uint16_t trackcount;
+	uint32_t delta; //used to compare times
+	uint32_t overFlow;
+	bool exitFlag = false;
+	uint32_t soundRetracer = 0;
+	
+	aME msgGo;
+
+
+	
+	trackcount = theBigList.trackcount;
+
+	printf("\nCurrently playing type 1 standard midi file\n");
+	
+	localTotalLeft = getTotalLeft();
+	printf("localTotalLeft %d", localTotalLeft);
+	
+	while(localTotalLeft > 0 && !exitFlag)
+		{
+			
+		//For loop attempt to find the most pressing event with the lowest time delta to go
+		for(i=0; i<trackcount; i++)
+			{
+			if((theBigList.TrackEventList[lowestTrack].eventcount - 1) == parsers[lowestTrack]) continue; //this track is exhausted, go to next
+			
+			currentIndex = parsers[i]; //get where we at with this delta
+			
+			//find the address of the midi event it points to
+			whereTo  = (uint32_t)(theBigList.TrackEventList[i].baseOffset);
+			whereTo += (uint32_t)((uint32_t) currentIndex *(uint32_t)  MIDI_EVENT_FAR_SIZE);
+			
+			//read the delta time from there
+			delta =    (((uint32_t)((FAR_PEEKW((uint32_t) MIDI_PARSED + (uint32_t) whereTo))) << 16)
+					   | (uint32_t) (FAR_PEEKW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2)));
+			
+			//does it beat the lowest found yet?
+			if((delta - soundRetracer) < lowestTimeFound) 
+				{
+				lowestTimeFound = delta;
+				lowestTrack = i; //new record in this track
+				whereToLowest = whereTo;
+				}
+			if(lowestTimeFound == 0) break; //not gonna find a more imminent event
+			}  //end of the for loop for most imminent event
+
+		//Do the event
+			msgGo.deltaToGo = lowestTimeFound;
+			msgGo.bytecount =    FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereToLowest + (uint32_t) AME_BYTECOUNT);
+			msgGo.msgToSend[0] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereToLowest + (uint32_t) AME_MSG);
+			msgGo.msgToSend[1] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereToLowest + (uint32_t) AME_MSG+(uint32_t) 1);
+			msgGo.msgToSend[2] = FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereToLowest + (uint32_t) AME_MSG+(uint32_t) 2);
+			
+		if(lowestTimeFound==0) //do these 0 delay events right away, no need to involve a Time Manager
+			{
+			sendAME(&msgGo);
+			}
+		else 
+			{ //for all the rest which have a time delay
+				overFlow = msgGo.deltaToGo;
+				while(overFlow > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
+				{
+					printf("overflow");
+					setTimer0(0xFF,0xFF,0xFF);
+					while(isTimer0Done()==0);
+					POKE(T0_PEND,0x10); //clear timer0 at 0x10
+					overFlow = overFlow - 0x00FFFFFF; //reduce the max value one by one until there is a remainder smaller than the max amount
+				}
+				setTimer0((uint8_t)(overFlow&0x000000FF),
+					  (uint8_t)((overFlow&0x0000FF00)>>8),
+				      (uint8_t)((overFlow&0x00FF0000)>>16));
+				while(isTimer0Done()==0)
+					;				
+					;				
+                POKE(T0_PEND,0x10); //clear timer0 at 0x10
+			    sendAME(&msgGo);
+
+			}					
+		//Advance the marker for the track that just did something, if there's more left
+		if((theBigList.TrackEventList[lowestTrack].eventcount - 1) > parsers[lowestTrack]) parsers[lowestTrack]++;
+
+		//advance the sound "retrace" for a new basis of comparison
+		if(lowestTimeFound >0) soundRetracer+=lowestTimeFound;
+			
+		lowestTimeFound = 0xFFFFFFFF; //make it easy to find lower for next pass
+		localTotalLeft--;
+		}
+	}
+	
 //gets a count of the total MIDI events that are relevant and left to play	
 uint32_t getTotalLeft(void)
 	{
@@ -539,6 +662,7 @@ int8_t parse(uint16_t startIndex, bool wantCmds)
     uint32_t i = startIndex; // #main array parsing index
     uint32_t j=0;
     uint16_t currentTrack=0; //index for the current track
+	uint32_t tempCalc=0;
     uint8_t last_cmd = 0x00;
     uint32_t currentI;
     uint32_t nValue, nValue2, nValue3, nValue4, timeDelta;
@@ -556,38 +680,38 @@ int8_t parse(uint16_t startIndex, bool wantCmds)
 
     i+=4; //skips MThd midi file header 4 character id string
     
-    size =  (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+3));
-    size += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+2))<<8;
-    size += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i+1))<<16;
-    size += (uint32_t)((uint8_t) FAR_PEEK(MIDI_BASE+i))<<24;
+    size =  (uint32_t)(FAR_PEEK(MIDI_BASE+i+3));
+    size += (uint32_t)( FAR_PEEK(MIDI_BASE+i+2))<<8;
+    size += (uint32_t)( FAR_PEEK(MIDI_BASE+i+1))<<16;
+    size += (uint32_t)( FAR_PEEK(MIDI_BASE+i))<<24;
 	i+=4;
 
 printf(" size=%08lx",size);  
  
-    gFormat = (uint16_t)(
-     	           (uint8_t) (FAR_PEEK(MIDI_BASE+i+1))
-    			  +(uint8_t) (FAR_PEEK(MIDI_BASE+i)<<8)
-    			  );
+    gFormat = 
+     	           (uint16_t) (FAR_PEEK(MIDI_BASE+i+1))
+    			  |(uint16_t) (FAR_PEEK(MIDI_BASE+i)<<8)
+    			  ;
     i+=2;
 
 printf(" format=%d",gFormat);  
  
-    trackcount = (uint16_t)(
-     	           (uint8_t)(FAR_PEEK(MIDI_BASE+i+1))  
-    			  +(uint8_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
-    			  );
+    trackcount = 
+     	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))  
+    			  |(uint16_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
+    			  ;
     i+=2;
 
 printf(" trackcount=%d",trackcount);  
     
     tickPerBeat = (uint16_t)(
-     	           (uint8_t)(FAR_PEEK(MIDI_BASE+i+1))  
-    			  +(uint8_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
+     	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))  
+    			  |(uint16_t)((FAR_PEEK(MIDI_BASE+i)<<8)) 
     			  );
     i+=2;
 printf(" tickPerBeat=%d",tickPerBeat);   
- 
-	gFileSize = (uint32_t)human2_end - (uint32_t)human2_start;
+ /*
+	gFileSize = (uint32_t)human2_end - (uint32_t)human2_start;*/
     currentTrack=0;
     
 printf(" filesize=%08lx\n",gFileSize);	
@@ -652,7 +776,8 @@ printf(" filesize=%08lx\n",gFileSize);
 					} //end of getting to nValue3
 				} //end of getting to nValue2	
     		timeDelta = nValue | nValue2 | nValue3 | nValue4;
-		
+			
+
     		//status byte or MIDI message reading
     		status_byte = FAR_PEEK(MIDI_BASE+i);
 			extra_byte  = FAR_PEEK(MIDI_BASE+i+1); //be ready for 2 bytes midi events
@@ -663,8 +788,6 @@ printf(" filesize=%08lx\n",gFileSize);
 			//first, check for run-on commands that don't repeat the status_byte
 			if(status_byte < 0x80)
 				{					
-			printf("---- %02x %02x %02x ----", status_byte, extra_byte, extra_byte2);
-			hitspace();
 				extra_byte = status_byte; //recycle the byte to its proper destination
 				status_byte = last_cmd;
 				extra_byte2 = FAR_PEEK(MIDI_BASE+i+1); //redo: be ready for 3 bytes midi events
@@ -747,10 +870,9 @@ printf(" filesize=%08lx\n",gFileSize);
 					//if you divide usPerBeat by tickPerBeat, 
 					//you get the duration in microseconds per tick, ready to be multiplied	by the events' deltaTimes to get delays in us
 
-					tick = (uint32_t)usPerBeat/((uint32_t)tickPerBeat);
-					tick = (uint32_t)((double)(fudge * (double)tick));
-					
-										
+					tick = (uint32_t)usPerBeat/((uint32_t)tickPerBeat);	
+
+			
 					}
 				else if(meta_byte == MetaSMPTEOffset)
 					{
@@ -758,7 +880,16 @@ printf(" filesize=%08lx\n",gFileSize);
 					}
 				else if(meta_byte == MetaTimeSignature)
 					{
-					i+=5;
+					i++; //skip, it should be a constant 0x04 here
+					nn = (uint8_t)FAR_PEEK(MIDI_BASE+i);
+					i++;
+					dd = (uint8_t)FAR_PEEK(MIDI_BASE+i);
+					i++;
+					cc = (uint8_t)FAR_PEEK(MIDI_BASE+i);
+					i++;
+					bb = (uint8_t)FAR_PEEK(MIDI_BASE+i);
+					i++;
+					printf("nn=%d dd=%d cc=%d bb=%d",nn,dd,cc,bb);
 					}
 				else if(meta_byte == MetaKeySignature)
 					{
@@ -791,9 +922,9 @@ printf(" filesize=%08lx\n",gFileSize);
 					whereTo  = (uint32_t)(theBigList.TrackEventList[currentTrack-1].baseOffset);
 					whereTo += (uint32_t)( (uint32_t)theBigList.TrackEventList[currentTrack-1].eventleft * (uint32_t) MIDI_EVENT_FAR_SIZE);
 					
-					
-					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (uint16_t) (( (uint32_t)(   (uint32_t)tick * (uint32_t)timeDelta) & 0xFFFF0000)  >>16))  ;
-					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2, (uint16_t) (( (uint32_t)(   (uint32_t)tick * (uint32_t)timeDelta) & 0x0000FFFF)      ))  ;
+					tempCalc = (uint16_t)(   (uint32_t)((double)(fudge * (double)tick)) * (uint32_t)timeDelta);
+					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (tempCalc & 0xFFFF0000)  >>16)  ;
+					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2,  tempCalc & 0x0000FFFF ) ;
 				
 					FAR_POKE((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_BYTECOUNT, 2);
 					FAR_POKE((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG, status_byte);
@@ -830,8 +961,19 @@ printf(" filesize=%08lx\n",gFileSize);
 					whereTo += (uint32_t)( (uint32_t) theBigList.TrackEventList[currentTrack-1].eventleft * (uint32_t) MIDI_EVENT_FAR_SIZE);
 					
 					
-					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (uint16_t) (( (uint32_t)(   (uint32_t)tick * (uint32_t)timeDelta) & 0xFFFF0000)  >>16))  ;
-					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2, (uint16_t) (( (uint32_t)(   (uint32_t)tick * (uint32_t)timeDelta) & 0x0000FFFF)      ))  ;
+										
+					if(where1<SAMPLECOUNT && timeDelta >0) 
+						{
+							samplesTicks[where1] = timeDelta;
+							samplesUs[where1] = (uint32_t)tick * (uint32_t)timeDelta;
+							samplesT0[where1] =(uint32_t)samplesUs[where1] * (uint32_t)fudge;
+							where1++;
+						}
+						
+					
+					tempCalc = (   (uint32_t)((double)(fudge * (double)tick)) * (uint32_t)timeDelta);
+					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (tempCalc & 0xFFFF0000)  >>16)  ;
+					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2,  tempCalc & 0x0000FFFF ) ;
 				
 					FAR_POKE((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_BYTECOUNT, 3);
 					FAR_POKE((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) AME_MSG, status_byte);
@@ -912,6 +1054,13 @@ int main(int argc, char *argv[]) {
 	bool isDone = false;
 	int16_t indexStart = 0;
 	
+	for(indexStart=0;indexStart<10;indexStart++)
+	{
+		samplesTicks[indexStart]=0;
+		samplesUs[indexStart]=0;
+		samplesT0[indexStart]=0;
+
+	}
 	
 	POKE(MMU_IO_CTRL, 0x00);
 	POKE(VKY_MSTR_CTRL_0, 0x4F); //graphics and tile enabled
@@ -941,7 +1090,7 @@ resetInstruments(false);
 		adjustOffsets();
 		parse(indexStart,true); //load up the actual event data in the big list
 		if(gFormat == 0) playmiditype0();
-		else playmidi();	
+		else playmidiND();	
 		printf("Playback ended.\n");
 	}
 	while(!isDone)

@@ -14,6 +14,7 @@ void realTextClear()
 	POKE(MMU_IO_CTRL,0x00);
 }
 
+
 //Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
 bool setTimer(const struct timer_t *timer)
 {

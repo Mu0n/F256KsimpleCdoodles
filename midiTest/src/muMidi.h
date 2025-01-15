@@ -24,5 +24,7 @@ void midiShutUp(bool wantAlt);
 void prgChange(uint8_t prg, uint8_t chan, bool wantAlt);
 void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
 void midiNoteOn(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
+void initVS1053MIDI(void);
+void emptyFIFO_ALT(void);
 
 #endif // MUMIDI_H

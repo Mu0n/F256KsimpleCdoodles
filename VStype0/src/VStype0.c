@@ -57,8 +57,6 @@ uint16_t i=0, j=0;
 uint16_t howManySoFar=0;
 uint8_t pass = 0;
 
-asm("sei");
-
 //codec enable all lines
 POKE(0xD620, 0x1F);
 POKE(0xD621, 0x2A);
@@ -67,10 +65,13 @@ while(PEEK(0xD622) & 0x01);
 
 initVS1053MIDI();
 
+for(i=0;i<4;i++)
+	printf("%02x",FAR_PEEK(10000+i));
+
 
 POKEW(VS_FIFO_STAT, 0x8000); //force the buffer to be empty? I think?
 
-printf("%04x bytes at start\n",PEEKW(VS_FIFO_STAT)&0x03FF);
+printf("\n%04x bytes at start\n",PEEKW(VS_FIFO_STAT)&0x03FF);
 while(i<fileSize)
 {
 	pass++;
@@ -85,7 +86,6 @@ while(i<fileSize)
 	while((PEEKW(VS_FIFO_STAT)& 0x8000) == 0); //loop in circles while it's not empty yet
 }
 
-asm("cli");
 
 while(true)
 {

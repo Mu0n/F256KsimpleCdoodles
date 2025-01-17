@@ -1,11 +1,11 @@
-#include "D:\F256\llvm-mos\code\vstype0\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\VStype0\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
 
 #include "f256lib.h"
 
 #define VS_SCI_CTRL  0xD700
-#define vS_SCI_ADDR  0xD701
+#define VS_SCI_ADDR  0xD701
 #define VS_SCI_DATA  0xD702   //2 bytes
 #define VS_FIFO_STAT 0xD704   //2 bytes
 #define VS_FIFO_DATA 0xD707
@@ -33,21 +33,21 @@ void initVS1053MIDI(void) {
       val = plugin[i++];
       while (n--) {
         //WriteVS10xxRegister(addr, val);
-        POKE(0xD701,addr);
-        POKEW(0xD702,val);
-        POKE(0xD700,1);
-        POKE(0xD700,0);
-		while (PEEK(0xd700) & 0x80);
+        POKE(VS_SCI_ADDR,addr);
+        POKEW(VS_SCI_DATA,val);
+        POKE(VS_SCI_CTRL,1);
+        POKE(VS_SCI_CTRL,0);
+		while (PEEK(VS_SCI_CTRL) & 0x80);
       }
     } else {           /* Copy run, copy n samples */
       while (n--) {
         val = plugin[i++];
         //WriteVS10xxRegister(addr, val);
-        POKE(0xD701,addr);
-        POKEW(0xD702,val);
-        POKE(0xD700,1);
-        POKE(0xD700,0);
-		while (PEEK(0xd700) & 0x80);
+        POKE(VS_SCI_ADDR,addr);
+        POKEW(VS_SCI_DATA,val);
+        POKE(VS_SCI_CTRL,1);
+        POKE(VS_SCI_CTRL,0);
+		while (PEEK(VS_SCI_CTRL) & 0x80);
       }
     }
   }
@@ -59,8 +59,6 @@ uint16_t i=0, j=0;
 uint16_t howManySoFar=0;
 uint8_t pass = 0;
 
-asm("sei");
-
 //codec enable all lines
 POKE(0xD620, 0x1F);
 POKE(0xD621, 0x2A);
@@ -69,10 +67,13 @@ while(PEEK(0xD622) & 0x01);
 
 initVS1053MIDI();
 
+for(i=0;i<4;i++)
+	printf("%02x",FAR_PEEK(10000+i));
+
 
 POKEW(VS_FIFO_STAT, 0x8000); //force the buffer to be empty? I think?
 
-printf("%04x bytes at start\n",PEEKW(VS_FIFO_STAT)&0x03FF);
+printf("\n%04x bytes at start\n",PEEKW(VS_FIFO_STAT)&0x03FF);
 while(i<fileSize)
 {
 	pass++;
@@ -87,7 +88,6 @@ while(i<fileSize)
 	while((PEEKW(VS_FIFO_STAT)& 0x8000) == 0); //loop in circles while it's not empty yet
 }
 
-asm("cli");
 
 while(true)
 {

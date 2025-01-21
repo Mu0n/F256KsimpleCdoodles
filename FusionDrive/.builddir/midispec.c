@@ -1,0 +1,42 @@
+#include "D:\F256\llvm-mos\code\FusionDrive\.builddir\trampoline.h"
+
+#include "f256lib.h"
+// --- MIDI spec hard coded values ---
+// good reference is here: https://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html#BM1_1
+// from the midi.org itself: https://midi.org/summary-of-midi-1-0-messages
+
+#define MetaEndOfTrack      0x2F
+#define MetaSequence        0x00
+#define MetaText            0x01
+#define MetaCopyright       0x02
+#define MetaTrackName       0x03
+#define MetaInstrumentName  0x04
+#define MetaLyrics          0x05
+#define MetaMarker          0x06
+#define MetaCuePoint        0x07
+#define MetaChannelPrefix   0x20
+#define MetaChangePort      0x21
+#define MetaEndOfTrack      0x2F
+#define MetaSetTempo        0x51
+#define MetaSMPTEOffset     0x54
+#define MetaTimeSignature   0x58
+#define MetaKeySignature    0x59
+#define MetaSequencerSpecific  0x7F
+
+typedef struct aMIDIEvent {
+    uint32_t deltaToGo;
+    uint8_t bytecount;
+    uint8_t msgToSend[3]; //some events are 2 bytes, some are 3, no biggie to use worst-case scenario
+    } aME, *aMEPtr, **aMEH;
+ 
+typedef struct aTableOfEvent {
+	uint8_t trackno;
+	uint16_t eventcount; //keeps track of total events for playback
+	uint32_t baseOffset; //where to put the data in far memory
+	} aTOE, *aTOEPtr, **aTOEH;
+	
+typedef struct bigParsedEventList {
+	bool hasBeenUsed;
+	uint16_t trackcount;
+	aTOEPtr TrackEventList;
+	} bigParsed, *bigParsedPtr, **bigParsedH;

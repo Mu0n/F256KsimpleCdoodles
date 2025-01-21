@@ -1,17 +1,8 @@
-#include "D:\F256\llvm-mos\code\ParseNPlayMidi\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\FusionDrive\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muUtils.h"
 
-
-//codec enable all lines
-void openAllCODEC()
-{
-	POKE(0xD620, 0x1F);
-	POKE(0xD621, 0x2A);
-	POKE(0xD622, 0x01);
-	while(PEEK(0xD622) & 0x01);
-}
 //realTextClear: manually changes to MMU page 2 and covers the whole 80x60 text layer
 //blank characters. the f256lib.h's textClear seems to only erase part of the screen only.
 void realTextClear()
@@ -24,7 +15,6 @@ void realTextClear()
 	}
 	POKE(MMU_IO_CTRL,0x00);
 }
-
 
 //Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
 bool setTimer(const struct timer_t *timer)

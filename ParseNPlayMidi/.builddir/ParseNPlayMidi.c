@@ -61,6 +61,14 @@
 #define VKY_SP0_POS_Y_H  0xD907
 
 
+
+//VS1053b serial bus
+#define VS_SCI_CTRL  0xD700
+#define VS_SCI_ADDR  0xD701
+#define VS_SCI_DATA  0xD702   //2 bytes
+#define VS_FIFO_STAT 0xD704   //2 bytes
+#define VS_FIFO_DATA 0xD707
+
 //INCLUDES
 #include "f256lib.h"
 #include <stdlib.h>
@@ -96,6 +104,15 @@ double fudge = 25.1658; //fudge factor when calculating time delays
 uint16_t *parsers; //indices for the various type 1 tracks during playback
 uint32_t *targetParse; //will pick the default 0x20000 if the file doesn't load
 uint8_t nn=4, dd=2, cc=24, bb=8; //nn numerator of time signature, dd= denom. cc=nb of midi clocks in metro click. bb = nb of 32nd notes in a beat
+
+const uint16_t plugin[28] = { /* Compressed plugin  for the VS1053b to enable real time midi mode */
+  0x0007, 0x0001, 0x8050, 0x0006, 0x0014, 0x0030, 0x0715, 0xb080, /*    0 */
+  0x3400, 0x0007, 0x9255, 0x3d00, 0x0024, 0x0030, 0x0295, 0x6890, /*    8 */
+  0x3400, 0x0030, 0x0495, 0x3d00, 0x0024, 0x2908, 0x4d40, 0x0030, /*   10 */
+  0x0200, 0x000a, 0x0001, 0x0050
+};
+
+
 //FUNCTION PROTOTYPES
 void sendAME(aMEPtr midiEvent); //sends a MIDI event message, either a 2-byte or 3-byte one
 int16_t findPositionOfHeader(void);  //this opens a .mid file and ignores everything until 'MThd' is encountered
@@ -115,6 +132,7 @@ void loadBM(void);
 void chopSound(void);
 
 void goToPrison(uint16_t);
+void initVS1053MIDI(void);
 
 uint32_t samplesTicks[30];
 uint32_t samplesUs[30];
@@ -123,15 +141,46 @@ uint8_t where1=0;
 uint8_t where2=0;
 uint8_t where3=0;
 
+//this is a small code to enable the VS1053b's midi mode; present on the Jr2 and K2. It is necessary for the first revs of these 2 machines
+void initVS1053MIDI(void) {
+    uint8_t n;
+    uint16_t addr, val, i=0;
 
+  while (i<sizeof(plugin)/sizeof(plugin[0])) {
+    addr = plugin[i++];
+    n = plugin[i++];
+    if (n & 0x8000) { /* RLE run, replicate n samples */
+      n &= 0x7FFF;
+      val = plugin[i++];
+      while (n--) {
+        //WriteVS10xxRegister(addr, val);
+        POKE(VS_SCI_ADDR,addr);
+        POKEW(VS_SCI_DATA,val);
+        POKE(VS_SCI_CTRL,1);
+        POKE(VS_SCI_CTRL,0);
+		while (PEEK(VS_SCI_CTRL) & 0x80);
+      }
+    } else {           /* Copy run, copy n samples */
+      while (n--) {
+        val = plugin[i++];
+        //WriteVS10xxRegister(addr, val);
+        POKE(VS_SCI_ADDR,addr);
+        POKEW(VS_SCI_DATA,val);
+        POKE(VS_SCI_CTRL,1);
+        POKE(VS_SCI_CTRL,0);
+		while (PEEK(VS_SCI_CTRL) & 0x80);
+      }
+    }
+  }
+}
 //the workhorse of MIDIPlay, "send A MIDI Event" sends a string of MIDI bytes into the midi FIFO
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(aMEPtr midiEvent)
 	{
-	POKE(MIDI_FIFO, midiEvent->msgToSend[0]);
-	POKE(MIDI_FIFO, midiEvent->msgToSend[1]);
-	if(midiEvent->bytecount == 3) POKE(MIDI_FIFO, midiEvent->msgToSend[2]);
+	POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[0]);
+	POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[1]);
+	if(midiEvent->bytecount == 3) POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[2]);
 	}
 	
 //checks the tempo, number of tracks, etc
@@ -1068,8 +1117,8 @@ int main(int argc, char *argv[]) {
 	bool isDone = false;
 	int16_t indexStart = 0;
 	uint8_t i=0;
-	
-	
+	openAllCODEC();
+	initVS1053MIDI();
 	for(indexStart=0;indexStart<10;indexStart++)
 	{
 		samplesTicks[indexStart]=0;

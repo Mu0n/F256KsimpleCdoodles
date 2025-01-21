@@ -35,13 +35,13 @@ int main(int argc, char *argv[]) {
 uint8_t c=0; //index of char to print to show it's not frozen
 	
 //set NES_CTRL
-POKE(NES_CTRL,NES_CTRL_MODE_SNES);
+POKE(NES_CTRL,NES_CTRL_MODE_NES);
 	
 while(true)
 {
 	textGotoXY(0,0);printf("%02x",c++);
 	//trigger a read
-	POKE(NES_CTRL,NES_CTRL_TRIG);
+	POKE(NES_CTRL, NES_CTRL_MODE_NES | NES_CTRL_TRIG);
 	//wait until it's ready
 	while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)
 		;
@@ -52,7 +52,7 @@ while(true)
 	textGotoXY(10,7);printf("pad2 status %02x", PEEK(NES_PAD2));
 	textGotoXY(10,8);printf("pad3 status %02x", PEEK(NES_PAD3));
 	//clear the trig
-	POKE(NES_STAT_DONE, NES_CTRL_MODE_SNES);
+	POKE(NES_CTRL, NES_CTRL_MODE_NES);
 }
 
 

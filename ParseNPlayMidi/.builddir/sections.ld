@@ -7,4 +7,3 @@
   .peon4 : { *(.peon4 .peon4*) } >peon4 end_peon4 = .;
   .peon5 : { *(.peon5 .peon5*) } >peon5 end_peon5 = .;
   .gfxhuman2gfx : { *(.gfxhuman2gfx .gfxhuman2gfx*) } >gfxhuman2gfx end_gfxhuman2gfx = .;
-  .human2 : { *(.human2 .human2*) } >human2 end_human2 = .;

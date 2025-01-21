@@ -7,4 +7,3 @@
   peon4 : ORIGIN = __peon4_lma, LENGTH = __peon4_size
   peon5 : ORIGIN = __peon5_lma, LENGTH = __peon5_size
   gfxhuman2gfx : ORIGIN = __gfxhuman2gfx_lma, LENGTH = __gfxhuman2gfx_size
-  human2 : ORIGIN = __human2_lma, LENGTH = __human2_size

@@ -42,9 +42,3 @@
   BYTE((end_gfxhuman2gfx - __gfxhuman2gfx_lma)>>16)
   TRIM(gfxhuman2gfx)
 
-  SHORT(ORIGIN(human2))
-  BYTE(ORIGIN(human2)>>16)
-  SHORT(end_human2 - __human2_lma)
-  BYTE((end_human2 - __human2_lma)>>16)
-  TRIM(human2)
-

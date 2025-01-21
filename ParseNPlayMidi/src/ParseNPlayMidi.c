@@ -81,14 +81,13 @@ EMBED(peon3, "../assets/peon3.data", 0x15200);
 EMBED(peon4, "../assets/peon4.data", 0x15B00);
 EMBED(peon5, "../assets/peon5.data", 0x16400);
 EMBED(gfxhuman2gfx, "../assets/backg.raw", 0x18000);
-EMBED(human2, "../assets/war1.mid", 0x40000);
 //STRUCTS
 struct timer_t midiNoteTimer;
 
 
 //GLOBALS
 bigParsed theBigList;
-bool gVerbo = false; //global verbose flag, gives more info throughout operations when set true
+bool gVerbo = true; //global verbose flag, gives more info throughout operations when set true
 FILE *theMIDIfile;
 uint16_t gFormat = 0; //holds the format type for the info provided after loading 0=single track, 1=multitrack
 uint16_t trackcount = 0; // #number of tracks detected
@@ -128,7 +127,7 @@ uint32_t readTimer0(void);
 uint8_t isTimer0Done(void);
 void loadBM(void);
 void chopSound(void);
-
+void hitspace(void);
 void goToPrison(uint16_t);
 void initVS1053MIDI(void);
 
@@ -286,10 +285,14 @@ int16_t findPositionOfHeader(void)
 	char buffer[400];
 	uint16_t i=0;
 	
+	printf("about to check header\n");
+	hitspace();
 	for(i=0;i<400;i++) buffer[i] = FAR_PEEK(MIDI_BASE + i);
 	
     position = strstr(buffer, targetSequence);
 	
+	printf("positions is %08x",*position);
+	hitspace();
 	if(position != NULL)
 		{
 		thePosition = (int16_t)(position - buffer);
@@ -301,17 +304,9 @@ int16_t findPositionOfHeader(void)
 	
 //high level function that directs the reading and parsing of the MIDI file     
 int16_t getAndAnalyzeMIDI(void)
-	{
-	uint8_t result;
-		
+	{		
 	int16_t indexToStart=0; //MThd should be at position 0, but it might not, so we'll find it
-	
-	
-	//result = loadSMFile("human2.mid"); //actual process of asking for a midi file through std mac dialog
-	
-	
-	if(result ==1) return -1;
-	
+
 	indexToStart = findPositionOfHeader(); //find the start index of 'MThd'
 	
 	if(gVerbo) printf("Had to skip %d bytes to find MIDI Header tag\n",indexToStart);
@@ -329,15 +324,14 @@ int16_t getAndAnalyzeMIDI(void)
 //Opens the std MIDI file
 uint8_t loadSMFile(char *name)
 {
-	char *buffer;
-	size_t bufferSize = 25600; //initial buffer size
+	uint8_t buffer[255];
 	size_t bytesRead = 0;
-	size_t totalBytesRead = 0;
+	uint32_t totalBytesRead = 0;
+	uint16_t i=0;
+	uint32_t j=0;
+	if(gVerbo) printf("about to open file: %s\n",name);
 	
 
-	if(gVerbo) printf("Opening file: %s\n",name);
-	
-	
 	theMIDIfile = fopen(name,"rb"); // open file in read mode
 	if(theMIDIfile == NULL)
 	{
@@ -345,23 +339,26 @@ uint8_t loadSMFile(char *name)
 		return 1;
 	}
 	
-	buffer = (char *) malloc(bufferSize);
-	
-		if(gVerbo) printf("%s will now be read\n",name);
-	while ((bytesRead = fread(buffer + totalBytesRead, 1, 2, theMIDIfile)) > 0) 
-		{ 
-		totalBytesRead += bytesRead;
-		FAR_POKE((uint32_t)(MIDI_BASE + totalBytesRead), buffer[totalBytesRead-1]);
-		if(totalBytesRead >= bufferSize) 
-			{
-			bufferSize *= 2;
-			buffer = (char *) realloc(buffer, bufferSize);
+    if(gVerbo) printf("about to start reading\n");
+
+	while ((bytesRead = fread(buffer, 1, 255, theMIDIfile))>0)
+			{ 
+
+		
+			j++;
+
+			//dump the buffer into a special RAM area
+			for(i=0;i<bytesRead;i++)
+				{
+				FAR_POKE((uint32_t)((uint32_t)((uint32_t)MIDI_BASE+(uint32_t)totalBytesRead
+				+(uint32_t)i)),buffer[i]);
+				}
+			totalBytesRead += (uint32_t) bytesRead;
+			if(bytesRead < 255) break;
 			}
-		}
 	fclose(theMIDIfile);
 	
-	
-	if(gVerbo) printf("size of file: %ld\n",(uint32_t)totalBytesRead);
+	if(gVerbo) printf("%lu chunks read, size of file: %ld\n",j,(uint32_t)totalBytesRead);
 	
 	return 0;
 }
@@ -410,7 +407,6 @@ void hitspace()
 
 void playmiditype0(void)
 {
-	uint8_t i;
 	uint16_t localTotalLeft=0;
 	uint32_t whereTo; //in far memory, keeps adress of event to send
 	uint32_t overFlow;
@@ -518,8 +514,6 @@ void playmidiND(void) //non-destructive version
 	uint32_t overFlow;
 	bool exitFlag = false;
 	uint32_t *soundBeholders; //keeps a scan of the next delta in line for each track
-	uint8_t ypos=0;
-	uint8_t cCycle=0; //color cycle
 	
 	aME msgGo;
 	trackcount = theBigList.trackcount;
@@ -1139,6 +1133,8 @@ resetInstruments(false);
 	midiNoteTimer.units = TIMER_FRAMES;
 	midiNoteTimer.cookie = TIMER_MIDI_COOKIE;
 
+	loadSMFile("human2.mid");
+	
 	indexStart = getAndAnalyzeMIDI();
 	
 	loadBM();

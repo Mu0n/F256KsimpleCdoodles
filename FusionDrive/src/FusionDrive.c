@@ -3,9 +3,14 @@
 #define F256LIB_IMPLEMENTATION
 
 #define NES_CTRL    0xD880
-#define NES_CTRL_TRIG 0x80
-#define NES_CTRL_MODE_NES 0x05
-#define NES_CTRL_MODE_SNES 0x04
+
+#define NES_CTRL_TRIG 0b10000000
+#define NES_STAT_DONE 0b01000000
+//D880 settings
+//        7  6  5  4 |  3  2   1  0
+// NES_TRIG XX XX XX | XX MODE XX NES_EN
+#define NES_CTRL_MODE_NES  0b00000001
+#define NES_CTRL_MODE_SNES 0b00000101
 
 #define NES_STAT    0xD880
 #define NES_PAD0    0xD884
@@ -795,7 +800,8 @@ void setCarPos(uint16_t x, uint16_t y)
 }
 void updateCarPos(uint8_t *value)
 {
-	POKE(NES_CTRL,NES_CTRL_TRIG);
+	
+	POKE(NES_CTRL, NES_CTRL_MODE_NES | NES_CTRL_TRIG);
 	kernelNextEvent();
 	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
 	{		
@@ -809,8 +815,9 @@ void updateCarPos(uint8_t *value)
 				*/
 				carTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_CAR_DELAY;
 				setTimer(&carTimer);
-				if((NES_STAT & 0x40) == 0x40)
-				{
+				while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)
+					;
+				
 					if(PEEK(NES_PAD0)==NES_PAD0_LEFT)
 					{
 						carX-= 3;
@@ -821,7 +828,7 @@ void updateCarPos(uint8_t *value)
 						carX += 3;
 						setCarPos(carX, carY);
 					}
-				}
+				
 				break;
 			case TIMER_LANE_COOKIE:
 				swapColors(112,146);
@@ -830,7 +837,9 @@ void updateCarPos(uint8_t *value)
 				break;
 				
 		}
-	}		
+	}
+	//clear the trig
+	POKE(NES_CTRL, NES_CTRL_MODE_NES);	
 }
 
 void swapColors(uint8_t c1, uint8_t c2)
@@ -889,6 +898,7 @@ void setup()
 	
 	setCarPos(160,220);
 
+	
 	//set NES_CTRL
 	POKE(NES_CTRL,NES_CTRL_MODE_NES);
 

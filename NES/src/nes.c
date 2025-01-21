@@ -25,12 +25,15 @@
 #define NES_PAD0_RIGHT  0xFE
 
 #define NES_PAD1    0xD886
-#define NES_PAD2    0xD887
+#define NES_PAD2    0xD888
 #define NES_PAD3    0xD88A
 
 int main(int argc, char *argv[]) {
 
 uint8_t c=0; //index of char to print to show it's not frozen
+	
+	
+	POKE(MMU_IO_CTRL, 0x00);
 	
 //set NES_CTRL
 POKE(NES_CTRL,NES_CTRL_MODE_NES);

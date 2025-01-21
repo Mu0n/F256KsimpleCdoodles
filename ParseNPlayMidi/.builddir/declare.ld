@@ -21,6 +21,3 @@
   __gfxhuman2gfx_lma  = 0x18000;
   __gfxhuman2gfx_size = 0x12c00;
 
-  __human2_lma  = 0x40000;
-  __human2_size = 0xc8bb;
-

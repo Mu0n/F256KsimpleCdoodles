@@ -132,6 +132,7 @@ void chopSound(void);
 void hitspace(void);
 void goToPrison(uint16_t);
 void initVS1053MIDI(void);
+void lilpause(uint8_t);
 
 uint32_t samplesTicks[30];
 uint32_t samplesUs[30];
@@ -177,9 +178,9 @@ void initVS1053MIDI(void) {
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(aMEPtr midiEvent)
 	{
-	POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[0]);
-	POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[1]);
-	if(midiEvent->bytecount == 3) POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[2]);
+	POKE(MIDI_FIFO, midiEvent->msgToSend[0]);
+	POKE(MIDI_FIFO, midiEvent->msgToSend[1]);
+	if(midiEvent->bytecount == 3) POKE(MIDI_FIFO, midiEvent->msgToSend[2]);
 	}
 	
 //checks the tempo, number of tracks, etc
@@ -284,21 +285,20 @@ int16_t findPositionOfHeader(void)
 	char targetSequence[] = "MThd";
     char *position;
     int16_t thePosition = 0;
-	char buffer[400];
+	char buffer[64];
 	uint16_t i=0;
 	
-	printf("about to check header\n");
-	hitspace();
-	for(i=0;i<400;i++) buffer[i] = FAR_PEEK(MIDI_BASE + i);
+	for(i=0;i<64;i++) buffer[i] = FAR_PEEK(MIDI_BASE + i);
 	
     position = strstr(buffer, targetSequence);
 	
-	printf("positions is %08x",*position);
-	hitspace();
+
+
 	if(position != NULL)
 		{
 		thePosition = (int16_t)(position - buffer);
-		return thePosition;
+		printf("position is %08x",thePosition);
+		return 0;
 		}
 	return -1;
 	}
@@ -343,20 +343,19 @@ uint8_t loadSMFile(char *name)
 	
     if(gVerbo) printf("about to start reading\n");
 
-	while ((bytesRead = fread(buffer, 1, 255, theMIDIfile))>0)
+	while ((bytesRead = fread(buffer, sizeof(uint8_t), 250, theMIDIfile))>0)
 			{
-
+			buffer[0]=buffer[0];
 	
 			j++;
 
 			//dump the buffer into a special RAM area
 			for(i=0;i<bytesRead;i++)
 				{
-				FAR_POKE((uint32_t)((uint32_t)((uint32_t)MIDI_BASE+(uint32_t)totalBytesRead
-				+(uint32_t)i)),buffer[i]);
+				FAR_POKE((uint32_t)MIDI_BASE+(uint32_t)totalBytesRead+(uint32_t)i,buffer[i]);
 				}
 			totalBytesRead += (uint32_t) bytesRead;
-			if(bytesRead < 255) break;
+			if(bytesRead < 250) break;
 			}
 	fclose(theMIDIfile);
 	

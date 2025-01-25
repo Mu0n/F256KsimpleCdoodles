@@ -90,12 +90,14 @@ void sendAME(aMEPtr midiEvent, bool wantAlt)
 	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, midiEvent->msgToSend[0]);
 	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, midiEvent->msgToSend[1]);
 	if(midiEvent->bytecount == 3) POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, midiEvent->msgToSend[2]);
+	/*
 	if((midiEvent->msgToSend[0] & 0xF0) == 0x90)
 			midiPlaybackShimmering(midiEvent->msgToSend[0] & 0x0F,  midiEvent->msgToSend[1], false);
 	else if((midiEvent->msgToSend[0] & 0xF0) == 0x80)
 			midiPlaybackShimmering(midiEvent->msgToSend[0] & 0x0F,  midiEvent->msgToSend[1], true);
 	else if((midiEvent->msgToSend[0] & 0xF0) == 0xC0)
 		 updateInstrumentDisplay(midiEvent->msgToSend[0] & 0x0F, midiEvent->msgToSend[1]);
+	*/
 	}
 	
 //Opens the std MIDI file
@@ -242,6 +244,7 @@ void adjustOffsets(struct bigParsedEventList *list)
 // wantCmds is when it's ready to record the relevant commands in an array
 int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct bigParsedEventList *list)
 	{
+	uint8_t j=0; //simple index
     uint32_t trackLength = 0; //size in bytes of the current track
     uint32_t i = startIndex; // #main array parsing index
     uint16_t currentTrack=0; //index for the current track
@@ -257,10 +260,10 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
     uint32_t data_byte = 0x00, data_byte2= 0x00, data_byte3 = 0x00, data_byte4= 0x00;
 	uint32_t usPerBeat=500000; //this is read off of a meta event 0xFF 0x51, 3 bytes long
     bool lastCmdPreserver = false;
-	uint32_t superTotal=0; //in uSeconds, the whole song
-	
+	uint32_t *superTotal; //in uSeconds/8, the whole song, per track. we'll keep the highest at the end
+	uint32_t recordTotal=0; //highest count of superTotal found.
 	uint32_t whereTo=0; //where to write individual midi events in far memory
-	
+	bool eotDetected=false; //raises up when the meta EOT event is detected, 0xFF 0x2F 0x00
     //first pass will find the number of events to keep in the TOE (table of elements)
     //and initialize the myParsedEventList, an array of TOE arrays
 
@@ -281,6 +284,13 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
     			  ;
     i+=2;
 
+	//now that we know the trackcount, allocate ram to hold the timing totals for every track
+	superTotal = (uint32_t *) malloc(sizeof(uint32_t) * rec->trackcount);
+	for(j=0;j<rec->trackcount;j++)
+	{
+		superTotal[j]=0;
+	}
+	
     rec->tick = (uint16_t)(
      	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))
     			  |(uint16_t)((FAR_PEEK(MIDI_BASE+i)<<8))
@@ -291,6 +301,8 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
  
     while(currentTrack < rec->trackcount)
     	{
+		eotDetected = false;
+	
 		i+=4; //skip 'MTrk' header 4 character string
 		trackLength =  (((uint32_t)(FAR_PEEK(MIDI_BASE+i)))<<24)
 		             | (((uint32_t)(FAR_PEEK(MIDI_BASE+i+1)))<<16)
@@ -410,6 +422,8 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 			    	}
 				else if(meta_byte == MetaEndOfTrack)
 					{
+					eotDetected=true;
+	
 					i++;
 					continue;
 					}
@@ -435,7 +449,6 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 					usPerTick = (uint32_t)usPerBeat/((uint32_t)rec->tick);
 					timer0PerTick = (uint32_t)((double)usPerTick * (double)rec->fudge); //convert to the units of timer0
 					rec->bpm = (uint16_t) ((uint32_t)6E7/((uint32_t)usPerBeat));
-	
 	
 					}
 				else if(meta_byte == MetaSMPTEOffset)
@@ -482,7 +495,7 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 					whereTo += (uint32_t)( (uint32_t)interestingIndex * (uint32_t) MIDI_EVENT_FAR_SIZE);
 	
 					tempCalc = timer0PerTick * timeDelta;
-					superTotal +=  (uint32_t)(tempCalc)>>3; //it has to fit, otherwise uint32_t limits are reached for a full song!
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta);
 	
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (tempCalc & 0xFFFF0000)  >>16)  ;
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2,  tempCalc & 0x0000FFFF ) ;
@@ -528,7 +541,7 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 					whereTo += (uint32_t)( (uint32_t)interestingIndex * (uint32_t) MIDI_EVENT_FAR_SIZE);
 	
 					tempCalc = timer0PerTick * timeDelta;
-					superTotal +=  (uint32_t)(tempCalc)>>3; //it has to fit, otherwise uint32_t limits are reached for a full song!
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta);
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (tempCalc & 0xFFFF0000)  >>16)  ;
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2,  tempCalc & 0x0000FFFF ) ;
 	
@@ -554,7 +567,12 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 			currentTrack++;
     	} //end of parsing all tracks
 
-		rec->totalDuration = superTotal;
+		for(i=0;i<rec->trackcount;i++)
+			{
+			if(superTotal[i] > recordTotal) recordTotal = superTotal[i];
+			}
+		rec->totalDuration = recordTotal;
+
 		return 0;
      }	 //end of parse function
  
@@ -830,13 +848,13 @@ void displayInfo(struct midiRecord *rec)
 	wipeStatus();
 	
 	textGotoXY(1,1);
-	textSetColor(1,0);textPrint("Filename: ");
+	textSetColor(5,0);textPrint("Filename: ");
 	textSetColor(0,0);printf("%s",rec->fileName);
 	textGotoXY(1,2);
-	textSetColor(1,0);textPrint("Type ");textSetColor(0,0);printf(" %d ", rec->format);
-	textSetColor(1,0);textPrint("MIDI file with ");
+	textSetColor(5,0);textPrint("Type ");textSetColor(0,0);printf(" %d ", rec->format);
+	textSetColor(5,0);textPrint("MIDI file with ");
 	textSetColor(0,0);printf("%d ",rec->trackcount);
-	textSetColor(1,0);(rec->trackcount)>1?textPrint("tracks"):textPrint("track");
+	textSetColor(5,0);(rec->trackcount)>1?textPrint("tracks"):textPrint("track");
 	textSetColor(0,0);textGotoXY(1,7);textPrint("CH Instrument");
 	for(i=0;i<16;i++)
 	{
@@ -853,24 +871,22 @@ void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list)
 	wipeStatus();
 	textGotoXY(1,3);
 	textSetColor(0,0);printf("%lu ", getTotalLeft(list));
-	textSetColor(1,0);textPrint("total event count");
+	textSetColor(5,0);textPrint("total event count");
 	textGotoXY(40,2);
-	textSetColor(1,0);textPrint("Tempo: ");
+	textSetColor(5,0);textPrint("Tempo: ");
 	textSetColor(0,0);printf("%d ",rec->bpm);
-	textSetColor(1,0);textPrint("bpm");
+	textSetColor(5,0);textPrint("bpm");
 	textGotoXY(40,3);
-	textSetColor(1,0);textPrint("Time Signature ");
+	textSetColor(5,0);textPrint("Time Signature ");
 	textSetColor(0,0);printf("%d:%d",rec->nn,1<<(rec->dd));
 	textGotoXY(0,25);printf("  ->Preparing for playback...");
 }
 void superExtraInfo(struct midiRecord *rec)
 {
-	uint16_t temp;
-	
-	temp=(uint32_t)((rec->totalDuration)/125000);
-	temp=(uint32_t)((((double)temp))/((double)(rec->fudge)));
+	uint32_t temp;
+	temp=(uint32_t)(((double)rec->totalDuration)/((double)1e6));
 	rec->totalSec = temp;
-	textGotoXY(68,5); printf("%d:%02d",temp/60,temp % 60);
+	textGotoXY(68,5); printf("%d:%02d",(uint16_t)(temp/60),(uint16_t)(temp % 60));
 	textGotoXY(1,24);textPrint("[ESC]: quit    [SPACE]:  pause");
 }
 
@@ -925,22 +941,22 @@ void setColors()
 	for(i=1;i<6;i++) //do yellows
 	{
 		POKE(0xD800+4*i,  0);              //blue
-		POKE(0xD800+4*i+1, 0xCD + (i-1) * 10); //green
-		POKE(0xD800+4*i+2, 0xCD + (i-1) * 10); //red
+		POKE(0xD800+4*i+1, 0x69 + (i-1) * 30); //green
+		POKE(0xD800+4*i+2, 0x69 + (i-1) * 30); //red
 		POKE(0xD800+4*i+3, 0); 		     //unused alpha
 	}
 	for(i=6;i<11;i++) //do oranges
 	{
 		POKE(0xD800+4*i,  0);              //blue
-		POKE(0xD800+4*i+1, (0xCD + (i-6) * 10)/2); //green
-		POKE(0xD800+4*i+2, 0xCD + (i-6) * 10); //red
+		POKE(0xD800+4*i+1, (0x69 + (i-6) * 30)/2); //green
+		POKE(0xD800+4*i+2, 0x69 + (i-6) * 30); //red
 		POKE(0xD800+4*i+3, 0); 		     //unused alpha
 	}
 	for(i=11;i<16;i++) //do reds
 	{
 		POKE(0xD800+4*i,  0);              //blue
 		POKE(0xD800+4*i+1,0); //green
-		POKE(0xD800+4*i+2, 0xCD + (i-11) * 10); //red
+		POKE(0xD800+4*i+2, 0x69 + (i-11) * 30); //red
 		POKE(0xD800+4*i+3, 0); 		     //unused alpha
 	}
 	POKE(MMU_IO_CTRL, backup);

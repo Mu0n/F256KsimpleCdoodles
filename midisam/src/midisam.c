@@ -13,6 +13,7 @@
 #include "../src/timer0.h"  //contains basic cpu based timer0 functions I often use
 
 //STRUCTS
+
 struct timer_t playbackTimer;
 struct time_t time_data;
 
@@ -258,23 +259,40 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
     uint32_t data_byte = 0x00, data_byte2= 0x00, data_byte3 = 0x00, data_byte4= 0x00;
 	uint32_t usPerBeat=500000; //this is read off of a meta event 0xFF 0x51, 3 bytes long
     bool lastCmdPreserver = false;
-	uint32_t *superTotal; //in uSeconds/8, the whole song, per track. we'll keep the highest at the end
+	uint32_t *superTotal; //in uSeconds, the whole song, per track. we'll keep the highest at the end
 	uint32_t recordTotal=0; //highest count of superTotal found. 
 	uint32_t whereTo=0; //where to write individual midi events in far memory
-	bool eotDetected=false; //raises up when the meta EOT event is detected, 0xFF 0x2F 0x00
+	
+	
     //first pass will find the number of events to keep in the TOE (table of elements)
     //and initialize the myParsedEventList, an array of TOE arrays
-
     //second pass will actually record the midi events into the appropriate TOE for each track
+	
 
+	uint8_t tempoChIndex =0; 	//tempo change - where are we at
+	if(!wantCmds) rec->nbTempoChanges=0; //init this variable to 0 on the first pass
+	else if(wantCmds)//reserve array space on the second pass to record when tempo changes occur and what value is tied to it
+	{
+		rec->myTempos.absTick     = (uint32_t *)malloc(sizeof(uint32_t) * rec->nbTempoChanges);
+		rec->myTempos.usPerTick   = (uint32_t *)malloc(sizeof(uint32_t) * rec->nbTempoChanges);
+		rec->myTempos.usPerTimer0 = (uint32_t *)malloc(sizeof(uint32_t) * rec->nbTempoChanges);
+		for(j=0;j<rec->nbTempoChanges;j++)
+		{
+			rec->myTempos.absTick[j]=0;
+			rec->myTempos.usPerTick[j]=0;
+			rec->myTempos.usPerTimer0[j]=0;
+		}
+	}
+
+	//start parsing!
     i+=4; //skips 'MThd' midi file header 4 character id string 
-	i+=4; //skip size since it's always 6
+	i+=4; //skips the 4 byte size param since it's always 6 and it's never used to compute anything
 
     rec->format = 
      	           (uint16_t) (FAR_PEEK(MIDI_BASE+i+1))
     			  |(uint16_t) (FAR_PEEK(MIDI_BASE+i)<<8)
     			  ;
-    i+=2;
+    i+=2; //format is either 0 or 1
 
     rec->trackcount = 
      	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))  
@@ -282,12 +300,12 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
     			  ;
     i+=2;
 
+
 	//now that we know the trackcount, allocate ram to hold the timing totals for every track
 	superTotal = (uint32_t *) malloc(sizeof(uint32_t) * rec->trackcount);
-	for(j=0;j<rec->trackcount;j++)
-	{
-		superTotal[j]=0;
-	}
+	//initalize the superTotals
+	for(j=0;j<rec->trackcount;j++) superTotal[j]=0;
+
 	
     rec->tick = (uint16_t)(
      	           (uint16_t)(FAR_PEEK(MIDI_BASE+i+1))  
@@ -299,8 +317,11 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
     
     while(currentTrack < rec->trackcount)
     	{	
-		eotDetected = false;
-	
+		tempoChIndex=0; //reset the tempo change index and be ready to progress tempo changes for every track
+		usPerBeat = 500000;//initialize with 500 000 us per beat
+		usPerTick = (uint32_t)usPerBeat/((uint32_t)rec->tick); //find the default value of us per tick based on the tick per beat from the header
+
+					
 		i+=4; //skip 'MTrk' header 4 character string
 		trackLength =  (((uint32_t)(FAR_PEEK(MIDI_BASE+i)))<<24) 
 		             | (((uint32_t)(FAR_PEEK(MIDI_BASE+i+1)))<<16)
@@ -374,58 +395,67 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 				if(meta_byte == MetaSequence)
 					{
 					i+=2;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaText)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaCopyright)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick		
 					}
 				else if(meta_byte == MetaTrackName)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaInstrumentName)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaLyrics)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaMarker)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaCuePoint)
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
 					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaChannelPrefix)
 					{
 					i+=2;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaChangePort)
 			    	{
 			    	i+=2;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 			    	}
 				else if(meta_byte == MetaEndOfTrack)
 					{
-					eotDetected=true;
-					
 					i++;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					continue;
 					}
-				else if(meta_byte == MetaSetTempo)
+				else if(meta_byte == MetaSetTempo) //in type 1 files, can happen several times in track 0
 					{
 					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i);
 					i++;
@@ -435,23 +465,45 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 					i++;
 					data_byte4 = (uint8_t)FAR_PEEK(MIDI_BASE+i);
 					i++;
-					
-					usPerBeat = ( ((uint32_t)data_byte2)<<16 ) | 
-								   ( ((uint32_t)data_byte3)<<8  ) | 
-								     ((uint32_t)data_byte4);
-									 
-					
-					//if you divide usPerBeat by tick per beat, 
-					//you get the duration in microseconds per tick, ready to be multiplied	by the events' deltaTimes to get delays in us
+											
+					if(!wantCmds)
+					{
+						rec->nbTempoChanges++; //count them to prep for the 2nd pass
 
-					usPerTick = (uint32_t)usPerBeat/((uint32_t)rec->tick);
-					timer0PerTick = (uint32_t)((double)usPerTick * (double)rec->fudge); //convert to the units of timer0
-					rec->bpm = (uint16_t) ((uint32_t)6E7/((uint32_t)usPerBeat));
-					
+						superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick
+						usPerTick = ((uint32_t)(( ((uint32_t)data_byte2)<<16 ) | 
+							   ( ((uint32_t)data_byte3)<<8  ) | 
+								 ((uint32_t)data_byte4)))
+								 /
+								 ((uint32_t)rec->tick);						
+					}
+					if(wantCmds) //record when tempo changes occur, probably happens in track 0 only
+					{		
+						superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick		
+
+						//keep track of when
+						rec->myTempos.absTick[tempoChIndex]  = superTotal[currentTrack];
+						
+						//get the new one by dividing usPerBeat by TickPerBeat to get usPerTick					
+						rec->myTempos.usPerTick[tempoChIndex] = ((uint32_t)(( ((uint32_t)data_byte2)<<16 ) | 
+							   ( ((uint32_t)data_byte3)<<8  ) | 
+								 ((uint32_t)data_byte4)))
+								 /
+								 ((uint32_t)rec->tick);
+						usPerTick=rec->myTempos.usPerTick[tempoChIndex]; //adjust current value
+						rec->myTempos.usPerTimer0[tempoChIndex] = (uint32_t)((double)usPerTick * (double)rec->fudge);
+						
+						printf("\nchange #:%d uspT=%lu at: %lu ticks",tempoChIndex, rec->myTempos.usPerTick[tempoChIndex],rec->myTempos.absTick[tempoChIndex]);
+						hitspace();
+						tempoChIndex++;
+						//if you divide usPerBeat by tick per beat, 
+						//you get the duration in microseconds per tick, ready to be multiplied	by the events' deltaTimes to get delays in us
+						}
 					}
 				else if(meta_byte == MetaSMPTEOffset)
 					{
 					i+=6;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaTimeSignature)
 					{
@@ -464,14 +516,18 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 					i++;
 					rec->bb = (uint8_t)FAR_PEEK(MIDI_BASE+i);
 					i++;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaKeySignature)
 					{
 					i+=3;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 				else if(meta_byte == MetaSequencerSpecific)
 					{
-					continue;
+					data_byte = (uint8_t)FAR_PEEK(MIDI_BASE+i); //length of text
+					i+=(uint16_t)data_byte + 1;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
 					}
 			    
 				} //end if for meta events
@@ -482,18 +538,36 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 			//Channel Pressure 0xD_
 			else if(status_byte >= 0xC0 && status_byte <= 0xDF)
 				{
-				if(wantCmds == false) //merely counting here
-					{
-					list->TrackEventList[currentTrack].eventcount++; 
-					}
+				if(!wantCmds) 
+				{
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
+					list->TrackEventList[currentTrack].eventcount++; //merely counting here
+				}
 				if(wantCmds) //prep the MIDI event
 					{
 						
 					whereTo  = (uint32_t)(list->TrackEventList[currentTrack].baseOffset);
 					whereTo += (uint32_t)( (uint32_t)interestingIndex * (uint32_t) MIDI_EVENT_FAR_SIZE);
 					
-					tempCalc = timer0PerTick * timeDelta;
+						printf("\nST is %lu and next TC is >= %lu",superTotal[currentTrack],(rec->myTempos.absTick[tempoChIndex]));
+						hitspace();
+					//we've passed the time of a recorded tempo change, this is probably happening outside of track 0 for type 1
+					while(superTotal[currentTrack] >= (rec->myTempos.absTick[tempoChIndex]) && tempoChIndex < rec->nbTempoChanges) 
+					{
+						printf("\ntempoChange at %lu since it's >= %lu",superTotal[currentTrack],(rec->myTempos.absTick[tempoChIndex]));
+						hitspace();
+						tempoChIndex++;
+					}
+/*
+					printf("\ntr:%d at:%lu nextCh %02d at:%lu",currentTrack, superTotal[currentTrack], tempoChIndex, myTempos.absTick[tempoChIndex]); 
+					hitspace();
+					*/
+					usPerTick = rec->myTempos.usPerTick[tempoChIndex]; //use the lined up current usPerTick
+					timer0PerTick = rec->myTempos.usPerTimer0[tempoChIndex];
+					
 					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); 
+					tempCalc = timer0PerTick * timeDelta;
+					
 					
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (tempCalc & 0xFFFF0000)  >>16)  ;
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2,  tempCalc & 0x0000FFFF ) ;
@@ -518,9 +592,10 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 			// Pitch Bend 0xE_
 			else if((status_byte >= 0x80 && status_byte <= 0xBF) || (status_byte >= 0xE0 && status_byte <= 0xEF))
 				{
-				if(wantCmds == false) //merely counting here
+				if(!wantCmds)
 					{
-					list->TrackEventList[currentTrack].eventcount++;
+					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
+					list->TrackEventList[currentTrack].eventcount++; //merely counting here
 					}
 				if(wantCmds) //prep the MIDI event
 					{
@@ -535,11 +610,31 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 						lastCmdPreserver = true;
 						//if(currentTrack == 4) hitspace();
 					}
-					whereTo =  (uint32_t)(list->TrackEventList[currentTrack].baseOffset);
+					whereTo  = (uint32_t)(list->TrackEventList[currentTrack].baseOffset);
 					whereTo += (uint32_t)( (uint32_t)interestingIndex * (uint32_t) MIDI_EVENT_FAR_SIZE);
 					
-					tempCalc = timer0PerTick * timeDelta;
+					printf("\nST is %lu and next TC is >= %lu",superTotal[currentTrack],(rec->myTempos.absTick[tempoChIndex]));
+						hitspace();
+					
+					//we've passed the time of a recorded tempo change, this is probably happening outside of track 0 for type 1
+					while(superTotal[currentTrack] >= (rec->myTempos.absTick[tempoChIndex]) && tempoChIndex < rec->nbTempoChanges) 
+						
+					{
+						printf("\ntempoChange at %lu since it's >= %lu",superTotal[currentTrack],(rec->myTempos.absTick[tempoChIndex]));
+						hitspace();
+						tempoChIndex++;
+					}
+/*
+					printf("\ntr:%d at:%lu nextCh %02d at:%lu",currentTrack, superTotal[currentTrack], tempoChIndex, myTempos.absTick[tempoChIndex]); 
+					hitspace();
+					*/
+					usPerTick = rec->myTempos.usPerTick[tempoChIndex]; //use the lined up current usPerTick
+					timer0PerTick = rec->myTempos.usPerTimer0[tempoChIndex];
+					
 					superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); 
+					tempCalc = timer0PerTick * timeDelta;
+					
+					
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo    			, (tempCalc & 0xFFFF0000)  >>16)  ;
 					FAR_POKEW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2,  tempCalc & 0x0000FFFF ) ;
 				
@@ -556,7 +651,8 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 
     		else
     			{
-    			//printf("\n ---Unrecognized event sb= %02x",status_byte);
+				superTotal[currentTrack] +=  ((uint32_t)usPerTick*(uint32_t)timeDelta); //use the current usPerTick	
+    			printf("\n ---Unrecognized event sb= %02x",status_byte);
     			}
     		last_cmd = status_byte;
     		if(lastCmdPreserver) last_cmd = (status_byte & 0x0F) | 0x90; //revert to note one if a note on 0 velocity was detected.
@@ -565,12 +661,28 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
 			currentTrack++;
     	} //end of parsing all tracks
 
-		for(i=0;i<rec->trackcount;i++)
-			{
-			if(superTotal[i] > recordTotal) recordTotal = superTotal[i];
-			}
-		rec->totalDuration = recordTotal;
+		//find the track that runs the longest so that this number will be used to estimate the song's duration and display it 
+		if(wantCmds)
+		{
+				for(j=0;j<rec->trackcount;j++)
+					{
+					if(superTotal[j] > recordTotal) recordTotal = superTotal[j];
+					//printf("\ntrack %d superT=%lu",j,superTotal[j]);
+					}
+				rec->totalDuration = recordTotal;
+				for(j=0;j<rec->nbTempoChanges;j++)
+				{
+					//printf("\n%d abs=%lu uspT=%lu",j,myTempos.absTick[j],myTempos.usPerTick[j]);
 
+				}
+		}
+
+		if(wantCmds)//frees them since they're no longer used.
+		{
+			free(rec->myTempos.absTick);
+			free(rec->myTempos.usPerTick);
+		}
+		free(superTotal); 
 		return 0;
      }	 //end of parse function
      
@@ -872,7 +984,7 @@ void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list)
 	textSetColor(5,0);textPrint("total event count");
 	textGotoXY(40,2); 
 	textSetColor(5,0);textPrint("Tempo: ");
-	textSetColor(0,0);printf("%d ",rec->bpm);
+	textSetColor(0,0);printf("120 ");
 	textSetColor(5,0);textPrint("bpm");
 	textGotoXY(40,3);
 	textSetColor(5,0);textPrint("Time Signature ");
@@ -1029,6 +1141,7 @@ int main(int argc, char *argv[]) {
 		{
 		parse(indexStart,false, &myRecord, &theBigList); //count the events and prep the mem allocation for the big list
 		adjustOffsets(&theBigList);
+
 		extraInfo(&myRecord,&theBigList);
 		parse(indexStart,true, &myRecord, &theBigList); //load up the actual event data in the big list
 		superExtraInfo(&myRecord);		

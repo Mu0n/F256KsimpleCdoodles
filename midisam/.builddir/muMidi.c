@@ -109,7 +109,6 @@ void initVS1053MIDI(void) {
 void initMidiRecord(struct midiRecord *rec)
 {
 	rec->totalDuration=0;
-	rec->bpm = 120;
 	rec->fileName = malloc(sizeof(char) * 64);
 	rec->format = 0;
 	rec->trackcount =0;

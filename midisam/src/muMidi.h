@@ -2,7 +2,6 @@
 #define MUMIDI_H
 
 //MIDI related meta codes
-#define MetaEndOfTrack      0x2F
 #define MetaSequence        0x00
 #define MetaText            0x01
 #define MetaCopyright       0x02
@@ -55,13 +54,20 @@
 
 #include "f256lib.h"
 
+//keeps track of tempo changes and pre-calculations of usPerTick and usPerTimer0 to make it lighter during parsing
+typedef struct tempoChange{
+	uint32_t *absTick; //when it occurs
+	uint32_t *usPerTick; //microsecond per tick
+	uint32_t *usPerTimer0; //microsecond per tick
+} tCh;
+
 
 //struct for holding info about the midi file itself, for info display purposes
 typedef struct midiRecord {
+	tCh myTempos; //keeps all tempo changes here
 	char *fileName;
 	uint16_t format; //0: single track, 1: multitrack
 	uint16_t trackcount;
-	uint8_t bpm;
 	uint32_t tick; //ticks per beat (aka per quarter note). default of 48 can and will probably be replaced by reading a std midi file
 	uint32_t fileSize; //number of bytes for the midi file
 	double fudge; //conversion factor for time units away from microseconds towards one for the cpu bound timer0, which is 2/3rds of a second long when it goes from 0x000000 to 0xFFFFFF) default is 25.1658
@@ -70,6 +76,7 @@ typedef struct midiRecord {
 	uint32_t totalDuration; //in units to be divded by 125000 and fudge to get seconds
 	uint16_t totalSec;
 	uint16_t currentSec;
+	uint8_t  nbTempoChanges; //count of tempo changes to perform during playback
 } midiRec, *midiRecPtr;
 
 //the following three structs are for midi event playback. keep every aMIDIEvent's content in far memory

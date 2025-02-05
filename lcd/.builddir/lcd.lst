@@ -1,0 +1,798 @@
+
+lcd.elf:	file format elf32-mos
+
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 zero-bss.c
+00000000 l    df *ABS*	00000000 ld-temp.o
+00000894 l     O .bss	00000007 kernelEventData
+00000864 l     O .rodata	00000030 textColors
+0000089c l     O .bss	00000001 _col
+0000089d l     O .bss	00000001 _row
+0000089b l     O .bss	00000001 kernelError
+00000325 g     F .text	0000051a main
+00030d00 g       .mac	00000000 mac_end
+00010000 g       .mac	00000000 mac_start
+0000030e g       .text	00000000 __after_main
+00000300 g       .text	00000000 __do_init_stack
+00000308 g       .text	00000000 __do_zero_bss
+00000312 g     F .text	00000013 __zero_bss
+0000083f g     F .text	00000005 exit
+00000311 g       .text	00000000 _fini
+00000844  w    F .text	00000020 __memset
+00001000  w      *ABS*	00000000 __heap_default_limit
+0000089e g       .noinit	00000000 __heap_start
+00000010 g       *ABS*	00000000 __rc0
+00000012 g       *ABS*	00000000 __rc2
+00000014 g       *ABS*	00000000 __rc4
+00000016 g       *ABS*	00000000 __rc6
+00000018 g       *ABS*	00000000 __rc8
+0000001a g       *ABS*	00000000 __rc10
+0000001c g       *ABS*	00000000 __rc12
+0000001e g       *ABS*	00000000 __rc14
+00000020 g       *ABS*	00000000 __rc16
+00000022 g       *ABS*	00000000 __rc18
+00000024 g       *ABS*	00000000 __rc20
+00000026 g       *ABS*	00000000 __rc22
+00000028 g       *ABS*	00000000 __rc24
+0000002a g       *ABS*	00000000 __rc26
+0000002c g       *ABS*	00000000 __rc28
+0000002e g       *ABS*	00000000 __rc30
+0000002f g       *ABS*	00000000 __rc31
+00000300 g       *ABS*	00000000 __f256_start
+0000a000 g       *ABS*	00000000 __stack
+0000a000 g       *ABS*	00000000 __SLOT_ADDR
+0800a000 g       *ABS*	00000000 __block8_lma
+00002000 g       *ABS*	00000000 __BLOCK_SIZE
+0900a000 g       *ABS*	00000000 __block9_lma
+0a00a000 g       *ABS*	00000000 __block10_lma
+0b00a000 g       *ABS*	00000000 __block11_lma
+0c00a000 g       *ABS*	00000000 __block12_lma
+0d00a000 g       *ABS*	00000000 __block13_lma
+0e00a000 g       *ABS*	00000000 __block14_lma
+0f00a000 g       *ABS*	00000000 __block15_lma
+1000a000 g       *ABS*	00000000 __block16_lma
+1100a000 g       *ABS*	00000000 __block17_lma
+1200a000 g       *ABS*	00000000 __block18_lma
+1300a000 g       *ABS*	00000000 __block19_lma
+1400a000 g       *ABS*	00000000 __block20_lma
+1500a000 g       *ABS*	00000000 __block21_lma
+1600a000 g       *ABS*	00000000 __block22_lma
+1700a000 g       *ABS*	00000000 __block23_lma
+00010000 g       *ABS*	00000000 __mac_lma
+00020d00 g       *ABS*	00000000 __mac_size
+00000894 g       .bss	00000000 __bss_start
+00030d00 g       .mac	00000000 end_mac
+00000300 g       .text	00000000 _start
+0000002d g       *ABS*	00000000 __rc29
+0000002b g       *ABS*	00000000 __rc27
+00000029 g       *ABS*	00000000 __rc25
+00000027 g       *ABS*	00000000 __rc23
+00000025 g       *ABS*	00000000 __rc21
+00000023 g       *ABS*	00000000 __rc19
+00000021 g       *ABS*	00000000 __rc17
+0000001f g       *ABS*	00000000 __rc15
+0000001d g       *ABS*	00000000 __rc13
+0000001b g       *ABS*	00000000 __rc11
+00000019 g       *ABS*	00000000 __rc9
+00000017 g       *ABS*	00000000 __rc7
+00000015 g       *ABS*	00000000 __rc5
+00000013 g       *ABS*	00000000 __rc3
+00000011 g       *ABS*	00000000 __rc1
+00000030 g       .zp.data	00000000 __zp_data_start
+00000300 g       *ABS*	00000000 __zp_data_load_start
+00000000 g       *ABS*	00000000 __zp_data_size
+00000030 g       .zp.bss	00000000 __zp_bss_start
+00000000 g       *ABS*	00000000 __zp_bss_size
+00000300 g       .text	00000000 _init
+00000864 g       .text	00000000 __init_array_start
+00000864 g       .text	00000000 __init_array_end
+00000864 g       .text	00000000 __fini_array_start
+00000864 g       .text	00000000 __fini_array_end
+00000894 g       .data	00000000 __data_start
+00000894 g       .data	00000000 __data_end
+00000894 g       *ABS*	00000000 __data_load_start
+00000000 g       *ABS*	00000000 __data_size
+0000089e g       .bss	00000000 __bss_end
+0000000a g       *ABS*	00000000 __bss_size
+0000089e g       .noinit	00000000 end_block8
+0000089e g       .noinit	00000000 end_block9
+0000089e g       .noinit	00000000 end_block10
+0000089e g       .noinit	00000000 end_block11
+0000089e g       .noinit	00000000 end_block12
+0000089e g       .noinit	00000000 end_block13
+0000089e g       .noinit	00000000 end_block14
+0000089e g       .noinit	00000000 end_block15
+0000089e g       .noinit	00000000 end_block16
+0000089e g       .noinit	00000000 end_block17
+0000089e g       .noinit	00000000 end_block18
+0000089e g       .noinit	00000000 end_block19
+0000089e g       .noinit	00000000 end_block20
+0000089e g       .noinit	00000000 end_block21
+0000089e g       .noinit	00000000 end_block22
+0000089e g       .noinit	00000000 end_block23
+
+Disassembly of section .text:
+
+00000300 <_start>:
+     300: a9 00        	lda	#$0
+     302: 85 10        	sta	$10                     ; 0x2010 <end_block9+0x1772>
+     304: a9 a0        	lda	#$a0
+     306: 85 11        	sta	$11                     ; 0x2011 <end_block9+0x1773>
+
+00000308 <__do_zero_bss>:
+     308: 20 12 03     	jsr	$312 <__zero_bss>
+     30b: 20 25 03     	jsr	$325 <main>
+
+0000030e <__after_main>:
+     30e: 4c 3f 08     	jmp	$83f <exit>
+
+00000311 <_fini>:
+     311: 60           	rts
+
+00000312 <__zero_bss>:
+     312: a2 0a        	ldx	#$a
+     314: a0 00        	ldy	#$0
+     316: a9 94        	lda	#$94
+     318: 85 12        	sta	$12                     ; 0x2012 <end_block9+0x1774>
+     31a: a9 08        	lda	#$8
+     31c: 85 13        	sta	$13                     ; 0x2013 <end_block9+0x1775>
+     31e: a9 00        	lda	#$0
+     320: 84 14        	sty	$14                     ; 0x2014 <end_block9+0x1776>
+     322: 4c 44 08     	jmp	$844 <__memset>
+
+00000325 <main>:
+     325: 18           	clc
+     326: a5 10        	lda	$10                     ; 0x2010 <end_block9+0x1772>
+     328: 69 f7        	adc	#$f7
+     32a: 85 10        	sta	$10                     ; 0x2010 <end_block9+0x1772>
+     32c: a5 11        	lda	$11                     ; 0x2011 <end_block9+0x1773>
+     32e: 69 ff        	adc	#$ff
+     330: 85 11        	sta	$11                     ; 0x2011 <end_block9+0x1773>
+     332: 64 14        	stz	$14                     ; 0x2014 <end_block9+0x1776>
+     334: a2 00        	ldx	#$0
+     336: 86 12        	stx	$12                     ; 0x2012 <end_block9+0x1774>
+     338: a2 c0        	ldx	#$c0
+     33a: 86 13        	stx	$13                     ; 0x2013 <end_block9+0x1775>
+     33c: 64 01        	stz	$1                      ; 0x2001 <end_block9+0x1763>
+     33e: a2 3f        	ldx	#$3f
+     340: 8e 00 d0     	stx	$d000                   ; 0xd000 <end_block9+0xc762>
+     343: a2 b3        	ldx	#$b3
+     345: 86 00        	stx	$0                      ; 0x2000 <end_block9+0x1762>
+     347: 64 08        	stz	$8                      ; 0x2008 <end_block9+0x176a>
+     349: a2 01        	ldx	#$1
+     34b: 86 09        	stx	$9                      ; 0x2009 <end_block9+0x176b>
+     34d: e8           	inx
+     34e: 86 0a        	stx	$a                      ; 0x200a <end_block9+0x176c>
+     350: e8           	inx
+     351: 86 0b        	stx	$b                      ; 0x200b <end_block9+0x176d>
+     353: e8           	inx
+     354: 86 0c        	stx	$c                      ; 0x200c <end_block9+0x176e>
+     356: e8           	inx
+     357: 86 0d        	stx	$d                      ; 0x200d <end_block9+0x176f>
+     359: a2 94        	ldx	#$94
+     35b: a0 08        	ldy	#$8
+     35d: 86 f0        	stx	$f0                     ; 0x20f0 <end_block9+0x1852>
+     35f: 84 f1        	sty	$f1                     ; 0x20f1 <end_block9+0x1853>
+     361: a2 00        	ldx	#$0
+     363: 86 18        	stx	$18                     ; 0x2018 <end_block9+0x177a>
+     365: ca           	dex
+     366: 86 19        	stx	$19                     ; 0x2019 <end_block9+0x177b>
+     368: 8a           	txa
+     369: 0a           	asl
+     36a: 0a           	asl
+     36b: 18           	clc
+     36c: 69 d4        	adc	#$d4
+     36e: 85 1a        	sta	$1a                     ; 0x201a <end_block9+0x177c>
+     370: a0 00        	ldy	#$0
+     372: 64 17        	stz	$17                     ; 0x2017 <end_block9+0x1779>
+     374: 64 16        	stz	$16                     ; 0x2016 <end_block9+0x1778>
+     376: a6 19        	ldx	$19                     ; 0x2019 <end_block9+0x177b>
+     378: e0 03        	cpx	#$3
+     37a: a6 01        	ldx	$1                      ; 0x2001 <end_block9+0x1763>
+     37c: 86 1c        	stx	$1c                     ; 0x201c <end_block9+0x177e>
+     37e: a2 d0        	ldx	#$d0
+     380: 84 1b        	sty	$1b                     ; 0x201b <end_block9+0x177d>
+     382: b0 02        	bcs	$386 <main+0x61>
+     384: a6 1a        	ldx	$1a                     ; 0x201a <end_block9+0x177c>
+     386: 86 15        	stx	$15                     ; 0x2015 <end_block9+0x1777>
+     388: a5 17        	lda	$17                     ; 0x2017 <end_block9+0x1779>
+     38a: 18           	clc
+     38b: 65 14        	adc	$14                     ; 0x2014 <end_block9+0x1776>
+     38d: a8           	tay
+     38e: a6 17        	ldx	$17                     ; 0x2017 <end_block9+0x1779>
+     390: a5 16        	lda	$16                     ; 0x2016 <end_block9+0x1778>
+     392: 85 1d        	sta	$1d                     ; 0x201d <end_block9+0x177f>
+     394: a5 16        	lda	$16                     ; 0x2016 <end_block9+0x1778>
+     396: 65 15        	adc	$15                     ; 0x2015 <end_block9+0x1777>
+     398: 84 16        	sty	$16                     ; 0x2016 <end_block9+0x1778>
+     39a: a0 01        	ldy	#$1
+     39c: 84 01        	sty	$1                      ; 0x2001 <end_block9+0x1763>
+     39e: 85 17        	sta	$17                     ; 0x2017 <end_block9+0x1779>
+     3a0: a5 1b        	lda	$1b                     ; 0x201b <end_block9+0x177d>
+     3a2: 92 16        	sta	($16)                   ; 0x2016 <end_block9+0x1778>
+     3a4: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     3a6: c8           	iny
+     3a7: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     3a9: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     3ab: c8           	iny
+     3ac: a9 ff        	lda	#$ff
+     3ae: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     3b0: 8a           	txa
+     3b1: a6 1c        	ldx	$1c                     ; 0x201c <end_block9+0x177e>
+     3b3: 86 01        	stx	$1                      ; 0x2001 <end_block9+0x1763>
+     3b5: 18           	clc
+     3b6: 69 04        	adc	#$4
+     3b8: 85 17        	sta	$17                     ; 0x2017 <end_block9+0x1779>
+     3ba: a5 1d        	lda	$1d                     ; 0x201d <end_block9+0x177f>
+     3bc: 69 00        	adc	#$0
+     3be: e6 15        	inc	$15                     ; 0x2015 <end_block9+0x1777>
+     3c0: a4 15        	ldy	$15                     ; 0x2015 <end_block9+0x1777>
+     3c2: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     3c4: c9 04        	cmp	#$4
+     3c6: f0 03        	beq	$3cb <main+0xa6>
+     3c8: 4c 76 03     	jmp	$376 <main+0x51>
+     3cb: a5 17        	lda	$17                     ; 0x2017 <end_block9+0x1779>
+     3cd: f0 03        	beq	$3d2 <main+0xad>
+     3cf: 4c 76 03     	jmp	$376 <main+0x51>
+     3d2: a6 18        	ldx	$18                     ; 0x2018 <end_block9+0x177a>
+     3d4: e8           	inx
+     3d5: e0 04        	cpx	#$4
+     3d7: f0 03        	beq	$3dc <main+0xb7>
+     3d9: 4c 63 03     	jmp	$363 <main+0x3e>
+     3dc: ad 02 d0     	lda	$d002                   ; 0xd002 <end_block9+0xc764>
+     3df: 29 f0        	and	#$f0
+     3e1: 8d 02 d0     	sta	$d002                   ; 0xd002 <end_block9+0xc764>
+     3e4: ad 02 d0     	lda	$d002                   ; 0xd002 <end_block9+0xc764>
+     3e7: 29 0f        	and	#$f
+     3e9: 09 10        	ora	#$10
+     3eb: 8d 02 d0     	sta	$d002                   ; 0xd002 <end_block9+0xc764>
+     3ee: a2 02        	ldx	#$2
+     3f0: 8e 03 d0     	stx	$d003                   ; 0xd003 <end_block9+0xc765>
+     3f3: ad 01 d0     	lda	$d001                   ; 0xd001 <end_block9+0xc763>
+     3f6: 29 f9        	and	#$f9
+     3f8: 09 04        	ora	#$4
+     3fa: 8d 01 d0     	sta	$d001                   ; 0xd001 <end_block9+0xc763>
+     3fd: 64 14        	stz	$14                     ; 0x2014 <end_block9+0x1776>
+     3ff: 9c 10 d0     	stz	$d010                   ; 0xd010 <end_block9+0xc772>
+     402: a2 00        	ldx	#$0
+     404: 64 15        	stz	$15                     ; 0x2015 <end_block9+0x1777>
+     406: 86 18        	stx	$18                     ; 0x2018 <end_block9+0x177a>
+     408: a4 18        	ldy	$18                     ; 0x2018 <end_block9+0x177a>
+     40a: be 64 08     	ldx	$864,y                  ; 0x864 <textColors>
+     40d: 86 19        	stx	$19                     ; 0x2019 <end_block9+0x177b>
+     40f: be 65 08     	ldx	$865,y                  ; 0x865 <textColors+0x1>
+     412: 86 1a        	stx	$1a                     ; 0x201a <end_block9+0x177c>
+     414: be 66 08     	ldx	$866,y                  ; 0x866 <textColors+0x2>
+     417: 86 1b        	stx	$1b                     ; 0x201b <end_block9+0x177d>
+     419: a6 15        	ldx	$15                     ; 0x2015 <end_block9+0x1777>
+     41b: 8e 00 de     	stx	$de00                   ; 0xde00 <end_block9+0xd562>
+     41e: 86 17        	stx	$17                     ; 0x2017 <end_block9+0x1779>
+     420: 9c 01 de     	stz	$de01                   ; 0xde01 <end_block9+0xd563>
+     423: a2 04        	ldx	#$4
+     425: 8e 02 de     	stx	$de02                   ; 0xde02 <end_block9+0xd564>
+     428: 9c 03 de     	stz	$de03                   ; 0xde03 <end_block9+0xd565>
+     42b: ad 10 de     	lda	$de10                   ; 0xde10 <end_block9+0xd572>
+     42e: ac 11 de     	ldy	$de11                   ; 0xde11 <end_block9+0xd573>
+     431: 84 15        	sty	$15                     ; 0x2015 <end_block9+0x1777>
+     433: ac 12 de     	ldy	$de12                   ; 0xde12 <end_block9+0xd574>
+     436: ac 13 de     	ldy	$de13                   ; 0xde13 <end_block9+0xd575>
+     439: 18           	clc
+     43a: 65 14        	adc	$14                     ; 0x2014 <end_block9+0x1776>
+     43c: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     43e: a6 17        	ldx	$17                     ; 0x2017 <end_block9+0x1779>
+     440: a9 d8        	lda	#$d8
+     442: 65 15        	adc	$15                     ; 0x2015 <end_block9+0x1777>
+     444: 85 17        	sta	$17                     ; 0x2017 <end_block9+0x1779>
+     446: a5 1b        	lda	$1b                     ; 0x201b <end_block9+0x177d>
+     448: 92 16        	sta	($16)                   ; 0x2016 <end_block9+0x1778>
+     44a: a0 01        	ldy	#$1
+     44c: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     44e: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     450: c8           	iny
+     451: a5 19        	lda	$19                     ; 0x2019 <end_block9+0x177b>
+     453: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     455: c8           	iny
+     456: a9 ff        	lda	#$ff
+     458: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     45a: 8e 00 de     	stx	$de00                   ; 0xde00 <end_block9+0xd562>
+     45d: 9c 01 de     	stz	$de01                   ; 0xde01 <end_block9+0xd563>
+     460: c8           	iny
+     461: 8c 02 de     	sty	$de02                   ; 0xde02 <end_block9+0xd564>
+     464: 9c 03 de     	stz	$de03                   ; 0xde03 <end_block9+0xd565>
+     467: ad 10 de     	lda	$de10                   ; 0xde10 <end_block9+0xd572>
+     46a: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     46c: ad 11 de     	lda	$de11                   ; 0xde11 <end_block9+0xd573>
+     46f: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     471: a9 40        	lda	#$40
+     473: 18           	clc
+     474: 65 15        	adc	$15                     ; 0x2015 <end_block9+0x1777>
+     476: a8           	tay
+     477: a9 d8        	lda	#$d8
+     479: 65 16        	adc	$16                     ; 0x2016 <end_block9+0x1778>
+     47b: 85 17        	sta	$17                     ; 0x2017 <end_block9+0x1779>
+     47d: 84 16        	sty	$16                     ; 0x2016 <end_block9+0x1778>
+     47f: ad 12 de     	lda	$de12                   ; 0xde12 <end_block9+0xd574>
+     482: ad 13 de     	lda	$de13                   ; 0xde13 <end_block9+0xd575>
+     485: a5 1b        	lda	$1b                     ; 0x201b <end_block9+0x177d>
+     487: 92 16        	sta	($16)                   ; 0x2016 <end_block9+0x1778>
+     489: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     48b: a0 01        	ldy	#$1
+     48d: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     48f: a5 19        	lda	$19                     ; 0x2019 <end_block9+0x177b>
+     491: c8           	iny
+     492: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     494: c8           	iny
+     495: a9 ff        	lda	#$ff
+     497: 91 16        	sta	($16),y                 ; 0x2016 <end_block9+0x1778>
+     499: e8           	inx
+     49a: 86 15        	stx	$15                     ; 0x2015 <end_block9+0x1777>
+     49c: 18           	clc
+     49d: a5 18        	lda	$18                     ; 0x2018 <end_block9+0x177a>
+     49f: 69 03        	adc	#$3
+     4a1: aa           	tax
+     4a2: c9 30        	cmp	#$30
+     4a4: f0 03        	beq	$4a9 <main+0x184>
+     4a6: 4c 06 04     	jmp	$406 <main+0xe1>
+     4a9: a6 01        	ldx	$1                      ; 0x2001 <end_block9+0x1763>
+     4ab: 86 18        	stx	$18                     ; 0x2018 <end_block9+0x177a>
+     4ad: a2 50        	ldx	#$50
+     4af: 8e 00 de     	stx	$de00                   ; 0xde00 <end_block9+0xd562>
+     4b2: 9c 01 de     	stz	$de01                   ; 0xde01 <end_block9+0xd563>
+     4b5: a2 1e        	ldx	#$1e
+     4b7: 8e 02 de     	stx	$de02                   ; 0xde02 <end_block9+0xd564>
+     4ba: 9c 03 de     	stz	$de03                   ; 0xde03 <end_block9+0xd565>
+     4bd: ae 10 de     	ldx	$de10                   ; 0xde10 <end_block9+0xd572>
+     4c0: ac 11 de     	ldy	$de11                   ; 0xde11 <end_block9+0xd573>
+     4c3: ad 12 de     	lda	$de12                   ; 0xde12 <end_block9+0xd574>
+     4c6: ad 13 de     	lda	$de13                   ; 0xde13 <end_block9+0xd575>
+     4c9: a9 02        	lda	#$2
+     4cb: 85 01        	sta	$1                      ; 0x2001 <end_block9+0x1763>
+     4cd: e0 01        	cpx	#$1
+     4cf: 98           	tya
+     4d0: e9 00        	sbc	#$0
+     4d2: 50 02        	bvc	$4d6 <main+0x1b1>
+     4d4: 49 80        	eor	#$80
+     4d6: c9 00        	cmp	#$0
+     4d8: 30 48        	bmi	$522 <main+0x1fd>
+     4da: a9 20        	lda	#$20
+     4dc: 86 19        	stx	$19                     ; 0x2019 <end_block9+0x177b>
+     4de: 86 14        	stx	$14                     ; 0x2014 <end_block9+0x1776>
+     4e0: 84 15        	sty	$15                     ; 0x2015 <end_block9+0x1777>
+     4e2: a2 00        	ldx	#$0
+     4e4: 86 16        	stx	$16                     ; 0x2016 <end_block9+0x1778>
+     4e6: a2 c0        	ldx	#$c0
+     4e8: 86 17        	stx	$17                     ; 0x2017 <end_block9+0x1779>
+     4ea: 92 16        	sta	($16)                   ; 0x2016 <end_block9+0x1778>
+     4ec: e6 16        	inc	$16                     ; 0x2016 <end_block9+0x1778>
+     4ee: d0 02        	bne	$4f2 <main+0x1cd>
+     4f0: e6 17        	inc	$17                     ; 0x2017 <end_block9+0x1779>
+     4f2: a2 ff        	ldx	#$ff
+     4f4: c6 14        	dec	$14                     ; 0x2014 <end_block9+0x1776>
+     4f6: e4 14        	cpx	$14                     ; 0x2014 <end_block9+0x1776>
+     4f8: d0 02        	bne	$4fc <main+0x1d7>
+     4fa: c6 15        	dec	$15                     ; 0x2015 <end_block9+0x1777>
+     4fc: a6 15        	ldx	$15                     ; 0x2015 <end_block9+0x1777>
+     4fe: d0 ea        	bne	$4ea <main+0x1c5>
+     500: a6 14        	ldx	$14                     ; 0x2014 <end_block9+0x1776>
+     502: d0 e6        	bne	$4ea <main+0x1c5>
+     504: a2 03        	ldx	#$3
+     506: 86 01        	stx	$1                      ; 0x2001 <end_block9+0x1763>
+     508: a6 19        	ldx	$19                     ; 0x2019 <end_block9+0x177b>
+     50a: a9 f0        	lda	#$f0
+     50c: 92 12        	sta	($12)                   ; 0x2012 <end_block9+0x1774>
+     50e: e6 12        	inc	$12                     ; 0x2012 <end_block9+0x1774>
+     510: d0 02        	bne	$514 <main+0x1ef>
+     512: e6 13        	inc	$13                     ; 0x2013 <end_block9+0x1775>
+     514: ca           	dex
+     515: e0 ff        	cpx	#$ff
+     517: d0 01        	bne	$51a <main+0x1f5>
+     519: 88           	dey
+     51a: 98           	tya
+     51b: d0 ed        	bne	$50a <main+0x1e5>
+     51d: 8a           	txa
+     51e: d0 ea        	bne	$50a <main+0x1e5>
+     520: 80 04        	bra	$526 <main+0x201>
+     522: a2 03        	ldx	#$3
+     524: 86 01        	stx	$1                      ; 0x2001 <end_block9+0x1763>
+     526: a6 18        	ldx	$18                     ; 0x2018 <end_block9+0x177a>
+     528: 86 01        	stx	$1                      ; 0x2001 <end_block9+0x1763>
+     52a: 9c 9c 08     	stz	$89c                    ; 0x89c <_col>
+     52d: 9c 14 d0     	stz	$d014                   ; 0xd014 <end_block9+0xc776>
+     530: 9c 15 d0     	stz	$d015                   ; 0xd015 <end_block9+0xc777>
+     533: 9c 9d 08     	stz	$89d                    ; 0x89d <_row>
+     536: 9c 16 d0     	stz	$d016                   ; 0xd016 <end_block9+0xc778>
+     539: 9c 17 d0     	stz	$d017                   ; 0xd017 <end_block9+0xc779>
+     53c: a2 40        	ldx	#$40
+     53e: 8e 00 de     	stx	$de00                   ; 0xde00 <end_block9+0xd562>
+     541: a2 01        	ldx	#$1
+     543: 8e 01 de     	stx	$de01                   ; 0xde01 <end_block9+0xd563>
+     546: a2 f0        	ldx	#$f0
+     548: 8e 02 de     	stx	$de02                   ; 0xde02 <end_block9+0xd564>
+     54b: 9c 03 de     	stz	$de03                   ; 0xde03 <end_block9+0xd565>
+     54e: ae 10 de     	ldx	$de10                   ; 0xde10 <end_block9+0xd572>
+     551: 86 17        	stx	$17                     ; 0x2017 <end_block9+0x1779>
+     553: ae 11 de     	ldx	$de11                   ; 0xde11 <end_block9+0xd573>
+     556: 86 12        	stx	$12                     ; 0x2012 <end_block9+0x1774>
+     558: ae 12 de     	ldx	$de12                   ; 0xde12 <end_block9+0xd574>
+     55b: 86 13        	stx	$13                     ; 0x2013 <end_block9+0x1775>
+     55d: ae 13 de     	ldx	$de13                   ; 0xde13 <end_block9+0xd575>
+     560: 86 14        	stx	$14                     ; 0x2014 <end_block9+0x1776>
+     562: a4 12        	ldy	$12                     ; 0x2012 <end_block9+0x1774>
+     564: 84 15        	sty	$15                     ; 0x2015 <end_block9+0x1777>
+     566: 06 15        	asl	$15                     ; 0x2015 <end_block9+0x1777>
+     568: a5 13        	lda	$13                     ; 0x2013 <end_block9+0x1775>
+     56a: 2a           	rol
+     56b: 86 16        	stx	$16                     ; 0x2016 <end_block9+0x1778>
+     56d: 26 16        	rol	$16                     ; 0x2016 <end_block9+0x1778>
+     56f: 06 15        	asl	$15                     ; 0x2015 <end_block9+0x1777>
+     571: 2a           	rol
+     572: 26 16        	rol	$16                     ; 0x2016 <end_block9+0x1778>
+     574: 06 15        	asl	$15                     ; 0x2015 <end_block9+0x1777>
+     576: 2a           	rol
+     577: 26 16        	rol	$16                     ; 0x2016 <end_block9+0x1778>
+     579: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     57b: 8d 00 de     	sta	$de00                   ; 0xde00 <end_block9+0xd562>
+     57e: a5 16        	lda	$16                     ; 0x2016 <end_block9+0x1778>
+     580: 8d 01 de     	sta	$de01                   ; 0xde01 <end_block9+0xd563>
+     583: 9c 02 de     	stz	$de02                   ; 0xde02 <end_block9+0xd564>
+     586: a2 20        	ldx	#$20
+     588: 8e 03 de     	stx	$de03                   ; 0xde03 <end_block9+0xd565>
+     58b: ae 10 de     	ldx	$de10                   ; 0xde10 <end_block9+0xd572>
+     58e: 86 16        	stx	$16                     ; 0x2016 <end_block9+0x1778>
+     590: ae 11 de     	ldx	$de11                   ; 0xde11 <end_block9+0xd573>
+     593: 86 18        	stx	$18                     ; 0x2018 <end_block9+0x177a>
+     595: ac 12 de     	ldy	$de12                   ; 0xde12 <end_block9+0xd574>
+     598: ae 13 de     	ldx	$de13                   ; 0xde13 <end_block9+0xd575>
+     59b: e4 14        	cpx	$14                     ; 0x2014 <end_block9+0x1776>
+     59d: d0 14        	bne	$5b3 <main+0x28e>
+     59f: c4 13        	cpy	$13                     ; 0x2013 <end_block9+0x1775>
+     5a1: d0 10        	bne	$5b3 <main+0x28e>
+     5a3: a6 18        	ldx	$18                     ; 0x2018 <end_block9+0x177a>
+     5a5: e4 12        	cpx	$12                     ; 0x2012 <end_block9+0x1774>
+     5a7: d0 0a        	bne	$5b3 <main+0x28e>
+     5a9: a6 16        	ldx	$16                     ; 0x2016 <end_block9+0x1778>
+     5ab: e4 17        	cpx	$17                     ; 0x2017 <end_block9+0x1779>
+     5ad: d0 04        	bne	$5b3 <main+0x28e>
+     5af: a6 15        	ldx	$15                     ; 0x2015 <end_block9+0x1777>
+     5b1: 80 06        	bra	$5b9 <main+0x294>
+     5b3: a6 15        	ldx	$15                     ; 0x2015 <end_block9+0x1777>
+     5b5: e8           	inx
+     5b6: d0 01        	bne	$5b9 <main+0x294>
+     5b8: 1a           	inc
+     5b9: 8e 00 de     	stx	$de00                   ; 0xde00 <end_block9+0xd562>
+     5bc: 8d 01 de     	sta	$de01                   ; 0xde01 <end_block9+0xd563>
+     5bf: 9c 02 de     	stz	$de02                   ; 0xde02 <end_block9+0xd564>
+     5c2: a2 20        	ldx	#$20
+     5c4: 8e 03 de     	stx	$de03                   ; 0xde03 <end_block9+0xd565>
+     5c7: ae 10 de     	ldx	$de10                   ; 0xde10 <end_block9+0xd572>
+     5ca: 86 12        	stx	$12                     ; 0x2012 <end_block9+0x1774>
+     5cc: ae 11 de     	ldx	$de11                   ; 0xde11 <end_block9+0xd573>
+     5cf: 86 13        	stx	$13                     ; 0x2013 <end_block9+0x1775>
+     5d1: ae 12 de     	ldx	$de12                   ; 0xde12 <end_block9+0xd574>
+     5d4: 86 14        	stx	$14                     ; 0x2014 <end_block9+0x1776>
+     5d6: a9 00        	lda	#$0
+     5d8: 38           	sec
+     5d9: e5 12        	sbc	$12                     ; 0x2012 <end_block9+0x1774>
+     5db: a8           	tay
+     5dc: a9 00        	lda	#$0
+     5de: e5 13        	sbc	$13                     ; 0x2013 <end_block9+0x1775>
+     5e0: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     5e2: a9 08        	lda	#$8
+     5e4: e5 14        	sbc	$14                     ; 0x2014 <end_block9+0x1776>
+     5e6: aa           	tax
+     5e7: 98           	tya
+     5e8: 84 17        	sty	$17                     ; 0x2017 <end_block9+0x1779>
+     5ea: 38           	sec
+     5eb: e5 12        	sbc	$12                     ; 0x2012 <end_block9+0x1774>
+     5ed: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     5ef: a5 15        	lda	$15                     ; 0x2015 <end_block9+0x1777>
+     5f1: e5 13        	sbc	$13                     ; 0x2013 <end_block9+0x1775>
+     5f3: 85 18        	sta	$18                     ; 0x2018 <end_block9+0x177a>
+     5f5: 8a           	txa
+     5f6: 86 19        	stx	$19                     ; 0x2019 <end_block9+0x177b>
+     5f8: e5 14        	sbc	$14                     ; 0x2014 <end_block9+0x1776>
+     5fa: a8           	tay
+     5fb: 38           	sec
+     5fc: a5 16        	lda	$16                     ; 0x2016 <end_block9+0x1778>
+     5fe: e5 12        	sbc	$12                     ; 0x2012 <end_block9+0x1774>
+     600: 85 12        	sta	$12                     ; 0x2012 <end_block9+0x1774>
+     602: a5 18        	lda	$18                     ; 0x2018 <end_block9+0x177a>
+     604: e5 13        	sbc	$13                     ; 0x2013 <end_block9+0x1775>
+     606: 85 13        	sta	$13                     ; 0x2013 <end_block9+0x1775>
+     608: 98           	tya
+     609: e5 14        	sbc	$14                     ; 0x2014 <end_block9+0x1776>
+     60b: ae 13 de     	ldx	$de13                   ; 0xde13 <end_block9+0xd575>
+     60e: a6 17        	ldx	$17                     ; 0x2017 <end_block9+0x1779>
+     610: 8e 01 d1     	stx	$d101                   ; 0xd101 <end_block9+0xc863>
+     613: a6 15        	ldx	$15                     ; 0x2015 <end_block9+0x1777>
+     615: 8e 02 d1     	stx	$d102                   ; 0xd102 <end_block9+0xc864>
+     618: a6 19        	ldx	$19                     ; 0x2019 <end_block9+0x177b>
+     61a: 8e 03 d1     	stx	$d103                   ; 0xd103 <end_block9+0xc865>
+     61d: a6 16        	ldx	$16                     ; 0x2016 <end_block9+0x1778>
+     61f: 8e 09 d1     	stx	$d109                   ; 0xd109 <end_block9+0xc86b>
+     622: a6 18        	ldx	$18                     ; 0x2018 <end_block9+0x177a>
+     624: 8e 0a d1     	stx	$d10a                   ; 0xd10a <end_block9+0xc86c>
+     627: 8c 0b d1     	sty	$d10b                   ; 0xd10b <end_block9+0xc86d>
+     62a: a6 12        	ldx	$12                     ; 0x2012 <end_block9+0x1774>
+     62c: 8e 11 d1     	stx	$d111                   ; 0xd111 <end_block9+0xc873>
+     62f: a6 13        	ldx	$13                     ; 0x2013 <end_block9+0x1775>
+     631: 8e 12 d1     	stx	$d112                   ; 0xd112 <end_block9+0xc874>
+     634: 8d 13 d1     	sta	$d113                   ; 0xd113 <end_block9+0xc875>
+     637: 9c 00 d1     	stz	$d100                   ; 0xd100 <end_block9+0xc862>
+     63a: 9c 08 d1     	stz	$d108                   ; 0xd108 <end_block9+0xc86a>
+     63d: 9c 10 d1     	stz	$d110                   ; 0xd110 <end_block9+0xc872>
+     640: a2 10        	ldx	#$10
+     642: 8e 00 d2     	stx	$d200                   ; 0xd200 <end_block9+0xc962>
+     645: 8e 0c d2     	stx	$d20c                   ; 0xd20c <end_block9+0xc96e>
+     648: 8e 18 d2     	stx	$d218                   ; 0xd218 <end_block9+0xc97a>
+     64b: a0 d9        	ldy	#$d9
+     64d: a2 40        	ldx	#$40
+     64f: 64 12        	stz	$12                     ; 0x2012 <end_block9+0x1774>
+     651: 84 13        	sty	$13                     ; 0x2013 <end_block9+0x1775>
+     653: a9 00        	lda	#$0
+     655: 92 12        	sta	($12)                   ; 0x2012 <end_block9+0x1774>
+     657: ca           	dex
+     658: 18           	clc
+     659: a5 12        	lda	$12                     ; 0x2012 <end_block9+0x1774>
+     65b: 69 08        	adc	#$8
+     65d: 85 12        	sta	$12                     ; 0x2012 <end_block9+0x1774>
+     65f: 98           	tya
+     660: 69 00        	adc	#$0
+     662: a8           	tay
+     663: 8a           	txa
+     664: d0 eb        	bne	$651 <main+0x32c>
+     666: 18           	clc
+     667: a5 10        	lda	$10                     ; 0x2010 <end_block9+0x1772>
+     669: 69 01        	adc	#$1
+     66b: 85 12        	sta	$12                     ; 0x2012 <end_block9+0x1774>
+     66d: a5 11        	lda	$11                     ; 0x2011 <end_block9+0x1773>
+     66f: 69 00        	adc	#$0
+     671: 85 13        	sta	$13                     ; 0x2013 <end_block9+0x1775>
+     673: a6 12        	ldx	$12                     ; 0x2012 <end_block9+0x1774>
+     675: 86 fb        	stx	$fb                     ; 0x20fb <end_block9+0x185d>
+     677: 85 fc        	sta	$fc                     ; 0x20fc <end_block9+0x185e>
+     679: a2 08        	ldx	#$8
+     67b: 86 fd        	stx	$fd                     ; 0x20fd <end_block9+0x185f>
+     67d: 18           	clc
+     67e: a6 10        	ldx	$10                     ; 0x2010 <end_block9+0x1772>
+     680: 86 14        	stx	$14                     ; 0x2014 <end_block9+0x1776>
+     682: a6 11        	ldx	$11                     ; 0x2011 <end_block9+0x1773>
+     684: 86 15        	stx	$15                     ; 0x2015 <end_block9+0x1777>
+     686: a2 9b        	ldx	#$9b
+     688: 86 16        	stx	$16                     ; 0x2016 <end_block9+0x1778>
+     68a: a2 08        	ldx	#$8
+     68c: 86 17        	stx	$17                     ; 0x2017 <end_block9+0x1779>
+     68e: a0 06        	ldy	#$6
+     690: 20 dc ff     	jsr	$ffdc <end_block9+0xf73e>
+     693: 92 14        	sta	($14)                   ; 0x2014 <end_block9+0x1776>
+     695: a9 00        	lda	#$0
+     697: 6a           	ror
+     698: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     69a: b1 12        	lda	($12),y                 ; 0x2012 <end_block9+0x1774>
+     69c: 85 14        	sta	$14                     ; 0x2014 <end_block9+0x1776>
+     69e: c8           	iny
+     69f: b1 12        	lda	($12),y                 ; 0x2012 <end_block9+0x1774>
+     6a1: a6 14        	ldx	$14                     ; 0x2014 <end_block9+0x1776>
+     6a3: 8e 00 de     	stx	$de00                   ; 0xde00 <end_block9+0xd562>
+     6a6: 9c 01 de     	stz	$de01                   ; 0xde01 <end_block9+0xd563>
+     6a9: 8d 02 de     	sta	$de02                   ; 0xde02 <end_block9+0xd564>
+     6ac: 9c 03 de     	stz	$de03                   ; 0xde03 <end_block9+0xd565>
+     6af: ae 10 de     	ldx	$de10                   ; 0xde10 <end_block9+0xd572>
+     6b2: ac 11 de     	ldy	$de11                   ; 0xde11 <end_block9+0xd573>
+     6b5: ad 12 de     	lda	$de12                   ; 0xde12 <end_block9+0xd574>
+     6b8: ad 13 de     	lda	$de13                   ; 0xde13 <end_block9+0xd575>
+     6bb: 8e a4 d6     	stx	$d6a4                   ; 0xd6a4 <end_block9+0xce06>
+     6be: 8c a5 d6     	sty	$d6a5                   ; 0xd6a5 <end_block9+0xce07>
+     6c1: a2 03        	ldx	#$3
+     6c3: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <end_block9+0xce08>
+     6c6: a2 2a        	ldx	#$2a
+     6c8: 8e 40 dd     	stx	$dd40                   ; 0xdd40 <end_block9+0xd4a2>
+     6cb: a2 00        	ldx	#$0
+     6cd: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6d0: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6d3: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6d6: a0 ef        	ldy	#$ef
+     6d8: 8c 41 dd     	sty	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6db: a0 2b        	ldy	#$2b
+     6dd: 8c 40 dd     	sty	$dd40                   ; 0xdd40 <end_block9+0xd4a2>
+     6e0: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6e3: a0 14        	ldy	#$14
+     6e5: 8c 41 dd     	sty	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6e8: a0 01        	ldy	#$1
+     6ea: 8c 41 dd     	sty	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6ed: a0 40        	ldy	#$40
+     6ef: 8c 41 dd     	sty	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     6f2: a0 2c        	ldy	#$2c
+     6f4: 8c 40 dd     	sty	$dd40                   ; 0xdd40 <end_block9+0xd4a2>
+     6f7: a0 00        	ldy	#$0
+     6f9: a9 f0        	lda	#$f0
+     6fb: 9c 42 dd     	stz	$dd42                   ; 0xdd42 <end_block9+0xd4a4>
+     6fe: 9c 43 dd     	stz	$dd43                   ; 0xdd43 <end_block9+0xd4a5>
+     701: 3a           	dec
+     702: d0 f7        	bne	$6fb <main+0x3d6>
+     704: e8           	inx
+     705: d0 01        	bne	$708 <main+0x3e3>
+     707: c8           	iny
+     708: c0 01        	cpy	#$1
+     70a: d0 ed        	bne	$6f9 <main+0x3d4>
+     70c: e0 18        	cpx	#$18
+     70e: d0 e9        	bne	$6f9 <main+0x3d4>
+     710: a2 2a        	ldx	#$2a
+     712: 8e 40 dd     	stx	$dd40                   ; 0xdd40 <end_block9+0xd4a2>
+     715: 64 14        	stz	$14                     ; 0x2014 <end_block9+0x1776>
+     717: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     71a: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     71d: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     720: a2 ef        	ldx	#$ef
+     722: 8e 41 dd     	stx	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     725: a2 2b        	ldx	#$2b
+     727: 8e 40 dd     	stx	$dd40                   ; 0xdd40 <end_block9+0xd4a2>
+     72a: 9c 41 dd     	stz	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     72d: a2 14        	ldx	#$14
+     72f: 8e 41 dd     	stx	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     732: a2 01        	ldx	#$1
+     734: 8e 41 dd     	stx	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     737: a2 40        	ldx	#$40
+     739: 8e 41 dd     	stx	$dd41                   ; 0xdd41 <end_block9+0xd4a3>
+     73c: a2 2c        	ldx	#$2c
+     73e: 8e 40 dd     	stx	$dd40                   ; 0xdd40 <end_block9+0xd4a2>
+     741: 64 16        	stz	$16                     ; 0x2016 <end_block9+0x1778>
+     743: 64 15        	stz	$15                     ; 0x2015 <end_block9+0x1777>
+     745: a9 00        	lda	#$0
+     747: a8           	tay
+     748: aa           	tax
+     749: 64 13        	stz	$13                     ; 0x2013 <end_block9+0x1775>
+     74b: 64 12        	stz	$12                     ; 0x2012 <end_block9+0x1774>
+     74d: 86 18        	stx	$18                     ; 0x2018 <end_block9+0x177a>
+     74f: 84 17        	sty	$17                     ; 0x2017 <end_block9+0x1779>
+     751: a2 f0        	ldx	#$f0
+     753: a4 16        	ldy	$16                     ; 0x2016 <end_block9+0x1778>
+     755: 85 1d        	sta	$1d                     ; 0x201d <end_block9+0x177f>
+     757: a5 15        	lda	$15                     ; 0x2015 <end_block9+0x1777>
+     759: 85 1e        	sta	$1e                     ; 0x201e <end_block9+0x1780>
+     75b: a5 15        	lda	$15                     ; 0x2015 <end_block9+0x1777>
+     75d: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     75f: 84 1f        	sty	$1f                     ; 0x201f <end_block9+0x1781>
+     761: 84 1a        	sty	$1a                     ; 0x201a <end_block9+0x177c>
+     763: a4 14        	ldy	$14                     ; 0x2014 <end_block9+0x1776>
+     765: 84 1b        	sty	$1b                     ; 0x201b <end_block9+0x177d>
+     767: 18           	clc
+     768: 84 1c        	sty	$1c                     ; 0x201c <end_block9+0x177e>
+     76a: 98           	tya
+     76b: 69 00        	adc	#$0
+     76d: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     76f: 69 00        	adc	#$0
+     771: 85 14        	sta	$14                     ; 0x2014 <end_block9+0x1776>
+     773: a5 15        	lda	$15                     ; 0x2015 <end_block9+0x1777>
+     775: 69 01        	adc	#$1
+     777: 06 14        	asl	$14                     ; 0x2014 <end_block9+0x1776>
+     779: 2a           	rol
+     77a: 06 14        	asl	$14                     ; 0x2014 <end_block9+0x1776>
+     77c: 2a           	rol
+     77d: a4 0f        	ldy	$f                      ; 0x200f <end_block9+0x1771>
+     77f: 78           	sei
+     780: 06 14        	asl	$14                     ; 0x2014 <end_block9+0x1776>
+     782: 2a           	rol
+     783: 85 0f        	sta	$f                      ; 0x200f <end_block9+0x1771>
+     785: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     787: 09 e0        	ora	#$e0
+     789: 5a           	phy
+     78a: a4 1b        	ldy	$1b                     ; 0x201b <end_block9+0x177d>
+     78c: 84 14        	sty	$14                     ; 0x2014 <end_block9+0x1776>
+     78e: 7a           	ply
+     78f: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     791: b2 14        	lda	($14)                   ; 0x2014 <end_block9+0x1776>
+     793: 84 0f        	sty	$f                      ; 0x200f <end_block9+0x1771>
+     795: 58           	cli
+     796: 8d 42 dd     	sta	$dd42                   ; 0xdd42 <end_block9+0xd4a4>
+     799: 18           	clc
+     79a: a5 1b        	lda	$1b                     ; 0x201b <end_block9+0x177d>
+     79c: 69 01        	adc	#$1
+     79e: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     7a0: 69 00        	adc	#$0
+     7a2: 85 14        	sta	$14                     ; 0x2014 <end_block9+0x1776>
+     7a4: a5 16        	lda	$16                     ; 0x2016 <end_block9+0x1778>
+     7a6: 69 01        	adc	#$1
+     7a8: 06 14        	asl	$14                     ; 0x2014 <end_block9+0x1776>
+     7aa: 2a           	rol
+     7ab: 06 14        	asl	$14                     ; 0x2014 <end_block9+0x1776>
+     7ad: 2a           	rol
+     7ae: a4 1d        	ldy	$1d                     ; 0x201d <end_block9+0x177f>
+     7b0: 84 22        	sty	$22                     ; 0x2022 <end_block9+0x1784>
+     7b2: 06 14        	asl	$14                     ; 0x2014 <end_block9+0x1776>
+     7b4: 2a           	rol
+     7b5: a4 0f        	ldy	$f                      ; 0x200f <end_block9+0x1771>
+     7b7: 78           	sei
+     7b8: 85 0f        	sta	$f                      ; 0x200f <end_block9+0x1771>
+     7ba: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     7bc: 5a           	phy
+     7bd: a4 1b        	ldy	$1b                     ; 0x201b <end_block9+0x177d>
+     7bf: 84 14        	sty	$14                     ; 0x2014 <end_block9+0x1776>
+     7c1: 7a           	ply
+     7c2: e6 14        	inc	$14                     ; 0x2014 <end_block9+0x1776>
+     7c4: d0 01        	bne	$7c7 <main+0x4a2>
+     7c6: 1a           	inc
+     7c7: 09 e0        	ora	#$e0
+     7c9: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     7cb: b2 14        	lda	($14)                   ; 0x2014 <end_block9+0x1776>
+     7cd: 84 0f        	sty	$f                      ; 0x200f <end_block9+0x1771>
+     7cf: 58           	cli
+     7d0: 8d 43 dd     	sta	$dd43                   ; 0xdd43 <end_block9+0xd4a5>
+     7d3: a5 1c        	lda	$1c                     ; 0x201c <end_block9+0x177e>
+     7d5: ca           	dex
+     7d6: 18           	clc
+     7d7: 69 02        	adc	#$2
+     7d9: 85 14        	sta	$14                     ; 0x2014 <end_block9+0x1776>
+     7db: a5 1f        	lda	$1f                     ; 0x201f <end_block9+0x1781>
+     7dd: 69 00        	adc	#$0
+     7df: a8           	tay
+     7e0: a5 1e        	lda	$1e                     ; 0x201e <end_block9+0x1780>
+     7e2: 69 00        	adc	#$0
+     7e4: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     7e6: a5 1d        	lda	$1d                     ; 0x201d <end_block9+0x177f>
+     7e8: 69 00        	adc	#$0
+     7ea: 85 1d        	sta	$1d                     ; 0x201d <end_block9+0x177f>
+     7ec: 8a           	txa
+     7ed: f0 03        	beq	$7f2 <main+0x4cd>
+     7ef: 4c 57 07     	jmp	$757 <main+0x432>
+     7f2: a6 16        	ldx	$16                     ; 0x2016 <end_block9+0x1778>
+     7f4: 86 19        	stx	$19                     ; 0x2019 <end_block9+0x177b>
+     7f6: 18           	clc
+     7f7: a5 1b        	lda	$1b                     ; 0x201b <end_block9+0x177d>
+     7f9: 69 02        	adc	#$2
+     7fb: 85 14        	sta	$14                     ; 0x2014 <end_block9+0x1776>
+     7fd: a5 1a        	lda	$1a                     ; 0x201a <end_block9+0x177c>
+     7ff: 69 00        	adc	#$0
+     801: 85 16        	sta	$16                     ; 0x2016 <end_block9+0x1778>
+     803: a5 19        	lda	$19                     ; 0x2019 <end_block9+0x177b>
+     805: 69 00        	adc	#$0
+     807: 85 15        	sta	$15                     ; 0x2015 <end_block9+0x1777>
+     809: a5 22        	lda	$22                     ; 0x2022 <end_block9+0x1784>
+     80b: 69 00        	adc	#$0
+     80d: a6 18        	ldx	$18                     ; 0x2018 <end_block9+0x177a>
+     80f: a4 17        	ldy	$17                     ; 0x2017 <end_block9+0x1779>
+     811: c8           	iny
+     812: d0 09        	bne	$81d <main+0x4f8>
+     814: e8           	inx
+     815: d0 06        	bne	$81d <main+0x4f8>
+     817: e6 13        	inc	$13                     ; 0x2013 <end_block9+0x1775>
+     819: d0 02        	bne	$81d <main+0x4f8>
+     81b: e6 12        	inc	$12                     ; 0x2012 <end_block9+0x1774>
+     81d: e6 12        	inc	$12                     ; 0x2012 <end_block9+0x1774>
+     81f: c6 12        	dec	$12                     ; 0x2012 <end_block9+0x1774>
+     821: f0 03        	beq	$826 <main+0x501>
+     823: 4c 4d 07     	jmp	$74d <main+0x428>
+     826: e6 13        	inc	$13                     ; 0x2013 <end_block9+0x1775>
+     828: c6 13        	dec	$13                     ; 0x2013 <end_block9+0x1775>
+     82a: f0 03        	beq	$82f <main+0x50a>
+     82c: 4c 4d 07     	jmp	$74d <main+0x428>
+     82f: e0 01        	cpx	#$1
+     831: f0 03        	beq	$836 <main+0x511>
+     833: 4c 4d 07     	jmp	$74d <main+0x428>
+     836: c0 18        	cpy	#$18
+     838: f0 03        	beq	$83d <main+0x518>
+     83a: 4c 4d 07     	jmp	$74d <main+0x428>
+     83d: 80 fe        	bra	$83d <main+0x518>
+
+0000083f <exit>:
+     83f: 20 11 03     	jsr	$311 <_fini>
+     842: 80 fe        	bra	$842 <exit+0x3>
+
+00000844 <__memset>:
+     844: a4 14        	ldy	$14                     ; 0x2014 <end_block9+0x1776>
+     846: d0 04        	bne	$84c <__memset+0x8>
+     848: e0 00        	cpx	#$0
+     84a: f0 17        	beq	$863 <__memset+0x1f>
+     84c: 92 12        	sta	($12)                   ; 0x2012 <end_block9+0x1774>
+     84e: e6 12        	inc	$12                     ; 0x2012 <end_block9+0x1774>
+     850: d0 02        	bne	$854 <__memset+0x10>
+     852: e6 13        	inc	$13                     ; 0x2013 <end_block9+0x1775>
+     854: ca           	dex
+     855: e0 ff        	cpx	#$ff
+     857: d0 02        	bne	$85b <__memset+0x17>
+     859: c6 14        	dec	$14                     ; 0x2014 <end_block9+0x1776>
+     85b: a4 14        	ldy	$14                     ; 0x2014 <end_block9+0x1776>
+     85d: d0 ed        	bne	$84c <__memset+0x8>
+     85f: e0 00        	cpx	#$0
+     861: d0 e9        	bne	$84c <__memset+0x8>
+     863: 60           	rts

@@ -66,3 +66,11 @@ The full list of timers used is:
 
 This is meant for the F256K2 (and Jr. "the Second") since it targets the SAM2695 Dream IC found on those machines only. Use the arrow keys left/right to select the note to be played, use the up/down to select the instrument (from 0 to 128) and play a short test note with the space bar. If you plug in a MIDI controller in the MIDI in port, you can also play that way (much easier and faster for tests). The relevant MIDI uart register addresses will try to display in real time the data that passes through them. 
 
+## lcd
+
+![image](https://github.com/user-attachments/assets/a4a7e8f2-8f41-4910-ad2e-3d91afb2b08f)
+
+This only works with a F256K2 since it sends a special converted bitmap image to an LCD only present in the K2 enclosure. Here are some instructions in the wiki to get this process going: https://wiki.f256foenix.com/index.php?title=Use_the_K2_LCD 
+Therein, you'll find a link to a python script to help the conversion process.
+
+

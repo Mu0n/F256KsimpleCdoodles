@@ -301,23 +301,7 @@ int16_t findPositionOfHeader(void)
 	}	
 	
 	
-//high level function that directs the reading and parsing of the MIDI file     
-int16_t getAndAnalyzeMIDI(void)
-	{		
-	int16_t indexToStart=0; //MThd should be at position 0, but it might not, so we'll find it
 
-	indexToStart = findPositionOfHeader(); //find the start index of 'MThd'
-	
-	if(gVerbo) printf("Had to skip %d bytes to find MIDI Header tag\n",indexToStart);
-	if(indexToStart == -1)	
-		{
-		printf("ERROR: couldn't find a MIDI header in your file; it might be invalid\n");
-		return -1;
-		}
-	detectStructure(indexToStart); //parse it a first time to get the format type and nb of tracks
-	
-	return indexToStart;
-	}
 
 
 //Opens the std MIDI file

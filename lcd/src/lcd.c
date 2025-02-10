@@ -11,6 +11,7 @@
 #define LCD_WIN_X 0x2A    // window X command 
 #define LCD_WIN_Y 0x2B    // window Y command
 #define LCD_WRI   0x2C    //write command
+#define LCD_RD    0x2E    //read  command
 
 //Read Only
 #define LCD_TE  0x40        //Tear Enable 
@@ -20,15 +21,21 @@
 #define LCD_PIX_HI   0xDD43 //{R[4:0], G[5:3]}
 #define LCD_CTRL_REG 0xDD44
 
+#define LCD_PURE_RED  0xF800
+#define LCD_PURE_GRN  0x07E0
+#define LCD_PURE_BLU  0x001F
+#define LCD_PURE_WHI  0xFFFF
+#define LCD_PURE_BLK  0x0000
 
 #include "f256lib.h"
 
 //STRUCTS
 struct timer_t pauseTimer;
 
-EMBED(mac, "../assets/mom.bin", 0x10000);
+EMBED(mac, "../assets/cat.bin", 0x10000);
 
-void clearVisible(uint8_t, uint8_t, uint8_t);
+uint16_t ccycle[3] = {LCD_PURE_RED, LCD_PURE_GRN, LCD_PURE_BLU};
+void clearVisible(uint16_t);
 void gotoLCDXY(uint8_t, uint16_t);
 void lilpause(uint8_t);
 bool setTimer(const struct timer_t *);
@@ -81,7 +88,7 @@ void lilpause(uint8_t timedelay)
 	}
 }
 
-void clearVisible(uint8_t red, uint8_t green, uint8_t blue)
+void clearVisible(uint16_t colorWord)
 {
 	uint8_t i;
 	uint16_t j;
@@ -103,7 +110,7 @@ void clearVisible(uint8_t red, uint8_t green, uint8_t blue)
 	{
 		for(i=0;i<240;i++)
 		{
-			POKE(LCD_PIX_LO,blue&0x0F);POKE(LCD_PIX_HI,red<<4 | (green&0x0F));
+			POKEW(LCD_PIX_LO,colorWord);
 		}
 	}
 }
@@ -140,8 +147,35 @@ void displayImage()
 }
 
 int main(int argc, char *argv[]) {
+	uint16_t r1,r2,r3,r4,r5,r6;
+	uint8_t i=0;
 	
-	clearVisible(0,0,0);
+	POKE(0xD6A0, 0b01111111);
+	while(true)
+	{
+		r1 = randomRead();
+		r2 = randomRead();
+		r3 = randomRead();
+		r4 = randomRead();
+		r5 = randomRead();
+		r6 = randomRead();
+		//clearVisible(ccycle[i++]);
+		if(i>2)i=0;
+		POKE(0xD6A7, HIGH_BYTE(r1)); //power blue
+		POKE(0xD6A8, LOW_BYTE(r1));  //power green
+		POKE(0xD6A9, HIGH_BYTE(r2)); //power red
+		POKE(0xD6AA, LOW_BYTE(r2));  //media blue
+		POKE(0xD6AB, HIGH_BYTE(r3)); //media green
+		POKE(0xD6AC, LOW_BYTE(r3));  //media red
+		POKE(0xD6AD, HIGH_BYTE(r4)); //lock blue
+		POKE(0xD6AE, LOW_BYTE(r4));  //lock green 
+		POKE(0xD6AF, HIGH_BYTE(r5));  //lock red
+		POKE(0xD6B3, LOW_BYTE(r5)); //lock blue
+		POKE(0xD6B4, HIGH_BYTE(r6));  //lock green 
+		POKE(0xD6B5, LOW_BYTE(r6));  //lock red
+		if(i%2==0) POKE(0xD6A0, 0b01101111);
+		else POKE(0xD6A0,0b01111111);
+	}
 	displayImage();
 	
 	while(true);

@@ -87,9 +87,9 @@
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 #include "../src/midispec.c"
 
-EMBED(palback, "../assets/Urban4.data.pal", 0x10000);
-EMBED(carL, "../assets/car.spr",0x10400);
-EMBED(carR, "../assets/carr.spr",0x10800);
+EMBED(palback, "../assets/Urban4.data.pal", 0x10000); //1kb
+EMBED(carL, "../assets/car.bin",0x10400); //5kb
+EMBED(carR, "../assets/carr.spr",0x11800); // 5kb
 EMBED(backbmp, "../assets/Urban4.data", 0x20000);
 EMBED(midifile, "../assets/continen.mid", 0x38000);
 
@@ -145,6 +145,25 @@ int16_t SIN[] = {
      -24,  -23,  -21,  -20,  -18,  -17,  -15,  -14,
      -12,  -10,   -9,   -7,   -6,   -4,   -3,   -1,
 };
+
+//GLOBALS
+typedef struct sprStatus
+{
+	uint16_t x,y; //position
+	bool rightOrLeft; //last facing
+	bool isDashing;
+	uint32_t addr; //base address
+	uint8_t frame; //frame into view
+	uint16_t sx, sy; //speed
+	struct timer_t timer; //animation timer;
+	uint8_t cookie; //cookie for timer
+	uint8_t state; //which state: 0 idle, 1 walk right, 2 walk left, etc
+	uint8_t *minIndexForState; //minimum index for given state
+	uint8_t *maxIndexForState; //maximum index for given state
+} sprStatus;
+
+struct sprStatus carLS, carRS;
+
 
 //FUNCTION PROTOTYPES
 void setup(void);
@@ -891,6 +910,11 @@ void setup()
 	bitmapSetVisible(1,false);
 	bitmapSetVisible(2,false);
 	
+	
+
+	
+
+
 	spriteDefine(0,SPR_L0,32,0,0);
 	spriteSetVisible(0,true);
 	spriteDefine(1,SPR_R0,32,0,0);
@@ -917,9 +941,41 @@ void setup()
 	
 }
 
-
-
-/*
+void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, bool wantVisible, struct sprStatus) 
+{
+	spriteDefine(s, addr, size, clut, layer);
+	carLS 
+	
+	
+		carLS.x = 160;
+	carLS.y = 220;
+	carLS.rightOrLeft = true;
+	carLS.addr = SPR_L0;
+	carLS.frame = 0;
+	carLS.sx = 0;
+	carLS.state = 0;
+	carLS.minIndexForState = (uint8_t *)malloc(sizeof(uint8_t) * 1);
+	carLS.maxIndexForState = (uint8_t *)malloc(sizeof(uint8_t) * 1);
+	carLS.minIndexForState[0] = 0;
+	carLS.maxIndexForState[0] = 0;
+	
+	
+	
+}
+	/*typedef struct sprStatus
+{
+	uint16_t x,y; //position
+	bool rightOrLeft; //last facing
+	bool isDashing;
+	uint32_t addr; //base address
+	uint8_t frame; //frame into view
+	uint16_t sx, sy; //speed
+	struct timer_t timer; //animation timer;
+	uint8_t cookie; //cookie for timer
+	uint8_t state; //which state: 0 idle, 1 walk right, 2 walk left, etc
+	uint8_t *minIndexForState; //minimum index for given state
+	uint8_t *maxIndexForState; //maximum index for given state
+} sprStatus;
 */
 			
 void prepTimers()

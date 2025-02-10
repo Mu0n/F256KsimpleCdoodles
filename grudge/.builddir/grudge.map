@@ -1,0 +1,234 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __palgrudge_lma = 0x10000
+       0        0        0     1 __palgrudge_size = 0x400
+       0        0        0     1 __boy1_lma = 0x10400
+       0        0        0     1 __boy1_size = 0x400
+       0        0        0     1 __thing_lma = 0x10800
+       0        0        0     1 __thing_size = 0x400
+       0        0        0     1 __girl1_lma = 0x10c00
+       0        0        0     1 __girl1_size = 0x400
+       0        0        0     1 __cath_lma = 0x11000
+       0        0        0     1 __cath_size = 0x400
+       0        0        0     1 __cat_lma = 0x11400
+       0        0        0     1 __cat_size = 0x400
+       0        0        0     1 __dash_lma = 0x13000
+       0        0        0     1 __dash_size = 0x800
+      30      300        6     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300        6     1         grudge.lto.o:(.zp.data)
+      30      300        6     1                 stateDelays
+      36      306        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      36      306        0     1 __zp_data_size = SIZEOF(.zp.data)
+      36       36       4e     1 .zp.bss
+      36       36        0     1         __zp_bss_start = .
+      36       36       4e     1         grudge.lto.o:(.zp.bss)
+      36       36        7     1                 kernelEventData
+      3d       3d        1     1                 _ccolor
+      3e       3e        1     1                 _col
+      3f       3f        1     1                 _row
+      40       40       40     1                 _spriteCtl
+      80       80        2     1                 __putchar.s
+      82       82        1     1                 padTimer.1
+      83       83        1     1                 (anonymous namespace)::initialized
+      84       84        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      84       84       6c     1 .zp
+      84       84       6c     1         grudge.lto.o:(.zp.noinit)
+     306      306     2a69     2 .text
+     306      306        0     1         _init = .
+     306      306        0     1         _start = .
+     306      306        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     306      306        0     1                 __do_init_stack
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     30e      30e        0     1                 __do_zero_bss
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     311      311        0     1                 __do_zero_zp_bss
+     314      314        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     314      314        0     1                 __do_copy_zp_data
+     317      317        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     31a      31a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     31a      31a        0     1                 __after_main
+     31d      31d        0     1         _fini = .
+     31d      31d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     31e      31e      139     2         grudge.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     31e      31e      139     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     457      457       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     457      457       13     1                 __zero_bss
+     46a      46a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     46a      46a       13     1                 __zero_zp_bss
+     47d      47d       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     47d      47d       17     1                 __copy_zp_data
+     494      494      397     1         grudge.lto.o:(.text.f256Init)
+     494      494      397     1                 f256Init
+     82b      82b        6     1         grudge.lto.o:(.text.main)
+     82b      82b        6     1                 main
+     831      831      686     1         grudge.lto.o:(.text.f256main)
+     831      831      686     1                 f256main
+     eb7      eb7      694     1         grudge.lto.o:(.text.checkNESPad)
+     eb7      eb7      694     1                 checkNESPad
+    154b     154b      1ba     1         grudge.lto.o:(.text.updateFrames)
+    154b     154b      1ba     1                 updateFrames
+    1705     1705      3ba     1         grudge.lto.o:(.text.mySpriteDefine)
+    1705     1705      3ba     1                 mySpriteDefine
+    1abf     1abf      1d0     1         grudge.lto.o:(.text.__putchar)
+    1abf     1abf      1d0     1                 __putchar
+    1c8f     1c8f        5     1         grudge.lto.o:(.text.exit)
+    1c8f     1c8f        5     1                 exit
+    1c94     1c94       d1     1         grudge.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    1c94     1c94       d1     1                 (anonymous namespace)::put(char, Status*)
+    1d65     1d65      10d     1         grudge.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1d65     1d65      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1e72     1e72      bb3     1         grudge.lto.o:(.text.printf)
+    1e72     1e72      bb3     1                 printf
+    2a25     2a25      2b5     1         grudge.lto.o:(.text.malloc)
+    2a25     2a25      2b5     1                 malloc
+    2cda     2cda       2c     1         grudge.lto.o:(.text.memcpy)
+    2cda     2cda       2c     1                 memcpy
+    2d06     2d06       20     1         grudge.lto.o:(.text.__memset)
+    2d06     2d06       20     1                 __memset
+    2d26     2d26       17     1         grudge.lto.o:(.text.__ashlsi3)
+    2d26     2d26       17     1                 __ashlsi3
+    2d3d     2d3d       32     1         grudge.lto.o:(.text.__mulhi3)
+    2d3d     2d3d       32     1                 __mulhi3
+    2d6f     2d6f        0     1         __init_array_start = .
+    2d6f     2d6f        0     1         __init_array_end = .
+    2d6f     2d6f        0     1         __fini_array_start = .
+    2d6f     2d6f        0     1         __fini_array_end = .
+    2d6f     2d6f       8f     1 .rodata
+    2d6f     2d6f        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    2d6f     2d6f        0     1                 __set_v
+    2d70     2d70       3a     1         grudge.lto.o:(.rodata.printf)
+    2daa     2daa       30     1         grudge.lto.o:(.rodata.textColors)
+    2daa     2daa       30     1                 textColors
+    2dda     2dda       24     1         <internal>:(.rodata.str1.1)
+    2dfe     2dfe        0     1 .data
+    2dfe     2dfe        0     1         __data_start = .
+    2dfe     2dfe        0     1         __data_end = .
+    2dfe     2dfe        0     1 __data_load_start = LOADADDR(.data)
+    2dfe     2dfe        0     1 __data_size = SIZEOF(.data)
+    2dfe     2dfe      1e5     1 .bss
+    2dfe     2dfe        0     1         __bss_start = .
+    2dfe     2dfe      1e0     1         grudge.lto.o:(.bss.spriteStatuses)
+    2dfe     2dfe      1e0     1                 spriteStatuses
+    2fde     2fde        1     1         grudge.lto.o:(.bss.kernelError)
+    2fde     2fde        1     1                 kernelError
+    2fdf     2fdf        2     1         grudge.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    2fdf     2fdf        2     1                 (anonymous namespace)::free_size
+    2fe1     2fe1        2     1         grudge.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    2fe1     2fe1        2     1                 (anonymous namespace)::free_list
+    2fe3     2fe3        0     1         __bss_end = .
+    2fe3     2fe3        0     1 __bss_size = SIZEOF(.bss)
+    2fe3     2fe3        0     1 .noinit
+    2fe3     2fe3        0     1         __heap_start = ALIGN(., 2)
+    2fe3     2fe3        0     1 end_block8 = .
+    2fe3     2fe3        0     1 end_block9 = .
+    2fe3     2fe3        0     1 end_block10 = .
+    2fe3     2fe3        0     1 end_block11 = .
+    2fe3     2fe3        0     1 end_block12 = .
+    2fe3     2fe3        0     1 end_block13 = .
+    2fe3     2fe3        0     1 end_block14 = .
+    2fe3     2fe3        0     1 end_block15 = .
+    2fe3     2fe3        0     1 end_block16 = .
+    2fe3     2fe3        0     1 end_block17 = .
+    2fe3     2fe3        0     1 end_block18 = .
+    2fe3     2fe3        0     1 end_block19 = .
+    2fe3     2fe3        0     1 end_block20 = .
+    2fe3     2fe3        0     1 end_block21 = .
+    2fe3     2fe3        0     1 end_block22 = .
+    2fe3     2fe3        0     1 end_block23 = .
+   10000    10000      400    16 .palgrudge
+   10000    10000      400    16         grudge.lto.o:(.palgrudge)
+   10000    10000        0     1                 palgrudge_start
+   10400    10400        0     1                 palgrudge_end
+   10400    10400        0     1 end_palgrudge = .
+   10400    10400      400    16 .boy1
+   10400    10400      400    16         grudge.lto.o:(.boy1)
+   10400    10400        0     1                 boy1_start
+   10800    10800        0     1                 boy1_end
+   10800    10800        0     1 end_boy1 = .
+   10800    10800      400    16 .thing
+   10800    10800      400    16         grudge.lto.o:(.thing)
+   10800    10800        0     1                 thing_start
+   10c00    10c00        0     1                 thing_end
+   10c00    10c00        0     1 end_thing = .
+   10c00    10c00      400    16 .girl1
+   10c00    10c00      400    16         grudge.lto.o:(.girl1)
+   10c00    10c00        0     1                 girl1_start
+   11000    11000        0     1                 girl1_end
+   11000    11000        0     1 end_girl1 = .
+   11000    11000      400    16 .cath
+   11000    11000      400    16         grudge.lto.o:(.cath)
+   11000    11000        0     1                 cath_start
+   11400    11400        0     1                 cath_end
+   11400    11400        0     1 end_cath = .
+   11400    11400      400    16 .cat
+   11400    11400      400    16         grudge.lto.o:(.cat)
+   11400    11400        0     1                 cat_start
+   11800    11800        0     1                 cat_end
+   11800    11800        0     1 end_cat = .
+   13000    13000      800    16 .dash
+   13000    13000      800    16         grudge.lto.o:(.dash)
+   13000    13000        0     1                 dash_start
+   13800    13800        0     1                 dash_end
+   13800    13800        0     1 end_dash = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      a90     4 .symtab
+       0        0      a90     4         <internal>:(.symtab)
+       0        0       8a     1 .shstrtab
+       0        0       8a     1         <internal>:(.shstrtab)
+       0        0      7c2     1 .strtab
+       0        0      7c2     1         <internal>:(.strtab)

@@ -62,9 +62,7 @@
       30       30        0     1 .zp.bss
       30       30        0     1         __zp_bss_start = .
       30       30        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      30       30        9     1 .zp
-      30       30        9     1         lcd.lto.o:(.zp.noinit)
-     300      300      45f     1 .text
+     300      300      51d     1 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -78,58 +76,54 @@
      311      311        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
      312      312       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
      312      312       13     1                 __zero_bss
-     325      325      382     1         lcd.lto.o:(.text.f256Init)
-     325      325      382     1                 f256Init
-     6a7      6a7        6     1         lcd.lto.o:(.text.main)
-     6a7      6a7        6     1                 main
-     6ad      6ad       8d     1         lcd.lto.o:(.text.f256main)
-     6ad      6ad       8d     1                 f256main
-     73a      73a        5     1         lcd.lto.o:(.text.exit)
-     73a      73a        5     1                 exit
-     73f      73f       20     1         lcd.lto.o:(.text.__memset)
-     73f      73f       20     1                 __memset
-     75f      75f        0     1         __init_array_start = .
-     75f      75f        0     1         __init_array_end = .
-     75f      75f        0     1         __fini_array_start = .
-     75f      75f        0     1         __fini_array_end = .
-     75f      75f       30     1 .rodata
-     75f      75f       30     1         lcd.lto.o:(.rodata.textColors)
-     75f      75f       30     1                 textColors
-     78f      78f        0     1 .data
-     78f      78f        0     1         __data_start = .
-     78f      78f        0     1         __data_end = .
-     78f      78f        0     1 __data_load_start = LOADADDR(.data)
-     78f      78f        0     1 __data_size = SIZEOF(.data)
-     78f      78f        a     1 .bss
-     78f      78f        0     1         __bss_start = .
-     78f      78f        7     1         lcd.lto.o:(.bss.kernelEventData)
-     78f      78f        7     1                 kernelEventData
-     796      796        1     1         lcd.lto.o:(.bss.kernelError)
-     796      796        1     1                 kernelError
-     797      797        1     1         lcd.lto.o:(.bss._col)
-     797      797        1     1                 _col
-     798      798        1     1         lcd.lto.o:(.bss._row)
-     798      798        1     1                 _row
-     799      799        0     1         __bss_end = .
-     799      799        0     1 __bss_size = SIZEOF(.bss)
-     799      799        0     1 .noinit
-     799      799        0     1         __heap_start = ALIGN(., 2)
-     799      799        0     1 end_block8 = .
-     799      799        0     1 end_block9 = .
-     799      799        0     1 end_block10 = .
-     799      799        0     1 end_block11 = .
-     799      799        0     1 end_block12 = .
-     799      799        0     1 end_block13 = .
-     799      799        0     1 end_block14 = .
-     799      799        0     1 end_block15 = .
-     799      799        0     1 end_block16 = .
-     799      799        0     1 end_block17 = .
-     799      799        0     1 end_block18 = .
-     799      799        0     1 end_block19 = .
-     799      799        0     1 end_block20 = .
-     799      799        0     1 end_block21 = .
-     799      799        0     1 end_block22 = .
-     799      799        0     1 end_block23 = .
+     325      325      4d3     1         lcd.lto.o:(.text.main)
+     325      325      4d3     1                 main
+     7f8      7f8        5     1         lcd.lto.o:(.text.exit)
+     7f8      7f8        5     1                 exit
+     7fd      7fd       20     1         lcd.lto.o:(.text.__memset)
+     7fd      7fd       20     1                 __memset
+     81d      81d        0     1         __init_array_start = .
+     81d      81d        0     1         __init_array_end = .
+     81d      81d        0     1         __fini_array_start = .
+     81d      81d        0     1         __fini_array_end = .
+     81d      81d       30     1 .rodata
+     81d      81d       30     1         lcd.lto.o:(.rodata.textColors)
+     81d      81d       30     1                 textColors
+     84d      84d        0     1 .data
+     84d      84d        0     1         __data_start = .
+     84d      84d        0     1         __data_end = .
+     84d      84d        0     1 __data_load_start = LOADADDR(.data)
+     84d      84d        0     1 __data_size = SIZEOF(.data)
+     84d      84d        a     1 .bss
+     84d      84d        0     1         __bss_start = .
+     84d      84d        7     1         lcd.lto.o:(.bss.kernelEventData)
+     84d      84d        7     1                 kernelEventData
+     854      854        1     1         lcd.lto.o:(.bss.kernelError)
+     854      854        1     1                 kernelError
+     855      855        1     1         lcd.lto.o:(.bss._col)
+     855      855        1     1                 _col
+     856      856        1     1         lcd.lto.o:(.bss._row)
+     856      856        1     1                 _row
+     857      857        0     1         __bss_end = .
+     857      857        0     1 __bss_size = SIZEOF(.bss)
+     857      857        0     1 .noinit
+     857      857        0     1         __heap_start = ALIGN(., 2)
+     857      857        0     1 end_block8 = .
+     857      857        0     1 end_block9 = .
+     857      857        0     1 end_block10 = .
+     857      857        0     1 end_block11 = .
+     857      857        0     1 end_block12 = .
+     857      857        0     1 end_block13 = .
+     857      857        0     1 end_block14 = .
+     857      857        0     1 end_block15 = .
+     857      857        0     1 end_block16 = .
+     857      857        0     1 end_block17 = .
+     857      857        0     1 end_block18 = .
+     857      857        0     1 end_block19 = .
+     857      857        0     1 end_block20 = .
+     857      857        0     1 end_block21 = .
+     857      857        0     1 end_block22 = .
+     857      857        0     1 end_block23 = .
    10000    10000    20d00    16 .mac
    10000    10000    20d00    16         lcd.lto.o:(.mac)
    10000    10000        0     1                 mac_start
@@ -137,9 +131,9 @@
    30d00    30d00        0     1 end_mac = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      6f0     4 .symtab
-       0        0      6f0     4         <internal>:(.symtab)
-       0        0       5f     1 .shstrtab
-       0        0       5f     1         <internal>:(.shstrtab)
-       0        0      496     1 .strtab
-       0        0      496     1         <internal>:(.strtab)
+       0        0      6d0     4 .symtab
+       0        0      6d0     4         <internal>:(.symtab)
+       0        0       5b     1 .shstrtab
+       0        0       5b     1         <internal>:(.shstrtab)
+       0        0      484     1 .strtab
+       0        0      484     1         <internal>:(.strtab)

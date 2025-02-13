@@ -1,3 +1,14 @@
+/*
+for a simpler midi player, go check the midisam program
+
+Things achieved in this:
+-loads a fixed .mid SMF file human2.mid
+-parses its data for lagfree consumption and playback
+-loads a bitmap gfx (warcraft 1 background) and a series of peon sprite bitmaps
+-plays it while animating the sprite
+-forces a percussion for the wood chopping sound effect, also a MIDI note sent in the FIFO
+*/
+
 
 //DEFINES
 #define F256LIB_IMPLEMENTATION
@@ -70,7 +81,6 @@
 //INCLUDES
 #include "f256lib.h"
 #include <stdlib.h>
-#include "../MacSource\midispec.c"
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 
@@ -101,13 +111,6 @@ double fudge = 25.1658; //fudge factor when calculating time delays
 uint16_t *parsers; //indices for the various type 1 tracks during playback
 uint8_t nn=4, dd=2, cc=24, bb=8; //nn numerator of time signature, dd= denom. cc=nb of midi clocks in metro click. bb = nb of 32nd notes in a beat
 
-const uint16_t plugin[28] = { /* Compressed plugin  for the VS1053b to enable real time midi mode */
-  0x0007, 0x0001, 0x8050, 0x0006, 0x0014, 0x0030, 0x0715, 0xb080, /*    0 */
-  0x3400, 0x0007, 0x9255, 0x3d00, 0x0024, 0x0030, 0x0295, 0x6890, /*    8 */
-  0x3400, 0x0030, 0x0495, 0x3d00, 0x0024, 0x2908, 0x4d40, 0x0030, /*   10 */
-  0x0200, 0x000a, 0x0001, 0x0050
-};
-
 
 //FUNCTION PROTOTYPES
 void sendAME(aMEPtr midiEvent); //sends a MIDI event message, either a 2-byte or 3-byte one
@@ -117,7 +120,6 @@ uint8_t loadSMFile(char *name); //Opens the std MIDI file
 int16_t getAndAnalyzeMIDI(void); //high level function that directs the reading and parsing of the MIDI file  
 int8_t parse(uint16_t startIndex, bool wantCmds);
 void wipeBigList(void);
-uint32_t getTotalLeft(void);
 void playmidi(void);
 void adjustOffsets(void);
 void resetTimer0(void);
@@ -126,10 +128,7 @@ uint32_t readTimer0(void);
 uint8_t isTimer0Done(void);
 void loadBM(void);
 void chopSound(void);
-void hitspace(void);
 void goToPrison(uint16_t);
-void initVS1053MIDI(void);
-void lilpause(uint8_t);
 
 uint32_t samplesTicks[30];
 uint32_t samplesUs[30];
@@ -138,38 +137,6 @@ uint8_t where1=0;
 uint8_t where2=0;
 uint8_t where3=0;
 
-//this is a small code to enable the VS1053b's midi mode; present on the Jr2 and K2. It is necessary for the first revs of these 2 machines
-void initVS1053MIDI(void) {
-    uint8_t n;
-    uint16_t addr, val, i=0;
-
-  while (i<sizeof(plugin)/sizeof(plugin[0])) {
-    addr = plugin[i++];
-    n = plugin[i++];
-    if (n & 0x8000) { /* RLE run, replicate n samples */
-      n &= 0x7FFF;
-      val = plugin[i++];
-      while (n--) {
-        //WriteVS10xxRegister(addr, val);
-        POKE(VS_SCI_ADDR,addr);
-        POKEW(VS_SCI_DATA,val);
-        POKE(VS_SCI_CTRL,1);
-        POKE(VS_SCI_CTRL,0);
-		while (PEEK(VS_SCI_CTRL) & 0x80);
-      }
-    } else {           /* Copy run, copy n samples */
-      while (n--) {
-        val = plugin[i++];
-        //WriteVS10xxRegister(addr, val);
-        POKE(VS_SCI_ADDR,addr);
-        POKEW(VS_SCI_DATA,val);
-        POKE(VS_SCI_CTRL,1);
-        POKE(VS_SCI_CTRL,0);
-		while (PEEK(VS_SCI_CTRL) & 0x80);
-      }
-    }
-  }
-}
 //the workhorse of MIDIPlay, "send A MIDI Event" sends a string of MIDI bytes into the midi FIFO
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
@@ -301,6 +268,23 @@ int16_t findPositionOfHeader(void)
 	}	
 	
 	
+//high level function that directs the reading and parsing of the MIDI file     
+int16_t getAndAnalyzeMIDI(void)
+	{		
+	int16_t indexToStart=0; //MThd should be at position 0, but it might not, so we'll find it
+
+	indexToStart = findPositionOfHeader(); //find the start index of 'MThd'
+	
+	if(gVerbo) printf("Had to skip %d bytes to find MIDI Header tag\n",indexToStart);
+	if(indexToStart == -1)	
+		{
+		printf("ERROR: couldn't find a MIDI header in your file; it might be invalid\n");
+		return -1;
+		}
+	detectStructure(indexToStart); //parse it a first time to get the format type and nb of tracks
+	
+	return indexToStart;
+	}
 
 
 
@@ -345,47 +329,6 @@ uint8_t loadSMFile(char *name)
 	return 0;
 }
 
-void lilpause(uint8_t timedelay)
-{
-	bool noteExitFlag = false;
-	midiNoteTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + timedelay;
-	setTimer(&midiNoteTimer);
-	noteExitFlag = false;
-	while(!noteExitFlag)
-	{
-		kernelNextEvent();
-		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
-		{
-			switch(kernelEventData.timer.cookie)
-			{
-			case TIMER_MIDI_COOKIE:
-				noteExitFlag = true;
-				break;
-			}
-		}
-	}
-}
-
-void hitspace()
-{
-	bool exitFlag = false;
-	
-	while(exitFlag == false)
-	{
-			kernelNextEvent();
-			if(kernelEventData.type == kernelEvent(key.PRESSED))
-			{
-				switch(kernelEventData.key.raw)
-				{
-					case 148: //enter
-					case 32: //space
-						exitFlag = true;
-						break;
-				}
-			}
-	}
-}
-
 
 void playmiditype0(void)
 {
@@ -401,7 +344,7 @@ void playmiditype0(void)
 	textSetColor(22,0);
 	printf("\nCurrently playing type 0 standard midi file\n");
 	
-	localTotalLeft = getTotalLeft();
+	localTotalLeft = getTotalLeft(&theBigList);
 	printf("Total MIDI events to play %d\n", localTotalLeft);
 	
 	
@@ -506,7 +449,7 @@ void playmidiND(void) //non-destructive version
 	
 	soundBeholders=(uint32_t*)malloc(trackcount * sizeof(uint32_t));
 	
-	localTotalLeft = getTotalLeft();
+	localTotalLeft = getTotalLeft(&theBigList);
 	while(localTotalLeft > 0 && !exitFlag)
 	{		
 	for(i=0;i<trackcount;i++) //pick their first deltas to start things
@@ -610,20 +553,7 @@ void playmidiND(void) //non-destructive version
 		}
 	}
 	}
-	
-//gets a count of the total MIDI events that are relevant and left to play	
-uint32_t getTotalLeft(void)
-	{
-	uint32_t sum=0;
-	uint16_t i=0;
 
-	for(i=0; i<theBigList.trackcount; i++)
-		{
-		sum+=(theBigList).TrackEventList[i].eventcount;
-		}
-	return sum;
-	}
-	
 
 void wipeBigList(void)
 	{

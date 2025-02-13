@@ -7,26 +7,26 @@ SYMBOL TABLE:
 00000000 l    df *ABS*	00000000 copy-zp-data.c
 00000000 l    df *ABS*	00000000 ld-temp.o
 00000494 l     F .text	00000397 f256Init
-00000036 l     O .zp.bss	00000007 kernelEventData
-0000003d l     O .zp.bss	00000001 _ccolor
+0000007c l     O .zp.bss	00000007 kernelEventData
+00000036 l     O .zp.bss	00000001 _ccolor
 00002daa l     O .rodata	00000030 textColors
-0000003e l     O .zp.bss	00000001 _col
-0000003f l     O .zp.bss	00000001 _row
-00000040 l     O .zp.bss	00000040 _spriteCtl
+00000037 l     O .zp.bss	00000001 _col
+00000038 l     O .zp.bss	00000001 _row
+00000039 l     O .zp.bss	00000040 _spriteCtl
 00002fde l     O .bss	00000001 kernelError
 00000831 l     F .text	00000686 f256main
 00001705 l     F .text	000003ba mySpriteDefine
 00002dfe l     O .bss	000001e0 spriteStatuses
 0000154b l     F .text	000001ba updateFrames
 00000030 l     O .zp.data	00000006 stateDelays
-00000082 l     O .zp.bss	00000001 padTimer.1
+0000007b l     O .zp.bss	00000001 padTimer.1
 00000eb7 l     F .text	00000694 checkNESPad
 00002d26 l     F .text	00000017 __ashlsi3
 00002d3d l     F .text	00000032 __mulhi3
 00001e72 l     F .text	00000bb3 printf
 00002a25 l     F .text	000002b5 malloc
 00001abf l     F .text	000001d0 __putchar
-00000080 l     O .zp.bss	00000002 __putchar.s
+00000079 l     O .zp.bss	00000002 __putchar.s
 00001c94 l     F .text	000000d1 _ZN12_GLOBAL__N_13putEcP6Status
 00001d65 l     F .text	0000010d _ZN12_GLOBAL__N_112print_stringEPKcP6Status
 00000083 l     O .zp.bss	00000001 _ZN12_GLOBAL__N_111initializedE
@@ -421,7 +421,7 @@ Disassembly of section .text:
      4b6: 86 0c        	stx	$c                      ; 0x200c <printf+0x19a>
      4b8: e8           	inx
      4b9: 86 0d        	stx	$d                      ; 0x200d <printf+0x19b>
-     4bb: a2 36        	ldx	#$36
+     4bb: a2 7c        	ldx	#$7c
      4bd: a0 00        	ldy	#$0
      4bf: 86 f0        	stx	$f0                     ; 0x20f0 <printf+0x27e>
      4c1: 84 f1        	sty	$f1                     ; 0x20f1 <printf+0x27f>
@@ -500,7 +500,7 @@ Disassembly of section .text:
      54d: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xa01e>
      550: a2 02        	ldx	#$2
      552: 8e 03 d0     	stx	$d003                   ; 0xd003 <__heap_start+0xa01f>
-     555: 64 3d        	stz	$3d                     ; 0x203d <printf+0x1cb>
+     555: 64 36        	stz	$36                     ; 0x2036 <printf+0x1c4>
      557: ad 01 d0     	lda	$d001                   ; 0xd001 <__heap_start+0xa01d>
      55a: 29 f9        	and	#$f9
      55c: 09 04        	ora	#$4
@@ -631,7 +631,7 @@ Disassembly of section .text:
      669: d0 e6        	bne	$651 <f256Init+0x1bd>
      66b: a2 03        	ldx	#$3
      66d: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
-     66f: a5 3d        	lda	$3d                     ; 0x203d <printf+0x1cb>
+     66f: a5 36        	lda	$36                     ; 0x2036 <printf+0x1c4>
      671: 29 01        	and	#$1
      673: aa           	tax
      674: a9 40        	lda	#$40
@@ -658,10 +658,10 @@ Disassembly of section .text:
      69c: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
      69e: a6 18        	ldx	$18                     ; 0x2018 <printf+0x1a6>
      6a0: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
-     6a2: 64 3e        	stz	$3e                     ; 0x203e <printf+0x1cc>
+     6a2: 64 37        	stz	$37                     ; 0x2037 <printf+0x1c5>
      6a4: 9c 14 d0     	stz	$d014                   ; 0xd014 <__heap_start+0xa030>
      6a7: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xa031>
-     6aa: 64 3f        	stz	$3f                     ; 0x203f <printf+0x1cd>
+     6aa: 64 38        	stz	$38                     ; 0x2038 <printf+0x1c6>
      6ac: 9c 16 d0     	stz	$d016                   ; 0xd016 <__heap_start+0xa032>
      6af: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xa033>
      6b2: a2 40        	ldx	#$40
@@ -791,7 +791,7 @@ Disassembly of section .text:
      7c3: 64 12        	stz	$12                     ; 0x2012 <printf+0x1a0>
      7c5: a2 00        	ldx	#$0
      7c7: 84 13        	sty	$13                     ; 0x2013 <printf+0x1a1>
-     7c9: b5 40        	lda	$40,x                   ; 0x2040 <printf+0x1ce>
+     7c9: b5 39        	lda	$39,x                   ; 0x2039 <printf+0x1c7>
      7cb: 92 12        	sta	($12)                   ; 0x2012 <printf+0x1a0>
      7cd: a5 12        	lda	$12                     ; 0x2012 <printf+0x1a0>
      7cf: e8           	inx
@@ -1232,9 +1232,9 @@ Disassembly of section .text:
      b55: a9 02        	lda	#$2
      b57: 18           	clc
      b58: 72 24        	adc	($24)                   ; 0x2024 <printf+0x1b2>
-     b5a: 85 82        	sta	$82                     ; 0x2082 <printf+0x210>
+     b5a: 85 7b        	sta	$7b                     ; 0x207b <printf+0x209>
      b5c: 64 f3        	stz	$f3                     ; 0x20f3 <printf+0x281>
-     b5e: a6 82        	ldx	$82                     ; 0x2082 <printf+0x210>
+     b5e: a6 7b        	ldx	$7b                     ; 0x207b <printf+0x209>
      b60: 86 f4        	stx	$f4                     ; 0x20f4 <printf+0x282>
      b62: a2 63        	ldx	#$63
      b64: 86 f5        	stx	$f5                     ; 0x20f5 <printf+0x283>
@@ -1245,16 +1245,16 @@ Disassembly of section .text:
      b6e: 6a           	ror
      b6f: 85 26        	sta	$26                     ; 0x2026 <printf+0x1b4>
      b71: 8c 80 d8     	sty	$d880                   ; 0xd880 <__heap_start+0xa89c>
-     b74: 64 36        	stz	$36                     ; 0x2036 <printf+0x1c4>
+     b74: 64 7c        	stz	$7c                     ; 0x207c <printf+0x20a>
      b76: 20 00 ff     	jsr	$ff00 <__heap_start+0xcf1c>
      b79: 92 24        	sta	($24)                   ; 0x2024 <printf+0x1b2>
      b7b: a9 00        	lda	#$0
      b7d: 6a           	ror
      b7e: 85 26        	sta	$26                     ; 0x2026 <printf+0x1b4>
-     b80: a6 36        	ldx	$36                     ; 0x2036 <printf+0x1c4>
+     b80: a6 7c        	ldx	$7c                     ; 0x207c <printf+0x20a>
      b82: e0 52        	cpx	#$52
      b84: d0 eb        	bne	$b71 <f256main+0x340>
-     b86: a6 3a        	ldx	$3a                     ; 0x203a <printf+0x1c8>
+     b86: a6 80        	ldx	$80                     ; 0x2080 <printf+0x20e>
      b88: e0 0a        	cpx	#$a
      b8a: a0 01        	ldy	#$1
      b8c: b0 02        	bcs	$b90 <f256main+0x35f>
@@ -1339,9 +1339,9 @@ Disassembly of section .text:
      c1c: 69 d9        	adc	#$d9
      c1e: 84 12        	sty	$12                     ; 0x2012 <printf+0x1a0>
      c20: 85 13        	sta	$13                     ; 0x2013 <printf+0x1a1>
-     c22: b5 40        	lda	$40,x                   ; 0x2040 <printf+0x1ce>
+     c22: b5 39        	lda	$39,x                   ; 0x2039 <printf+0x1c7>
      c24: 92 12        	sta	($12)                   ; 0x2012 <printf+0x1a0>
-     c26: a5 3a        	lda	$3a                     ; 0x203a <printf+0x1c8>
+     c26: a5 80        	lda	$80                     ; 0x2080 <printf+0x20e>
      c28: 18           	clc
      c29: 69 f6        	adc	#$f6
      c2b: aa           	tax
@@ -1444,7 +1444,7 @@ Disassembly of section .text:
      ce0: 18           	clc
      ce1: 72 24        	adc	($24)                   ; 0x2024 <printf+0x1b2>
      ce3: 85 14        	sta	$14                     ; 0x2014 <printf+0x1a2>
-     ce5: a5 3a        	lda	$3a                     ; 0x203a <printf+0x1c8>
+     ce5: a5 80        	lda	$80                     ; 0x2080 <printf+0x20e>
      ce7: 0a           	asl
      ce8: 64 12        	stz	$12                     ; 0x2012 <printf+0x1a0>
      cea: 26 12        	rol	$12                     ; 0x2012 <printf+0x1a0>
@@ -1519,7 +1519,7 @@ Disassembly of section .text:
      d6a: 85 26        	sta	$26                     ; 0x2026 <printf+0x1b4>
      d6c: b2 24        	lda	($24)                   ; 0x2024 <printf+0x1b2>
      d6e: 85 14        	sta	$14                     ; 0x2014 <printf+0x1a2>
-     d70: a5 3a        	lda	$3a                     ; 0x203a <printf+0x1c8>
+     d70: a5 80        	lda	$80                     ; 0x2080 <printf+0x20e>
      d72: 0a           	asl
      d73: 64 12        	stz	$12                     ; 0x2012 <printf+0x1a0>
      d75: 26 12        	rol	$12                     ; 0x2012 <printf+0x1a0>
@@ -1568,7 +1568,7 @@ Disassembly of section .text:
      dc1: a9 00        	lda	#$0
      dc3: 6a           	ror
      dc4: 85 26        	sta	$26                     ; 0x2026 <printf+0x1b4>
-     dc6: a5 3a        	lda	$3a                     ; 0x203a <printf+0x1c8>
+     dc6: a5 80        	lda	$80                     ; 0x2080 <printf+0x20e>
      dc8: 0a           	asl
      dc9: 64 12        	stz	$12                     ; 0x2012 <printf+0x1a0>
      dcb: 26 12        	rol	$12                     ; 0x2012 <printf+0x1a0>
@@ -1681,9 +1681,9 @@ Disassembly of section .text:
      e99: 18           	clc
      e9a: a9 02        	lda	#$2
      e9c: 72 24        	adc	($24)                   ; 0x2024 <printf+0x1b2>
-     e9e: 85 82        	sta	$82                     ; 0x2082 <printf+0x210>
+     e9e: 85 7b        	sta	$7b                     ; 0x207b <printf+0x209>
      ea0: 64 f3        	stz	$f3                     ; 0x20f3 <printf+0x281>
-     ea2: a6 82        	ldx	$82                     ; 0x2082 <printf+0x210>
+     ea2: a6 7b        	ldx	$7b                     ; 0x207b <printf+0x209>
      ea4: 86 f4        	stx	$f4                     ; 0x20f4 <printf+0x282>
      ea6: a2 63        	ldx	#$63
      ea8: 86 f5        	stx	$f5                     ; 0x20f5 <printf+0x283>
@@ -2336,7 +2336,7 @@ Disassembly of section .text:
     1379: 69 d9        	adc	#$d9
     137b: 85 17        	sta	$17                     ; 0x2017 <printf+0x1a5>
     137d: a9 01        	lda	#$1
-    137f: 15 40        	ora	$40,x                   ; 0x2040 <printf+0x1ce>
+    137f: 15 39        	ora	$39,x                   ; 0x2039 <printf+0x1c7>
     1381: 92 16        	sta	($16)                   ; 0x2016 <printf+0x1a4>
     1383: a2 80        	ldx	#$80
     1385: 86 f3        	stx	$f3                     ; 0x20f3 <printf+0x281>
@@ -2500,10 +2500,10 @@ Disassembly of section .text:
     14b5: a0 13        	ldy	#$13
     14b7: a5 95        	lda	$95                     ; 0x2095 <printf+0x223>
     14b9: 91 12        	sta	($12),y                 ; 0x2012 <printf+0x1a0>
-    14bb: 64 3e        	stz	$3e                     ; 0x203e <printf+0x1cc>
+    14bb: 64 37        	stz	$37                     ; 0x2037 <printf+0x1c5>
     14bd: 9c 14 d0     	stz	$d014                   ; 0xd014 <__heap_start+0xa030>
     14c0: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xa031>
-    14c3: 64 3f        	stz	$3f                     ; 0x203f <printf+0x1cd>
+    14c3: 64 38        	stz	$38                     ; 0x2038 <printf+0x1c6>
     14c5: 9c 16 d0     	stz	$d016                   ; 0xd016 <__heap_start+0xa032>
     14c8: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xa033>
     14cb: a6 8e        	ldx	$8e                     ; 0x208e <printf+0x21c>
@@ -2516,7 +2516,7 @@ Disassembly of section .text:
     14d9: b1 12        	lda	($12),y                 ; 0x2012 <printf+0x1a0>
     14db: 85 16        	sta	$16                     ; 0x2016 <printf+0x1a4>
     14dd: a2 01        	ldx	#$1
-    14df: 86 3d        	stx	$3d                     ; 0x203d <printf+0x1cb>
+    14df: 86 36        	stx	$36                     ; 0x2036 <printf+0x1c4>
     14e1: a0 01        	ldy	#$1
     14e3: a5 96        	lda	$96                     ; 0x2096 <printf+0x224>
     14e5: 18           	clc
@@ -2861,7 +2861,7 @@ Disassembly of section .text:
     1757: a9 40        	lda	#$40
     1759: a6 8c        	ldx	$8c                     ; 0x208c <printf+0x21a>
     175b: 86 90        	stx	$90                     ; 0x2090 <printf+0x21e>
-    175d: 9d 40 00     	sta	$40,x                   ; 0x40 <_spriteCtl>
+    175d: 9d 39 00     	sta	$39,x                   ; 0x39 <_spriteCtl>
     1760: 92 88        	sta	($88)                   ; 0x2088 <printf+0x216>
     1762: a5 15        	lda	$15                     ; 0x2015 <printf+0x1a3>
     1764: 92 1c        	sta	($1c)                   ; 0x201c <printf+0x1aa>
@@ -2913,7 +2913,7 @@ Disassembly of section .text:
     17b2: 92 1c        	sta	($1c)                   ; 0x201c <printf+0x1aa>
     17b4: a8           	tay
     17b5: a9 40        	lda	#$40
-    17b7: 9d 40 00     	sta	$40,x                   ; 0x40 <_spriteCtl>
+    17b7: 9d 39 00     	sta	$39,x                   ; 0x39 <_spriteCtl>
     17ba: 92 22        	sta	($22)                   ; 0x2022 <printf+0x1b0>
     17bc: a5 1e        	lda	$1e                     ; 0x201e <printf+0x1ac>
     17be: 18           	clc
@@ -3003,10 +3003,10 @@ Disassembly of section .text:
     185b: 91 1e        	sta	($1e),y                 ; 0x201e <printf+0x1ac>
     185d: a5 1a        	lda	$1a                     ; 0x201a <printf+0x1a8>
     185f: a4 90        	ldy	$90                     ; 0x2090 <printf+0x21e>
-    1861: 19 40 00     	ora	$40,y                   ; 0x40 <_spriteCtl>
+    1861: 19 39 00     	ora	$39,y                   ; 0x39 <_spriteCtl>
     1864: 92 88        	sta	($88)                   ; 0x2088 <printf+0x216>
     1866: a5 1a        	lda	$1a                     ; 0x201a <printf+0x1a8>
-    1868: 15 40        	ora	$40,x                   ; 0x2040 <printf+0x1ce>
+    1868: 15 39        	ora	$39,x                   ; 0x2039 <printf+0x1c7>
     186a: 92 22        	sta	($22)                   ; 0x2022 <printf+0x1b0>
     186c: 18           	clc
     186d: a5 16        	lda	$16                     ; 0x2016 <printf+0x1a4>
@@ -3315,10 +3315,10 @@ Disassembly of section .text:
     1abe: 60           	rts
 
 00001abf <__putchar>:
-    1abf: 85 80        	sta	$80                     ; 0x2080 <printf+0x20e>
+    1abf: 85 79        	sta	$79                     ; 0x2079 <printf+0x207>
     1ac1: a6 01        	ldx	$1                      ; 0x2001 <printf+0x18f>
     1ac3: 86 22        	stx	$22                     ; 0x2022 <printf+0x1b0>
-    1ac5: a6 3f        	ldx	$3f                     ; 0x203f <printf+0x1cd>
+    1ac5: a6 38        	ldx	$38                     ; 0x2038 <printf+0x1c6>
     1ac7: a0 50        	ldy	#$50
     1ac9: 8c 00 de     	sty	$de00                   ; 0xde00 <__heap_start+0xae1c>
     1acc: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xae1d>
@@ -3372,7 +3372,7 @@ Disassembly of section .text:
     1b3e: e6 12        	inc	$12                     ; 0x2012 <printf+0x1a0>
     1b40: d0 02        	bne	$1b44 <__putchar+0x85>
     1b42: e6 13        	inc	$13                     ; 0x2013 <printf+0x1a1>
-    1b44: a9 80        	lda	#$80
+    1b44: a9 79        	lda	#$79
     1b46: 18           	clc
     1b47: 65 12        	adc	$12                     ; 0x2012 <printf+0x1a0>
     1b49: 85 1c        	sta	$1c                     ; 0x201c <printf+0x1aa>
@@ -3389,29 +3389,29 @@ Disassembly of section .text:
     1b5e: 4c 78 1c     	jmp	$1c78 <__putchar+0x1b9>
     1b61: a2 03        	ldx	#$3
     1b63: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
-    1b65: a5 3d        	lda	$3d                     ; 0x203d <printf+0x1cb>
+    1b65: a5 36        	lda	$36                     ; 0x2036 <printf+0x1c4>
     1b67: 29 01        	and	#$1
     1b69: a2 40        	ldx	#$40
     1b6b: a8           	tay
     1b6c: d0 02        	bne	$1b70 <__putchar+0xb1>
     1b6e: a2 f0        	ldx	#$f0
-    1b70: a4 3e        	ldy	$3e                     ; 0x203e <printf+0x1cc>
+    1b70: a4 37        	ldy	$37                     ; 0x2037 <printf+0x1c5>
     1b72: 8a           	txa
     1b73: 91 1a        	sta	($1a),y                 ; 0x201a <printf+0x1a8>
     1b75: a2 02        	ldx	#$2
     1b77: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
     1b79: b2 1c        	lda	($1c)                   ; 0x201c <printf+0x1aa>
-    1b7b: a4 3e        	ldy	$3e                     ; 0x203e <printf+0x1cc>
+    1b7b: a4 37        	ldy	$37                     ; 0x2037 <printf+0x1c5>
     1b7d: 91 1a        	sta	($1a),y                 ; 0x201a <printf+0x1a8>
-    1b7f: a6 3e        	ldx	$3e                     ; 0x203e <printf+0x1cc>
+    1b7f: a6 37        	ldx	$37                     ; 0x2037 <printf+0x1c5>
     1b81: e8           	inx
-    1b82: e6 3e        	inc	$3e                     ; 0x203e <printf+0x1cc>
+    1b82: e6 37        	inc	$37                     ; 0x2037 <printf+0x1c5>
     1b84: e0 50        	cpx	#$50
     1b86: d0 b6        	bne	$1b3e <__putchar+0x7f>
-    1b88: 64 3e        	stz	$3e                     ; 0x203e <printf+0x1cc>
-    1b8a: a6 3f        	ldx	$3f                     ; 0x203f <printf+0x1cd>
+    1b88: 64 37        	stz	$37                     ; 0x2037 <printf+0x1c5>
+    1b8a: a6 38        	ldx	$38                     ; 0x2038 <printf+0x1c6>
     1b8c: e8           	inx
-    1b8d: e6 3f        	inc	$3f                     ; 0x203f <printf+0x1cd>
+    1b8d: e6 38        	inc	$38                     ; 0x2038 <printf+0x1c6>
     1b8f: e0 1e        	cpx	#$1e
     1b91: f0 03        	beq	$1b96 <__putchar+0xd7>
     1b93: 4c 31 1b     	jmp	$1b31 <__putchar+0x72>
@@ -3448,7 +3448,7 @@ Disassembly of section .text:
     1bd0: d0 ca        	bne	$1b9c <__putchar+0xdd>
     1bd2: a2 03        	ldx	#$3
     1bd4: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
-    1bd6: a5 3d        	lda	$3d                     ; 0x203d <printf+0x1cb>
+    1bd6: a5 36        	lda	$36                     ; 0x2036 <printf+0x1c4>
     1bd8: 29 01        	and	#$1
     1bda: aa           	tax
     1bdb: a9 40        	lda	#$40
@@ -3506,7 +3506,7 @@ Disassembly of section .text:
     1c41: 84 1d        	sty	$1d                     ; 0x201d <printf+0x1ab>
     1c43: e0 00        	cpx	#$0
     1c45: d0 e3        	bne	$1c2a <__putchar+0x16b>
-    1c47: c6 3f        	dec	$3f                     ; 0x203f <printf+0x1cd>
+    1c47: c6 38        	dec	$38                     ; 0x2038 <printf+0x1c6>
     1c49: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xae24>
     1c4c: a2 c0        	ldx	#$c0
     1c4e: 8e 09 de     	stx	$de09                   ; 0xde09 <__heap_start+0xae25>
@@ -3526,11 +3526,11 @@ Disassembly of section .text:
     1c75: 4c 3e 1b     	jmp	$1b3e <__putchar+0x7f>
     1c78: a6 22        	ldx	$22                     ; 0x2022 <printf+0x1b0>
     1c7a: 86 01        	stx	$1                      ; 0x2001 <printf+0x18f>
-    1c7c: a6 3e        	ldx	$3e                     ; 0x203e <printf+0x1cc>
-    1c7e: a4 3f        	ldy	$3f                     ; 0x203f <printf+0x1cd>
+    1c7c: a6 37        	ldx	$37                     ; 0x2037 <printf+0x1c5>
+    1c7e: a4 38        	ldy	$38                     ; 0x2038 <printf+0x1c6>
     1c80: 8e 14 d0     	stx	$d014                   ; 0xd014 <__heap_start+0xa030>
     1c83: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xa031>
-    1c86: 84 3f        	sty	$3f                     ; 0x203f <printf+0x1cd>
+    1c86: 84 38        	sty	$38                     ; 0x2038 <printf+0x1c6>
     1c88: 8c 16 d0     	sty	$d016                   ; 0xd016 <__heap_start+0xa032>
     1c8b: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xa033>
     1c8e: 60           	rts

@@ -28,11 +28,10 @@
 #define LCD_PURE_BLK  0x0000
 
 #include "f256lib.h"
+#include "../src/muUtils.h" //contains helper functions I often use
 
-//STRUCTS
-struct timer_t pauseTimer;
 
-EMBED(mac, "../assets/cat.bin", 0x10000);
+EMBED(mac, "../assets/bomb2.bin", 0x10000);
 
 uint16_t ccycle[3] = {LCD_PURE_RED, LCD_PURE_GRN, LCD_PURE_BLU};
 void clearVisible(uint16_t);
@@ -45,47 +44,6 @@ void displayImage();
 void gotoLCDXY(uint8_t, uint16_t)
 {
 	
-}
-//Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
-bool setTimer(const struct timer_t *timer)
-{
-    *(uint8_t*)0xf3 = timer->units;
-    *(uint8_t*)0xf4 = timer->absolute;
-    *(uint8_t*)0xf5 = timer->cookie;
-    kernelCall(Clock.SetTimer);
-	return !kernelError;
-}
-//getTimerAbsolute:
-//This is essential if you want to retrigger a timer properly. The old value of the absolute
-//field has a high chance of being desynchronized when you arrive at the moment when a timer
-//is expired and you must act upon it.
-//get the value returned by this, add the delay you want, and use setTimer to send it off
-//ex: myTimer.absolute = getTimerAbsolute(TIMES_SECONDS) + TIMER_MYTIMER_DELAY
-uint8_t getTimerAbsolute(uint8_t units)
-{
-    *(uint8_t*)0xf3 = units | 0x80;
-    return kernelCall(Clock.SetTimer);
-}
-
-void lilpause(uint8_t timedelay)
-{
-	bool noteExitFlag = false;
-	pauseTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + timedelay;
-	setTimer(&pauseTimer);
-	noteExitFlag = false;
-	while(!noteExitFlag)
-	{
-		kernelNextEvent();
-		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
-		{
-			switch(kernelEventData.timer.cookie)
-			{
-			case TIMER_COOKIE:
-				noteExitFlag = true;
-				break;
-			}
-		}
-	}
 }
 
 void clearVisible(uint16_t colorWord)
@@ -151,6 +109,9 @@ int main(int argc, char *argv[]) {
 	uint8_t i=0;
 	
 	POKE(0xD6A0, 0b01111111);
+	
+	displayImage();
+	while(true);
 	while(true)
 	{
 		r1 = randomRead();

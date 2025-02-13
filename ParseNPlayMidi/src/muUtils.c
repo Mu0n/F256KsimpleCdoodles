@@ -2,6 +2,17 @@
 #include "../src/muUtils.h"
 
 
+//graphics background cleardevice
+void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
+{
+	byte backup;
+	backup = PEEK(MMU_IO_CTRL);
+	POKE(MMU_IO_CTRL,0);
+	POKE(0xD00D,blue); //force black graphics background
+	POKE(0xD00E,green);
+	POKE(0xD00F,red);
+	POKE(MMU_IO_CTRL,backup);
+}	
 //codec enable all lines
 void openAllCODEC()
 {
@@ -56,4 +67,24 @@ void injectChar40col(uint8_t x, uint8_t y, uint8_t theChar, uint8_t col)
 		POKE(MMU_IO_CTRL,0x00);  //set it back to default
 }
 
+//simple hit space to continue forced modal delay
+void hitspace()
+{
+	bool exitFlag = false;
+	
+	while(exitFlag == false)
+	{
+			kernelNextEvent();
+			if(kernelEventData.type == kernelEvent(key.PRESSED))
+			{
+				switch(kernelEventData.key.raw)
+				{
+					case 148: //enter
+					case 32: //space
+						exitFlag = true;
+						break;
+				}
+			}
+	}
+}
 }

@@ -4,9 +4,9 @@
   __palback_size = 0x400;
 
   __carL_lma  = 0x10400;
-  __carL_size = 0x400;
+  __carL_size = 0x1400;
 
-  __carR_lma  = 0x10800;
+  __carR_lma  = 0x11800;
   __carR_size = 0x400;
 
   __backbmp_lma  = 0x20000;

@@ -153,6 +153,9 @@ int main(int argc, char *argv[]) {
 	uint8_t i=0;
 	
 	POKE(0xD6A0, 0b01111111);
+	
+	displayImage();
+	while(true);
 	while(true)
 	{
 		r1 = randomRead();

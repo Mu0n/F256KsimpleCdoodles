@@ -87,11 +87,10 @@
 #include <stdlib.h>
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
-#include "../src/midispec.c"
 
-EMBED(palback, "../assets/Urban4.data.pal", 0x10000);
-EMBED(carL, "../assets/car.spr",0x10400);
-EMBED(carR, "../assets/carr.spr",0x10800);
+EMBED(palback, "../assets/Urban4.data.pal", 0x10000); //1kb
+EMBED(carL, "../assets/car.bin",0x10400); //5kb
+EMBED(carR, "../assets/carr.spr",0x11800); // 5kb
 EMBED(backbmp, "../assets/Urban4.data", 0x20000);
 EMBED(midifile, "../assets/continen.mid", 0x38000);
 
@@ -148,6 +147,25 @@ int16_t SIN[] = {
      -12,  -10,   -9,   -7,   -6,   -4,   -3,   -1,
 };
 
+//GLOBALS
+typedef struct sprStatus
+{
+	uint16_t x,y; //position
+	bool rightOrLeft; //last facing
+	bool isDashing;
+	uint32_t addr; //base address
+	uint8_t frame; //frame into view
+	uint16_t sx, sy; //speed
+	struct timer_t timer; //animation timer;
+	uint8_t cookie; //cookie for timer
+	uint8_t state; //which state: 0 idle, 1 walk right, 2 walk left, etc
+	uint8_t *minIndexForState; //minimum index for given state
+	uint8_t *maxIndexForState; //maximum index for given state
+} sprStatus;
+
+struct sprStatus carLS, carRS;
+
+
 //FUNCTION PROTOTYPES
 void setup(void);
 
@@ -156,7 +174,6 @@ int16_t findPositionOfHeader(void);  //this opens a .mid file and ignores everyt
 void detectStructure(uint16_t startIndex); //checks the tempo, number of tracks, etc
 int16_t getAndAnalyzeMIDI(void); //high level function that directs the reading and parsing of the MIDI file
 int8_t parse(uint16_t startIndex, bool wantCmds);
-uint32_t getTotalLeft(void);
 void playmidi(void);
 void adjustOffsets(void);
 void resetTimer0(void);
@@ -166,7 +183,6 @@ uint8_t isTimer0Done(void);
 
 void updateCarPos(uint8_t *value);
 void setCarPos(uint16_t, uint16_t);
-void hitspace(void);
 void swapColors(uint8_t, uint8_t);
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
@@ -600,18 +616,6 @@ int8_t parse(uint16_t startIndex, bool wantCmds)
      }	 //end of parse function
  
 	
-//gets a count of the total MIDI events that are relevant and left to play
-uint32_t getTotalLeft(void)
-	{
-	uint32_t sum=0;
-	uint16_t i=0;
-
-	for(i=0; i<theBigList.trackcount; i++)
-		{
-		sum+=(theBigList).TrackEventList[i].eventcount;
-		}
-	return sum;
-	}
 	
 void playmidi(void) //non-destructive version
 {
@@ -632,7 +636,7 @@ void playmidi(void) //non-destructive version
 	
 	soundBeholders=(uint32_t*)malloc(trackcount * sizeof(uint32_t));
 	
-	localTotalLeft = getTotalLeft();
+	localTotalLeft = getTotalLeft(&theBigList);
 	
 	while(localTotalLeft > 0 && !exitFlag)
 	{
@@ -774,26 +778,6 @@ uint8_t isTimer0Done()
 {
 	return PEEK(T0_PEND)&0x10;
 }
-	
-void hitspace()
-{
-	bool exitFlag = false;
-	
-	while(exitFlag == false)
-	{
-			kernelNextEvent();
-			if(kernelEventData.type == kernelEvent(key.PRESSED))
-			{
-				switch(kernelEventData.key.raw)
-				{
-					case 148: //enter
-					case 32: //space
-						exitFlag = true;
-						break;
-				}
-			}
-	}
-}
 
 void setCarPos(uint16_t x, uint16_t y)
 {
@@ -820,16 +804,16 @@ void updateCarPos(uint8_t *value)
 				while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)
 					;
 	
-					if(PEEK(NES_PAD0)==NES_PAD0_LEFT)
-					{
-						carX-= 3;
-						setCarPos(carX, carY);
-					}
-					else if(PEEK(NES_PAD0) == NES_PAD0_RIGHT)
-					{
-						carX += 3;
-						setCarPos(carX, carY);
-					}
+				if(PEEK(NES_PAD0)==NES_PAD0_LEFT)
+				{
+					carX-= 3;
+					setCarPos(carX, carY);
+				}
+				else if(PEEK(NES_PAD0) == NES_PAD0_RIGHT)
+				{
+					carX += 3;
+					setCarPos(carX, carY);
+				}
 	
 				break;
 			case TIMER_LANE_COOKIE:
@@ -893,6 +877,11 @@ void setup()
 	bitmapSetVisible(1,false);
 	bitmapSetVisible(2,false);
 	
+	
+
+	
+
+
 	spriteDefine(0,SPR_L0,32,0,0);
 	spriteSetVisible(0,true);
 	spriteDefine(1,SPR_R0,32,0,0);
@@ -919,9 +908,41 @@ void setup()
 	
 }
 
-
-
-/*
+void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, bool wantVisible, struct sprStatus)
+{
+	spriteDefine(s, addr, size, clut, layer);
+	
+	
+	
+	carLS.x = 160;
+	carLS.y = 220;
+	carLS.rightOrLeft = true;
+	carLS.addr = SPR_L0;
+	carLS.frame = 0;
+	carLS.sx = 0;
+	carLS.state = 0;
+	carLS.minIndexForState = (uint8_t *)malloc(sizeof(uint8_t) * 1);
+	carLS.maxIndexForState = (uint8_t *)malloc(sizeof(uint8_t) * 1);
+	carLS.minIndexForState[0] = 0;
+	carLS.maxIndexForState[0] = 0;
+	
+	
+	
+}
+	/*typedef struct sprStatus
+{
+	uint16_t x,y; //position
+	bool rightOrLeft; //last facing
+	bool isDashing;
+	uint32_t addr; //base address
+	uint8_t frame; //frame into view
+	uint16_t sx, sy; //speed
+	struct timer_t timer; //animation timer;
+	uint8_t cookie; //cookie for timer
+	uint8_t state; //which state: 0 idle, 1 walk right, 2 walk left, etc
+	uint8_t *minIndexForState; //minimum index for given state
+	uint8_t *maxIndexForState; //maximum index for given state
+} sprStatus;
 */
 	
 void prepTimers()

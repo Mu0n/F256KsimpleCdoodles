@@ -3,11 +3,6 @@
 //DEFINES
 #define F256LIB_IMPLEMENTATION
 
-
-
-
-
-
 #define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
 #define TIMER_SPRANIM_COOKIE 0
@@ -114,7 +109,7 @@
 
 //INCLUDES
 #include "f256lib.h"
-#include "../src/muUtils.h"
+#include "../src/muUtils.h" //contains helper functions I often use
 #include <stdlib.h>
 
 EMBED(palgrudge, "../assets/grudge.pal", 0x10000);//1kb

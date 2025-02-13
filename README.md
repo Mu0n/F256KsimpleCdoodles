@@ -73,4 +73,11 @@ This is meant for the F256K2 (and Jr. "the Second") since it targets the SAM2695
 This only works with a F256K2 since it sends a special converted bitmap image to an LCD only present in the K2 enclosure. Here are some instructions in the wiki to get this process going: https://wiki.f256foenix.com/index.php?title=Use_the_K2_LCD 
 Therein, you'll find a link to a python script to help the conversion process.
 
+## lightshow
+
+![image](https://github.com/user-attachments/assets/4b302ed3-5d81-4043-b752-4b1560b14972)
+
+This is supposed to detect 2 RGB addressable LEDs on a Jr. or Jr2, 3 RGB LEDs on a F256K and 4 RGB LEDs on a F256K2.
+It will pick random RGB values and send them to the registers every 20 frames (about 3 times per second)
+
 

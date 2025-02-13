@@ -38,15 +38,15 @@ int main(int argc, char *argv[]) {
 		POKE(LED_PWR_B, HIGH_BYTE(r1)); //power blue
 		POKE(LED_PWR_G, LOW_BYTE(r1));  //power green
 		POKE(LED_PWR_R, HIGH_BYTE(r2)); //power red
-		POKE(LED_SD_B, LOW_BYTE(r2));  //media blue
-		POKE(LED_SD_G, HIGH_BYTE(r3)); //media green
-		POKE(LED_SD_R, LOW_BYTE(r3));  //media red
+		POKE(LED_SD_B, LOW_BYTE(r2));   //media blue
+		POKE(LED_SD_G, HIGH_BYTE(r3));  //media green
+		POKE(LED_SD_R, LOW_BYTE(r3));   //media red
 		POKE(LED_LCK_B, HIGH_BYTE(r4)); //lock blue
 		POKE(LED_LCK_G, LOW_BYTE(r4));  //lock green 
-		POKE(LED_LCK_R, HIGH_BYTE(r5));  //lock red
-		POKE(LED_NET_B, LOW_BYTE(r5)); //lock blue
-		POKE(LED_NET_G, HIGH_BYTE(r6));  //lock green 
-		POKE(LED_NET_R, LOW_BYTE(r6));  //lock red
+		POKE(LED_LCK_R, HIGH_BYTE(r5)); //lock red
+		POKE(LED_NET_B, LOW_BYTE(r5));  //network blue
+		POKE(LED_NET_G, HIGH_BYTE(r6)); //network green 
+		POKE(LED_NET_R, LOW_BYTE(r6));  //network red
 		lilpause(20);
 	}
 	

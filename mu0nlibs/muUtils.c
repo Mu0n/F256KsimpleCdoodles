@@ -1,7 +1,6 @@
 #include "f256lib.h"
 #include "../src/muUtils.h"
 
-
 //will return true if the machine id is detected as a K or K2, enabling peace of mind to use its exclusive features
 bool isAnyK(void)
 {

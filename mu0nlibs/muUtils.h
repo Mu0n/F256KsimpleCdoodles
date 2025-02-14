@@ -20,6 +20,7 @@ void hitspace(void);
 void lilpause(uint8_t);
 bool isAnyK(void);
 bool hasCaseLCD(void);
+void shutDownIfNoK2(void);
 
 
 #endif // UTIL_H

@@ -7,12 +7,12 @@ SYMBOL TABLE:
 00000000 l    df *ABS*	00000000 ld-temp.o
 0000033b l     F .text	00000380 f256Init
 00000032 l     O .zp.bss	00000007 kernelEventData
-000009cc l     O .rodata	00000030 textColors
+000009f8 l     O .rodata	00000030 textColors
 00000030 l     O .zp.bss	00000001 _col
 00000031 l     O .zp.bss	00000001 _row
-00000a90 l     O .bss	00000001 kernelError
-000006c1 l     F .text	0000012e f256main
-000007ef l     F .text	000001b8 textPrint
+00000abc l     O .bss	00000001 kernelError
+000006c1 l     F .text	0000015a f256main
+0000081b l     F .text	000001b8 textPrint
 000006bb g     F .text	00000006 main
 00000311 g       .text	00000000 __after_main
 00000300 g       .text	00000000 __do_init_stack
@@ -20,11 +20,11 @@ SYMBOL TABLE:
 00000315 g     F .text	00000013 __zero_bss
 0000030b g       .text	00000000 __do_zero_zp_bss
 00000328 g     F .text	00000013 __zero_zp_bss
-000009a7 g     F .text	00000005 exit
+000009d3 g     F .text	00000005 exit
 00000314 g       .text	00000000 _fini
-000009ac  w    F .text	00000020 __memset
+000009d8  w    F .text	00000020 __memset
 00001000  w      *ABS*	00000000 __heap_default_limit
-00000a92 g       .noinit	00000000 __heap_start
+00000abe g       .noinit	00000000 __heap_start
 00000010 g       *ABS*	00000000 __rc0
 00000012 g       *ABS*	00000000 __rc2
 00000014 g       *ABS*	00000000 __rc4
@@ -62,7 +62,7 @@ SYMBOL TABLE:
 1500a000 g       *ABS*	00000000 __block21_lma
 1600a000 g       *ABS*	00000000 __block22_lma
 1700a000 g       *ABS*	00000000 __block23_lma
-00000a90 g       .bss	00000000 __bss_start
+00000abc g       .bss	00000000 __bss_start
 00000300 g       .text	00000000 _start
 0000002d g       *ABS*	00000000 __rc29
 0000002b g       *ABS*	00000000 __rc27
@@ -85,40 +85,40 @@ SYMBOL TABLE:
 00000030 g       .zp.bss	00000000 __zp_bss_start
 00000009 g       *ABS*	00000000 __zp_bss_size
 00000300 g       .text	00000000 _init
-000009cc g       .text	00000000 __init_array_start
-000009cc g       .text	00000000 __init_array_end
-000009cc g       .text	00000000 __fini_array_start
-000009cc g       .text	00000000 __fini_array_end
-00000a90 g       .data	00000000 __data_start
-00000a90 g       .data	00000000 __data_end
-00000a90 g       *ABS*	00000000 __data_load_start
+000009f8 g       .text	00000000 __init_array_start
+000009f8 g       .text	00000000 __init_array_end
+000009f8 g       .text	00000000 __fini_array_start
+000009f8 g       .text	00000000 __fini_array_end
+00000abc g       .data	00000000 __data_start
+00000abc g       .data	00000000 __data_end
+00000abc g       *ABS*	00000000 __data_load_start
 00000000 g       *ABS*	00000000 __data_size
-00000a91 g       .bss	00000000 __bss_end
+00000abd g       .bss	00000000 __bss_end
 00000001 g       *ABS*	00000000 __bss_size
-00000a91 g       .noinit	00000000 end_block8
-00000a91 g       .noinit	00000000 end_block9
-00000a91 g       .noinit	00000000 end_block10
-00000a91 g       .noinit	00000000 end_block11
-00000a91 g       .noinit	00000000 end_block12
-00000a91 g       .noinit	00000000 end_block13
-00000a91 g       .noinit	00000000 end_block14
-00000a91 g       .noinit	00000000 end_block15
-00000a91 g       .noinit	00000000 end_block16
-00000a91 g       .noinit	00000000 end_block17
-00000a91 g       .noinit	00000000 end_block18
-00000a91 g       .noinit	00000000 end_block19
-00000a91 g       .noinit	00000000 end_block20
-00000a91 g       .noinit	00000000 end_block21
-00000a91 g       .noinit	00000000 end_block22
-00000a91 g       .noinit	00000000 end_block23
+00000abd g       .noinit	00000000 end_block8
+00000abd g       .noinit	00000000 end_block9
+00000abd g       .noinit	00000000 end_block10
+00000abd g       .noinit	00000000 end_block11
+00000abd g       .noinit	00000000 end_block12
+00000abd g       .noinit	00000000 end_block13
+00000abd g       .noinit	00000000 end_block14
+00000abd g       .noinit	00000000 end_block15
+00000abd g       .noinit	00000000 end_block16
+00000abd g       .noinit	00000000 end_block17
+00000abd g       .noinit	00000000 end_block18
+00000abd g       .noinit	00000000 end_block19
+00000abd g       .noinit	00000000 end_block20
+00000abd g       .noinit	00000000 end_block21
+00000abd g       .noinit	00000000 end_block22
+00000abd g       .noinit	00000000 end_block23
 
 Disassembly of section .text:
 
 00000300 <_start>:
      300: a9 00        	lda	#$0
-     302: 85 10        	sta	$10                     ; 0x2010 <__heap_start+0x157e>
+     302: 85 10        	sta	$10                     ; 0x2010 <__heap_start+0x1552>
      304: a9 a0        	lda	#$a0
-     306: 85 11        	sta	$11                     ; 0x2011 <__heap_start+0x157f>
+     306: 85 11        	sta	$11                     ; 0x2011 <__heap_start+0x1553>
 
 00000308 <__do_zero_bss>:
      308: 20 15 03     	jsr	$315 <__zero_bss>
@@ -128,7 +128,7 @@ Disassembly of section .text:
      30e: 20 bb 06     	jsr	$6bb <main>
 
 00000311 <__after_main>:
-     311: 4c a7 09     	jmp	$9a7 <exit>
+     311: 4c d3 09     	jmp	$9d3 <exit>
 
 00000314 <_fini>:
      314: 60           	rts
@@ -136,225 +136,225 @@ Disassembly of section .text:
 00000315 <__zero_bss>:
      315: a2 01        	ldx	#$1
      317: a0 00        	ldy	#$0
-     319: a9 90        	lda	#$90
-     31b: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1580>
+     319: a9 bc        	lda	#$bc
+     31b: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1554>
      31d: a9 0a        	lda	#$a
-     31f: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x1581>
+     31f: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x1555>
      321: a9 00        	lda	#$0
-     323: 84 14        	sty	$14                     ; 0x2014 <__heap_start+0x1582>
-     325: 4c ac 09     	jmp	$9ac <__memset>
+     323: 84 14        	sty	$14                     ; 0x2014 <__heap_start+0x1556>
+     325: 4c d8 09     	jmp	$9d8 <__memset>
 
 00000328 <__zero_zp_bss>:
      328: a2 09        	ldx	#$9
      32a: a0 00        	ldy	#$0
      32c: a9 30        	lda	#$30
-     32e: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1580>
+     32e: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1554>
      330: a9 00        	lda	#$0
-     332: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x1581>
+     332: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x1555>
      334: a9 00        	lda	#$0
-     336: 84 14        	sty	$14                     ; 0x2014 <__heap_start+0x1582>
-     338: 4c ac 09     	jmp	$9ac <__memset>
+     336: 84 14        	sty	$14                     ; 0x2014 <__heap_start+0x1556>
+     338: 4c d8 09     	jmp	$9d8 <__memset>
 
 0000033b <f256Init>:
-     33b: 64 14        	stz	$14                     ; 0x2014 <__heap_start+0x1582>
+     33b: 64 14        	stz	$14                     ; 0x2014 <__heap_start+0x1556>
      33d: a2 00        	ldx	#$0
-     33f: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
+     33f: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
      341: a2 c0        	ldx	#$c0
-     343: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1581>
-     345: 64 01        	stz	$1                      ; 0x2001 <__heap_start+0x156f>
+     343: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1555>
+     345: 64 01        	stz	$1                      ; 0x2001 <__heap_start+0x1543>
      347: a2 3f        	ldx	#$3f
-     349: 8e 00 d0     	stx	$d000                   ; 0xd000 <__heap_start+0xc56e>
+     349: 8e 00 d0     	stx	$d000                   ; 0xd000 <__heap_start+0xc542>
      34c: a2 b3        	ldx	#$b3
-     34e: 86 00        	stx	$0                      ; 0x2000 <__heap_start+0x156e>
-     350: 64 08        	stz	$8                      ; 0x2008 <__heap_start+0x1576>
+     34e: 86 00        	stx	$0                      ; 0x2000 <__heap_start+0x1542>
+     350: 64 08        	stz	$8                      ; 0x2008 <__heap_start+0x154a>
      352: a2 01        	ldx	#$1
-     354: 86 09        	stx	$9                      ; 0x2009 <__heap_start+0x1577>
+     354: 86 09        	stx	$9                      ; 0x2009 <__heap_start+0x154b>
      356: e8           	inx
-     357: 86 0a        	stx	$a                      ; 0x200a <__heap_start+0x1578>
+     357: 86 0a        	stx	$a                      ; 0x200a <__heap_start+0x154c>
      359: e8           	inx
-     35a: 86 0b        	stx	$b                      ; 0x200b <__heap_start+0x1579>
+     35a: 86 0b        	stx	$b                      ; 0x200b <__heap_start+0x154d>
      35c: e8           	inx
-     35d: 86 0c        	stx	$c                      ; 0x200c <__heap_start+0x157a>
+     35d: 86 0c        	stx	$c                      ; 0x200c <__heap_start+0x154e>
      35f: e8           	inx
-     360: 86 0d        	stx	$d                      ; 0x200d <__heap_start+0x157b>
+     360: 86 0d        	stx	$d                      ; 0x200d <__heap_start+0x154f>
      362: a2 32        	ldx	#$32
      364: a0 00        	ldy	#$0
-     366: 86 f0        	stx	$f0                     ; 0x20f0 <__heap_start+0x165e>
-     368: 84 f1        	sty	$f1                     ; 0x20f1 <__heap_start+0x165f>
+     366: 86 f0        	stx	$f0                     ; 0x20f0 <__heap_start+0x1632>
+     368: 84 f1        	sty	$f1                     ; 0x20f1 <__heap_start+0x1633>
      36a: a2 00        	ldx	#$0
-     36c: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x1586>
+     36c: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x155a>
      36e: ca           	dex
-     36f: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x1587>
+     36f: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x155b>
      371: 8a           	txa
      372: 0a           	asl
      373: 0a           	asl
      374: 18           	clc
      375: 69 d4        	adc	#$d4
-     377: 85 1a        	sta	$1a                     ; 0x201a <__heap_start+0x1588>
+     377: 85 1a        	sta	$1a                     ; 0x201a <__heap_start+0x155c>
      379: a0 00        	ldy	#$0
-     37b: 64 17        	stz	$17                     ; 0x2017 <__heap_start+0x1585>
-     37d: 64 16        	stz	$16                     ; 0x2016 <__heap_start+0x1584>
-     37f: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x1587>
+     37b: 64 17        	stz	$17                     ; 0x2017 <__heap_start+0x1559>
+     37d: 64 16        	stz	$16                     ; 0x2016 <__heap_start+0x1558>
+     37f: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x155b>
      381: e0 03        	cpx	#$3
-     383: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x156f>
-     385: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x158a>
+     383: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x1543>
+     385: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x155e>
      387: a2 d0        	ldx	#$d0
-     389: 84 1b        	sty	$1b                     ; 0x201b <__heap_start+0x1589>
+     389: 84 1b        	sty	$1b                     ; 0x201b <__heap_start+0x155d>
      38b: b0 02        	bcs	$38f <f256Init+0x54>
-     38d: a6 1a        	ldx	$1a                     ; 0x201a <__heap_start+0x1588>
-     38f: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1583>
-     391: a5 17        	lda	$17                     ; 0x2017 <__heap_start+0x1585>
+     38d: a6 1a        	ldx	$1a                     ; 0x201a <__heap_start+0x155c>
+     38f: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1557>
+     391: a5 17        	lda	$17                     ; 0x2017 <__heap_start+0x1559>
      393: 18           	clc
-     394: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x1582>
+     394: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x1556>
      396: a8           	tay
-     397: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x1585>
-     399: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1584>
-     39b: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x158b>
-     39d: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1584>
-     39f: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1583>
-     3a1: 84 16        	sty	$16                     ; 0x2016 <__heap_start+0x1584>
+     397: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x1559>
+     399: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1558>
+     39b: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x155f>
+     39d: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1558>
+     39f: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1557>
+     3a1: 84 16        	sty	$16                     ; 0x2016 <__heap_start+0x1558>
      3a3: a0 01        	ldy	#$1
-     3a5: 84 01        	sty	$1                      ; 0x2001 <__heap_start+0x156f>
-     3a7: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1585>
-     3a9: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x1589>
-     3ab: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1584>
-     3ad: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
+     3a5: 84 01        	sty	$1                      ; 0x2001 <__heap_start+0x1543>
+     3a7: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1559>
+     3a9: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x155d>
+     3ab: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1558>
+     3ad: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
      3af: c8           	iny
-     3b0: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
-     3b2: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1583>
+     3b0: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
+     3b2: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1557>
      3b4: c8           	iny
      3b5: a9 ff        	lda	#$ff
-     3b7: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
+     3b7: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
      3b9: 8a           	txa
-     3ba: a6 1c        	ldx	$1c                     ; 0x201c <__heap_start+0x158a>
-     3bc: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
+     3ba: a6 1c        	ldx	$1c                     ; 0x201c <__heap_start+0x155e>
+     3bc: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
      3be: 18           	clc
      3bf: 69 04        	adc	#$4
-     3c1: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1585>
-     3c3: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x158b>
+     3c1: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1559>
+     3c3: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x155f>
      3c5: 69 00        	adc	#$0
-     3c7: e6 15        	inc	$15                     ; 0x2015 <__heap_start+0x1583>
-     3c9: a4 15        	ldy	$15                     ; 0x2015 <__heap_start+0x1583>
-     3cb: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1584>
+     3c7: e6 15        	inc	$15                     ; 0x2015 <__heap_start+0x1557>
+     3c9: a4 15        	ldy	$15                     ; 0x2015 <__heap_start+0x1557>
+     3cb: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1558>
      3cd: c9 04        	cmp	#$4
      3cf: f0 03        	beq	$3d4 <f256Init+0x99>
      3d1: 4c 7f 03     	jmp	$37f <f256Init+0x44>
-     3d4: a5 17        	lda	$17                     ; 0x2017 <__heap_start+0x1585>
+     3d4: a5 17        	lda	$17                     ; 0x2017 <__heap_start+0x1559>
      3d6: f0 03        	beq	$3db <f256Init+0xa0>
      3d8: 4c 7f 03     	jmp	$37f <f256Init+0x44>
-     3db: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x1586>
+     3db: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x155a>
      3dd: e8           	inx
      3de: e0 04        	cpx	#$4
      3e0: f0 03        	beq	$3e5 <f256Init+0xaa>
      3e2: 4c 6c 03     	jmp	$36c <f256Init+0x31>
-     3e5: ad 02 d0     	lda	$d002                   ; 0xd002 <__heap_start+0xc570>
+     3e5: ad 02 d0     	lda	$d002                   ; 0xd002 <__heap_start+0xc544>
      3e8: 29 f0        	and	#$f0
-     3ea: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xc570>
-     3ed: ad 02 d0     	lda	$d002                   ; 0xd002 <__heap_start+0xc570>
+     3ea: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xc544>
+     3ed: ad 02 d0     	lda	$d002                   ; 0xd002 <__heap_start+0xc544>
      3f0: 29 0f        	and	#$f
      3f2: 09 10        	ora	#$10
-     3f4: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xc570>
+     3f4: 8d 02 d0     	sta	$d002                   ; 0xd002 <__heap_start+0xc544>
      3f7: a2 02        	ldx	#$2
-     3f9: 8e 03 d0     	stx	$d003                   ; 0xd003 <__heap_start+0xc571>
-     3fc: ad 01 d0     	lda	$d001                   ; 0xd001 <__heap_start+0xc56f>
+     3f9: 8e 03 d0     	stx	$d003                   ; 0xd003 <__heap_start+0xc545>
+     3fc: ad 01 d0     	lda	$d001                   ; 0xd001 <__heap_start+0xc543>
      3ff: 29 f9        	and	#$f9
      401: 09 04        	ora	#$4
-     403: 8d 01 d0     	sta	$d001                   ; 0xd001 <__heap_start+0xc56f>
-     406: 64 14        	stz	$14                     ; 0x2014 <__heap_start+0x1582>
-     408: 9c 10 d0     	stz	$d010                   ; 0xd010 <__heap_start+0xc57e>
+     403: 8d 01 d0     	sta	$d001                   ; 0xd001 <__heap_start+0xc543>
+     406: 64 14        	stz	$14                     ; 0x2014 <__heap_start+0x1556>
+     408: 9c 10 d0     	stz	$d010                   ; 0xd010 <__heap_start+0xc552>
      40b: a2 00        	ldx	#$0
-     40d: 64 15        	stz	$15                     ; 0x2015 <__heap_start+0x1583>
-     40f: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x1586>
-     411: a4 18        	ldy	$18                     ; 0x2018 <__heap_start+0x1586>
-     413: be cc 09     	ldx	$9cc,y                  ; 0x9cc <textColors>
-     416: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x1587>
-     418: be cd 09     	ldx	$9cd,y                  ; 0x9cd <textColors+0x1>
-     41b: 86 1a        	stx	$1a                     ; 0x201a <__heap_start+0x1588>
-     41d: be ce 09     	ldx	$9ce,y                  ; 0x9ce <textColors+0x2>
-     420: 86 1b        	stx	$1b                     ; 0x201b <__heap_start+0x1589>
-     422: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1583>
-     424: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     427: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1585>
-     429: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd36f>
+     40d: 64 15        	stz	$15                     ; 0x2015 <__heap_start+0x1557>
+     40f: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x155a>
+     411: a4 18        	ldy	$18                     ; 0x2018 <__heap_start+0x155a>
+     413: be f8 09     	ldx	$9f8,y                  ; 0x9f8 <textColors>
+     416: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x155b>
+     418: be f9 09     	ldx	$9f9,y                  ; 0x9f9 <textColors+0x1>
+     41b: 86 1a        	stx	$1a                     ; 0x201a <__heap_start+0x155c>
+     41d: be fa 09     	ldx	$9fa,y                  ; 0x9fa <textColors+0x2>
+     420: 86 1b        	stx	$1b                     ; 0x201b <__heap_start+0x155d>
+     422: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1557>
+     424: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd342>
+     427: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1559>
+     429: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd343>
      42c: a2 04        	ldx	#$4
-     42e: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd370>
-     431: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd371>
-     434: ad 10 de     	lda	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     437: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     43a: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1583>
-     43c: ac 12 de     	ldy	$de12                   ; 0xde12 <__heap_start+0xd380>
-     43f: ac 13 de     	ldy	$de13                   ; 0xde13 <__heap_start+0xd381>
+     42e: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd344>
+     431: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd345>
+     434: ad 10 de     	lda	$de10                   ; 0xde10 <__heap_start+0xd352>
+     437: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd353>
+     43a: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1557>
+     43c: ac 12 de     	ldy	$de12                   ; 0xde12 <__heap_start+0xd354>
+     43f: ac 13 de     	ldy	$de13                   ; 0xde13 <__heap_start+0xd355>
      442: 18           	clc
-     443: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x1582>
-     445: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1584>
-     447: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x1585>
+     443: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x1556>
+     445: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1558>
+     447: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x1559>
      449: a9 d8        	lda	#$d8
-     44b: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1583>
-     44d: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1585>
-     44f: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x1589>
-     451: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1584>
+     44b: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1557>
+     44d: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1559>
+     44f: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x155d>
+     451: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1558>
      453: a0 01        	ldy	#$1
-     455: a5 1a        	lda	$1a                     ; 0x201a <__heap_start+0x1588>
-     457: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
+     455: a5 1a        	lda	$1a                     ; 0x201a <__heap_start+0x155c>
+     457: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
      459: c8           	iny
-     45a: a5 19        	lda	$19                     ; 0x2019 <__heap_start+0x1587>
-     45c: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
+     45a: a5 19        	lda	$19                     ; 0x2019 <__heap_start+0x155b>
+     45c: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
      45e: c8           	iny
      45f: a9 ff        	lda	#$ff
-     461: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
-     463: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     466: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd36f>
+     461: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
+     463: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd342>
+     466: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd343>
      469: c8           	iny
-     46a: 8c 02 de     	sty	$de02                   ; 0xde02 <__heap_start+0xd370>
-     46d: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd371>
-     470: ad 10 de     	lda	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     473: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1583>
-     475: ad 11 de     	lda	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     478: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1584>
+     46a: 8c 02 de     	sty	$de02                   ; 0xde02 <__heap_start+0xd344>
+     46d: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd345>
+     470: ad 10 de     	lda	$de10                   ; 0xde10 <__heap_start+0xd352>
+     473: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1557>
+     475: ad 11 de     	lda	$de11                   ; 0xde11 <__heap_start+0xd353>
+     478: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1558>
      47a: a9 40        	lda	#$40
      47c: 18           	clc
-     47d: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1583>
+     47d: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1557>
      47f: a8           	tay
      480: a9 d8        	lda	#$d8
-     482: 65 16        	adc	$16                     ; 0x2016 <__heap_start+0x1584>
-     484: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1585>
-     486: 84 16        	sty	$16                     ; 0x2016 <__heap_start+0x1584>
-     488: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd380>
-     48b: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xd381>
-     48e: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x1589>
-     490: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1584>
-     492: a5 1a        	lda	$1a                     ; 0x201a <__heap_start+0x1588>
+     482: 65 16        	adc	$16                     ; 0x2016 <__heap_start+0x1558>
+     484: 85 17        	sta	$17                     ; 0x2017 <__heap_start+0x1559>
+     486: 84 16        	sty	$16                     ; 0x2016 <__heap_start+0x1558>
+     488: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd354>
+     48b: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xd355>
+     48e: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x155d>
+     490: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1558>
+     492: a5 1a        	lda	$1a                     ; 0x201a <__heap_start+0x155c>
      494: a0 01        	ldy	#$1
-     496: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
-     498: a5 19        	lda	$19                     ; 0x2019 <__heap_start+0x1587>
+     496: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
+     498: a5 19        	lda	$19                     ; 0x2019 <__heap_start+0x155b>
      49a: c8           	iny
-     49b: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
+     49b: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
      49d: c8           	iny
      49e: a9 ff        	lda	#$ff
-     4a0: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1584>
+     4a0: 91 16        	sta	($16),y                 ; 0x2016 <__heap_start+0x1558>
      4a2: e8           	inx
-     4a3: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1583>
+     4a3: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1557>
      4a5: 18           	clc
-     4a6: a5 18        	lda	$18                     ; 0x2018 <__heap_start+0x1586>
+     4a6: a5 18        	lda	$18                     ; 0x2018 <__heap_start+0x155a>
      4a8: 69 03        	adc	#$3
      4aa: aa           	tax
      4ab: c9 30        	cmp	#$30
      4ad: f0 03        	beq	$4b2 <f256Init+0x177>
      4af: 4c 0f 04     	jmp	$40f <f256Init+0xd4>
-     4b2: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x156f>
-     4b4: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x1586>
+     4b2: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x1543>
+     4b4: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x155a>
      4b6: a2 50        	ldx	#$50
-     4b8: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     4bb: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd36f>
+     4b8: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd342>
+     4bb: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd343>
      4be: a2 1e        	ldx	#$1e
-     4c0: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd370>
-     4c3: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd371>
-     4c6: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     4c9: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     4cc: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd380>
-     4cf: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xd381>
+     4c0: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd344>
+     4c3: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd345>
+     4c6: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd352>
+     4c9: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd353>
+     4cc: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd354>
+     4cf: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xd355>
      4d2: a9 02        	lda	#$2
-     4d4: 85 01        	sta	$1                      ; 0x2001 <__heap_start+0x156f>
+     4d4: 85 01        	sta	$1                      ; 0x2001 <__heap_start+0x1543>
      4d6: e0 01        	cpx	#$1
      4d8: 98           	tya
      4d9: e9 00        	sbc	#$0
@@ -363,34 +363,34 @@ Disassembly of section .text:
      4df: c9 00        	cmp	#$0
      4e1: 30 48        	bmi	$52b <f256Init+0x1f0>
      4e3: a9 20        	lda	#$20
-     4e5: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x1587>
-     4e7: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1582>
-     4e9: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1583>
+     4e5: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x155b>
+     4e7: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1556>
+     4e9: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1557>
      4eb: a2 00        	ldx	#$0
-     4ed: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1584>
+     4ed: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1558>
      4ef: a2 c0        	ldx	#$c0
-     4f1: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1585>
-     4f3: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1584>
-     4f5: e6 16        	inc	$16                     ; 0x2016 <__heap_start+0x1584>
+     4f1: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1559>
+     4f3: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1558>
+     4f5: e6 16        	inc	$16                     ; 0x2016 <__heap_start+0x1558>
      4f7: d0 02        	bne	$4fb <f256Init+0x1c0>
-     4f9: e6 17        	inc	$17                     ; 0x2017 <__heap_start+0x1585>
+     4f9: e6 17        	inc	$17                     ; 0x2017 <__heap_start+0x1559>
      4fb: a2 ff        	ldx	#$ff
-     4fd: c6 14        	dec	$14                     ; 0x2014 <__heap_start+0x1582>
-     4ff: e4 14        	cpx	$14                     ; 0x2014 <__heap_start+0x1582>
+     4fd: c6 14        	dec	$14                     ; 0x2014 <__heap_start+0x1556>
+     4ff: e4 14        	cpx	$14                     ; 0x2014 <__heap_start+0x1556>
      501: d0 02        	bne	$505 <f256Init+0x1ca>
-     503: c6 15        	dec	$15                     ; 0x2015 <__heap_start+0x1583>
-     505: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1583>
+     503: c6 15        	dec	$15                     ; 0x2015 <__heap_start+0x1557>
+     505: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1557>
      507: d0 ea        	bne	$4f3 <f256Init+0x1b8>
-     509: a6 14        	ldx	$14                     ; 0x2014 <__heap_start+0x1582>
+     509: a6 14        	ldx	$14                     ; 0x2014 <__heap_start+0x1556>
      50b: d0 e6        	bne	$4f3 <f256Init+0x1b8>
      50d: a2 03        	ldx	#$3
-     50f: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     511: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x1587>
+     50f: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     511: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x155b>
      513: a9 f0        	lda	#$f0
-     515: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1580>
-     517: e6 12        	inc	$12                     ; 0x2012 <__heap_start+0x1580>
+     515: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1554>
+     517: e6 12        	inc	$12                     ; 0x2012 <__heap_start+0x1554>
      519: d0 02        	bne	$51d <f256Init+0x1e2>
-     51b: e6 13        	inc	$13                     ; 0x2013 <__heap_start+0x1581>
+     51b: e6 13        	inc	$13                     ; 0x2013 <__heap_start+0x1555>
      51d: ca           	dex
      51e: e0 ff        	cpx	#$ff
      520: d0 01        	bne	$523 <f256Init+0x1e8>
@@ -401,149 +401,149 @@ Disassembly of section .text:
      527: d0 ea        	bne	$513 <f256Init+0x1d8>
      529: 80 04        	bra	$52f <f256Init+0x1f4>
      52b: a2 03        	ldx	#$3
-     52d: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     52f: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x1586>
-     531: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     533: 64 30        	stz	$30                     ; 0x2030 <__heap_start+0x159e>
-     535: 9c 14 d0     	stz	$d014                   ; 0xd014 <__heap_start+0xc582>
-     538: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xc583>
-     53b: 64 31        	stz	$31                     ; 0x2031 <__heap_start+0x159f>
-     53d: 9c 16 d0     	stz	$d016                   ; 0xd016 <__heap_start+0xc584>
-     540: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xc585>
+     52d: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     52f: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x155a>
+     531: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     533: 64 30        	stz	$30                     ; 0x2030 <__heap_start+0x1572>
+     535: 9c 14 d0     	stz	$d014                   ; 0xd014 <__heap_start+0xc556>
+     538: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xc557>
+     53b: 64 31        	stz	$31                     ; 0x2031 <__heap_start+0x1573>
+     53d: 9c 16 d0     	stz	$d016                   ; 0xd016 <__heap_start+0xc558>
+     540: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xc559>
      543: a2 40        	ldx	#$40
-     545: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd36e>
+     545: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd342>
      548: a2 01        	ldx	#$1
-     54a: 8e 01 de     	stx	$de01                   ; 0xde01 <__heap_start+0xd36f>
+     54a: 8e 01 de     	stx	$de01                   ; 0xde01 <__heap_start+0xd343>
      54d: a2 f0        	ldx	#$f0
-     54f: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd370>
-     552: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd371>
-     555: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     558: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1585>
-     55a: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     55d: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     55f: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xd380>
-     562: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1581>
-     564: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xd381>
-     567: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1582>
-     569: a4 12        	ldy	$12                     ; 0x2012 <__heap_start+0x1580>
-     56b: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1583>
-     56d: 06 15        	asl	$15                     ; 0x2015 <__heap_start+0x1583>
-     56f: a5 13        	lda	$13                     ; 0x2013 <__heap_start+0x1581>
+     54f: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd344>
+     552: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd345>
+     555: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd352>
+     558: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1559>
+     55a: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xd353>
+     55d: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     55f: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xd354>
+     562: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1555>
+     564: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xd355>
+     567: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1556>
+     569: a4 12        	ldy	$12                     ; 0x2012 <__heap_start+0x1554>
+     56b: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1557>
+     56d: 06 15        	asl	$15                     ; 0x2015 <__heap_start+0x1557>
+     56f: a5 13        	lda	$13                     ; 0x2013 <__heap_start+0x1555>
      571: 2a           	rol
-     572: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1584>
-     574: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x1584>
-     576: 06 15        	asl	$15                     ; 0x2015 <__heap_start+0x1583>
+     572: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1558>
+     574: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x1558>
+     576: 06 15        	asl	$15                     ; 0x2015 <__heap_start+0x1557>
      578: 2a           	rol
-     579: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x1584>
-     57b: 06 15        	asl	$15                     ; 0x2015 <__heap_start+0x1583>
+     579: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x1558>
+     57b: 06 15        	asl	$15                     ; 0x2015 <__heap_start+0x1557>
      57d: 2a           	rol
-     57e: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x1584>
-     580: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1583>
-     582: 8d 00 de     	sta	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     585: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1584>
-     587: 8d 01 de     	sta	$de01                   ; 0xde01 <__heap_start+0xd36f>
-     58a: 9c 02 de     	stz	$de02                   ; 0xde02 <__heap_start+0xd370>
+     57e: 26 16        	rol	$16                     ; 0x2016 <__heap_start+0x1558>
+     580: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1557>
+     582: 8d 00 de     	sta	$de00                   ; 0xde00 <__heap_start+0xd342>
+     585: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1558>
+     587: 8d 01 de     	sta	$de01                   ; 0xde01 <__heap_start+0xd343>
+     58a: 9c 02 de     	stz	$de02                   ; 0xde02 <__heap_start+0xd344>
      58d: a2 20        	ldx	#$20
-     58f: 8e 03 de     	stx	$de03                   ; 0xde03 <__heap_start+0xd371>
-     592: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     595: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1584>
-     597: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     59a: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x1586>
-     59c: ac 12 de     	ldy	$de12                   ; 0xde12 <__heap_start+0xd380>
-     59f: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xd381>
-     5a2: e4 14        	cpx	$14                     ; 0x2014 <__heap_start+0x1582>
+     58f: 8e 03 de     	stx	$de03                   ; 0xde03 <__heap_start+0xd345>
+     592: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd352>
+     595: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1558>
+     597: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xd353>
+     59a: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x155a>
+     59c: ac 12 de     	ldy	$de12                   ; 0xde12 <__heap_start+0xd354>
+     59f: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xd355>
+     5a2: e4 14        	cpx	$14                     ; 0x2014 <__heap_start+0x1556>
      5a4: d0 14        	bne	$5ba <f256Init+0x27f>
-     5a6: c4 13        	cpy	$13                     ; 0x2013 <__heap_start+0x1581>
+     5a6: c4 13        	cpy	$13                     ; 0x2013 <__heap_start+0x1555>
      5a8: d0 10        	bne	$5ba <f256Init+0x27f>
-     5aa: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x1586>
-     5ac: e4 12        	cpx	$12                     ; 0x2012 <__heap_start+0x1580>
+     5aa: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x155a>
+     5ac: e4 12        	cpx	$12                     ; 0x2012 <__heap_start+0x1554>
      5ae: d0 0a        	bne	$5ba <f256Init+0x27f>
-     5b0: a6 16        	ldx	$16                     ; 0x2016 <__heap_start+0x1584>
-     5b2: e4 17        	cpx	$17                     ; 0x2017 <__heap_start+0x1585>
+     5b0: a6 16        	ldx	$16                     ; 0x2016 <__heap_start+0x1558>
+     5b2: e4 17        	cpx	$17                     ; 0x2017 <__heap_start+0x1559>
      5b4: d0 04        	bne	$5ba <f256Init+0x27f>
-     5b6: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1583>
+     5b6: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1557>
      5b8: 80 06        	bra	$5c0 <f256Init+0x285>
-     5ba: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1583>
+     5ba: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1557>
      5bc: e8           	inx
      5bd: d0 01        	bne	$5c0 <f256Init+0x285>
      5bf: 1a           	inc
-     5c0: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     5c3: 8d 01 de     	sta	$de01                   ; 0xde01 <__heap_start+0xd36f>
-     5c6: 9c 02 de     	stz	$de02                   ; 0xde02 <__heap_start+0xd370>
+     5c0: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd342>
+     5c3: 8d 01 de     	sta	$de01                   ; 0xde01 <__heap_start+0xd343>
+     5c6: 9c 02 de     	stz	$de02                   ; 0xde02 <__heap_start+0xd344>
      5c9: a2 20        	ldx	#$20
-     5cb: 8e 03 de     	stx	$de03                   ; 0xde03 <__heap_start+0xd371>
-     5ce: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     5d1: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     5d3: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     5d6: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1581>
-     5d8: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xd380>
-     5db: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1582>
+     5cb: 8e 03 de     	stx	$de03                   ; 0xde03 <__heap_start+0xd345>
+     5ce: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd352>
+     5d1: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     5d3: ae 11 de     	ldx	$de11                   ; 0xde11 <__heap_start+0xd353>
+     5d6: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1555>
+     5d8: ae 12 de     	ldx	$de12                   ; 0xde12 <__heap_start+0xd354>
+     5db: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1556>
      5dd: a9 00        	lda	#$0
      5df: 38           	sec
-     5e0: e5 12        	sbc	$12                     ; 0x2012 <__heap_start+0x1580>
+     5e0: e5 12        	sbc	$12                     ; 0x2012 <__heap_start+0x1554>
      5e2: a8           	tay
      5e3: a9 00        	lda	#$0
-     5e5: e5 13        	sbc	$13                     ; 0x2013 <__heap_start+0x1581>
-     5e7: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1583>
+     5e5: e5 13        	sbc	$13                     ; 0x2013 <__heap_start+0x1555>
+     5e7: 85 15        	sta	$15                     ; 0x2015 <__heap_start+0x1557>
      5e9: a9 08        	lda	#$8
-     5eb: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x1582>
+     5eb: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x1556>
      5ed: aa           	tax
      5ee: 98           	tya
-     5ef: 84 17        	sty	$17                     ; 0x2017 <__heap_start+0x1585>
+     5ef: 84 17        	sty	$17                     ; 0x2017 <__heap_start+0x1559>
      5f1: 38           	sec
-     5f2: e5 12        	sbc	$12                     ; 0x2012 <__heap_start+0x1580>
-     5f4: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1584>
-     5f6: a5 15        	lda	$15                     ; 0x2015 <__heap_start+0x1583>
-     5f8: e5 13        	sbc	$13                     ; 0x2013 <__heap_start+0x1581>
-     5fa: 85 18        	sta	$18                     ; 0x2018 <__heap_start+0x1586>
+     5f2: e5 12        	sbc	$12                     ; 0x2012 <__heap_start+0x1554>
+     5f4: 85 16        	sta	$16                     ; 0x2016 <__heap_start+0x1558>
+     5f6: a5 15        	lda	$15                     ; 0x2015 <__heap_start+0x1557>
+     5f8: e5 13        	sbc	$13                     ; 0x2013 <__heap_start+0x1555>
+     5fa: 85 18        	sta	$18                     ; 0x2018 <__heap_start+0x155a>
      5fc: 8a           	txa
-     5fd: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x1587>
-     5ff: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x1582>
+     5fd: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x155b>
+     5ff: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x1556>
      601: a8           	tay
      602: 38           	sec
-     603: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1584>
-     605: e5 12        	sbc	$12                     ; 0x2012 <__heap_start+0x1580>
-     607: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1580>
-     609: a5 18        	lda	$18                     ; 0x2018 <__heap_start+0x1586>
-     60b: e5 13        	sbc	$13                     ; 0x2013 <__heap_start+0x1581>
-     60d: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x1581>
+     603: a5 16        	lda	$16                     ; 0x2016 <__heap_start+0x1558>
+     605: e5 12        	sbc	$12                     ; 0x2012 <__heap_start+0x1554>
+     607: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1554>
+     609: a5 18        	lda	$18                     ; 0x2018 <__heap_start+0x155a>
+     60b: e5 13        	sbc	$13                     ; 0x2013 <__heap_start+0x1555>
+     60d: 85 13        	sta	$13                     ; 0x2013 <__heap_start+0x1555>
      60f: 98           	tya
-     610: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x1582>
-     612: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xd381>
-     615: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x1585>
-     617: 8e 01 d1     	stx	$d101                   ; 0xd101 <__heap_start+0xc66f>
-     61a: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1583>
-     61c: 8e 02 d1     	stx	$d102                   ; 0xd102 <__heap_start+0xc670>
-     61f: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x1587>
-     621: 8e 03 d1     	stx	$d103                   ; 0xd103 <__heap_start+0xc671>
-     624: a6 16        	ldx	$16                     ; 0x2016 <__heap_start+0x1584>
-     626: 8e 09 d1     	stx	$d109                   ; 0xd109 <__heap_start+0xc677>
-     629: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x1586>
-     62b: 8e 0a d1     	stx	$d10a                   ; 0xd10a <__heap_start+0xc678>
-     62e: 8c 0b d1     	sty	$d10b                   ; 0xd10b <__heap_start+0xc679>
-     631: a6 12        	ldx	$12                     ; 0x2012 <__heap_start+0x1580>
-     633: 8e 11 d1     	stx	$d111                   ; 0xd111 <__heap_start+0xc67f>
-     636: a6 13        	ldx	$13                     ; 0x2013 <__heap_start+0x1581>
-     638: 8e 12 d1     	stx	$d112                   ; 0xd112 <__heap_start+0xc680>
-     63b: 8d 13 d1     	sta	$d113                   ; 0xd113 <__heap_start+0xc681>
-     63e: 9c 00 d1     	stz	$d100                   ; 0xd100 <__heap_start+0xc66e>
-     641: 9c 08 d1     	stz	$d108                   ; 0xd108 <__heap_start+0xc676>
-     644: 9c 10 d1     	stz	$d110                   ; 0xd110 <__heap_start+0xc67e>
+     610: e5 14        	sbc	$14                     ; 0x2014 <__heap_start+0x1556>
+     612: ae 13 de     	ldx	$de13                   ; 0xde13 <__heap_start+0xd355>
+     615: a6 17        	ldx	$17                     ; 0x2017 <__heap_start+0x1559>
+     617: 8e 01 d1     	stx	$d101                   ; 0xd101 <__heap_start+0xc643>
+     61a: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1557>
+     61c: 8e 02 d1     	stx	$d102                   ; 0xd102 <__heap_start+0xc644>
+     61f: a6 19        	ldx	$19                     ; 0x2019 <__heap_start+0x155b>
+     621: 8e 03 d1     	stx	$d103                   ; 0xd103 <__heap_start+0xc645>
+     624: a6 16        	ldx	$16                     ; 0x2016 <__heap_start+0x1558>
+     626: 8e 09 d1     	stx	$d109                   ; 0xd109 <__heap_start+0xc64b>
+     629: a6 18        	ldx	$18                     ; 0x2018 <__heap_start+0x155a>
+     62b: 8e 0a d1     	stx	$d10a                   ; 0xd10a <__heap_start+0xc64c>
+     62e: 8c 0b d1     	sty	$d10b                   ; 0xd10b <__heap_start+0xc64d>
+     631: a6 12        	ldx	$12                     ; 0x2012 <__heap_start+0x1554>
+     633: 8e 11 d1     	stx	$d111                   ; 0xd111 <__heap_start+0xc653>
+     636: a6 13        	ldx	$13                     ; 0x2013 <__heap_start+0x1555>
+     638: 8e 12 d1     	stx	$d112                   ; 0xd112 <__heap_start+0xc654>
+     63b: 8d 13 d1     	sta	$d113                   ; 0xd113 <__heap_start+0xc655>
+     63e: 9c 00 d1     	stz	$d100                   ; 0xd100 <__heap_start+0xc642>
+     641: 9c 08 d1     	stz	$d108                   ; 0xd108 <__heap_start+0xc64a>
+     644: 9c 10 d1     	stz	$d110                   ; 0xd110 <__heap_start+0xc652>
      647: a2 10        	ldx	#$10
-     649: 8e 00 d2     	stx	$d200                   ; 0xd200 <__heap_start+0xc76e>
-     64c: 8e 0c d2     	stx	$d20c                   ; 0xd20c <__heap_start+0xc77a>
-     64f: 8e 18 d2     	stx	$d218                   ; 0xd218 <__heap_start+0xc786>
+     649: 8e 00 d2     	stx	$d200                   ; 0xd200 <__heap_start+0xc742>
+     64c: 8e 0c d2     	stx	$d20c                   ; 0xd20c <__heap_start+0xc74e>
+     64f: 8e 18 d2     	stx	$d218                   ; 0xd218 <__heap_start+0xc75a>
      652: a0 d9        	ldy	#$d9
      654: a2 40        	ldx	#$40
-     656: 64 12        	stz	$12                     ; 0x2012 <__heap_start+0x1580>
-     658: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x1581>
+     656: 64 12        	stz	$12                     ; 0x2012 <__heap_start+0x1554>
+     658: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x1555>
      65a: a9 00        	lda	#$0
-     65c: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1580>
+     65c: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1554>
      65e: ca           	dex
      65f: 18           	clc
-     660: a5 12        	lda	$12                     ; 0x2012 <__heap_start+0x1580>
+     660: a5 12        	lda	$12                     ; 0x2012 <__heap_start+0x1554>
      662: 69 08        	adc	#$8
-     664: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1580>
+     664: 85 12        	sta	$12                     ; 0x2012 <__heap_start+0x1554>
      666: 98           	tya
      667: 69 00        	adc	#$0
      669: a8           	tay
@@ -551,37 +551,37 @@ Disassembly of section .text:
      66b: d0 eb        	bne	$658 <f256Init+0x31d>
      66d: a2 39        	ldx	#$39
      66f: a0 00        	ldy	#$0
-     671: 86 fb        	stx	$fb                     ; 0x20fb <__heap_start+0x1669>
-     673: 84 fc        	sty	$fc                     ; 0x20fc <__heap_start+0x166a>
+     671: 86 fb        	stx	$fb                     ; 0x20fb <__heap_start+0x163d>
+     673: 84 fc        	sty	$fc                     ; 0x20fc <__heap_start+0x163e>
      675: a2 08        	ldx	#$8
-     677: 86 fd        	stx	$fd                     ; 0x20fd <__heap_start+0x166b>
+     677: 86 fd        	stx	$fd                     ; 0x20fd <__heap_start+0x163f>
      679: a2 41        	ldx	#$41
      67b: a0 00        	ldy	#$0
-     67d: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     67f: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x1581>
-     681: a2 90        	ldx	#$90
-     683: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1582>
+     67d: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     67f: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x1555>
+     681: a2 bc        	ldx	#$bc
+     683: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1556>
      685: a2 0a        	ldx	#$a
-     687: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1583>
-     689: 20 dc ff     	jsr	$ffdc <__heap_start+0xf54a>
-     68c: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1580>
+     687: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1557>
+     689: 20 dc ff     	jsr	$ffdc <__heap_start+0xf51e>
+     68c: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1554>
      68e: a9 00        	lda	#$0
      690: 6a           	ror
-     691: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1582>
-     693: a6 3f        	ldx	$3f                     ; 0x203f <__heap_start+0x15ad>
-     695: a4 40        	ldy	$40                     ; 0x2040 <__heap_start+0x15ae>
-     697: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     69a: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd36f>
-     69d: 8c 02 de     	sty	$de02                   ; 0xde02 <__heap_start+0xd370>
-     6a0: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd371>
-     6a3: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     6a6: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     6a9: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd380>
-     6ac: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xd381>
-     6af: 8e a4 d6     	stx	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     6b2: 8c a5 d6     	sty	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
+     691: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1556>
+     693: a6 3f        	ldx	$3f                     ; 0x203f <__heap_start+0x1581>
+     695: a4 40        	ldy	$40                     ; 0x2040 <__heap_start+0x1582>
+     697: 8e 00 de     	stx	$de00                   ; 0xde00 <__heap_start+0xd342>
+     69a: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd343>
+     69d: 8c 02 de     	sty	$de02                   ; 0xde02 <__heap_start+0xd344>
+     6a0: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd345>
+     6a3: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd352>
+     6a6: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd353>
+     6a9: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd354>
+     6ac: ad 13 de     	lda	$de13                   ; 0xde13 <__heap_start+0xd355>
+     6af: 8e a4 d6     	stx	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     6b2: 8c a5 d6     	sty	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
      6b5: a2 03        	ldx	#$3
-     6b7: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
+     6b7: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
      6ba: 60           	rts
 
 000006bb <main>:
@@ -590,365 +590,386 @@ Disassembly of section .text:
 
 000006c1 <f256main>:
      6c1: a2 01        	ldx	#$1
-     6c3: 86 30        	stx	$30                     ; 0x2030 <__heap_start+0x159e>
-     6c5: 8e 14 d0     	stx	$d014                   ; 0xd014 <__heap_start+0xc582>
-     6c8: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xc583>
+     6c3: 86 30        	stx	$30                     ; 0x2030 <__heap_start+0x1572>
+     6c5: 8e 14 d0     	stx	$d014                   ; 0xd014 <__heap_start+0xc556>
+     6c8: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xc557>
      6cb: a9 14        	lda	#$14
-     6cd: 85 31        	sta	$31                     ; 0x2031 <__heap_start+0x159f>
-     6cf: 8d 16 d0     	sta	$d016                   ; 0xd016 <__heap_start+0xc584>
-     6d2: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xc585>
-     6d5: ad a7 d6     	lda	$d6a7                   ; 0xd6a7 <__heap_start+0xcc15>
+     6cd: 85 31        	sta	$31                     ; 0x2031 <__heap_start+0x1573>
+     6cf: 8d 16 d0     	sta	$d016                   ; 0xd016 <__heap_start+0xc558>
+     6d2: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xc559>
+     6d5: ad a7 d6     	lda	$d6a7                   ; 0xd6a7 <__heap_start+0xcbe9>
      6d8: 29 1f        	and	#$1f
-     6da: c9 10        	cmp	#$10
-     6dc: a2 fc        	ldx	#$fc
-     6de: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     6e0: a2 09        	ldx	#$9
-     6e2: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1581>
-     6e4: a2 0f        	ldx	#$f
-     6e6: 90 21        	bcc	$709 <f256main+0x48>
-     6e8: c9 17        	cmp	#$17
-     6ea: b0 1d        	bcs	$709 <f256main+0x48>
-     6ec: ad c1 dd     	lda	$ddc1                   ; 0xddc1 <__heap_start+0xd32f>
-     6ef: 29 02        	and	#$2
-     6f1: f0 0c        	beq	$6ff <f256main+0x3e>
-     6f3: a2 33        	ldx	#$33
-     6f5: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     6f7: a2 0a        	ldx	#$a
-     6f9: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1581>
-     6fb: a2 2f        	ldx	#$2f
-     6fd: 80 0a        	bra	$709 <f256main+0x48>
-     6ff: a2 61        	ldx	#$61
-     701: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     703: a2 0a        	ldx	#$a
-     705: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1581>
-     707: a2 6f        	ldx	#$6f
-     709: 8e a0 d6     	stx	$d6a0                   ; 0xd6a0 <__heap_start+0xcc0e>
-     70c: 20 ef 07     	jsr	$7ef <textPrint>
-     70f: a2 3a        	ldx	#$3a
-     711: a0 00        	ldy	#$0
-     713: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1580>
-     715: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x1581>
-     717: a2 90        	ldx	#$90
-     719: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1582>
-     71b: a2 0a        	ldx	#$a
-     71d: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1583>
-     71f: a2 39        	ldx	#$39
-     721: a0 00        	ldy	#$0
-     723: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1584>
-     725: 84 17        	sty	$17                     ; 0x2017 <__heap_start+0x1585>
-     727: a2 3b        	ldx	#$3b
-     729: a0 00        	ldy	#$0
-     72b: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x1586>
-     72d: 84 19        	sty	$19                     ; 0x2019 <__heap_start+0x1587>
-     72f: a2 01        	ldx	#$1
-     731: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
-     734: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     737: 84 1a        	sty	$1a                     ; 0x201a <__heap_start+0x1588>
-     739: ad a5 d6     	lda	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
-     73c: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
-     73f: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     742: 84 1b        	sty	$1b                     ; 0x201b <__heap_start+0x1589>
-     744: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
-     747: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x158c>
-     749: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
-     74c: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     74f: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x158a>
-     751: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
-     754: 84 22        	sty	$22                     ; 0x2022 <__heap_start+0x1590>
-     756: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
-     759: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     75c: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x158b>
-     75e: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
-     761: 84 24        	sty	$24                     ; 0x2024 <__heap_start+0x1592>
-     763: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
-     766: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     769: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x158d>
-     76b: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
-     76e: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcc14>
-     771: ae a4 d6     	ldx	$d6a4                   ; 0xd6a4 <__heap_start+0xcc12>
-     774: 86 23        	stx	$23                     ; 0x2023 <__heap_start+0x1591>
-     776: ae a5 d6     	ldx	$d6a5                   ; 0xd6a5 <__heap_start+0xcc13>
-     779: 8d a7 d6     	sta	$d6a7                   ; 0xd6a7 <__heap_start+0xcc15>
-     77c: a5 1a        	lda	$1a                     ; 0x201a <__heap_start+0x1588>
-     77e: 8d a8 d6     	sta	$d6a8                   ; 0xd6a8 <__heap_start+0xcc16>
-     781: a5 1e        	lda	$1e                     ; 0x201e <__heap_start+0x158c>
-     783: 8d a9 d6     	sta	$d6a9                   ; 0xd6a9 <__heap_start+0xcc17>
-     786: a5 1b        	lda	$1b                     ; 0x201b <__heap_start+0x1589>
-     788: 8d aa d6     	sta	$d6aa                   ; 0xd6aa <__heap_start+0xcc18>
-     78b: a5 22        	lda	$22                     ; 0x2022 <__heap_start+0x1590>
-     78d: 8d ab d6     	sta	$d6ab                   ; 0xd6ab <__heap_start+0xcc19>
-     790: a5 1c        	lda	$1c                     ; 0x201c <__heap_start+0x158a>
-     792: 8d ac d6     	sta	$d6ac                   ; 0xd6ac <__heap_start+0xcc1a>
-     795: a5 24        	lda	$24                     ; 0x2024 <__heap_start+0x1592>
-     797: 8d ad d6     	sta	$d6ad                   ; 0xd6ad <__heap_start+0xcc1b>
-     79a: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x158b>
-     79c: 8d ae d6     	sta	$d6ae                   ; 0xd6ae <__heap_start+0xcc1c>
-     79f: 8c af d6     	sty	$d6af                   ; 0xd6af <__heap_start+0xcc1d>
-     7a2: a4 1f        	ldy	$1f                     ; 0x201f <__heap_start+0x158d>
-     7a4: 8c b3 d6     	sty	$d6b3                   ; 0xd6b3 <__heap_start+0xcc21>
-     7a7: 8e b4 d6     	stx	$d6b4                   ; 0xd6b4 <__heap_start+0xcc22>
-     7aa: a6 23        	ldx	$23                     ; 0x2023 <__heap_start+0x1591>
-     7ac: 8e b5 d6     	stx	$d6b5                   ; 0xd6b5 <__heap_start+0xcc23>
-     7af: a2 80        	ldx	#$80
-     7b1: 86 f3        	stx	$f3                     ; 0x20f3 <__heap_start+0x1661>
-     7b3: 20 f0 ff     	jsr	$fff0 <__heap_start+0xf55e>
-     7b6: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1580>
-     7b8: a9 00        	lda	#$0
-     7ba: 6a           	ror
-     7bb: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1582>
-     7bd: a9 14        	lda	#$14
-     7bf: 18           	clc
-     7c0: 65 3a        	adc	$3a                     ; 0x203a <__heap_start+0x15a8>
-     7c2: 64 f3        	stz	$f3                     ; 0x20f3 <__heap_start+0x1661>
-     7c4: 85 f4        	sta	$f4                     ; 0x20f4 <__heap_start+0x1662>
-     7c6: a2 d5        	ldx	#$d5
-     7c8: 86 f5        	stx	$f5                     ; 0x20f5 <__heap_start+0x1663>
-     7ca: 20 f0 ff     	jsr	$fff0 <__heap_start+0xf55e>
-     7cd: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1584>
-     7cf: a9 00        	lda	#$0
-     7d1: 6a           	ror
-     7d2: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1582>
-     7d4: 64 32        	stz	$32                     ; 0x2032 <__heap_start+0x15a0>
-     7d6: 20 00 ff     	jsr	$ff00 <__heap_start+0xf46e>
-     7d9: 92 18        	sta	($18)                   ; 0x2018 <__heap_start+0x1586>
-     7db: a9 00        	lda	#$0
-     7dd: 6a           	ror
-     7de: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1582>
-     7e0: a6 32        	ldx	$32                     ; 0x2032 <__heap_start+0x15a0>
-     7e2: e0 52        	cpx	#$52
-     7e4: d0 ee        	bne	$7d4 <f256main+0x113>
-     7e6: a6 36        	ldx	$36                     ; 0x2036 <__heap_start+0x15a4>
-     7e8: e0 d5        	cpx	#$d5
-     7ea: d0 e8        	bne	$7d4 <f256main+0x113>
-     7ec: 4c 2f 07     	jmp	$72f <f256main+0x6e>
+     6da: a2 01        	ldx	#$1
+     6dc: 86 3c        	stx	$3c                     ; 0x203c <__heap_start+0x157e>
+     6de: c9 10        	cmp	#$10
+     6e0: a2 28        	ldx	#$28
+     6e2: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     6e4: a2 0a        	ldx	#$a
+     6e6: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1555>
+     6e8: a2 0f        	ldx	#$f
+     6ea: 90 11        	bcc	$6fd <f256main+0x3c>
+     6ec: c9 17        	cmp	#$17
+     6ee: a9 01        	lda	#$1
+     6f0: b0 2f        	bcs	$721 <f256main+0x60>
+     6f2: ad c1 dd     	lda	$ddc1                   ; 0xddc1 <__heap_start+0xd303>
+     6f5: 29 02        	and	#$2
+     6f7: d0 08        	bne	$701 <f256main+0x40>
+     6f9: a9 00        	lda	#$0
+     6fb: 80 06        	bra	$703 <f256main+0x42>
+     6fd: a9 01        	lda	#$1
+     6ff: 80 20        	bra	$721 <f256main+0x60>
+     701: a9 01        	lda	#$1
+     703: 29 01        	and	#$1
+     705: f0 0c        	beq	$713 <f256main+0x52>
+     707: a2 5f        	ldx	#$5f
+     709: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     70b: a2 0a        	ldx	#$a
+     70d: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1555>
+     70f: a2 2f        	ldx	#$2f
+     711: 80 0a        	bra	$71d <f256main+0x5c>
+     713: a2 8d        	ldx	#$8d
+     715: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     717: a2 0a        	ldx	#$a
+     719: 86 13        	stx	$13                     ; 0x2013 <__heap_start+0x1555>
+     71b: a2 6f        	ldx	#$6f
+     71d: a0 00        	ldy	#$0
+     71f: 84 3c        	sty	$3c                     ; 0x203c <__heap_start+0x157e>
+     721: 85 24        	sta	$24                     ; 0x2024 <__heap_start+0x1566>
+     723: 8e a0 d6     	stx	$d6a0                   ; 0xd6a0 <__heap_start+0xcbe2>
+     726: 20 1b 08     	jsr	$81b <textPrint>
+     729: a2 3a        	ldx	#$3a
+     72b: a0 00        	ldy	#$0
+     72d: 86 12        	stx	$12                     ; 0x2012 <__heap_start+0x1554>
+     72f: 84 13        	sty	$13                     ; 0x2013 <__heap_start+0x1555>
+     731: a2 bc        	ldx	#$bc
+     733: 86 14        	stx	$14                     ; 0x2014 <__heap_start+0x1556>
+     735: a2 0a        	ldx	#$a
+     737: 86 15        	stx	$15                     ; 0x2015 <__heap_start+0x1557>
+     739: a2 39        	ldx	#$39
+     73b: a0 00        	ldy	#$0
+     73d: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1558>
+     73f: 84 17        	sty	$17                     ; 0x2017 <__heap_start+0x1559>
+     741: a2 3b        	ldx	#$3b
+     743: a0 00        	ldy	#$0
+     745: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x155a>
+     747: 84 19        	sty	$19                     ; 0x2019 <__heap_start+0x155b>
+     749: 4c a9 07     	jmp	$7a9 <f256main+0xe8>
+     74c: a6 1f        	ldx	$1f                     ; 0x201f <__heap_start+0x1561>
+     74e: 8e ad d6     	stx	$d6ad                   ; 0xd6ad <__heap_start+0xcbef>
+     751: a6 1d        	ldx	$1d                     ; 0x201d <__heap_start+0x155f>
+     753: 8e ae d6     	stx	$d6ae                   ; 0xd6ae <__heap_start+0xcbf0>
+     756: a6 25        	ldx	$25                     ; 0x2025 <__heap_start+0x1567>
+     758: 8e af d6     	stx	$d6af                   ; 0xd6af <__heap_start+0xcbf1>
+     75b: a6 24        	ldx	$24                     ; 0x2024 <__heap_start+0x1566>
+     75d: d0 0d        	bne	$76c <f256main+0xab>
+     75f: a6 1b        	ldx	$1b                     ; 0x201b <__heap_start+0x155d>
+     761: 8e b3 d6     	stx	$d6b3                   ; 0xd6b3 <__heap_start+0xcbf5>
+     764: a6 1c        	ldx	$1c                     ; 0x201c <__heap_start+0x155e>
+     766: 8e b4 d6     	stx	$d6b4                   ; 0xd6b4 <__heap_start+0xcbf6>
+     769: 8d b5 d6     	sta	$d6b5                   ; 0xd6b5 <__heap_start+0xcbf7>
+     76c: a2 80        	ldx	#$80
+     76e: 86 f3        	stx	$f3                     ; 0x20f3 <__heap_start+0x1635>
+     770: 20 f0 ff     	jsr	$fff0 <__heap_start+0xf532>
+     773: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1554>
+     775: a9 00        	lda	#$0
+     777: 6a           	ror
+     778: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1556>
+     77a: a9 14        	lda	#$14
+     77c: 18           	clc
+     77d: 65 3a        	adc	$3a                     ; 0x203a <__heap_start+0x157c>
+     77f: 64 f3        	stz	$f3                     ; 0x20f3 <__heap_start+0x1635>
+     781: 85 f4        	sta	$f4                     ; 0x20f4 <__heap_start+0x1636>
+     783: a2 d5        	ldx	#$d5
+     785: 86 f5        	stx	$f5                     ; 0x20f5 <__heap_start+0x1637>
+     787: 20 f0 ff     	jsr	$fff0 <__heap_start+0xf532>
+     78a: 92 16        	sta	($16)                   ; 0x2016 <__heap_start+0x1558>
+     78c: a9 00        	lda	#$0
+     78e: 6a           	ror
+     78f: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1556>
+     791: 64 32        	stz	$32                     ; 0x2032 <__heap_start+0x1574>
+     793: 20 00 ff     	jsr	$ff00 <__heap_start+0xf442>
+     796: 92 18        	sta	($18)                   ; 0x2018 <__heap_start+0x155a>
+     798: a9 00        	lda	#$0
+     79a: 6a           	ror
+     79b: 85 14        	sta	$14                     ; 0x2014 <__heap_start+0x1556>
+     79d: a6 32        	ldx	$32                     ; 0x2032 <__heap_start+0x1574>
+     79f: e0 52        	cpx	#$52
+     7a1: d0 ee        	bne	$791 <f256main+0xd0>
+     7a3: a6 36        	ldx	$36                     ; 0x2036 <__heap_start+0x1578>
+     7a5: e0 d5        	cpx	#$d5
+     7a7: d0 e8        	bne	$791 <f256main+0xd0>
+     7a9: a2 01        	ldx	#$1
+     7ab: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
+     7ae: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     7b1: 84 1a        	sty	$1a                     ; 0x201a <__heap_start+0x155c>
+     7b3: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
+     7b6: 84 23        	sty	$23                     ; 0x2023 <__heap_start+0x1565>
+     7b8: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
+     7bb: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     7be: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x1560>
+     7c0: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
+     7c3: 84 26        	sty	$26                     ; 0x2026 <__heap_start+0x1568>
+     7c5: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
+     7c8: ac a4 d6     	ldy	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     7cb: 84 22        	sty	$22                     ; 0x2022 <__heap_start+0x1564>
+     7cd: ac a5 d6     	ldy	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
+     7d0: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
+     7d3: ad a4 d6     	lda	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     7d6: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x155f>
+     7d8: ad a5 d6     	lda	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
+     7db: 85 1f        	sta	$1f                     ; 0x201f <__heap_start+0x1561>
+     7dd: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
+     7e0: ad a4 d6     	lda	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     7e3: 85 1b        	sta	$1b                     ; 0x201b <__heap_start+0x155d>
+     7e5: ad a5 d6     	lda	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
+     7e8: 85 25        	sta	$25                     ; 0x2025 <__heap_start+0x1567>
+     7ea: 8e a6 d6     	stx	$d6a6                   ; 0xd6a6 <__heap_start+0xcbe8>
+     7ed: ad a4 d6     	lda	$d6a4                   ; 0xd6a4 <__heap_start+0xcbe6>
+     7f0: ae a5 d6     	ldx	$d6a5                   ; 0xd6a5 <__heap_start+0xcbe7>
+     7f3: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x155e>
+     7f5: a6 23        	ldx	$23                     ; 0x2023 <__heap_start+0x1565>
+     7f7: 8e a7 d6     	stx	$d6a7                   ; 0xd6a7 <__heap_start+0xcbe9>
+     7fa: a6 1a        	ldx	$1a                     ; 0x201a <__heap_start+0x155c>
+     7fc: 8e a8 d6     	stx	$d6a8                   ; 0xd6a8 <__heap_start+0xcbea>
+     7ff: a6 26        	ldx	$26                     ; 0x2026 <__heap_start+0x1568>
+     801: 8e a9 d6     	stx	$d6a9                   ; 0xd6a9 <__heap_start+0xcbeb>
+     804: a6 1e        	ldx	$1e                     ; 0x201e <__heap_start+0x1560>
+     806: 8e aa d6     	stx	$d6aa                   ; 0xd6aa <__heap_start+0xcbec>
+     809: 8c ab d6     	sty	$d6ab                   ; 0xd6ab <__heap_start+0xcbed>
+     80c: a6 22        	ldx	$22                     ; 0x2022 <__heap_start+0x1564>
+     80e: 8e ac d6     	stx	$d6ac                   ; 0xd6ac <__heap_start+0xcbee>
+     811: a6 3c        	ldx	$3c                     ; 0x203c <__heap_start+0x157e>
+     813: d0 03        	bne	$818 <f256main+0x157>
+     815: 4c 4c 07     	jmp	$74c <f256main+0x8b>
+     818: 4c 5b 07     	jmp	$75b <f256main+0x9a>
 
-000007ef <textPrint>:
-     7ef: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x156f>
-     7f1: 86 3c        	stx	$3c                     ; 0x203c <__heap_start+0x15aa>
-     7f3: a6 31        	ldx	$31                     ; 0x2031 <__heap_start+0x159f>
-     7f5: a0 50        	ldy	#$50
-     7f7: 8c 00 de     	sty	$de00                   ; 0xde00 <__heap_start+0xd36e>
-     7fa: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd36f>
-     7fd: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd370>
-     800: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd371>
-     803: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd37e>
-     806: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd37f>
-     809: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1583>
-     80b: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd380>
-     80e: ac 13 de     	ldy	$de13                   ; 0xde13 <__heap_start+0xd381>
-     811: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x158a>
-     813: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xd376>
-     816: a0 c0        	ldy	#$c0
-     818: 8c 09 de     	sty	$de09                   ; 0xde09 <__heap_start+0xd377>
-     81b: 9c 0a de     	stz	$de0a                   ; 0xde0a <__heap_start+0xd378>
-     81e: 9c 0b de     	stz	$de0b                   ; 0xde0b <__heap_start+0xd379>
-     821: 8e 0c de     	stx	$de0c                   ; 0xde0c <__heap_start+0xd37a>
-     824: 64 14        	stz	$14                     ; 0x2014 <__heap_start+0x1582>
-     826: a2 00        	ldx	#$0
-     828: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1584>
-     82a: a2 c0        	ldx	#$c0
-     82c: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1585>
-     82e: a2 11        	ldx	#$11
-     830: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x1586>
-     832: a2 c9        	ldx	#$c9
-     834: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x1587>
-     836: a2 10        	ldx	#$10
-     838: 86 1a        	stx	$1a                     ; 0x201a <__heap_start+0x1588>
-     83a: a2 c9        	ldx	#$c9
-     83c: 86 1b        	stx	$1b                     ; 0x201b <__heap_start+0x1589>
-     83e: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1583>
-     840: 8e 0d de     	stx	$de0d                   ; 0xde0d <__heap_start+0xd37b>
-     843: 8d 0e de     	sta	$de0e                   ; 0xde0e <__heap_start+0xd37c>
-     846: a6 1c        	ldx	$1c                     ; 0x201c <__heap_start+0x158a>
-     848: 8e 0f de     	stx	$de0f                   ; 0xde0f <__heap_start+0xd37d>
-     84b: ac 18 de     	ldy	$de18                   ; 0xde18 <__heap_start+0xd386>
-     84e: ad 19 de     	lda	$de19                   ; 0xde19 <__heap_start+0xd387>
-     851: ae 1a de     	ldx	$de1a                   ; 0xde1a <__heap_start+0xd388>
-     854: ae 1b de     	ldx	$de1b                   ; 0xde1b <__heap_start+0xd389>
-     857: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x158a>
-     859: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x158b>
-     85b: 64 15        	stz	$15                     ; 0x2015 <__heap_start+0x1583>
-     85d: 80 13        	bra	$872 <textPrint+0x83>
-     85f: a5 1c        	lda	$1c                     ; 0x201c <__heap_start+0x158a>
-     861: 18           	clc
-     862: 69 50        	adc	#$50
-     864: 85 1c        	sta	$1c                     ; 0x201c <__heap_start+0x158a>
-     866: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x158b>
-     868: 69 00        	adc	#$0
-     86a: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x158b>
-     86c: e6 14        	inc	$14                     ; 0x2014 <__heap_start+0x1582>
-     86e: d0 02        	bne	$872 <textPrint+0x83>
-     870: e6 15        	inc	$15                     ; 0x2015 <__heap_start+0x1583>
-     872: a5 12        	lda	$12                     ; 0x2012 <__heap_start+0x1580>
-     874: 18           	clc
-     875: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x1582>
-     877: 85 1e        	sta	$1e                     ; 0x201e <__heap_start+0x158c>
-     879: a5 13        	lda	$13                     ; 0x2013 <__heap_start+0x1581>
-     87b: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1583>
-     87d: 85 1f        	sta	$1f                     ; 0x201f <__heap_start+0x158d>
-     87f: b2 1e        	lda	($1e)                   ; 0x201e <__heap_start+0x158c>
-     881: c9 0a        	cmp	#$a
-     883: f0 26        	beq	$8ab <textPrint+0xbc>
-     885: c9 0d        	cmp	#$d
-     887: f0 22        	beq	$8ab <textPrint+0xbc>
-     889: aa           	tax
-     88a: d0 03        	bne	$88f <textPrint+0xa0>
-     88c: 4c 90 09     	jmp	$990 <textPrint+0x1a1>
-     88f: a2 03        	ldx	#$3
-     891: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     893: a4 30        	ldy	$30                     ; 0x2030 <__heap_start+0x159e>
-     895: a9 f0        	lda	#$f0
-     897: 91 1c        	sta	($1c),y                 ; 0x201c <__heap_start+0x158a>
-     899: ca           	dex
-     89a: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     89c: b2 1e        	lda	($1e)                   ; 0x201e <__heap_start+0x158c>
-     89e: a4 30        	ldy	$30                     ; 0x2030 <__heap_start+0x159e>
-     8a0: 91 1c        	sta	($1c),y                 ; 0x201c <__heap_start+0x158a>
-     8a2: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x159e>
-     8a4: e8           	inx
-     8a5: e6 30        	inc	$30                     ; 0x2030 <__heap_start+0x159e>
-     8a7: e0 50        	cpx	#$50
-     8a9: d0 c1        	bne	$86c <textPrint+0x7d>
-     8ab: 64 30        	stz	$30                     ; 0x2030 <__heap_start+0x159e>
-     8ad: a6 31        	ldx	$31                     ; 0x2031 <__heap_start+0x159f>
-     8af: e8           	inx
-     8b0: e6 31        	inc	$31                     ; 0x2031 <__heap_start+0x159f>
-     8b2: e0 1e        	cpx	#$1e
-     8b4: f0 03        	beq	$8b9 <textPrint+0xca>
-     8b6: 4c 5f 08     	jmp	$85f <textPrint+0x70>
-     8b9: a2 03        	ldx	#$3
-     8bb: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     8bd: a2 01        	ldx	#$1
-     8bf: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x158a>
-     8c1: a2 09        	ldx	#$9
-     8c3: a0 10        	ldy	#$10
-     8c5: a9 00        	lda	#$0
-     8c7: 85 1e        	sta	$1e                     ; 0x201e <__heap_start+0x158c>
-     8c9: a9 c0        	lda	#$c0
-     8cb: 85 1f        	sta	$1f                     ; 0x201f <__heap_start+0x158d>
-     8cd: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x158b>
-     8cf: a0 50        	ldy	#$50
-     8d1: b1 1e        	lda	($1e),y                 ; 0x201e <__heap_start+0x158c>
-     8d3: 92 1e        	sta	($1e)                   ; 0x201e <__heap_start+0x158c>
-     8d5: a9 ff        	lda	#$ff
-     8d7: c6 1d        	dec	$1d                     ; 0x201d <__heap_start+0x158b>
-     8d9: c5 1d        	cmp	$1d                     ; 0x201d <__heap_start+0x158b>
-     8db: d0 01        	bne	$8de <textPrint+0xef>
-     8dd: ca           	dex
-     8de: e6 1e        	inc	$1e                     ; 0x201e <__heap_start+0x158c>
-     8e0: d0 02        	bne	$8e4 <textPrint+0xf5>
-     8e2: e6 1f        	inc	$1f                     ; 0x201f <__heap_start+0x158d>
-     8e4: 8a           	txa
-     8e5: d0 ea        	bne	$8d1 <textPrint+0xe2>
-     8e7: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x158b>
-     8e9: d0 e6        	bne	$8d1 <textPrint+0xe2>
-     8eb: a2 02        	ldx	#$2
-     8ed: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     8ef: a2 00        	ldx	#$0
-     8f1: a5 1c        	lda	$1c                     ; 0x201c <__heap_start+0x158a>
-     8f3: d0 ca        	bne	$8bf <textPrint+0xd0>
-     8f5: a2 03        	ldx	#$3
-     8f7: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     8f9: a2 50        	ldx	#$50
-     8fb: a0 11        	ldy	#$11
-     8fd: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x158a>
-     8ff: a0 c9        	ldy	#$c9
-     901: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x158b>
-     903: a0 10        	ldy	#$10
-     905: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x158c>
-     907: a0 c9        	ldy	#$c9
-     909: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x158d>
-     90b: a9 f0        	lda	#$f0
-     90d: a4 1c        	ldy	$1c                     ; 0x201c <__heap_start+0x158a>
-     90f: 84 22        	sty	$22                     ; 0x2022 <__heap_start+0x1590>
-     911: a4 1d        	ldy	$1d                     ; 0x201d <__heap_start+0x158b>
-     913: 84 23        	sty	$23                     ; 0x2023 <__heap_start+0x1591>
-     915: 92 1e        	sta	($1e)                   ; 0x201e <__heap_start+0x158c>
-     917: e6 1c        	inc	$1c                     ; 0x201c <__heap_start+0x158a>
-     919: d0 02        	bne	$91d <textPrint+0x12e>
-     91b: e6 1d        	inc	$1d                     ; 0x201d <__heap_start+0x158b>
-     91d: ca           	dex
-     91e: a4 22        	ldy	$22                     ; 0x2022 <__heap_start+0x1590>
-     920: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x158c>
-     922: a4 23        	ldy	$23                     ; 0x2023 <__heap_start+0x1591>
-     924: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x158d>
-     926: e0 00        	cpx	#$0
-     928: d0 e3        	bne	$90d <textPrint+0x11e>
-     92a: a2 02        	ldx	#$2
-     92c: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     92e: a2 50        	ldx	#$50
-     930: a0 11        	ldy	#$11
-     932: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x158a>
-     934: a0 c9        	ldy	#$c9
-     936: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x158b>
-     938: a0 10        	ldy	#$10
-     93a: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x158c>
-     93c: a0 c9        	ldy	#$c9
-     93e: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x158d>
-     940: a9 20        	lda	#$20
-     942: a4 1c        	ldy	$1c                     ; 0x201c <__heap_start+0x158a>
-     944: 84 22        	sty	$22                     ; 0x2022 <__heap_start+0x1590>
-     946: a4 1d        	ldy	$1d                     ; 0x201d <__heap_start+0x158b>
-     948: 84 23        	sty	$23                     ; 0x2023 <__heap_start+0x1591>
-     94a: 92 1e        	sta	($1e)                   ; 0x201e <__heap_start+0x158c>
-     94c: e6 1c        	inc	$1c                     ; 0x201c <__heap_start+0x158a>
-     94e: d0 02        	bne	$952 <textPrint+0x163>
-     950: e6 1d        	inc	$1d                     ; 0x201d <__heap_start+0x158b>
-     952: ca           	dex
-     953: a4 22        	ldy	$22                     ; 0x2022 <__heap_start+0x1590>
-     955: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x158c>
-     957: a4 23        	ldy	$23                     ; 0x2023 <__heap_start+0x1591>
-     959: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x158d>
-     95b: e0 00        	cpx	#$0
-     95d: d0 e3        	bne	$942 <textPrint+0x153>
-     95f: c6 31        	dec	$31                     ; 0x2031 <__heap_start+0x159f>
-     961: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xd376>
-     964: a2 c0        	ldx	#$c0
-     966: 8e 09 de     	stx	$de09                   ; 0xde09 <__heap_start+0xd377>
-     969: 9c 0a de     	stz	$de0a                   ; 0xde0a <__heap_start+0xd378>
-     96c: 9c 0b de     	stz	$de0b                   ; 0xde0b <__heap_start+0xd379>
-     96f: a2 1d        	ldx	#$1d
-     971: 8e 0c de     	stx	$de0c                   ; 0xde0c <__heap_start+0xd37a>
-     974: 9c 0d de     	stz	$de0d                   ; 0xde0d <__heap_start+0xd37b>
-     977: 9c 0e de     	stz	$de0e                   ; 0xde0e <__heap_start+0xd37c>
-     97a: 9c 0f de     	stz	$de0f                   ; 0xde0f <__heap_start+0xd37d>
-     97d: ae 18 de     	ldx	$de18                   ; 0xde18 <__heap_start+0xd386>
-     980: ac 19 de     	ldy	$de19                   ; 0xde19 <__heap_start+0xd387>
-     983: ad 1a de     	lda	$de1a                   ; 0xde1a <__heap_start+0xd388>
-     986: ad 1b de     	lda	$de1b                   ; 0xde1b <__heap_start+0xd389>
-     989: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x158a>
-     98b: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x158b>
-     98d: 4c 6c 08     	jmp	$86c <textPrint+0x7d>
-     990: a6 3c        	ldx	$3c                     ; 0x203c <__heap_start+0x15aa>
-     992: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x156f>
-     994: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x159e>
-     996: a4 31        	ldy	$31                     ; 0x2031 <__heap_start+0x159f>
-     998: 8e 14 d0     	stx	$d014                   ; 0xd014 <__heap_start+0xc582>
-     99b: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xc583>
-     99e: 84 31        	sty	$31                     ; 0x2031 <__heap_start+0x159f>
-     9a0: 8c 16 d0     	sty	$d016                   ; 0xd016 <__heap_start+0xc584>
-     9a3: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xc585>
-     9a6: 60           	rts
+0000081b <textPrint>:
+     81b: a6 01        	ldx	$1                      ; 0x2001 <__heap_start+0x1543>
+     81d: 86 3d        	stx	$3d                     ; 0x203d <__heap_start+0x157f>
+     81f: a6 31        	ldx	$31                     ; 0x2031 <__heap_start+0x1573>
+     821: a0 50        	ldy	#$50
+     823: 8c 00 de     	sty	$de00                   ; 0xde00 <__heap_start+0xd342>
+     826: 9c 01 de     	stz	$de01                   ; 0xde01 <__heap_start+0xd343>
+     829: 8e 02 de     	stx	$de02                   ; 0xde02 <__heap_start+0xd344>
+     82c: 9c 03 de     	stz	$de03                   ; 0xde03 <__heap_start+0xd345>
+     82f: ae 10 de     	ldx	$de10                   ; 0xde10 <__heap_start+0xd352>
+     832: ac 11 de     	ldy	$de11                   ; 0xde11 <__heap_start+0xd353>
+     835: 84 15        	sty	$15                     ; 0x2015 <__heap_start+0x1557>
+     837: ad 12 de     	lda	$de12                   ; 0xde12 <__heap_start+0xd354>
+     83a: ac 13 de     	ldy	$de13                   ; 0xde13 <__heap_start+0xd355>
+     83d: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x155e>
+     83f: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xd34a>
+     842: a0 c0        	ldy	#$c0
+     844: 8c 09 de     	sty	$de09                   ; 0xde09 <__heap_start+0xd34b>
+     847: 9c 0a de     	stz	$de0a                   ; 0xde0a <__heap_start+0xd34c>
+     84a: 9c 0b de     	stz	$de0b                   ; 0xde0b <__heap_start+0xd34d>
+     84d: 8e 0c de     	stx	$de0c                   ; 0xde0c <__heap_start+0xd34e>
+     850: 64 14        	stz	$14                     ; 0x2014 <__heap_start+0x1556>
+     852: a2 00        	ldx	#$0
+     854: 86 16        	stx	$16                     ; 0x2016 <__heap_start+0x1558>
+     856: a2 c0        	ldx	#$c0
+     858: 86 17        	stx	$17                     ; 0x2017 <__heap_start+0x1559>
+     85a: a2 11        	ldx	#$11
+     85c: 86 18        	stx	$18                     ; 0x2018 <__heap_start+0x155a>
+     85e: a2 c9        	ldx	#$c9
+     860: 86 19        	stx	$19                     ; 0x2019 <__heap_start+0x155b>
+     862: a2 10        	ldx	#$10
+     864: 86 1a        	stx	$1a                     ; 0x201a <__heap_start+0x155c>
+     866: a2 c9        	ldx	#$c9
+     868: 86 1b        	stx	$1b                     ; 0x201b <__heap_start+0x155d>
+     86a: a6 15        	ldx	$15                     ; 0x2015 <__heap_start+0x1557>
+     86c: 8e 0d de     	stx	$de0d                   ; 0xde0d <__heap_start+0xd34f>
+     86f: 8d 0e de     	sta	$de0e                   ; 0xde0e <__heap_start+0xd350>
+     872: a6 1c        	ldx	$1c                     ; 0x201c <__heap_start+0x155e>
+     874: 8e 0f de     	stx	$de0f                   ; 0xde0f <__heap_start+0xd351>
+     877: ac 18 de     	ldy	$de18                   ; 0xde18 <__heap_start+0xd35a>
+     87a: ad 19 de     	lda	$de19                   ; 0xde19 <__heap_start+0xd35b>
+     87d: ae 1a de     	ldx	$de1a                   ; 0xde1a <__heap_start+0xd35c>
+     880: ae 1b de     	ldx	$de1b                   ; 0xde1b <__heap_start+0xd35d>
+     883: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x155e>
+     885: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x155f>
+     887: 64 15        	stz	$15                     ; 0x2015 <__heap_start+0x1557>
+     889: 80 13        	bra	$89e <textPrint+0x83>
+     88b: a5 1c        	lda	$1c                     ; 0x201c <__heap_start+0x155e>
+     88d: 18           	clc
+     88e: 69 50        	adc	#$50
+     890: 85 1c        	sta	$1c                     ; 0x201c <__heap_start+0x155e>
+     892: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x155f>
+     894: 69 00        	adc	#$0
+     896: 85 1d        	sta	$1d                     ; 0x201d <__heap_start+0x155f>
+     898: e6 14        	inc	$14                     ; 0x2014 <__heap_start+0x1556>
+     89a: d0 02        	bne	$89e <textPrint+0x83>
+     89c: e6 15        	inc	$15                     ; 0x2015 <__heap_start+0x1557>
+     89e: a5 12        	lda	$12                     ; 0x2012 <__heap_start+0x1554>
+     8a0: 18           	clc
+     8a1: 65 14        	adc	$14                     ; 0x2014 <__heap_start+0x1556>
+     8a3: 85 1e        	sta	$1e                     ; 0x201e <__heap_start+0x1560>
+     8a5: a5 13        	lda	$13                     ; 0x2013 <__heap_start+0x1555>
+     8a7: 65 15        	adc	$15                     ; 0x2015 <__heap_start+0x1557>
+     8a9: 85 1f        	sta	$1f                     ; 0x201f <__heap_start+0x1561>
+     8ab: b2 1e        	lda	($1e)                   ; 0x201e <__heap_start+0x1560>
+     8ad: c9 0a        	cmp	#$a
+     8af: f0 26        	beq	$8d7 <textPrint+0xbc>
+     8b1: c9 0d        	cmp	#$d
+     8b3: f0 22        	beq	$8d7 <textPrint+0xbc>
+     8b5: aa           	tax
+     8b6: d0 03        	bne	$8bb <textPrint+0xa0>
+     8b8: 4c bc 09     	jmp	$9bc <textPrint+0x1a1>
+     8bb: a2 03        	ldx	#$3
+     8bd: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     8bf: a4 30        	ldy	$30                     ; 0x2030 <__heap_start+0x1572>
+     8c1: a9 f0        	lda	#$f0
+     8c3: 91 1c        	sta	($1c),y                 ; 0x201c <__heap_start+0x155e>
+     8c5: ca           	dex
+     8c6: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     8c8: b2 1e        	lda	($1e)                   ; 0x201e <__heap_start+0x1560>
+     8ca: a4 30        	ldy	$30                     ; 0x2030 <__heap_start+0x1572>
+     8cc: 91 1c        	sta	($1c),y                 ; 0x201c <__heap_start+0x155e>
+     8ce: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x1572>
+     8d0: e8           	inx
+     8d1: e6 30        	inc	$30                     ; 0x2030 <__heap_start+0x1572>
+     8d3: e0 50        	cpx	#$50
+     8d5: d0 c1        	bne	$898 <textPrint+0x7d>
+     8d7: 64 30        	stz	$30                     ; 0x2030 <__heap_start+0x1572>
+     8d9: a6 31        	ldx	$31                     ; 0x2031 <__heap_start+0x1573>
+     8db: e8           	inx
+     8dc: e6 31        	inc	$31                     ; 0x2031 <__heap_start+0x1573>
+     8de: e0 1e        	cpx	#$1e
+     8e0: f0 03        	beq	$8e5 <textPrint+0xca>
+     8e2: 4c 8b 08     	jmp	$88b <textPrint+0x70>
+     8e5: a2 03        	ldx	#$3
+     8e7: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     8e9: a2 01        	ldx	#$1
+     8eb: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x155e>
+     8ed: a2 09        	ldx	#$9
+     8ef: a0 10        	ldy	#$10
+     8f1: a9 00        	lda	#$0
+     8f3: 85 1e        	sta	$1e                     ; 0x201e <__heap_start+0x1560>
+     8f5: a9 c0        	lda	#$c0
+     8f7: 85 1f        	sta	$1f                     ; 0x201f <__heap_start+0x1561>
+     8f9: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x155f>
+     8fb: a0 50        	ldy	#$50
+     8fd: b1 1e        	lda	($1e),y                 ; 0x201e <__heap_start+0x1560>
+     8ff: 92 1e        	sta	($1e)                   ; 0x201e <__heap_start+0x1560>
+     901: a9 ff        	lda	#$ff
+     903: c6 1d        	dec	$1d                     ; 0x201d <__heap_start+0x155f>
+     905: c5 1d        	cmp	$1d                     ; 0x201d <__heap_start+0x155f>
+     907: d0 01        	bne	$90a <textPrint+0xef>
+     909: ca           	dex
+     90a: e6 1e        	inc	$1e                     ; 0x201e <__heap_start+0x1560>
+     90c: d0 02        	bne	$910 <textPrint+0xf5>
+     90e: e6 1f        	inc	$1f                     ; 0x201f <__heap_start+0x1561>
+     910: 8a           	txa
+     911: d0 ea        	bne	$8fd <textPrint+0xe2>
+     913: a5 1d        	lda	$1d                     ; 0x201d <__heap_start+0x155f>
+     915: d0 e6        	bne	$8fd <textPrint+0xe2>
+     917: a2 02        	ldx	#$2
+     919: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     91b: a2 00        	ldx	#$0
+     91d: a5 1c        	lda	$1c                     ; 0x201c <__heap_start+0x155e>
+     91f: d0 ca        	bne	$8eb <textPrint+0xd0>
+     921: a2 03        	ldx	#$3
+     923: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     925: a2 50        	ldx	#$50
+     927: a0 11        	ldy	#$11
+     929: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x155e>
+     92b: a0 c9        	ldy	#$c9
+     92d: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x155f>
+     92f: a0 10        	ldy	#$10
+     931: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x1560>
+     933: a0 c9        	ldy	#$c9
+     935: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x1561>
+     937: a9 f0        	lda	#$f0
+     939: a4 1c        	ldy	$1c                     ; 0x201c <__heap_start+0x155e>
+     93b: 84 22        	sty	$22                     ; 0x2022 <__heap_start+0x1564>
+     93d: a4 1d        	ldy	$1d                     ; 0x201d <__heap_start+0x155f>
+     93f: 84 23        	sty	$23                     ; 0x2023 <__heap_start+0x1565>
+     941: 92 1e        	sta	($1e)                   ; 0x201e <__heap_start+0x1560>
+     943: e6 1c        	inc	$1c                     ; 0x201c <__heap_start+0x155e>
+     945: d0 02        	bne	$949 <textPrint+0x12e>
+     947: e6 1d        	inc	$1d                     ; 0x201d <__heap_start+0x155f>
+     949: ca           	dex
+     94a: a4 22        	ldy	$22                     ; 0x2022 <__heap_start+0x1564>
+     94c: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x1560>
+     94e: a4 23        	ldy	$23                     ; 0x2023 <__heap_start+0x1565>
+     950: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x1561>
+     952: e0 00        	cpx	#$0
+     954: d0 e3        	bne	$939 <textPrint+0x11e>
+     956: a2 02        	ldx	#$2
+     958: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     95a: a2 50        	ldx	#$50
+     95c: a0 11        	ldy	#$11
+     95e: 84 1c        	sty	$1c                     ; 0x201c <__heap_start+0x155e>
+     960: a0 c9        	ldy	#$c9
+     962: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x155f>
+     964: a0 10        	ldy	#$10
+     966: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x1560>
+     968: a0 c9        	ldy	#$c9
+     96a: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x1561>
+     96c: a9 20        	lda	#$20
+     96e: a4 1c        	ldy	$1c                     ; 0x201c <__heap_start+0x155e>
+     970: 84 22        	sty	$22                     ; 0x2022 <__heap_start+0x1564>
+     972: a4 1d        	ldy	$1d                     ; 0x201d <__heap_start+0x155f>
+     974: 84 23        	sty	$23                     ; 0x2023 <__heap_start+0x1565>
+     976: 92 1e        	sta	($1e)                   ; 0x201e <__heap_start+0x1560>
+     978: e6 1c        	inc	$1c                     ; 0x201c <__heap_start+0x155e>
+     97a: d0 02        	bne	$97e <textPrint+0x163>
+     97c: e6 1d        	inc	$1d                     ; 0x201d <__heap_start+0x155f>
+     97e: ca           	dex
+     97f: a4 22        	ldy	$22                     ; 0x2022 <__heap_start+0x1564>
+     981: 84 1e        	sty	$1e                     ; 0x201e <__heap_start+0x1560>
+     983: a4 23        	ldy	$23                     ; 0x2023 <__heap_start+0x1565>
+     985: 84 1f        	sty	$1f                     ; 0x201f <__heap_start+0x1561>
+     987: e0 00        	cpx	#$0
+     989: d0 e3        	bne	$96e <textPrint+0x153>
+     98b: c6 31        	dec	$31                     ; 0x2031 <__heap_start+0x1573>
+     98d: 9c 08 de     	stz	$de08                   ; 0xde08 <__heap_start+0xd34a>
+     990: a2 c0        	ldx	#$c0
+     992: 8e 09 de     	stx	$de09                   ; 0xde09 <__heap_start+0xd34b>
+     995: 9c 0a de     	stz	$de0a                   ; 0xde0a <__heap_start+0xd34c>
+     998: 9c 0b de     	stz	$de0b                   ; 0xde0b <__heap_start+0xd34d>
+     99b: a2 1d        	ldx	#$1d
+     99d: 8e 0c de     	stx	$de0c                   ; 0xde0c <__heap_start+0xd34e>
+     9a0: 9c 0d de     	stz	$de0d                   ; 0xde0d <__heap_start+0xd34f>
+     9a3: 9c 0e de     	stz	$de0e                   ; 0xde0e <__heap_start+0xd350>
+     9a6: 9c 0f de     	stz	$de0f                   ; 0xde0f <__heap_start+0xd351>
+     9a9: ae 18 de     	ldx	$de18                   ; 0xde18 <__heap_start+0xd35a>
+     9ac: ac 19 de     	ldy	$de19                   ; 0xde19 <__heap_start+0xd35b>
+     9af: ad 1a de     	lda	$de1a                   ; 0xde1a <__heap_start+0xd35c>
+     9b2: ad 1b de     	lda	$de1b                   ; 0xde1b <__heap_start+0xd35d>
+     9b5: 86 1c        	stx	$1c                     ; 0x201c <__heap_start+0x155e>
+     9b7: 84 1d        	sty	$1d                     ; 0x201d <__heap_start+0x155f>
+     9b9: 4c 98 08     	jmp	$898 <textPrint+0x7d>
+     9bc: a6 3d        	ldx	$3d                     ; 0x203d <__heap_start+0x157f>
+     9be: 86 01        	stx	$1                      ; 0x2001 <__heap_start+0x1543>
+     9c0: a6 30        	ldx	$30                     ; 0x2030 <__heap_start+0x1572>
+     9c2: a4 31        	ldy	$31                     ; 0x2031 <__heap_start+0x1573>
+     9c4: 8e 14 d0     	stx	$d014                   ; 0xd014 <__heap_start+0xc556>
+     9c7: 9c 15 d0     	stz	$d015                   ; 0xd015 <__heap_start+0xc557>
+     9ca: 84 31        	sty	$31                     ; 0x2031 <__heap_start+0x1573>
+     9cc: 8c 16 d0     	sty	$d016                   ; 0xd016 <__heap_start+0xc558>
+     9cf: 9c 17 d0     	stz	$d017                   ; 0xd017 <__heap_start+0xc559>
+     9d2: 60           	rts
 
-000009a7 <exit>:
-     9a7: 20 14 03     	jsr	$314 <_fini>
-     9aa: 80 fe        	bra	$9aa <exit+0x3>
+000009d3 <exit>:
+     9d3: 20 14 03     	jsr	$314 <_fini>
+     9d6: 80 fe        	bra	$9d6 <exit+0x3>
 
-000009ac <__memset>:
-     9ac: a4 14        	ldy	$14                     ; 0x2014 <__heap_start+0x1582>
-     9ae: d0 04        	bne	$9b4 <__memset+0x8>
-     9b0: e0 00        	cpx	#$0
-     9b2: f0 17        	beq	$9cb <__memset+0x1f>
-     9b4: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1580>
-     9b6: e6 12        	inc	$12                     ; 0x2012 <__heap_start+0x1580>
-     9b8: d0 02        	bne	$9bc <__memset+0x10>
-     9ba: e6 13        	inc	$13                     ; 0x2013 <__heap_start+0x1581>
-     9bc: ca           	dex
-     9bd: e0 ff        	cpx	#$ff
-     9bf: d0 02        	bne	$9c3 <__memset+0x17>
-     9c1: c6 14        	dec	$14                     ; 0x2014 <__heap_start+0x1582>
-     9c3: a4 14        	ldy	$14                     ; 0x2014 <__heap_start+0x1582>
-     9c5: d0 ed        	bne	$9b4 <__memset+0x8>
-     9c7: e0 00        	cpx	#$0
-     9c9: d0 e9        	bne	$9b4 <__memset+0x8>
-     9cb: 60           	rts
+000009d8 <__memset>:
+     9d8: a4 14        	ldy	$14                     ; 0x2014 <__heap_start+0x1556>
+     9da: d0 04        	bne	$9e0 <__memset+0x8>
+     9dc: e0 00        	cpx	#$0
+     9de: f0 17        	beq	$9f7 <__memset+0x1f>
+     9e0: 92 12        	sta	($12)                   ; 0x2012 <__heap_start+0x1554>
+     9e2: e6 12        	inc	$12                     ; 0x2012 <__heap_start+0x1554>
+     9e4: d0 02        	bne	$9e8 <__memset+0x10>
+     9e6: e6 13        	inc	$13                     ; 0x2013 <__heap_start+0x1555>
+     9e8: ca           	dex
+     9e9: e0 ff        	cpx	#$ff
+     9eb: d0 02        	bne	$9ef <__memset+0x17>
+     9ed: c6 14        	dec	$14                     ; 0x2014 <__heap_start+0x1556>
+     9ef: a4 14        	ldy	$14                     ; 0x2014 <__heap_start+0x1556>
+     9f1: d0 ed        	bne	$9e0 <__memset+0x8>
+     9f3: e0 00        	cpx	#$0
+     9f5: d0 e9        	bne	$9e0 <__memset+0x8>
+     9f7: 60           	rts

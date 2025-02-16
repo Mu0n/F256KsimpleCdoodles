@@ -55,149 +55,190 @@
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
        0        0        0     1 __palback_lma = 0x10000
        0        0        0     1 __palback_size = 0x400
-       0        0        0     1 __carL_lma = 0x10400
-       0        0        0     1 __carL_size = 0x1400
-       0        0        0     1 __carR_lma = 0x11800
-       0        0        0     1 __carR_size = 0x400
+       0        0        0     1 __carF_lma = 0x10400
+       0        0        0     1 __carF_size = 0x800
+       0        0        0     1 __carM_lma = 0x10c00
+       0        0        0     1 __carM_size = 0x800
+       0        0        0     1 __carB_lma = 0x11400
+       0        0        0     1 __carB_size = 0x800
+       0        0        0     1 __yellow_lma = 0x11c00
+       0        0        0     1 __yellow_size = 0x1400
        0        0        0     1 __backbmp_lma = 0x20000
        0        0        0     1 __backbmp_size = 0x12c00
        0        0        0     1 __midifile_lma = 0x38000
        0        0        0     1 __midifile_size = 0xd187
-      30      300       32     1 .zp.data
-      30      300        0     1         __zp_data_start = .
-      30      300       32     1         FusionDrive.lto.o:(.zp.data)
-      30      300       30     1                 textColors
-      60      330        2     1                 carX
-      62      332        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      62      332        0     1 __zp_data_size = SIZEOF(.zp.data)
-      62       62       1f     1 .zp.bss
-      62       62        0     1         __zp_bss_start = .
-      62       62       1f     1         FusionDrive.lto.o:(.zp.bss)
-      62       62        4     1                 _BITMAP_BASE.0
-      66       66        2     1                 trackcount
-      68       68        4     1                 tick
-      6c       6c        2     1                 theBigList.1
-      6e       6e        2     1                 theBigList.2
-      70       70        2     1                 parsers
-      72       72        1     1                 carTimer.1
-      73       73        1     1                 laneTimer.1
-      74       74        1     1                 laneTimer.2
-      75       75        7     1                 kernelEventData
-      7c       7c        1     1                 (anonymous namespace)::initialized
-      7d       7d        2     1                 (anonymous namespace)::free_size
-      7f       7f        2     1                 (anonymous namespace)::free_list
-      81       81        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      81       81        d     1 .zp
-      81       81        d     1         FusionDrive.lto.o:(.zp.noinit)
-     332      332     2c74     2 .text
-     332      332        0     1         _init = .
-     332      332        0     1         _start = .
-     332      332        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     332      332        0     1                 __do_init_stack
-     33a      33a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     33a      33a        0     1                 __do_zero_bss
-     33d      33d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     33d      33d        0     1                 __do_zero_zp_bss
-     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     340      340        0     1                 __do_copy_zp_data
-     343      343        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     346      346        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     346      346        0     1                 __after_main
-     349      349        0     1         _fini = .
-     349      349        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     34a      34a      133     2         FusionDrive.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     34a      34a      133     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     47d      47d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     47d      47d       13     1                 __zero_bss
-     490      490       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     490      490       13     1                 __zero_zp_bss
-     4a3      4a3       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     4a3      4a3       17     1                 __copy_zp_data
-     4ba      4ba      393     1         FusionDrive.lto.o:(.text.f256Init)
-     4ba      4ba      393     1                 f256Init
-     84d      84d        6     1         FusionDrive.lto.o:(.text.main)
-     84d      84d        6     1                 main
-     853      853      e4e     1         FusionDrive.lto.o:(.text.f256main)
-     853      853      e4e     1                 f256main
-    16a1     16a1     113a     1         FusionDrive.lto.o:(.text.parse)
-    16a1     16a1     113a     1                 parse
-    27db     27db      119     1         FusionDrive.lto.o:(.text.adjustOffsets)
-    27db     27db      119     1                 adjustOffsets
-    28f4     28f4      161     1         FusionDrive.lto.o:(.text.updateCarPos)
-    28f4     28f4      161     1                 updateCarPos
-    2a55     2a55        5     1         FusionDrive.lto.o:(.text.exit)
-    2a55     2a55        5     1                 exit
-    2a5a     2a5a      2ad     1         FusionDrive.lto.o:(.text.malloc)
-    2a5a     2a5a      2ad     1                 malloc
-    2d07     2d07       2c     1         FusionDrive.lto.o:(.text.memcpy)
-    2d07     2d07       2c     1                 memcpy
-    2d33     2d33       20     1         FusionDrive.lto.o:(.text.__memset)
-    2d33     2d33       20     1                 __memset
-    2d53     2d53       74     1         FusionDrive.lto.o:(.text.strstr)
-    2d53     2d53       74     1                 strstr
-    2dc7     2dc7       70     1         FusionDrive.lto.o:(.text.__mulsi3)
-    2dc7     2dc7       70     1                 __mulsi3
-    2e37     2e37      16f     1         FusionDrive.lto.o:(.text.__udivsi3)
-    2e37     2e37      16f     1                 __udivsi3
-    2fa6     2fa6        0     1         __init_array_start = .
-    2fa6     2fa6        0     1         __init_array_end = .
-    2fa6     2fa6        0     1         __fini_array_start = .
-    2fa6     2fa6        0     1         __fini_array_end = .
-    2fa6     2fa6       28     1 .rodata
-    2fa6     2fa6        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2fa6     2fa6        0     1                 __set_v
-    2fa7     2fa7       22     1         FusionDrive.lto.o:(.rodata.parse)
-    2fc9     2fc9        5     1         <internal>:(.rodata.str1.1)
-    2fce     2fce        0     1 .data
-    2fce     2fce        0     1         __data_start = .
-    2fce     2fce        0     1         __data_end = .
-    2fce     2fce        0     1 __data_load_start = LOADADDR(.data)
-    2fce     2fce        0     1 __data_size = SIZEOF(.data)
-    2fce     2fce       43     1 .bss
-    2fce     2fce        0     1         __bss_start = .
-    2fce     2fce        1     1         FusionDrive.lto.o:(.bss._col)
-    2fce     2fce        1     1                 _col
-    2fcf     2fcf        1     1         FusionDrive.lto.o:(.bss._row)
-    2fcf     2fcf        1     1                 _row
-    2fd0     2fd0       40     1         FusionDrive.lto.o:(.bss._spriteCtl)
-    2fd0     2fd0       40     1                 _spriteCtl
-    3010     3010        1     1         FusionDrive.lto.o:(.bss.kernelError)
-    3010     3010        1     1                 kernelError
-    3011     3011        0     1         __bss_end = .
-    3011     3011        0     1 __bss_size = SIZEOF(.bss)
-    3011     3011        0     1 .noinit
-    3011     3011        0     1         __heap_start = ALIGN(., 2)
-    3011     3011        0     1 end_block8 = .
-    3011     3011        0     1 end_block9 = .
-    3011     3011        0     1 end_block10 = .
-    3011     3011        0     1 end_block11 = .
-    3011     3011        0     1 end_block12 = .
-    3011     3011        0     1 end_block13 = .
-    3011     3011        0     1 end_block14 = .
-    3011     3011        0     1 end_block15 = .
-    3011     3011        0     1 end_block16 = .
-    3011     3011        0     1 end_block17 = .
-    3011     3011        0     1 end_block18 = .
-    3011     3011        0     1 end_block19 = .
-    3011     3011        0     1 end_block20 = .
-    3011     3011        0     1 end_block21 = .
-    3011     3011        0     1 end_block22 = .
-    3011     3011        0     1 end_block23 = .
+      30       30        0     1 .zp.data
+      30       30        0     1         __zp_data_start = .
+      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
+      30       30       34     1 .zp.bss
+      30       30        0     1         __zp_bss_start = .
+      30       30       34     1         FusionDrive.lto.o:(.zp.bss)
+      30       30        1     1                 _col
+      31       31        1     1                 _row
+      32       32        4     1                 _BITMAP_BASE.2
+      36       36        1     1                 _active
+      37       37        2     1                 __putchar.s
+      39       39        2     1                 trackcount
+      3b       3b        4     1                 tick
+      3f       3f        2     1                 theBigList.1
+      41       41        2     1                 theBigList.2
+      43       43        2     1                 parsers
+      45       45        1     1                 carTimer.1
+      46       46        1     1                 car_yel_L.0
+      47       47        2     1                 car_yel_L.1
+      49       49        2     1                 car_yel_L.2
+      4b       4b        2     1                 car_yel_L.3
+      4d       4d        1     1                 car_yel_L.4
+      4e       4e        1     1                 car_yel_L.7
+      4f       4f        2     1                 car_back_L.1
+      51       51        1     1                 car_back_L.2
+      52       52        1     1                 car_back_L.8
+      53       53        1     1                 car_back_L.9
+      54       54        1     1                 laneTimer.1
+      55       55        1     1                 laneTimer.2
+      56       56        1     1                 carForceTimer.1
+      57       57        1     1                 carForceTimer.2
+      58       58        7     1                 kernelEventData
+      5f       5f        1     1                 (anonymous namespace)::initialized
+      60       60        2     1                 (anonymous namespace)::free_size
+      62       62        2     1                 (anonymous namespace)::free_list
+      64       64        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      64       64       65     1 .zp
+      64       64       65     1         FusionDrive.lto.o:(.zp.noinit)
+     300      300     45be     2 .text
+     300      300        0     1         _init = .
+     300      300        0     1         _start = .
+     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     300      300        0     1                 __do_init_stack
+     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     308      308        0     1                 __do_zero_bss
+     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30b      30b        0     1                 __do_zero_zp_bss
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     311      311        0     1                 __after_main
+     314      314        0     1         _fini = .
+     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     316      316      133     2         FusionDrive.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      133     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     449      449       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     449      449       13     1                 __zero_bss
+     45c      45c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     45c      45c       13     1                 __zero_zp_bss
+     46f      46f      3b6     1         FusionDrive.lto.o:(.text.f256Init)
+     46f      46f      3b6     1                 f256Init
+     825      825        6     1         FusionDrive.lto.o:(.text.main)
+     825      825        6     1                 main
+     82b      82b      fcf     1         FusionDrive.lto.o:(.text.f256main)
+     82b      82b      fcf     1                 f256main
+    17fa     17fa     113a     1         FusionDrive.lto.o:(.text.parse)
+    17fa     17fa     113a     1                 parse
+    2934     2934      119     1         FusionDrive.lto.o:(.text.adjustOffsets)
+    2934     2934      119     1                 adjustOffsets
+    2a4d     2a4d      804     1         FusionDrive.lto.o:(.text.updateCarPos)
+    2a4d     2a4d      804     1                 updateCarPos
+    3251     3251      1ba     1         FusionDrive.lto.o:(.text.__putchar)
+    3251     3251      1ba     1                 __putchar
+    340b     340b        5     1         FusionDrive.lto.o:(.text.exit)
+    340b     340b        5     1                 exit
+    3410     3410       d1     1         FusionDrive.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    3410     3410       d1     1                 (anonymous namespace)::put(char, Status*)
+    34e1     34e1      10d     1         FusionDrive.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    34e1     34e1      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
+    35ee     35ee      bb0     1         FusionDrive.lto.o:(.text.printf)
+    35ee     35ee      bb0     1                 printf
+    419e     419e      2ad     1         FusionDrive.lto.o:(.text.malloc)
+    419e     419e      2ad     1                 malloc
+    444b     444b       2c     1         FusionDrive.lto.o:(.text.memcpy)
+    444b     444b       2c     1                 memcpy
+    4477     4477       20     1         FusionDrive.lto.o:(.text.__memset)
+    4477     4477       20     1                 __memset
+    4497     4497       74     1         FusionDrive.lto.o:(.text.strstr)
+    4497     4497       74     1                 strstr
+    450b     450b       70     1         FusionDrive.lto.o:(.text.__mulsi3)
+    450b     450b       70     1                 __mulsi3
+    457b     457b       5c     1         FusionDrive.lto.o:(.text.__udivqi3)
+    457b     457b       5c     1                 __udivqi3
+    45d7     45d7       c0     1         FusionDrive.lto.o:(.text.__udivhi3)
+    45d7     45d7       c0     1                 __udivhi3
+    4697     4697      16f     1         FusionDrive.lto.o:(.text.__udivsi3)
+    4697     4697      16f     1                 __udivsi3
+    4806     4806       45     1         FusionDrive.lto.o:(.text.__divqi3)
+    4806     4806       45     1                 __divqi3
+    484b     484b       73     1         FusionDrive.lto.o:(.text.__divhi3)
+    484b     484b       73     1                 __divhi3
+    48be     48be        0     1         __init_array_start = .
+    48be     48be        0     1         __init_array_end = .
+    48be     48be        0     1         __fini_array_start = .
+    48be     48be        0     1         __fini_array_end = .
+    48be     48be       d3     1 .rodata
+    48be     48be        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    48be     48be        0     1                 __set_v
+    48bf     48bf       22     1         FusionDrive.lto.o:(.rodata.parse)
+    48e1     48e1        8     1         FusionDrive.lto.o:(.rodata.updateCarPos)
+    48e9     48e9       3a     1         FusionDrive.lto.o:(.rodata.printf)
+    4923     4923       30     1         FusionDrive.lto.o:(.rodata.textColors)
+    4923     4923       30     1                 textColors
+    4953     4953       3e     1         <internal>:(.rodata.str1.1)
+    4991     4991        0     1 .data
+    4991     4991        0     1         __data_start = .
+    4991     4991        0     1         __data_end = .
+    4991     4991        0     1 __data_load_start = LOADADDR(.data)
+    4991     4991        0     1 __data_size = SIZEOF(.data)
+    4991     4991       44     1 .bss
+    4991     4991        0     1         __bss_start = .
+    4991     4991        3     1         FusionDrive.lto.o:(.bss._BITMAP_CLUT)
+    4991     4991        3     1                 _BITMAP_CLUT
+    4994     4994       40     1         FusionDrive.lto.o:(.bss._spriteCtl)
+    4994     4994       40     1                 _spriteCtl
+    49d4     49d4        1     1         FusionDrive.lto.o:(.bss.kernelError)
+    49d4     49d4        1     1                 kernelError
+    49d5     49d5        0     1         __bss_end = .
+    49d5     49d5        0     1 __bss_size = SIZEOF(.bss)
+    49d5     49d5        0     1 .noinit
+    49d5     49d5        0     1         __heap_start = ALIGN(., 2)
+    49d5     49d5        0     1 end_block8 = .
+    49d5     49d5        0     1 end_block9 = .
+    49d5     49d5        0     1 end_block10 = .
+    49d5     49d5        0     1 end_block11 = .
+    49d5     49d5        0     1 end_block12 = .
+    49d5     49d5        0     1 end_block13 = .
+    49d5     49d5        0     1 end_block14 = .
+    49d5     49d5        0     1 end_block15 = .
+    49d5     49d5        0     1 end_block16 = .
+    49d5     49d5        0     1 end_block17 = .
+    49d5     49d5        0     1 end_block18 = .
+    49d5     49d5        0     1 end_block19 = .
+    49d5     49d5        0     1 end_block20 = .
+    49d5     49d5        0     1 end_block21 = .
+    49d5     49d5        0     1 end_block22 = .
+    49d5     49d5        0     1 end_block23 = .
    10000    10000      400    16 .palback
    10000    10000      400    16         FusionDrive.lto.o:(.palback)
    10000    10000        0     1                 palback_start
    10400    10400        0     1                 palback_end
    10400    10400        0     1 end_palback = .
-   10400    10400     1400    16 .carL
-   10400    10400     1400    16         FusionDrive.lto.o:(.carL)
-   10400    10400        0     1                 carL_start
-   11800    11800        0     1                 carL_end
-   11800    11800        0     1 end_carL = .
-   11800    11800      400    16 .carR
-   11800    11800      400    16         FusionDrive.lto.o:(.carR)
-   11800    11800        0     1                 carR_start
-   11c00    11c00        0     1                 carR_end
-   11c00    11c00        0     1 end_carR = .
+   10400    10400      800    16 .carF
+   10400    10400      800    16         FusionDrive.lto.o:(.carF)
+   10400    10400        0     1                 carF_start
+   10c00    10c00        0     1                 carF_end
+   10c00    10c00        0     1 end_carF = .
+   10c00    10c00      800    16 .carM
+   10c00    10c00      800    16         FusionDrive.lto.o:(.carM)
+   10c00    10c00        0     1                 carM_start
+   11400    11400        0     1                 carM_end
+   11400    11400        0     1 end_carM = .
+   11400    11400      800    16 .carB
+   11400    11400      800    16         FusionDrive.lto.o:(.carB)
+   11400    11400        0     1                 carB_start
+   11c00    11c00        0     1                 carB_end
+   11c00    11c00        0     1 end_carB = .
+   11c00    11c00     1400    16 .yellow
+   11c00    11c00     1400    16         FusionDrive.lto.o:(.yellow)
+   11c00    11c00        0     1                 yellow_start
+   13000    13000        0     1                 yellow_end
+   13000    13000        0     1 end_yellow = .
    20000    20000    12c00    16 .backbmp
    20000    20000    12c00    16         FusionDrive.lto.o:(.backbmp)
    20000    20000        0     1                 backbmp_start
@@ -210,9 +251,9 @@
    45187    45187        0     1 end_midifile = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      a10     4 .symtab
-       0        0      a10     4         <internal>:(.symtab)
-       0        0       82     1 .shstrtab
-       0        0       82     1         <internal>:(.shstrtab)
-       0        0      740     1 .strtab
-       0        0      740     1         <internal>:(.strtab)
+       0        0      be0     4 .symtab
+       0        0      be0     4         <internal>:(.symtab)
+       0        0       90     1 .shstrtab
+       0        0       90     1         <internal>:(.shstrtab)
+       0        0      8bd     1 .strtab
+       0        0      8bd     1         <internal>:(.strtab)

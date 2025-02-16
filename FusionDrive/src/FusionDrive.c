@@ -14,26 +14,25 @@
 
 #define NES_STAT    0xD880
 #define NES_PAD0    0xD884
-#define NES_PAD0_A      0x7F
-#define NES_PAD0_B      0xBF
-#define NES_PAD0_SELECT 0xDF
-#define NES_PAD0_START  0xEF
-#define NES_PAD0_UP     0xF7
-#define NES_PAD0_DOWN   0xFB
-#define NES_PAD0_LEFT   0xFD
-#define NES_PAD0_RIGHT  0xFE
+#define NES_PAD1    0xD886
+#define NES_A      0x7F
+#define NES_B      0xBF
+#define NES_SELECT 0xDF
+#define NES_START  0xEF
+#define NES_UP     0xF7
+#define NES_DOWN   0xFB
+#define NES_LEFT   0xFD
+#define NES_RIGHT  0xFE
 
+#define ABS(a) ((a) < 0 ? -(a) : (a)) 
 
-#define PAL_BASE    0x10000
-#define BITMAP_BASE      0x20000
-#define SPR_L0 0x10400   
-#define SPR_R0 0x10800
-#define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
 #define TIMER_CAR_COOKIE 0
 #define TIMER_LANE_COOKIE 1
+#define TIMER_CAR_FORCE_COOKIE 2
 #define TIMER_CAR_DELAY 1
 #define TIMER_LANE_DELAY 3
+#define TIMER_CAR_FORCE_DELAY 3
 
 #define VKY_SP0_CTRL  0xD900 //Sprite #0’s control register
 #define VKY_SP0_AD_L  0xD901 // Sprite #0’s pixel data address register
@@ -80,20 +79,45 @@
 #define MIDI_EVENT_FAR_SIZE 8
 
 
+#define PAL_BASE    0x10000
+#define BITMAP_BASE      0x20000
+#define SPR_FRONT_L 0x10400
+#define SPR_FRONT_R 0x10800
+#define SPR_MIDDLE_L 0x10C00
+#define SPR_MIDDLE_R 0x11000
+#define SPR_BACK_L 0x011400
+#define SPR_BACK_R 0x011800   
+#define SPR_YEL_L 0x011C00    
+#define SPR_YEL_R 0x012000    
+#define SPR_YEL_FAR1 0x012400
+#define SPR_YEL_FAR2 0x012800
+#define SPR_YEL_FAR3 0x012C00             
+#define TIMER_FRAMES 0
+
+#define TOP_SPEED 4
+#define TOP_MIN_X 42
+#define TOP_MAX_X 278
+#define TOP_FORCE 2
+#define ENMY_ENTRY_Y 170
+
 //INCLUDES
 #include "f256lib.h"
 #include <stdlib.h>
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
+#include "../src/timer0.h"  //contains timer0 routines
 
 EMBED(palback, "../assets/Urban4.data.pal", 0x10000); //1kb
-EMBED(carL, "../assets/car.bin",0x10400); //5kb
-EMBED(carR, "../assets/carr.spr",0x11800); // 5kb
+EMBED(carF, "../assets/carfront.bin",0x10400); //2kb
+EMBED(carM, "../assets/carmid.bin",0x10C00);   //2kb
+EMBED(carB, "../assets/carback.bin",0x11400); //2kb
+EMBED(yellow, "../assets/yellow.bin",0x11C00); //5kb
+//next would be at 0x13000
 EMBED(backbmp, "../assets/Urban4.data", 0x20000);
 EMBED(midifile, "../assets/continen.mid", 0x38000);
 
 //GLOBALS
-struct timer_t carTimer, laneTimer;
+struct timer_t carTimer, laneTimer, carForceTimer;
 
 bigParsed theBigList;
 FILE *theMIDIfile;
@@ -108,7 +132,6 @@ uint16_t *parsers; //indices for the various type 1 tracks during playback
 uint32_t *targetParse; //will pick the default 0x20000 if the file doesn't load
 uint8_t nn=4, dd=2, cc=24, bb=8; //nn numerator of time signature, dd= denom. cc=nb of midi clocks in metro click. bb = nb of 32nd notes in a beat
 uint8_t gSineIndex=0;
-uint16_t carX=160, carY=220;
 
 int16_t SIN[] = {
        0,    1,    3,    4,    6,    7,    9,   10,
@@ -148,12 +171,15 @@ int16_t SIN[] = {
 //GLOBALS
 typedef struct sprStatus
 {
-	uint16_t x,y; //position
+	uint8_t s; //sprite index in Vicky
+	int16_t x,y,z; //position
 	bool rightOrLeft; //last facing
 	bool isDashing;
 	uint32_t addr; //base address
 	uint8_t frame; //frame into view
 	uint16_t sx, sy; //speed
+	int8_t vx, vy; //velocity
+	int8_t ax, ay; //acceleration
 	struct timer_t timer; //animation timer;
 	uint8_t cookie; //cookie for timer
 	uint8_t state; //which state: 0 idle, 1 walk right, 2 walk left, etc
@@ -161,27 +187,26 @@ typedef struct sprStatus
 	uint8_t *maxIndexForState; //maximum index for given state
 } sprStatus;
 
-struct sprStatus carLS, carRS;
+struct sprStatus car_back_L, car_back_R, car_mid_L, car_mid_R, car_front_L, car_front_R,
+                 car_yel_L, car_yel_R;
 
 
 //FUNCTION PROTOTYPES
 void setup(void);
 
-void sendAME(aMEPtr midiEvent); //sends a MIDI event message, either a 2-byte or 3-byte one
+void sendAME(aMEPtr); //sends a MIDI event message, either a 2-byte or 3-byte one
 int16_t findPositionOfHeader(void);  //this opens a .mid file and ignores everything until 'MThd' is encountered	
-void detectStructure(uint16_t startIndex); //checks the tempo, number of tracks, etc
+void detectStructure(uint16_t); //checks the tempo, number of tracks, etc
 int16_t getAndAnalyzeMIDI(void); //high level function that directs the reading and parsing of the MIDI file  
-int8_t parse(uint16_t startIndex, bool wantCmds);
+int8_t parse(uint16_t, bool);
 void playmidi(void);
 void adjustOffsets(void);
-void resetTimer0(void);
-void setTimer0(uint8_t, uint8_t, uint8_t);
-uint32_t readTimer0(void);	
-uint8_t isTimer0Done(void);
 
-void updateCarPos(uint8_t *value);
-void setCarPos(uint16_t, uint16_t);
+void mySetCar(uint8_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint8_t, bool, struct sprStatus *);
+void updateCarPos(uint8_t *);
+void setCarPos(int16_t, int16_t);
 void swapColors(uint8_t, uint8_t);
+void setEnemyPos(struct sprStatus*);
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(aMEPtr midiEvent)
@@ -683,7 +708,6 @@ void playmidi(void) //non-destructive version
 				whereToLowest += (uint32_t)((uint32_t) parsers[i] *(uint32_t)  MIDI_EVENT_FAR_SIZE);
 				}
 			}  //end of the for loop for most imminent event
-//hitspace();
 		//Do the event
 			msgGo.deltaToGo = lowestTimeFound;
 			msgGo.bytecount =    FAR_PEEK((uint32_t) MIDI_PARSED + (uint32_t) whereToLowest + (uint32_t) AME_BYTECOUNT);
@@ -698,9 +722,6 @@ void playmidi(void) //non-destructive version
 			}
 		else 
 			{ //for all the rest which have a time delay
-		
-				
-				
 				overFlow = lowestTimeFound;
 				while(overFlow > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
 				{
@@ -733,7 +754,6 @@ void playmidi(void) //non-destructive version
 			if(i==lowestTrack) continue; //don't mess with the track that just acted
 			soundBeholders[i] -= lowestTimeFound;
 		}
-		
 		localTotalLeft--;
 		}
 	}
@@ -755,36 +775,74 @@ void adjustOffsets()
 	}	
 }	
 
-void setTimer0(uint8_t low, uint8_t mid, uint8_t hi)
-{
-	resetTimer0();
-	POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR); //when the target is reached, bring it back to value 0x000000
-	POKE(T0_CMP_L,low);POKE(T0_CMP_M,mid);POKE(T0_CMP_H,hi); //inject the compare value as max value
-}
 
-void resetTimer0()
+void setCarPos(int16_t x, int16_t y)
 {
-	POKE(T0_CTR, CTR_CLEAR);
-	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
-	POKE(T0_PEND,0x10); //clear pending timer0 
-}
-uint32_t readTimer0()
-{
-	return (uint32_t)((PEEK(T0_VAL_H)))<<16 | (uint32_t)((PEEK(T0_VAL_M)))<<8 | (uint32_t)((PEEK(T0_VAL_L)));
-}
-uint8_t isTimer0Done()
-{
-	return PEEK(T0_PEND)&0x10;
-}
-
-void setCarPos(uint16_t x, uint16_t y)
-{
+	int16_t midx, frontx;
+	
+	midx  = x-(x-160)/18;
+	frontx= x-(x-160)/12;
 	spriteSetPosition(0,x,y);
 	spriteSetPosition(1,x+32,y);
+	spriteSetPosition(2,midx,y);
+	spriteSetPosition(3,midx+32,y);
+	spriteSetPosition(4,frontx,y);
+	spriteSetPosition(5,frontx+32,y);
+}
+
+void setEnemyPos(struct sprStatus *theSpr)
+{
+	uint32_t tempAddr=0;
+	
+	switch(theSpr->z)
+	{
+		case 3:
+		    tempAddr = theSpr->addr + (uint32_t)4096;
+			spriteDefine(theSpr->s, tempAddr , 32, 0, 1);
+			spriteSetVisible(theSpr->s+1,false);
+			break;
+		case 2:
+			tempAddr =  theSpr->addr + (uint32_t)3072;
+			spriteDefine(theSpr->s, tempAddr, 32, 0, 1);
+			spriteSetVisible(theSpr->s+1,false);
+			break;
+		case 1:
+			tempAddr = theSpr->addr + (uint32_t)2048;
+			spriteDefine(theSpr->s, tempAddr, 32, 0, 1);
+			spriteSetVisible(theSpr->s+1,false);
+			break;
+		case 0:
+			tempAddr =  theSpr->addr;
+			spriteDefine(theSpr->s,	tempAddr , 32, 0, 0);
+			spriteDefine(theSpr->s+1, tempAddr + (uint32_t)1024, 32, 0, 0);
+			spriteSetVisible(theSpr->s+1,true);
+			break;
+	}
+	spriteSetVisible(theSpr->s,true);
+	textGotoXY(0,15);
+	
+	printf("ex:%d ey:%d ez:%d        ",theSpr->x, theSpr->y, theSpr->z);
+	spriteSetPosition(theSpr->s,theSpr->x  - (theSpr->z==0?16:0),theSpr->y);
+	spriteSetPosition(theSpr->s+1,theSpr->x+32 - (theSpr->z==0?16:0),theSpr->y);
+	theSpr->y += theSpr->sy;
+	if(theSpr->y>=220) 
+	{
+		spriteDefine(theSpr->s,tempAddr,32,0,0);
+		spriteDefine(theSpr->s+1,tempAddr + (uint32_t)1024,32,0,0);
+	spriteSetVisible(theSpr->s,true);
+	spriteSetVisible(theSpr->s+1,true);
+	}
+	else
+	{
+		spriteDefine(theSpr->s,tempAddr,32,0,1);
+	}
+	if(theSpr->y>240) theSpr->y = ENMY_ENTRY_Y;
+	theSpr->z = 3 - (theSpr->y - ENMY_ENTRY_Y)/12;
+	if(theSpr->z < 0) theSpr->z = 0;
+	
 }
 void updateCarPos(uint8_t *value)
 {
-	
 	POKE(NES_CTRL, NES_CTRL_MODE_NES | NES_CTRL_TRIG);
 	kernelNextEvent();
 	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
@@ -801,23 +859,70 @@ void updateCarPos(uint8_t *value)
 				setTimer(&carTimer);
 				while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)
 					;
-				
-				if(PEEK(NES_PAD0)==NES_PAD0_LEFT)
+				if(PEEK(NES_PAD1)==NES_LEFT)
 				{
-					carX-= 3;
-					setCarPos(carX, carY);
+					car_yel_L.x --;
 				}
-				else if(PEEK(NES_PAD0) == NES_PAD0_RIGHT)
+				else if(PEEK(NES_PAD1) == NES_RIGHT)
 				{
-					carX += 3;
-					setCarPos(carX, carY);
+					car_yel_L.x ++;
 				}
-				
+				if(PEEK(NES_PAD1)==NES_DOWN)
+				{
+					car_yel_L.z--;
+				}
+				else if(PEEK(NES_PAD1)==NES_UP)
+				{
+					car_yel_L.z++;
+				}
+				if(PEEK(NES_PAD0)==NES_LEFT)
+				{
+					car_back_L.ax = -TOP_FORCE;
+				}
+				else if(PEEK(NES_PAD0) == NES_RIGHT)
+				{
+					car_back_L.ax = TOP_FORCE;
+				}
+				else 
+				{
+					car_back_L.ax = 0;
+				}
+				car_back_L.x += car_back_L.vx;
+				if(car_back_L.x < TOP_MIN_X) 
+				{
+					car_back_L.vx = 0;
+					car_back_L.x = TOP_MIN_X;
+				}
+				if(car_back_L.x > TOP_MAX_X) 
+				{
+					car_back_L.vx = 0;
+					car_back_L.x = TOP_MAX_X;
+				}
+
+				setCarPos(car_back_L.x, car_back_L.y);
+				textGotoXY(0,10);
+				printf("x:%d vx:%d ax:%d              ", car_back_L.x, car_back_L.vx, car_back_L.ax);
 				break;
 			case TIMER_LANE_COOKIE:
 				swapColors(112,146);
 				laneTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_LANE_DELAY;
 				setTimer(&laneTimer);
+				break;
+			case TIMER_CAR_FORCE_COOKIE:
+				setEnemyPos(&car_yel_L);
+				if(car_back_L.ax == 0) //no longer pushing to the sides; start the deceleration process due to friction
+				{
+					if(car_back_L.vx < 0 && car_back_L.vx != 0) car_back_L.vx++;
+					if(car_back_L.vx > 0 && car_back_L.vx != 0) car_back_L.vx--;
+				}
+				else car_back_L.vx += car_back_L.ax; //top speed limitation, for both negative and positive speed orientation
+				
+				if(car_back_L.vx > TOP_SPEED) car_back_L.vx = TOP_SPEED; //speed limiters
+				if(car_back_L.vx < -TOP_SPEED) car_back_L.vx = -TOP_SPEED;
+				//if(car_back_L.vx == 0) car_back_L.ax = 0;
+				
+				carForceTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_CAR_FORCE_DELAY;
+				setTimer(&carForceTimer);
 				break;
 				
 		}
@@ -850,10 +955,10 @@ void setup()
 	
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b00101100); //sprite,graph,overlay,text
+	POKE(VKY_MSTR_CTRL_0, 0b00101111); //sprite,graph,overlay,text
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00010100); //font overlay, double height text, 320x240 at 60 Hz;
-	POKE(VKY_LAYER_CTRL_0, 0b00000001); //bitmap 1 in layer 0, bitmap 0 in layer 1
+	POKE(VKY_LAYER_CTRL_0, 0b00010000); //bitmap 0 in layer 0, bitmap 1 in layer 1
 	POKE(VKY_LAYER_CTRL_1, 0b00000010); //bitmap 2 in layer 2
 	POKE(0xD00D,0x00); //force black graphics background
 	POKE(0xD00E,0x00);
@@ -867,81 +972,55 @@ void setup()
 
 	
 	POKE(MMU_IO_CTRL,0);
-	bitmapSetActive(0);
-	bitmapSetAddress(0,BITMAP_BASE);
+	bitmapSetActive(2);
+	bitmapSetAddress(2,BITMAP_BASE);
 	bitmapSetCLUT(0);
 	
-	bitmapSetVisible(0,true);
+	bitmapSetVisible(0,false);
 	bitmapSetVisible(1,false);
-	bitmapSetVisible(2,false);
-	
-	
+	bitmapSetVisible(2,true); //furthermost to act as a real background
 
-	
+/*
+void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, uint8_t z, bool wantVisible, struct sprStatus *theCarPart) 
+*/
 
-
-	spriteDefine(0,SPR_L0,32,0,0);
-	spriteSetVisible(0,true);
-	spriteDefine(1,SPR_R0,32,0,0);
-	spriteSetVisible(1,true);
+	mySetCar(0, SPR_BACK_L, 32, 0, 1, 0, 128, 220, 0, true, &car_back_L);
+	mySetCar(1, SPR_BACK_R, 32, 0, 1, 0, 160, 220, 0, true, &car_back_R);
+	mySetCar(2, SPR_MIDDLE_L, 32, 0, 1, 0, 128, 220, 0, true, &car_mid_L);
+	mySetCar(3, SPR_MIDDLE_R, 32, 0, 1, 0, 160, 220, 0, true, &car_mid_R);
+	mySetCar(4, SPR_FRONT_L, 32, 0, 1, 0, 128, 220, 0, true, &car_front_L);
+	mySetCar(5, SPR_FRONT_R, 32, 0, 1, 0, 160, 220, 0, true, &car_front_R);
 	
-	setCarPos(160,220);
-
+	mySetCar(6, SPR_YEL_L, 32, 0, 1, 0, 165, ENMY_ENTRY_Y, 3, false, &car_yel_L);
+	//sprite 7 is reserved for this yellow car
+	car_yel_L.sy=1;
 	
+	
+	setCarPos(128,220);
+
 	//set NES_CTRL
 	POKE(NES_CTRL,NES_CTRL_MODE_NES);
-
-	/*
-#define VKY_SP0_CTRL  	 0xD900 //Sprite #0’s control register
-#define VKY_SP0_AD_L 	 0xD901 // Sprite #0’s pixel data address register
-#define VKY_SP0_AD_M     0xD902
-#define VKY_SP0_AD_H     0xD903
-#define VKY_SP0_POS_X_L  0xD904 // Sprite #0’s X position register
-#define VKY_SP0_POS_X_H  0xD905
-#define VKY_SP0_POS_Y_L  0xD906 // Sprite #0’s Y position register
-#define VKY_SP0_POS_Y_H  0xD907
-*/
 
 	POKE(MMU_IO_CTRL, 0x00);
 	
 }
 
-void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, bool wantVisible, struct sprStatus) 
+void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, uint8_t z, bool wantVisible, struct sprStatus *theCarPart) 
 {
 	spriteDefine(s, addr, size, clut, layer);
-	 
-	
-	
-	carLS.x = 160;
-	carLS.y = 220;
-	carLS.rightOrLeft = true;
-	carLS.addr = SPR_L0;
-	carLS.frame = 0;
-	carLS.sx = 0;
-	carLS.state = 0;
-	carLS.minIndexForState = (uint8_t *)malloc(sizeof(uint8_t) * 1);
-	carLS.maxIndexForState = (uint8_t *)malloc(sizeof(uint8_t) * 1);
-	carLS.minIndexForState[0] = 0;
-	carLS.maxIndexForState[0] = 0;
-	
-	
-	
+	spriteSetPosition(s,x,y);
+	spriteSetVisible(s,wantVisible);
+
+	theCarPart->s = s;
+	theCarPart->x = x;
+	theCarPart->y = y;
+	theCarPart->z = z;
+	theCarPart->addr = addr;
+	theCarPart->frame = frame;
+	theCarPart->sx = 0;
+	theCarPart->sy = 0;
 }
-	/*typedef struct sprStatus
-{
-	uint16_t x,y; //position
-	bool rightOrLeft; //last facing
-	bool isDashing;
-	uint32_t addr; //base address
-	uint8_t frame; //frame into view
-	uint16_t sx, sy; //speed
-	struct timer_t timer; //animation timer;
-	uint8_t cookie; //cookie for timer
-	uint8_t state; //which state: 0 idle, 1 walk right, 2 walk left, etc
-	uint8_t *minIndexForState; //minimum index for given state
-	uint8_t *maxIndexForState; //maximum index for given state
-} sprStatus;
-*/
+
 			
 void prepTimers()
 	{
@@ -954,6 +1033,11 @@ void prepTimers()
 	laneTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_LANE_DELAY;
 	laneTimer.cookie = TIMER_LANE_COOKIE;
 	setTimer(&laneTimer);	
+	
+	carForceTimer.units = TIMER_FRAMES;
+	carForceTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_CAR_FORCE_DELAY;
+	carForceTimer.cookie = TIMER_CAR_FORCE_COOKIE;
+	setTimer(&carForceTimer);
 	}
 	
 			

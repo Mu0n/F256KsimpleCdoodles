@@ -8,5 +8,7 @@
 
 void psgNoteOn(uint8_t loByte, uint8_t hiByte);
 void psgNoteOff(void);
+extern const uint8_t psgLow[];
+extern const uint8_t psgHigh[];
 
 #endif // MUPSG_H

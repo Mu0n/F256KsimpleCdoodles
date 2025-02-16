@@ -1,7 +1,32 @@
 #include "f256lib.h"
 #include "../src/muUtils.h"
 
+//will return true if the machine id is detected as a K or K2, enabling peace of mind to use its exclusive features
+bool isAnyK(void)
+{
+	uint8_t value = PEEK(0xD6A7) & 0x1F;
+	return (value >= 0x10 && value <= 0x16);
+}
 
+//will return true if the optical keyboard is detected, enabling the case embedded LCD present as well
+bool hasCaseLCD(void)
+{
+	//if the 2nd to last least significant bit is set, it's a mechanical keyboard, LCD not available, don't use it!
+	//if it's cleared, then it's an optical keyboard, you can use it!
+	return ((PEEK(0xDDC1) & 0x02)==0); //here the bit is cleared, so it's true it's an optical keyboard, it "hasCaseLCD"
+}
+
+//graphics background cleardevice
+void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
+{
+	byte backup;
+	backup = PEEK(MMU_IO_CTRL);
+	POKE(MMU_IO_CTRL,0);
+	POKE(0xD00D,blue); //force black graphics background
+	POKE(0xD00E,green);
+	POKE(0xD00F,red);
+	POKE(MMU_IO_CTRL,backup);
+}	
 //codec enable all lines
 void openAllCODEC()
 {
@@ -56,4 +81,48 @@ void injectChar40col(uint8_t x, uint8_t y, uint8_t theChar, uint8_t col)
 		POKE(MMU_IO_CTRL,0x00);  //set it back to default
 }
 
+//simple hit space to continue forced modal delay
+void hitspace()
+{
+	bool exitFlag = false;
+	
+	while(exitFlag == false)
+	{
+			kernelNextEvent();
+			if(kernelEventData.type == kernelEvent(key.PRESSED))
+			{
+				switch(kernelEventData.key.raw)
+				{
+					case 148: //enter
+					case 32: //space
+						exitFlag = true;
+						break;
+				}
+			}
+	}
+}
+
+void lilpause(uint8_t timedelay)
+{
+	struct timer_t pauseTimer;
+	bool noteExitFlag = false;
+	pauseTimer.units = 0; //frames
+	pauseTimer.cookie = 213; //let's hope you never use this cookie!
+	pauseTimer.absolute = getTimerAbsolute(0) + timedelay;
+	setTimer(&pauseTimer);
+	noteExitFlag = false;
+	while(!noteExitFlag)
+	{
+		kernelNextEvent();
+		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+		{
+			switch(kernelEventData.timer.cookie)
+			{
+			case 213:
+				noteExitFlag = true;
+				break;
+			}
+		}
+	}
+}
 }

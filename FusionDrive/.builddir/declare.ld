@@ -3,11 +3,17 @@
   __palback_lma  = 0x10000;
   __palback_size = 0x400;
 
-  __carL_lma  = 0x10400;
-  __carL_size = 0x1400;
+  __carF_lma  = 0x10400;
+  __carF_size = 0x800;
 
-  __carR_lma  = 0x11800;
-  __carR_size = 0x400;
+  __carM_lma  = 0x10c00;
+  __carM_size = 0x800;
+
+  __carB_lma  = 0x11400;
+  __carB_size = 0x800;
+
+  __yellow_lma  = 0x11c00;
+  __yellow_size = 0x1400;
 
   __backbmp_lma  = 0x20000;
   __backbmp_size = 0x12c00;

@@ -27,4 +27,8 @@ void clearSIDRegisters(void);
 void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn);
 void shutAllSIDVoices(void);
 
+
+extern const uint8_t sidLow[];
+extern const uint8_t sidHigh[];
+
 #endif // MUSID_H

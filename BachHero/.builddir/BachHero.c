@@ -1,4 +1,4 @@
-#include "C:\F256\f256llvm-mos\code\bachHero\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\BachHero\.builddir\trampoline.h"
 
 /* This is 1Bit Fever Dreams aka Mu0n aka Michaël Juneau's entry for the Oct 25-27 2024 Game Jam for the F256K/Jr/K2 event
 
@@ -62,6 +62,9 @@ about to hit piano: x=175 y=163
 #define MAP_MIDI  0x38800
 #define  MAP_PSG  0x38F20
 #define CURSOR_END_SONG 73
+
+#include "../src/muUtils.h" //contains helper functions I often use
+#include "../src/muMidi.h"  //contains basic MIDI functions I often use
 
 EMBED(xaa, "../assets/xaa", 0x10000);
 EMBED(xab, "../assets/xab", 0x18000);
@@ -208,21 +211,6 @@ int16_t SIN[] = {
      -12,  -10,   -9,   -7,   -6,   -4,   -3,   -1,
 };
 	
-bool setTimer(const struct timer_t *timer)
-{
-    *(uint8_t*)0xf3 = timer->units;
-    *(uint8_t*)0xf4 = timer->absolute;
-    *(uint8_t*)0xf5 = timer->cookie;
-    kernelCall(Clock.SetTimer);
-	return !kernelError;
-}
-
-uint8_t getTimerAbsolute(uint8_t units)
-{
-    *(uint8_t*)0xf3 = units | 0x80;
-    return kernelCall(Clock.SetTimer);
-}
-
 void setupNewGame()
 {
 }
@@ -323,26 +311,10 @@ void refreshPrints()
 	printf("score: %d ",score);
 }
 
-void midiNoteOff(uint8_t wantNote, uint8_t chan)
-{
-	//Send a Note_Off midi command for the previously ongoing note
-    POKE(MIDI_OUT, 0x80 | chan);
-	POKE(MIDI_OUT, wantNote);
-    POKE(MIDI_OUT, 0x4F);
-}
-void midiNoteOn(uint8_t wantNote, uint8_t chan)
-{
-	//Send a Note_On midi command on channel 0
-	POKE(MIDI_OUT, 0x90 | chan);
-	POKE(MIDI_OUT, wantNote);
-	POKE(MIDI_OUT, 0x7F);
-	//printf("%d ",wantNote);
-	//keep track of that note so we can Note_Off it when needed
-}
 void commandNote(uint8_t wantNote, uint8_t chan)
 {
-	midiNoteOff(oldnote, chan);
-	midiNoteOn(wantNote, chan);
+	midiNoteOff(chan, oldnote, 0x6f, false);
+	midiNoteOn(chan, wantNote, 0x6f, false);
 }
 
 void titleScreenLoop()
@@ -408,8 +380,8 @@ void drawIncomingNotes(uint8_t curNote, bool isRef)
 
 void writePianoKeyHelp()
 {
-	//textGotoXY(5,0); printf("Game Jam Oct 25 to 27 2024");
-	//textGotoXY(5,1); printf("Bach's MIDI Hero by Mu0n aka 1Bit Fever Dreams");
+	textGotoXY(5,0); printf("Game Jam Oct 25 to 27 2024");
+	textGotoXY(5,1); printf("Bach's MIDI Hero v2 by Mu0n aka 1Bit Fever Dreams");
 	textGotoXY(60,1); printf("F1: Begin Game!");
 	textGotoXY(33,16); printf("A S D   G H   K L ;   2 3   5 6 7   9 0   +");
 	textGotoXY(34,23); printf("Z X C V B N M , . / Q W E R T Y U I O P [ ]");
@@ -421,11 +393,15 @@ int main(int argc, char *argv[]) {
 	uint8_t offX=0, offY=128;
 	uint8_t sinx=0, siny=0;
 	uint8_t noteCursor=0;
+	uint8_t recByte, detectedNote, lastCmd=0x90, storedNote;
 	bool isSongActive = false; //real time mode
 	bool isTutorialAfterFirst = false; // after first automatic note
 	bool isTutorial = false; //tutorial mode
 	uint8_t midiInstr = 19;
 	int8_t octaveShift=0;
+	uint16_t toDo,i; //count in the midi fifo to deal with
+	bool nextIsNote = false, isHit=false; //detect a 0x9? or 0x8? command, the next is a note byte, used for coloring the keyboard note-rects
+	bool nextIsSpeed = false; //detects if we're at the end of a note on or off trio of bytes
 	setup();
 	setTimer(&GUITimer);
 	prepSprites();
@@ -435,6 +411,63 @@ int main(int argc, char *argv[]) {
 	POKE(MMU_IO_CTRL,0);
     while(true)
         {
+		if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
+		{
+			toDo = PEEKW(MIDI_RXD) & 0x0FFF; //discard top 4 bits of MIDI_RXD+1
+			for(i=0; i<toDo; i++)
+				{
+					recByte=PEEK(MIDI_FIFO);
+					if(nextIsSpeed) //this block activates when a note is getting finished on the 3rd byte ie 0x90 0x39 0x40 (noteOn middleC midSpeed)
+					{
+						nextIsSpeed = false;
+						//force a minimum level with this instead: recByte<0x70?0x70:recByte
+						if(isHit)
+						{
+							if(midiPSG) midiNoteOn(PLY_MIDI_CHAN, storedNote+octaveShift*12, 0x6f, false);
+							else
+							{
+								POKE(0xD608,0x9F);
+								POKE(0xD608,0x94);
+								POKE(0xD608,KeyCodesToLoPSG[MIDINotesToKeyCodes[storedNote+octaveShift*12]]);//"low byte to PSG channel 1 left"
+								POKE(0xD608,KeyCodesToHiPSG[MIDINotesToKeyCodes[storedNote+octaveShift*12]]);//hi byte to PSG channel 2 left"
+							}
+						drawIncomingNotes(storedNote+octaveShift*12, false);
+						}
+						else
+						{
+							if(midiPSG) midiNoteOff(PLY_MIDI_CHAN, storedNote+octaveShift*12, 0x6f, false);
+
+						}
+	
+					}
+					if(nextIsNote) //this block triggers if the previous byte was a NoteOn or NoteOff (0x90,0x80) command previously
+					{
+						//figure out which note on the graphic is going to be highlighted
+						detectedNote = recByte-0x14;
+						nextIsNote = false; //return to previous state after a note is being dealt with
+						storedNote = recByte;
+						nextIsSpeed = true;
+					}
+					if((recByte & 0xF0) < 0x80 && nextIsNote == false && nextIsSpeed == false) //run-on midi command
+					{
+						storedNote = recByte;
+						nextIsNote = false;
+						nextIsSpeed = true;
+						if((recByte & 0xF0 )== 0x90) isHit=true;
+						else isHit = false;
+					}
+					if((recByte & 0xF0 )== 0x90) { //we know it's a 'NoteOn', get ready to analyze the note byte, which is next
+						nextIsNote = true;
+						isHit=true;
+						lastCmd = recByte;
+					}
+					else if((recByte & 0xF0  )== 0x80) { //we know it's a 'NoteOff', get ready to analyze the note byte, which is next
+						nextIsNote = true;
+						isHit=false;
+						lastCmd = recByte;
+						}
+				}
+		}
 		kernelNextEvent();
         if(kernelEventData.type == kernelEvent(timer.EXPIRED))
             {
@@ -453,7 +486,7 @@ int main(int argc, char *argv[]) {
 					setTimer(&GUITimer);
 					break;
 				case TIMER_NOTE_COOKIE:
-					midiNoteOff(songrefnote, REF_MIDI_CHAN);
+					midiNoteOff(songrefnote, REF_MIDI_CHAN, 0x6f, false);
 					if(isSongActive && noteCursor<CURSOR_END_SONG)
 						{
 						noteCursor++;
@@ -467,7 +500,7 @@ int main(int argc, char *argv[]) {
 							POKE(0xD608,KeyCodesToHiPSG[MIDINotesToKeyCodes[songrefnote]]);//hi byte to PSG channel 2 left"
 						}
 						setTimer(&midiTimer);
-						if(midiPSG)midiNoteOn(songrefnote, REF_MIDI_CHAN);
+						if(midiPSG)midiNoteOn(REF_MIDI_CHAN, songrefnote, 0x6f, false);
 	
 						drawIncomingNotes(songrefnote,true);
 						}
@@ -528,11 +561,11 @@ int main(int argc, char *argv[]) {
 						}
 						break;
 					case 0xb8: //left
-					midiNoteOff(KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, PLY_MIDI_CHAN);
+					midiNoteOff(PLY_MIDI_CHAN, KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, 0x6f, false);
 						if(octaveShift>-3 && midiPSG)octaveShift--;
 						break;
 					case 0xb9: //right
-					midiNoteOff(KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, PLY_MIDI_CHAN);
+					midiNoteOff(PLY_MIDI_CHAN, KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, 0x6f, false);
 						if(octaveShift<4 && midiPSG)octaveShift++;
 						break;
 						/*
@@ -552,7 +585,7 @@ int main(int argc, char *argv[]) {
 						midiTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_NOTE_DELAY;
 						songrefnote = songNotes[noteCursor];
 						setTimer(&midiTimer);
-						midiNoteOn(songrefnote, REF_MIDI_CHAN);
+						midiNoteOn(REF_MIDI_CHAN, songrefnote, 0x6f, false);
 						isTutorial=true;
 						isTutorialAfterFirst=false;
 	
@@ -596,7 +629,7 @@ int main(int argc, char *argv[]) {
 							POKE(0xD608,KeyCodesToHiPSG[MIDINotesToKeyCodes[songrefnote]]);//hi byte to PSG channel 2 left"
 						}
 						setTimer(&midiTimer);
-						if(midiPSG)midiNoteOn(songrefnote, REF_MIDI_CHAN);
+						if(midiPSG)midiNoteOn(REF_MIDI_CHAN, songrefnote,0x6f, false);
 						break;
 					default:
 						if(midiPSG==false){
@@ -605,7 +638,7 @@ int main(int argc, char *argv[]) {
 							POKE(0xD608,KeyCodesToLoPSG[kernelEventData.key.raw]);//"low byte to PSG channel 1 left"
 							POKE(0xD608,KeyCodesToHiPSG[kernelEventData.key.raw]);//hi byte to PSG channel 2 left"
 						}
-						else midiNoteOn(KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, PLY_MIDI_CHAN);
+						else midiNoteOn(PLY_MIDI_CHAN, KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, 0x6f, false);
 						drawIncomingNotes(KeyCodesToMIDINotes[kernelEventData.key.raw], false);
 	
 	
@@ -626,7 +659,7 @@ int main(int argc, char *argv[]) {
 			{
 	
 				if(midiPSG==false) POKE(0xD608,0x9F);
-				else midiNoteOff(KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, PLY_MIDI_CHAN);
+				else midiNoteOff(PLY_MIDI_CHAN, KeyCodesToMIDINotes[kernelEventData.key.raw]+octaveShift*12, 0x6f, false);
 				spriteSetVisible(0,false);
 				if(isTutorial && isTutorialAfterFirst && noteCursor < (CURSOR_END_SONG+1))
 					{

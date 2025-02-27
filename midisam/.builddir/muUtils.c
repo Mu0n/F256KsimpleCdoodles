@@ -23,18 +23,6 @@ void openAllCODEC()
 	POKE(0xD622, 0x01);
 	while(PEEK(0xD622) & 0x01);
 }
-//realTextClear: manually changes to MMU page 2 and covers the whole 80x60 text layer
-//blank characters. the f256lib.h's textClear seems to only erase part of the screen only.
-void realTextClear()
-{
-	uint16_t c;
-	POKE(MMU_IO_CTRL,0x02);
-	for(c=0;c<4800;c++)
-	{
-		POKE(0xC000+c,0x20);
-	}
-	POKE(MMU_IO_CTRL,0x00);
-}
 
 
 //Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
@@ -58,16 +46,6 @@ uint8_t getTimerAbsolute(uint8_t units)
     return kernelCall(Clock.SetTimer);
 }
 
-//injectChar: injects a specific character in a specific location on screen.
-//position x,y is where it'll be injected in text layer coordinates
-//theChar is the byte from 0-255 that will be placed there
-//col(umn) should be either 40 (in double character width mode) or 80 (in regular width mode)
-void injectChar40col(uint8_t x, uint8_t y, uint8_t theChar, uint8_t col)
-{
-		POKE(MMU_IO_CTRL,0x02); //set io_ctrl to 2 to access text screen
-		POKE(0xC000 + col * y + x, theChar);
-		POKE(MMU_IO_CTRL,0x00);  //set it back to default
-}
 
 //simple hit space to continue forced modal delay
 void hitspace()

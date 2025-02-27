@@ -110,6 +110,7 @@ void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
 void midiNoteOn(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
 
 void initVS1053MIDI(void);
+void boostVSClock(void);
 void initMidiRecord(struct midiRecord *);
 void initBigList(struct bigParsedEventList *);
 uint32_t getTotalLeft(struct bigParsedEventList *);

@@ -709,16 +709,15 @@ void setup()
 
 	resetInstruments(false);
 	resetInstruments(true);
-	POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0xC2);
-	POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0x73);//woodblock
+	POKE(MIDI_FIFO_ALT,0xC2);
+	POKE(MIDI_FIFO_ALT,0x73);//woodblock
+	POKE(MIDI_FIFO,0xC2);
+	POKE(MIDI_FIFO,0x73);//woodblock
 	prgInst[0]=0;prgInst[1]=0;prgInst[9]=0;
 	textSetColor(textColorOrange,0x00);
 	
 	clearSIDRegisters();
 	prepSIDinstruments();
-	
-
-	
 }
 
 //This function highlights or de-highlights a choice in Instrument Picking mode
@@ -876,7 +875,7 @@ int main(int argc, char *argv[]) {
 	uint16_t toDo;
 	uint16_t i;
 	uint8_t j;
-	uint8_t recByte, detectedNote, detectedColor;
+	uint8_t recByte, detectedNote, detectedColor, lastCmd=0x90;
 	bool nextIsNote = false; //detect a 0x9? or 0x8? command, the next is a note byte, used for coloring the keyboard note-rects
 	bool nextIsSpeed = false; //detects if we're at the end of a note on or off trio of bytes
 	bool nextIsBend = false, nextIsLastBend=false; //detects if we're about to pitch bend
@@ -896,9 +895,10 @@ int main(int argc, char *argv[]) {
 	graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00);
 	
 		//codec enable all lines
+	//openAllCODEC();
+	boostVSClock();
 	initVS1053MIDI();
 	
-	openAllCODEC();
 	while(true)
         {
 		if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
@@ -909,9 +909,11 @@ int main(int argc, char *argv[]) {
 				if(instSelectMode==false){
 					textGotoXY(5,4);textPrint("                                                                                ");textGotoXY(5,4);
 				}
+	
 				//deal with the MIDI bytes and exhaust the FIFO buffer
 				for(i=0; i<toDo; i++)
 				{
+	
 					//get the next MIDI in FIFO buffer byte
 					recByte=PEEK(MIDI_FIFO);
 					if(instSelectMode==false)
@@ -921,13 +923,8 @@ int main(int argc, char *argv[]) {
 					if(nextIsSpeed) //this block activates when a note is getting finished on the 3rd byte ie 0x90 0x39 0x40 (noteOn middleC midSpeed)
 					{
 						nextIsSpeed = false;
-						if(isHit) {
-							dispatchNote(true, chSelect,storedNote,recByte<0x70?0x70:recByte, wantVS1053);
-						}
-	
-						else {
-							dispatchNote(false, chSelect,storedNote,recByte<0x70?0x70:recByte, wantVS1053);
-							}
+						//force a minimum level with this instead: recByte<0x70?0x70:recByte
+						dispatchNote(isHit, chSelect,storedNote,recByte<0x70?0x70:recByte, wantVS1053);
 					}
 					if(nextIsNote) //this block triggers if the previous byte was a NoteOn or NoteOff (0x90,0x80) command previously
 					{
@@ -955,18 +952,23 @@ int main(int argc, char *argv[]) {
 						nextIsLastBend=true;
 						POKE(sidChoiceToVoice[sidInstChoice]+SID_LO_PWDC, recByte);
 					}
+					if((recByte & 0xF0) < 0x80 && nextIsNote == false && nextIsSpeed == false) //run-on midi command
+					{
+						storedNote = recByte;
+						nextIsNote = false;
+						nextIsSpeed = true;
+						if((recByte & 0xF0 )== 0x90) isHit=true;
+						else isHit = false;
+					}
 					if((recByte & 0xF0 )== 0x90) { //we know it's a 'NoteOn', get ready to analyze the note byte, which is next
 						nextIsNote = true;
 						isHit=true;
-						//if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, ((recByte & 0xF0 ) | chSelect)); //send it to the chosen channel, only the first byte, and reroute
-	
-
-	
+						lastCmd = recByte;
 					}
 					else if((recByte & 0xF0  )== 0x80) { //we know it's a 'NoteOff', get ready to analyze the note byte, which is next
 						nextIsNote = true;
 						isHit=false;
-						//if(chipChoice==0) POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, ((recByte & 0xF0 ) | chSelect)); //send it to the chosen channel, only the first byte, and reroute
+						lastCmd = recByte;
 						}
 						/*
 					else if((recByte & 0xF0) == 0xE0 && chipChoice == 1) { //we know it's a pitch bend incoming
@@ -1132,6 +1134,7 @@ int main(int argc, char *argv[]) {
 							break;
 					case 146: // top left backspace, meant as reset
 						resetInstruments(wantVS1053);
+						resetInstruments(~wantVS1053);
 						POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0xC2);
 						POKE(wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0x73);//woodblock
 						prgInst[0]=0;prgInst[1]=0;prgInst[9]=0;
@@ -1214,6 +1217,8 @@ int main(int argc, char *argv[]) {
 									if(prgInst[chSelect] < 127 - shiftHit*9) prgInst[chSelect] = prgInst[chSelect] + 1 + shiftHit *9; //go up 10 instrument ticks if shift is on, otherwise just 1
 									if(altHit) prgInst[chSelect] = 127; //go to highest instrument, 127
 									prgChange(prgInst[chSelect],chSelect, wantVS1053);
+									prgChange(prgInst[chSelect],chSelect, !wantVS1053);
+textGotoXY(20,6);textPrint("PRG=");textPrintInt(prgInst[chSelect]);textPrint("  ");
 								}
 								if(chipChoice==1)
 								{
@@ -1229,6 +1234,8 @@ int main(int argc, char *argv[]) {
 									{
 										modalMoveUp(shiftHit);
 										prgChange(prgInst[chSelect],chSelect, wantVS1053);
+										prgChange(prgInst[chSelect],chSelect, !wantVS1053);
+textGotoXY(20,6);textPrint("PRG=");textPrintInt(prgInst[chSelect]);textPrint("  ");
 									}
 								}
 								if(chipChoice==1 && sidInstChoice>0) modalMoveUp(shiftHit);
@@ -1240,11 +1247,10 @@ int main(int argc, char *argv[]) {
 								if(chipChoice==0)
 									{
 									if(prgInst[chSelect] > 0 + shiftHit*9) prgInst[chSelect] = prgInst[chSelect] - 1 - shiftHit *9; //go down 10 instrument ticks if shift is on, otherwise just 1
-									if(altHit)
-										{
-										prgInst[chSelect] = 0; //go to lowest instrument, 0
-										prgChange(prgInst[chSelect],chSelect, wantVS1053);
-										}
+									if(altHit) prgInst[chSelect] = 0; //go to lowest instrument, 0
+									prgChange(prgInst[chSelect],chSelect, wantVS1053);
+									prgChange(prgInst[chSelect],chSelect, !wantVS1053);
+textGotoXY(20,6);textPrint("PRG=");textPrintInt(prgInst[chSelect]);textPrint("  ");
 									}
 								if(chipChoice==1)
 									{
@@ -1260,6 +1266,8 @@ int main(int argc, char *argv[]) {
 										{
 											modalMoveDown(shiftHit);
 											prgChange(prgInst[chSelect],chSelect, wantVS1053);
+											prgChange(prgInst[chSelect],chSelect, !wantVS1053);
+textGotoXY(20,6);textPrint("PRG=");textPrintInt(prgInst[chSelect]);textPrint("  ");
 										}
 									}
 								if(chipChoice==1 && sidInstChoice<5) modalMoveDown(shiftHit);
@@ -1278,6 +1286,8 @@ int main(int argc, char *argv[]) {
 							{
 							if(prgInst[chSelect] > 0) modalMoveLeft();
 							prgChange(prgInst[chSelect],chSelect, wantVS1053);
+							prgChange(prgInst[chSelect],chSelect, !wantVS1053);
+textGotoXY(20,6);textPrint("PRG=");textPrintInt(prgInst[chSelect]);textPrint("  ");
 							}
 						break;
 					case 0xb9: //right arrow
@@ -1294,6 +1304,8 @@ int main(int argc, char *argv[]) {
 							{
 							if(prgInst[chSelect] < 127) modalMoveRight();
 							prgChange(prgInst[chSelect],chSelect, wantVS1053);
+							prgChange(prgInst[chSelect],chSelect, !wantVS1053);
+textGotoXY(20,6);textPrint("PRG=");textPrintInt(prgInst[chSelect]);textPrint("  ");
 							}
 						break;
 					case 32: //space
@@ -1397,6 +1409,9 @@ int main(int argc, char *argv[]) {
 						midiShutAChannel(9, wantVS1053);
 						wantVS1053 = wantVS1053?false:true;
 	
+						midiShutAChannel(0, wantVS1053);
+						midiShutAChannel(1, wantVS1053);
+						midiShutAChannel(9, wantVS1053);
 						showMidiChoiceText();
 						break;
 					case 99: // C - chip select mode: 0=MIDI, 1=SID, (todo) 2= PSG, (todo) 3=OPL3

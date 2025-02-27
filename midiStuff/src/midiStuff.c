@@ -2,6 +2,9 @@
 
 #define MIDI_CTRL 	   0xDDA0
 #define MIDI_FIFO 	   0xDDA1
+
+#define MIDI_FIFO_ALT 	    0xDDB1
+
 #define MIDI_RXD 	   0xDDA2
 #define MIDI_RXD_COUNT 0xDDA3
 #define MIDI_TXD       0xDDA4

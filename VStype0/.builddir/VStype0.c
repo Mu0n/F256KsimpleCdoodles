@@ -4,37 +4,29 @@
 
 #include "f256lib.h"
 #include "../src/muMidi.h"
-
-#define VS_SCI_CTRL  0xD700
-#define VS_SCI_ADDR  0xD701
-#define VS_SCI_DATA  0xD702   //2 bytes
-#define VS_FIFO_STAT 0xD704   //2 bytes
-#define VS_FIFO_DATA 0xD707
-
+#include "../src/muUtils.h"
 
 EMBED(human2, "../assets/human2.mid", 0x10000);
 uint32_t fileSize = 33876;
-
-
-
-
 
 int main(int argc, char *argv[]) {
 uint16_t i=0, j=0;
 uint16_t howManySoFar=0;
 uint8_t pass = 0;
 
+//openAllCODEC(); //this should no longer be necessary after kernel update of Feb 19, 2025
+boostVSClock();
+initVS1053MIDI(); //apply the plugin to enable rtmidi
 
-
-initVS1053MIDI();
-
+//check the first 4 bytes and display it in the top corner
 for(i=0;i<4;i++)
-	printf("%02x",FAR_PEEK(10000+i));
+	printf("%02x",FAR_PEEK((uint32_t)0x10000+(uint32_t)i));
 
-
-POKEW(VS_FIFO_STAT, 0x8000); //force the buffer to be empty? I think?
+//POKEW(VS_FIFO_STAT, 0x8000); //force the buffer to be empty? I think?
 
 printf("\n%04x bytes at start\n",PEEKW(VS_FIFO_STAT)&0x03FF);
+
+i=0; //reset the index
 while(i<fileSize)
 {
 	pass++;

@@ -138,6 +138,21 @@ void initVS1053MIDI(void) {
   }
 }
 
+void boostVSClock()
+{
+//target the clock register
+POKE(VS_SCI_ADDR,0x03);
+//aim for 2.5X clock multiplier, no frills
+POKE(VS_SCI_DATA,0x00);
+POKE(VS_SCI_DATA+1,0x80);
+//trigger the command
+POKE(VS_SCI_CTRL,1);
+POKE(VS_SCI_CTRL,0);
+//check to see if it's done
+	while (PEEK(VS_SCI_CTRL) & 0x80)
+		;
+}
+
 
 void initMidiRecord(struct midiRecord *rec)
 {

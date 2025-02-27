@@ -211,9 +211,15 @@ void setEnemyPos(struct sprStatus*);
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(aMEPtr midiEvent)
 	{
-	POKE(MIDI_FIFO, midiEvent->msgToSend[0]);
-	POKE(MIDI_FIFO, midiEvent->msgToSend[1]);
-	if(midiEvent->bytecount == 3) POKE(MIDI_FIFO, midiEvent->msgToSend[2]);
+	POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[0]);
+	POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[1]);
+	//POKE(MIDI_FIFO, midiEvent->msgToSend[0]);
+	//POKE(MIDI_FIFO, midiEvent->msgToSend[1]);
+	if(midiEvent->bytecount == 3) 
+	{
+		POKE(MIDI_FIFO_ALT, midiEvent->msgToSend[2]);
+		//POKE(MIDI_FIFO, midiEvent->msgToSend[2]);
+	}
 	}
 //this opens a .mid file and ignores everything until 'MThd' is encountered	
 int16_t findPositionOfHeader(void)
@@ -1056,6 +1062,9 @@ int main(int argc, char *argv[]) {
 	theBigList.hasBeenUsed = false;
 	theBigList.trackcount = 0;
 	theBigList.TrackEventList = (aTOEPtr)NULL;
+	
+	boostVSClock();
+	initVS1053MIDI();
 	
 	setTimer0(0,0,0);
 	indexStart = getAndAnalyzeMIDI();

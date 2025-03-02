@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     uint16_t readEntryBufferIndex = 0;
 	uint16_t rawFIFOCount=0;
 	uint16_t bytesToTopOff=0;
-	uint16_t multipleOf32b = 0;
+	uint16_t multipleOf64b = 0;
 	uint8_t visualX=0;
 
 	char buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
@@ -130,12 +130,13 @@ int main(int argc, char *argv[]) {
 	{
 		rawFIFOCount = PEEKW(VS_FIFO_STAT);
 		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x0FFF); //found how many bytes are left in the 2KB buffer
-		multipleOf32b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
-		textGotoXY(0,7);textPrintInt(32-multipleOf32b);textPrint(" ");
-		/*visualX=multipleOf32b<<2;
+		multipleOf64b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
+		textGotoXY(0,7);textPrintInt(32-multipleOf64b);textPrint(" ");
+		/* just a bit of visuals can make it choke in initial tests
+		visualX=multipleOf64b<<2;
 		bitmapSetColor(0xFF);bitmapLine(1,50,visualX,50);
 		bitmapSetColor(0x3D);bitmapLine(visualX,50,128,50);*/
-		for(i=0; i<multipleOf32b; i++)
+		for(i=0; i<multipleOf64b; i++)
 		{
 			for(j=0; j<CHUNK64B; j++)
 			{
@@ -146,23 +147,24 @@ int main(int argc, char *argv[]) {
 			if(bufferIndex == CHUNK8K) bufferIndex = 0; //warp over if the 8KB limit is reached
 			
 			//read more of the file
-			fread((void *)(buffer+readEntryBufferIndex), sizeof(uint8_t), 64, theMP3file); //read 32 bytes
+			fread((void *)(buffer+readEntryBufferIndex), sizeof(uint8_t), 64, theMP3file); //read 64 bytes
 			readEntryBufferIndex+=CHUNK64B; //keep track of where we're at so we can finish the file
 			if(readEntryBufferIndex== CHUNK8K) readEntryBufferIndex = 0; //keep track of where we're at so we can finish the file
 		}
 	}
 	
-	/*
+	/* Variant where new data is loaded in 128bytes chunks
+	*
 	while(fileIndex<totalsize)
 	{
 		rawFIFOCount = PEEKW(VS_FIFO_STAT);
 		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x0FFF); //found how many bytes are left in the 2KB buffer
-		multipleOf32b = bytesToTopOff>>7; //multiples of 128 bytes of stuff to top off the FIFO buffer
-		textGotoXY(0,7);textPrintInt(multipleOf32b);textPrint(" ");
-		visualX=multipleOf32b<<3;
+		multipleOf64b = bytesToTopOff>>7; //multiples of 128 bytes of stuff to top off the FIFO buffer
+		textGotoXY(0,7);textPrintInt(multipleOf64b);textPrint(" ");
+		visualX=multipleOf64b<<3;
 		bitmapSetColor(0xFF);bitmapLine(1,50,visualX,50);
 		bitmapSetColor(0x3D);bitmapLine(visualX,50,128,50);
-		for(i=0; i<multipleOf32b; i++)
+		for(i=0; i<multipleOf64b; i++)
 		{
 			for(j=0; j<CHUNK128B; j++)
 			{
@@ -173,20 +175,21 @@ int main(int argc, char *argv[]) {
 			if(bufferIndex == CHUNK8K) bufferIndex = 0; //warp over if the 8KB limit is reached
 			
 			//read more of the file
-			fread((void *)(buffer+readEntryBufferIndex), sizeof(uint8_t), 128, theMP3file); //read 32 bytes
+			fread((void *)(buffer+readEntryBufferIndex), sizeof(uint8_t), 128, theMP3file); //read 128 bytes
 			readEntryBufferIndex+=CHUNK128B; //keep track of where we're at so we can finish the file
 			if(readEntryBufferIndex== CHUNK8K) readEntryBufferIndex = 0; //keep track of where we're at so we can finish the file
 		}
 	}	
 	
 	*/
-/*
+/* Variant where new data is loaded in 32 bytes chunks
+*
 	while(fileIndex<totalsize)
 	{
 		rawFIFOCount = PEEKW(VS_FIFO_STAT);
 		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x0FFF); //found how many bytes are left in the 2KB buffer
 		multipleOf32b = bytesToTopOff>>5; //multiples of 64 bytes of stuff to top off the FIFO buffer
-		textGotoXY(0,10);textPrintInt(multipleOf32b);textPrint(" /64 ");
+		textGotoXY(0,10);textPrintInt(multipleOf32b);textPrint(" ");
 		for(i=0; i<multipleOf32b; i++)
 		{
 			for(j=0; j<CHUNK32B; j++)

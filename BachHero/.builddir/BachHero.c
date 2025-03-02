@@ -432,12 +432,46 @@ int main(int argc, char *argv[]) {
 								POKE(0xD608,KeyCodesToHiPSG[MIDINotesToKeyCodes[storedNote+octaveShift*12]]);//hi byte to PSG channel 2 left"
 							}
 						drawIncomingNotes(storedNote+octaveShift*12, false);
+						if(storedNote+octaveShift*12 == songNotes[noteCursor] && isTutorial)
+							{
+							score++;
+							isTutorialAfterFirst = true;
+							}
+						else if(isTutorial && score>0)score--;
 						}
 						else
-						{
+							{
 							if(midiPSG) midiNoteOff(PLY_MIDI_CHAN, storedNote+octaveShift*12, 0x6f, false);
-
-						}
+							if(isTutorial && isTutorialAfterFirst && noteCursor < (CURSOR_END_SONG+1))
+								{
+								isTutorialAfterFirst=false;
+								noteCursor++;
+								songrefnote = songNotes[noteCursor];
+								drawIncomingNotes(songrefnote,true);
+								}
+							if(noteCursor==(CURSOR_END_SONG+1) && isTutorial)
+								{
+								//this is the winning aftermath
+								isTutorial = false;
+								isTutorialAfterFirst = false;
+								textGotoXY(25,8); printf("/");
+								textGotoXY(26,7);
+								if(score>71)
+									{
+									printf("Ausgezeichnet!          ");
+									reticX=69;
+									reticY=80;
+									spriteSetVisible(10,true);
+									spriteSetPosition(10,reticX,reticY);
+	
+									spriteSetVisible(11,true);
+									spriteSetPosition(11,reticX+32,reticY);
+									glassesTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_GLASSES_DELAY;
+									setTimer(&glassesTimer);
+									}
+								else printf("Sehr Schlecht! Wieder!");
+								}
+							}
 	
 					}
 					if(nextIsNote) //this block triggers if the previous byte was a NoteOn or NoteOff (0x90,0x80) command previously

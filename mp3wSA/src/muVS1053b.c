@@ -194,7 +194,6 @@ initVS1053Plugin(ptr, 950);
 //Enable the real time MIDI mode
 void initRTMIDI()
 {
-	
 const uint16_t *ptr = rtmplugin;
 initVS1053Plugin(ptr, 28);
 }

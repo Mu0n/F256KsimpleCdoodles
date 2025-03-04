@@ -25,15 +25,19 @@
 EMBED(backg, "../assets/rj.raw.pal", 0x10000);
 EMBED(palback, "../assets/rj.raw.bin", 0x10400);
 
+
 void read8KChunk(void *, FILE *);
 uint8_t openMP3File(char *);
-uint32_t totalsize = 10295603;
+uint32_t totalsize = 0;
+
 
 FILE *theMP3file;
 
 
 uint8_t openMP3File(char *name)
 {
+	uint32_t garbage;
+	
 	printf("Opening file: %s\n",name);
 	theMP3file = fopen(name,"rb"); // open file in read mode
 	if(theMP3file == NULL)
@@ -41,6 +45,12 @@ uint8_t openMP3File(char *name)
 		printf("Couldn't open the file: %s\n",name);
 		return 1;
 	}
+	while(fread(&garbage,sizeof(uint8_t),128,theMP3file) == 128)
+		;
+	
+	totalsize = ftell((FILE *)theMP3file);
+	rewind((FILE *)theMP3file);
+	
 	return 0;
 }
 
@@ -95,6 +105,7 @@ int main(int argc, char *argv[]) {
 	uint16_t bytesToTopOff=0;
 	uint16_t multipleOf64b = 0;
 	uint8_t visualX=0;
+	
 
 	char buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
 
@@ -110,7 +121,7 @@ int main(int argc, char *argv[]) {
 	printf("Hit space to start playback on a F256K2 or a F256Jr2");
 	hitspace();
 	
-	printf("\nPlayback launched for 'Try the Bass' from Ronald Jenkees");
+	printf("\nPlayback launched for 'Try the Bass' from Ronald Jenkees, %lu bytes",totalsize);
 
 	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
 		{

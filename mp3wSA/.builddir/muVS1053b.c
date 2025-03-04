@@ -1,4 +1,4 @@
-#include "c:\F256\f256llvm-mos\F256KsimpleCdoodles\mp3wSA\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\mp3wSA\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muVS1053b.h"
@@ -143,11 +143,16 @@ void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
     uint16_t addr, val, i=0;
 
   while (i<size) {
+	
+
     addr = plugin[i++];
     n = plugin[i++];
+	
+	printf("%04x %04x | ",addr, n);
     if (n & 0x8000) { /* RLE run, replicate n samples */
       n &= 0x7FFF;
       val = plugin[i++];
+	  printf("%04x ",val);
       while (n--) {
         //WriteVS10xxRegister(addr, val);
         POKE(VS_SCI_ADDR,addr);
@@ -159,6 +164,7 @@ void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
     } else {           /* Copy run, copy n samples */
       while (n--) {
         val = plugin[i++];
+	  printf("%04x ",val);
         //WriteVS10xxRegister(addr, val);
         POKE(VS_SCI_ADDR,addr);
         POKEW(VS_SCI_DATA,val);
@@ -196,7 +202,6 @@ initVS1053Plugin(ptr, 950);
 //Enable the real time MIDI mode
 void initRTMIDI()
 {
-	
 const uint16_t *ptr = rtmplugin;
 initVS1053Plugin(ptr, 28);
 }

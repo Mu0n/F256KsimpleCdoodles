@@ -58,7 +58,7 @@ void backgroundSetup()
 	bitmapSetActive(0);
 	bitmapSetCLUT(0);
 	
-	bitmapSetVisible(0,true);
+	bitmapSetVisible(0,false);
 	bitmapSetVisible(1,false);
 	bitmapSetVisible(2,false);
 }
@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
     backgroundSetup();
 	openAllCODEC();
 	boostVSClock();
+	initSpectrum();
 	
 	openMP3File("ronald.mp3");
 	//openMP3File("terranone.mp3");

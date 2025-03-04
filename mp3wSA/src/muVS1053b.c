@@ -141,11 +141,16 @@ void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
     uint16_t addr, val, i=0;
 
   while (i<size) {
+	  
+
     addr = plugin[i++];
     n = plugin[i++];
+	
+	printf("%04x %04x | ",addr, n);
     if (n & 0x8000) { /* RLE run, replicate n samples */
       n &= 0x7FFF;
       val = plugin[i++];
+	  printf("%04x ",val);
       while (n--) {
         //WriteVS10xxRegister(addr, val);
         POKE(VS_SCI_ADDR,addr);
@@ -157,6 +162,7 @@ void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
     } else {           /* Copy run, copy n samples */
       while (n--) {
         val = plugin[i++];
+	  printf("%04x ",val);
         //WriteVS10xxRegister(addr, val);
         POKE(VS_SCI_ADDR,addr);
         POKEW(VS_SCI_DATA,val);

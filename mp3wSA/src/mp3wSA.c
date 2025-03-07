@@ -43,6 +43,7 @@ void read8KChunk(void *buf, FILE *f)
 void backgroundSetup()
 {
 	uint16_t c=0;
+	uint16_t h=0;
 	
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
@@ -61,6 +62,31 @@ void backgroundSetup()
 	bitmapSetVisible(0,false);
 	bitmapSetVisible(1,false);
 	bitmapSetVisible(2,false);
+	
+	//color text LUT setup
+	for(c=0;c<8;c++)
+	{
+		POKE(0xD800+c*4,0);
+		POKE(0xD801+c*4,0xFF);
+		POKE(0xD802+c*4,0+(c<<5));
+	}
+	for(c=8;c<16;c++)
+	{
+		POKE(0xD800+c*4,0);
+		POKE(0xD801+c*4,0xFF-((c-8)<<5));
+		POKE(0xD802+c*4,0xFF);
+	}
+	
+	//color text matrix setup
+	POKE(MMU_IO_CTRL,3);
+	for(h=0;h<16;h++)
+		{
+		for(c=0;c<80;c++)
+			{
+			POKE(0xC910+c-h*80,0x10+h*16);
+			}
+		}
+	POKE(MMU_IO_CTRL, 0x00);
 }
 int main(int argc, char *argv[]) {
 	
@@ -72,22 +98,34 @@ int main(int argc, char *argv[]) {
 	uint16_t bytesToTopOff=0;
 	uint16_t multipleOf64b = 0;
 	uint8_t visualX=0;
-
+	uint16_t saVals[14];
+	uint8_t delaySA = 30;
+	uint16_t charSABase = 0xC92A;
+	uint8_t savedIO;
+	uint16_t peak;
+	
 	char buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
 
+	for(i=0;i<14;i++) saVals[i]=0;
+	
     backgroundSetup();
 	openAllCODEC();
+	printf("\n%04x clock before",checkClock());
 	boostVSClock();
+	printf("\n%04x clock after\n",checkClock());
 	initSpectrum();
 	
+	//openMP3File("107Hz.mp3");
 	openMP3File("ronald.mp3");
 	//openMP3File("terranone.mp3");
 	read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file	
 	fileIndex+=CHUNK8K; //advance the file index by 8kb
-	
+
 	printf("Hit space to start playback on a F256K2 or a F256Jr2");
-	hitspace();
+	printf("\nNumber of bands %d\n", getNbBands());
+
 	
+	hitspace();
 	printf("\nPlayback launched for 'Try the Bass' from Ronald Jenkees");
 
 	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
@@ -100,13 +138,30 @@ int main(int argc, char *argv[]) {
 		POKE(VS_FIFO_DATA, buffer[i]);
 		}
 	bufferIndex+=CHUNK2K;
-	
-	
 	printf("\nStreaming mp3 data to the VS1053b onboard chip.");
 	printf("\n\nBuffer in 64b chunks:");
 	while(fileIndex<totalsize)
 	{
-		rawFIFOCount = PEEKW(VS_FIFO_STAT);
+	getCenterSAValues(14, saVals);
+
+	savedIO = PEEK(MMU_IO_CTRL);
+	POKE(MMU_IO_CTRL,2);
+	for(j=0;j<14;j++)
+		{
+		peak=(saVals[j])>>2;
+		for(i=0;i<peak;i++) 
+			{
+				POKE(charSABase-i*80+2*j,0x15);
+				POKE(charSABase-i*80+2*j+1,0x15);
+			}
+		for(i=peak;i<16;i++) 
+			{
+				POKE(charSABase-i*80+2*j,0x20);
+				POKE(charSABase-i*80+2*j+1,0x20);
+			}
+		}	
+	POKE(MMU_IO_CTRL,savedIO);
+		rawFIFOCount = PEEKW(VS_FIFO_COUNT);
 		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x0FFF); //found how many bytes are left in the 2KB buffer
 		multipleOf64b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
 		textGotoXY(0,7);textPrintInt(32-multipleOf64b);textPrint(" ");
@@ -135,5 +190,4 @@ fclose(theMP3file);
 printf("\nPlayback ended. Press space to quit");
 hitspace();
 return 0;}
-
-
+}

@@ -2,6 +2,7 @@
 
 #include "f256lib.h"
 #include "../src/muVS1053b.h"
+#include "../src/muUtils.h"
 //The VS1053b is present on the Jr2 and K2.
 
 const uint16_t rtmplugin[28] = { /* Compressed plugin  for the VS1053b to enable real time midi mode */
@@ -139,7 +140,7 @@ const uint16_t saplugin[950] = { /* Compressed plugin  for the VS1053b to enable
 // size can be determined by using something like sizeof(chosenPlugin)/sizeof(chosenPlugin[0]),
 //    just select one of the plugin labels above and replace 'chosenPlugin'
 void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
-    uint8_t n;
+    uint16_t n;
     uint16_t addr, val, i=0;
 
   while (i<size) {
@@ -148,29 +149,28 @@ void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
     addr = plugin[i++];
     n = plugin[i++];
 	
-	printf("%04x %04x | ",addr, n);
-    if (n & 0x8000) { /* RLE run, replicate n samples */
+    if (n & 0x8000U) { /* RLE run, replicate n samples */
       n &= 0x7FFF;
       val = plugin[i++];
-	  printf("%04x ",val);
       while (n--) {
         //WriteVS10xxRegister(addr, val);
         POKE(VS_SCI_ADDR,addr);
         POKEW(VS_SCI_DATA,val);
-        POKE(VS_SCI_CTRL,1);
+        POKE(VS_SCI_CTRL,CTRL_Start);
         POKE(VS_SCI_CTRL,0);
-		while (PEEK(VS_SCI_CTRL) & 0x80);
+		while ((PEEK(VS_SCI_CTRL) & CTRL_Busy) == CTRL_Busy)
+			;
       }
     } else {           /* Copy run, copy n samples */
       while (n--) {
         val = plugin[i++];
-	  printf("%04x ",val);
         //WriteVS10xxRegister(addr, val);
         POKE(VS_SCI_ADDR,addr);
         POKEW(VS_SCI_DATA,val);
-        POKE(VS_SCI_CTRL,1);
+        POKE(VS_SCI_CTRL,CTRL_Start);
         POKE(VS_SCI_CTRL,0);
-		while (PEEK(VS_SCI_CTRL) & 0x80);
+		while ((PEEK(VS_SCI_CTRL) & CTRL_Busy) == CTRL_Busy)
+			;
       }
     }
   }
@@ -180,18 +180,93 @@ void initVS1053Plugin(const uint16_t plugin[], uint16_t size) {
 void boostVSClock()
 {
 //target the clock register
-POKE(VS_SCI_ADDR,0x03);
+POKE(VS_SCI_ADDR, VS_SCI_ADDR_CLOCKF);
 //aim for 2.5X clock multiplier, no frills
 POKE(VS_SCI_DATA,0x00);
 POKE(VS_SCI_DATA+1,0xc0);
 //trigger the command
-POKE(VS_SCI_CTRL,1);
+POKE(VS_SCI_CTRL,CTRL_Start);
 POKE(VS_SCI_CTRL,0);
 //check to see if it's done
-	while (PEEK(VS_SCI_CTRL) & 0x80)
+	while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
 		;
 }
 
+uint16_t checkClock()
+{
+POKE(VS_SCI_ADDR, VS_SCI_ADDR_CLOCKF);
+//trigger the command
+POKE(VS_SCI_CTRL, CTRL_Start | CTRL_RWn);
+POKE(VS_SCI_CTRL,0);
+//check to see if it's done
+	while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
+		;
+return PEEKW(VS_SCI_DATA);
+}
+
+uint16_t getNbBands()
+{
+	//Getting the number of bands (should be 14)
+	//target the wram addr register
+	POKE(VS_SCI_ADDR, VS_SCI_ADDR_WRAMADDR);
+	//target the number of used bands in 0x1802
+	POKEW(VS_SCI_DATA, 0x1802);
+	//trigger the command
+	POKE(VS_SCI_CTRL, CTRL_Start);
+	POKE(VS_SCI_CTRL,0);
+	//check to see if it's done
+		while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
+			;
+	//target the wram register
+	POKE(VS_SCI_ADDR, VS_SCI_ADDR_WRAM);
+	//trigger the read command
+	POKE(VS_SCI_CTRL, CTRL_Start | CTRL_RWn);
+	POKE(VS_SCI_CTRL,0);
+	//check to see if it's done
+		while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
+			;
+	return PEEKW(VS_SCI_DATA);
+}
+//Assuming the spectrum analyzer plugin has been loaded beforehand
+//this can read the results for each of the default 14 bands
+void getCenterSAValues(uint16_t nbBands, uint16_t *values)
+{
+uint16_t i = 0;
+uint16_t confirmedBands = nbBands;
+
+if(nbBands==0) confirmedBands = getNbBands();
+
+//target the wram addr register
+POKE(VS_SCI_ADDR, VS_SCI_ADDR_WRAMADDR);
+//target the WRAM location that contains the values in 0x1804
+POKEW(VS_SCI_DATA, 0x1804);
+//trigger the write command
+POKE(VS_SCI_CTRL, CTRL_Start);
+POKE(VS_SCI_CTRL,0);
+//check to see if it's done
+		while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
+		;
+	
+for(i=0; i<confirmedBands; i++)
+	{
+//target the wram register
+POKE(VS_SCI_ADDR, VS_SCI_ADDR_WRAM);
+//trigger the read command
+POKE(VS_SCI_CTRL, CTRL_Start | CTRL_RWn);
+POKE(VS_SCI_CTRL,0);
+//check to see if it's done
+	while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
+		;
+	values[i] = (0x003F&(PEEKW(VS_SCI_DATA))); //only pick the values, discard the peaks
+	}
+}
+
+
+//Assuming the spectrum analyzer plugin has been loaded beforehand
+//this can read the center frequency for each of the default 14 bands
+void getCenterSABands()
+{
+}
 //Enable the Spectrum Analyzer
 void initSpectrum()
 {

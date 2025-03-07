@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 		}	
 	POKE(MMU_IO_CTRL,savedIO);
 		rawFIFOCount = PEEKW(VS_FIFO_COUNT);
-		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x0FFF); //found how many bytes are left in the 2KB buffer
+		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x07FF); //found how many bytes are left in the 2KB buffer
 		multipleOf64b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
 		textGotoXY(0,7);textPrintInt(32-multipleOf64b);textPrint(" ");
 		/* just a bit of visuals can make it choke in initial tests

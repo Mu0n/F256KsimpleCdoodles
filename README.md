@@ -21,7 +21,17 @@ Foenix Retro Systems is a homebrew effort to bring 8/16/32-bit era processors in
 
 Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pick a selection of a few demos that are standalone .pgz executable programs.
 
-# Sprite
+## F256amp 
+(its code in mp3wSA - its executable is in NoFussDemos)
+
+![Screenshot 2025-03-10 03-05-46](https://github.com/user-attachments/assets/7dc572aa-fb2e-415b-ae45-cee5c28b32e5)
+
+F256amp is a mp3 player that uses the VS1053b sound chip only found in the Jr.2 and K2 (it will not work and quit out on a Jr. or a K). The command line is as such:
+<pre>
+/- F256amp yourtune.mp3
+</pre>
+
+## Sprite
 
 ![Screenshot 2025-01-17 16-30-14](https://github.com/user-attachments/assets/b6ed8445-34f7-447d-9877-c3cb20900a3b)
 

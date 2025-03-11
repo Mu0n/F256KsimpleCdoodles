@@ -5,10 +5,17 @@
 #define LCD_CMD_CMD 0xDD40  //Write Command Here
 #define LCD_RST 0x10        //0 to Reset (RSTn)
 #define LCD_BL  0x20        //1 = ON, 0 = OFF 
+#define LCD_MADCTL  0x0B    //Read Dislay MDCTL
+#define LCD_MADCTL_MY  0x80 //MY: 1=reverse
+#define LCD_MADCTL_MX  0x40 //MX: 1=reverse
+#define LCD_MADCTL_MV  0x20 //MV: 1 row/col exchange
+#define LCD_MADCTL_ML  0x10 //ML: 1=refresh bot to top
+
 #define LCD_WIN_X 0x2A    // window X command 
 #define LCD_WIN_Y 0x2B    // window Y command
 #define LCD_WRI   0x2C    //write command
 #define LCD_RD    0x2E    //read  command
+
 
 //Read Only
 #define LCD_TE  0x40        //Tear Enable 

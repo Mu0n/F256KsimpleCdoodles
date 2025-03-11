@@ -21,6 +21,7 @@ void lilpause(uint8_t);
 bool isAnyK(void);
 bool hasCaseLCD(void);
 void shutDownIfNoK2(void);
-
+bool isWave2(void);
+bool isK2(void);
 
 #endif // UTIL_H

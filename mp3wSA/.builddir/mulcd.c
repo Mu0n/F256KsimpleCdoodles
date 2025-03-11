@@ -1,3 +1,5 @@
+#include "D:\F256\llvm-mos\code\mp3wSA\.builddir\trampoline.h"
+
 #include "f256lib.h"
 #include "../src/mulcd.h"
 
@@ -32,7 +34,7 @@ void clearVisible(uint16_t colorWord)
 
 
 //will display a 240x280 image centered on the screen. This assumes a R5G6B5 bitmap file
-//converted to a 2 byte per pixel raw binary file, that will be sent to LCD_PIX_LO and LCD_PIX_HI 
+//converted to a 2 byte per pixel raw binary file, that will be sent to LCD_PIX_LO and LCD_PIX_HI
 //in that order, pixel by pixel
 //look for my instructions in https://wiki.f256foenix.com/index.php?title=Use_the_K2_LCD
 void displayImage(uint32_t addr)
@@ -89,5 +91,4 @@ void prepareRect(uint8_t x, uint16_t y, uint8_t width, uint16_t height)
 	POKE(LCD_CMD_DTA, (y+height)&0x00FF-1); //yend low
 	
 	POKE(LCD_CMD_CMD, LCD_WRI);
-}
 }

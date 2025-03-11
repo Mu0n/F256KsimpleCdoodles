@@ -1,10 +1,12 @@
-#include "c:\F256\f256llvm-mos\F256KsimpleCdoodles\fileSize\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\fileSize\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
+#define FILE_COOKIE 21
+
+
 
 #include "f256lib.h"
 #include <stdio.h>
-
 #include "../src/muUtils.h"
 
 void backgroundSetup()
@@ -28,33 +30,69 @@ void backgroundSetup()
 	bitmapSetVisible(2,false);
 	
 }
+
+
+#pragma push_macro("EOF")
+#undef EOF
+
 int main(int argc, char *argv[]) {
-long size = 0L;
-FILE *theFile=NULL;
+uint16_t fileID=0;
+uint32_t sizeSoFar=0;
 
-    backgroundSetup();
-	
-	theFile = fopen("ronald.mp3","rb");
-	if(theFile != NULL)
+backgroundSetup();
+
+kernelArgs->file.open.drive = 0;
+kernelArgs->common.buf = "ronald.mp3";
+kernelArgs->common.buflen = 11;
+kernelArgs->file.open.mode = 0;
+kernelArgs->file.open.cookie = FILE_COOKIE;
+
+kernelCall(File.Open);
+
+while(true)
+{
+	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(file.OPENED))
 		{
-		if(fseek(theFile,0L,SEEK_END) != 0)
-			{
-				size = ftell((FILE*)theFile);
-				if(size != -1L)
-					{
-					printf("%ld bytes\n",size);
-					if(fseek(theFile,0L,SEEK_SET) != 0)
-						{
-						if(fclose(theFile) == -1) printf("\n couldn't close the file");
-						}
-					else printf("\nCouldn't get back to the start of the file");
-					}
-				else printf("\nCouldn't get the file size");
+			if(kernelEventData.file.cookie == FILE_COOKIE) {
+				fileID = kernelEventData.file.stream;
+				break;
 			}
-		else printf("\nCouldn't seek to the end of the file");
 		}
-	else printf("\nCouldn't open the file");
+}
 
+printf("\nThe file was opened! Now reading stream ID=%d...",fileID);
+
+kernelArgs->file.read.stream = fileID;
+kernelArgs->file.read.buflen = 255;
+
+kernelCall(File.Read);
+while(true)
+{
+	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(file.DATA))
+		{
+			sizeSoFar+= kernelEventData.file.data.delivered;
+	
+			kernelArgs->file.read.stream = fileID;
+			kernelArgs->file.read.buflen = 255;
+			kernelCall(File.Read);
+	
+		}
+	
+	if(kernelEventData.type == kernelEvent(file.EOF))
+		{
+			sizeSoFar+= kernelEventData.file.data.delivered;
+	
+			break;
+		}
+	
+}
+
+printf("\n%lu bytes read",sizeSoFar);
 printf("\nHit space to end.");
 hitspace();
 return 0;}
+
+#pragma pop_macro("EOF")
+

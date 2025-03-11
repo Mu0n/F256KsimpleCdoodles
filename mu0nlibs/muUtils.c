@@ -8,12 +8,26 @@ bool isAnyK(void)
 	return (value >= 0x10 && value <= 0x16);
 }
 
+bool isK2(void)
+{
+	uint8_t value = PEEK(0xD6A7) & 0x1F;
+	return (value == 0x11);
+}
+
 //will return true if the optical keyboard is detected, enabling the case embedded LCD present as well
 bool hasCaseLCD(void)
 {
 	//if the 2nd to last least significant bit is set, it's a mechanical keyboard, LCD not available, don't use it!
 	//if it's cleared, then it's an optical keyboard, you can use it!
 	return ((PEEK(0xDDC1) & 0x02)==0); //here the bit is cleared, so it's true it's an optical keyboard, it "hasCaseLCD"
+}
+
+//returns yes if it's a Jr2 or a K2 in classic mmu mode (ie if it supports a VS1053b or SAM2695)
+bool isWave2(void)
+{
+	uint8_t mid;
+	mid = PEEK(0xD6A7)&0x3F;
+	return (mid == 0x22 || mid == 0x11); //22 is Jr2 and 11 is K2
 }
 
 //graphics background cleardevice

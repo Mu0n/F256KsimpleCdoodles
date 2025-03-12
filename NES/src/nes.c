@@ -2,8 +2,6 @@
 #include "f256lib.h"
 #include "../src/mupads.h"
 
-//DEFINES
-
 int main(int argc, char *argv[]) {
 
 uint8_t c=0; //index of char to print to show it's not frozen

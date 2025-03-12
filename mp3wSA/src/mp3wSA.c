@@ -215,11 +215,6 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	
-	openAllCODEC();
-	boostVSClock();
-	//boostVSBass();
-	initSpectrum();
-	
 	if(openMP3File(fileName)==1)
 	{
 		printf("\nCouldn't open the file: %s\n",fileName);

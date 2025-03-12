@@ -48,6 +48,14 @@
 #define VKY_SP3_POS_Y_H  0xD91F
 
 
+#define CHUNK8K 0x2000
+#define CHUNK4K 0x1000
+#define CHUNK2K 0x0800
+#define CHUNK1K 0x0400
+#define CHUNK128B 0x80
+#define CHUNK64B 0x40
+#define CHUNK32B 0x20
+
 
 #define NES_CTRL    0xD880
 
@@ -108,6 +116,7 @@
 //INCLUDES
 #include "f256lib.h"
 #include "../src/muUtils.h" //contains helper functions I often use
+#include "../src/muVS1053b.h" //VS1053b for wav pcm playing
 #include <stdlib.h>
 
 EMBED(palgrudge, "../assets/grudge.pal", 0x10000);//1kb
@@ -116,9 +125,7 @@ EMBED(thing, "../assets/thing.bin", 0x10800);//1kb
 EMBED(girl1, "../assets/girl1.bin", 0x10C00);//1kb
 EMBED(cath, "../assets/cath.bin",   0x11000);//1kb
 EMBED(cat, "../assets/cat.bin",     0x11400);//1kb
-
 EMBED(dash, "../assets/dash.bin",   0x13000); //2kb
-
 
 
 //FUNCTION PROTOTYPES
@@ -153,28 +160,6 @@ uint8_t dashDelay = 8; //delay between dash frames
 
 struct timer_t padTimer, lilPauseTimer; //delay for pad timer updating
 
-
-void lilpause(uint8_t timedelay)
-{
-	bool noteExitFlag = false;
-	lilPauseTimer.cookie = TIMER_LILPAUSE_COOKIE;
-	lilPauseTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + timedelay;
-	setTimer(&lilPauseTimer);
-	noteExitFlag = false;
-	while(!noteExitFlag)
-	{
-		kernelNextEvent();
-		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
-		{
-			switch(kernelEventData.timer.cookie)
-			{
-			case TIMER_LILPAUSE_COOKIE:
-				noteExitFlag = true;
-				break;
-			}
-		}
-	}
-}
 
 //this is an extended spriteDefine from the library, but it adds the initial frame we want to use
 void mySpriteDefine(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, bool wantVisible, uint8_t typeOf)
@@ -329,10 +314,15 @@ void setup()
 	padTimer.units = TIMER_FRAMES;
 	padTimer.cookie = TIMER_PAD_COOKIE;
 
+
+	openAllCODEC();
+	boostVSClock(); //VS1053b proper speed
+	initBigPatch();
 }
 
 void checkNESPad(uint8_t whichPad, bool nesOrSnes)
 {
+	
 	uint16_t addr;
 	bool rightOrLeft, bothAxis=false;
 	uint8_t rightBButton;
@@ -364,6 +354,7 @@ void checkNESPad(uint8_t whichPad, bool nesOrSnes)
 	}
 	else if(!CHECK_BIT(PEEK(addr),NES_PAD_DOWN)) 
 	{
+		
 		spriteStatuses[whichPad].sy=SPEED_BASE;
 		spriteStatuses[whichPad].state = spriteStatuses[whichPad].rightOrLeft?SPR_STATE_WALK_R:SPR_STATE_WALK_L;
 	}
@@ -377,6 +368,7 @@ void checkNESPad(uint8_t whichPad, bool nesOrSnes)
 	rightBButton = nesOrSnes? NES_PAD_B: SNES_PAD_B;
 	if(!CHECK_BIT(PEEK(addr),rightBButton))
 	{
+
 		if(spriteStatuses[whichPad].sx != 0 && spriteStatuses[whichPad].sy !=0) bothAxis = true;
 		if(spriteStatuses[whichPad].isDashing || (spriteStatuses[whichPad].sx==0&& spriteStatuses[whichPad].sy==0)) return; //dashing forfeits control
 	    spriteStatuses[whichPad].isDashing = true;

@@ -57,32 +57,6 @@
 #define CHUNK32B 0x20
 
 
-#define NES_CTRL    0xD880
-
-#define NES_CTRL_TRIG  0b10000000
-#define NES_STAT_DONE  0b01000000
-//D880 settings
-//        7  6  5  4 |  3  2   1  0
-// NES_TRIG XX XX XX | XX MODE XX NES_EN
-#define NES_CTRL_MODE_NES  0b00000001
-#define NES_CTRL_MODE_SNES 0b00000101
-
-#define NES_STAT    0xD880
-#define NES_PAD0    0xD884
-#define NES_PAD1    0xD886
-#define NES_PAD2    0xD888
-#define NES_PAD3    0xD88A
-#define NES_PAD_A      7
-#define NES_PAD_B      6
-#define NES_PAD_SELECT 5
-#define NES_PAD_START  4
-#define NES_PAD_UP     3
-#define NES_PAD_DOWN   2
-#define NES_PAD_LEFT   1
-#define NES_PAD_RIGHT  0
-
-#define SNES_PAD_B      7
-
 #define SPEED_BASE 1
 #define DASH_DISPLACE 24
 
@@ -117,6 +91,7 @@
 #include "f256lib.h"
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muVS1053b.h" //VS1053b for wav pcm playing
+#include "../src/mupads.h" //nes and snes
 #include <stdlib.h>
 
 EMBED(palgrudge, "../assets/grudge.pal", 0x10000);//1kb
@@ -132,7 +107,7 @@ EMBED(dash, "../assets/dash.bin",   0x13000); //2kb
 void setup(void);
 void updateFrames(void);
 void mySpriteDefine(uint8_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, bool, uint8_t);
-void checkNESPad(uint8_t, bool);
+void checkPads(uint8_t, bool);
 void lilpause(uint8_t);
 
 //GLOBALS
@@ -274,11 +249,7 @@ void setup()
 
 	
 	POKE(MMU_IO_CTRL,0);
-	
-	//set NES_CTRL
-	POKE(NES_CTRL,NES_CTRL_MODE_NES);
-	
-	
+		
 	bitmapSetVisible(0,false);
 	bitmapSetVisible(1,false);
 	bitmapSetVisible(2,false);
@@ -320,23 +291,23 @@ void setup()
 	initBigPatch();
 }
 
-void checkNESPad(uint8_t whichPad, bool nesOrSnes)
+void checkPads(uint8_t whichPad, bool nesOrSnes)
 {
 	
 	uint16_t addr;
 	bool rightOrLeft, bothAxis=false;
 	uint8_t rightBButton;
 	
-	if(nesOrSnes==true) addr = NES_PAD0 + (uint16_t)whichPad*(uint16_t)2;
-	else addr = NES_PAD0 + (uint16_t)(whichPad-4) * (uint16_t)2;
+	if(nesOrSnes==true) addr = PAD0 + (uint16_t)whichPad*(uint16_t)2;
+	else addr = PAD0 + (uint16_t)(whichPad-4) * (uint16_t)2;
 	
-	if(!CHECK_BIT(PEEK(addr),NES_PAD_LEFT)) 
+	if((PEEK(addr)&NES_LEFT)==0) 
 	{
 		spriteStatuses[whichPad].sx=-SPEED_BASE;
 		spriteStatuses[whichPad].state = SPR_STATE_WALK_L;
 		spriteStatuses[whichPad].rightOrLeft = false;
 	}
-	else if(!CHECK_BIT(PEEK(addr),NES_PAD_RIGHT)) 
+	else if((PEEK(addr)&NES_RIGHT)==0) 
 	{
 		spriteStatuses[whichPad].sx=SPEED_BASE;
 		spriteStatuses[whichPad].state = SPR_STATE_WALK_R;
@@ -347,12 +318,12 @@ void checkNESPad(uint8_t whichPad, bool nesOrSnes)
 		spriteStatuses[whichPad].state = spriteStatuses[whichPad].rightOrLeft?SPR_STATE_IDLE_R:SPR_STATE_IDLE_L;
 		spriteStatuses[whichPad].sx=0;
 	}
-	if(!CHECK_BIT(PEEK(addr),NES_PAD_UP)) 
+	if((PEEK(addr)&NES_UP)==0) 
 	{
 		spriteStatuses[whichPad].sy=-SPEED_BASE;
 		spriteStatuses[whichPad].state = spriteStatuses[whichPad].rightOrLeft?SPR_STATE_WALK_R:SPR_STATE_WALK_L;
 	}
-	else if(!CHECK_BIT(PEEK(addr),NES_PAD_DOWN)) 
+	else if((PEEK(addr)&NES_DOWN)==0) 
 	{
 		
 		spriteStatuses[whichPad].sy=SPEED_BASE;
@@ -365,8 +336,8 @@ void checkNESPad(uint8_t whichPad, bool nesOrSnes)
 	if(spriteStatuses[whichPad].sx == 0 && spriteStatuses[whichPad].sy == 0) 
 		spriteStatuses[whichPad].state = spriteStatuses[whichPad].rightOrLeft?SPR_STATE_IDLE_R:SPR_STATE_IDLE_L;
 	
-	rightBButton = nesOrSnes? NES_PAD_B: SNES_PAD_B;
-	if(!CHECK_BIT(PEEK(addr),rightBButton))
+	rightBButton = nesOrSnes? NES_B: SNES_B;
+	if((PEEK(addr)&rightBButton)==0) 
 	{
 
 		if(spriteStatuses[whichPad].sx != 0 && spriteStatuses[whichPad].sy !=0) bothAxis = true;
@@ -431,30 +402,28 @@ int main(int argc, char *argv[]) {
 	
 	while(!isDone)
 		{
-		POKE(NES_CTRL, NES_CTRL_MODE_NES | NES_CTRL_TRIG); //perform the trig
 		kernelNextEvent();
 		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
 			{
 				switch(kernelEventData.timer.cookie)
 				{
 					case TIMER_PAD_COOKIE:
-						while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)//wait until the trig is done
-									;
+					    pollNES();
+						padPollDelayUntilReady();
 						for(i=0;i<4;i++)
 							{
-								checkNESPad(i, true);
+								checkPads(i, true); //nes mode
 							}
 							
 						//perform the trig
-						POKE(NES_CTRL, NES_CTRL_MODE_SNES | NES_CTRL_TRIG);
-						while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)//wait until the trig is done
+						pollSNES();
+						padPollDelayUntilReady();
 									;										
 						for(i=4;i<8;i++)
 						{
-								checkNESPad(i, false);
+								checkPads(i, false); //snes mode
 						}
 						 
-						//SNES TODO
 						//relaunch pad timer
 						padTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_PAD_DELAY;
 						setTimer(&padTimer);
@@ -498,7 +467,6 @@ int main(int argc, char *argv[]) {
 						}
 						break;
 				}
-				POKE(NES_CTRL, NES_CTRL_MODE_NES);
 			}	
 		}
 	return 0;}

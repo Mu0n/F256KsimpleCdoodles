@@ -150,7 +150,7 @@ bool wrongMachineTest()
 {
 	if(isWave2() == false)
 		{
-		printf("In order to work, a VS1053b chip needs to be present. Only for the K2 and Jr.2");
+		printf("In order to work, a VS1053b chip needs to be present.\nOnly for the K2 and Jr.2");
 		printf("\nHit space to quit.");
 		hitspace();
 		return false;
@@ -211,16 +211,12 @@ int main(int argc, char *argv[]) {
 	}
 	else
 	{
-		printf("Invalid file name. Launch as /- F256amp.pgz file.mp3\n");
+		printf("Invalid file name. Launch as /- F256amp.pgz audiofile\n");
+		printf(".mp3, .ogg, .wav, .wma formats supported\n");
 		printf("Press space to exit.");
 		hitspace();
 		return 0;
 	}
-	
-	openAllCODEC();
-	boostVSClock();
-	//boostVSBass();
-	initSpectrum();
 	
 	if(openMP3File(fileName)==1)
 	{
@@ -229,7 +225,7 @@ int main(int argc, char *argv[]) {
 		hitspace();
 		return 0;
 	}
-	
+
 	
 	openAllCODEC();
 	boostVSClock();
@@ -239,8 +235,8 @@ int main(int argc, char *argv[]) {
 	read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file
 
 	textSetColor(6,0);
-	textGotoXY(66,1);textPrint("F256Amp v0.7");
-	textGotoXY(68,2);textPrint("2025-03-11");
+	textGotoXY(66,1);textPrint("F256Amp v0.8");
+	textGotoXY(68,2);textPrint("2025-03-12");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	
 	textGotoXY(0,0);printf("Loading %s ...",fileName);

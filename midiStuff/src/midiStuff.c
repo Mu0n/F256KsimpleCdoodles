@@ -25,6 +25,7 @@ struct timer_t midiTimer, refTimer; //timer_t structure for setting timer throug
 
 uint16_t note = 0x36, oldnote; /*note is the current midi hex note code to send. oldnote keeps the previous one so it can be Note_off'ed away after the timer expires, or a new note is called*/
 uint16_t prgInst = 0; /* program change value, the MIDI instrument number */
+bool wantVS = true;
 
 struct midi_uart {
 	uint8_t status;

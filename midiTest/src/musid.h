@@ -26,8 +26,10 @@
 void clearSIDRegisters(void);
 void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn);
 void shutAllSIDVoices(void);
+void prepSIDinstruments(void);
 
-
+extern const char *sid_instruments[];
+extern const uint8_t sid_instrumentsSize;
 extern const uint8_t sidLow[];
 extern const uint8_t sidHigh[];
 

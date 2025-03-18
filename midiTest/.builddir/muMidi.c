@@ -47,6 +47,16 @@ const uint16_t plugin[28] = { /* Compressed plugin  for the VS1053b to enable re
 
 
 // wantAlt = true if you want to use the VS1053b, false if you want to use the sam2695
+void emptyMIDIINBuffer()
+{
+	uint16_t i, toDo;
+	if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
+		{
+		toDo = PEEKW(MIDI_RXD) & 0x0FFF;
+		for(i=0;i<toDo;i++) PEEK(MIDI_FIFO);
+		}
+}
+
 
 //shut one channel in particular from 0 to 15
 void midiShutAChannel(uint8_t chan, bool wantAlt)

@@ -100,14 +100,14 @@ typedef struct bigParsedEventList {
 
 
 
-
-void resetInstruments(bool wantAlt);
-void midiShutAChannel(uint8_t chan, bool wantAlt);
-void midiShutAllChannels(bool wantAlt);
-void midiShutUp(bool wantAlt);
-void prgChange(uint8_t prg, uint8_t chan, bool wantAlt);
-void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
-void midiNoteOn(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
+void emptyMIDIINBuffer(void);
+void resetInstruments(bool);
+void midiShutAChannel(uint8_t, bool);
+void midiShutAllChannels(bool);
+void midiShutUp(bool);
+void prgChange(uint8_t, uint8_t, bool);
+void midiNoteOff(uint8_t, uint8_t, uint8_t, bool);
+void midiNoteOn(uint8_t, uint8_t, uint8_t, bool);
 
 void initVS1053MIDI(void);
 void boostVSClock(void);

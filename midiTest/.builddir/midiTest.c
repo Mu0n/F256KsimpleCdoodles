@@ -5,6 +5,8 @@
 #define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
 
+#define VELO_MIN 0x40 //minimum MIDI in note velocity, to avoid being too quiet
+
  //TIMER_TEXT for the 1-frame long text refresh timer for data display
  //TIMER_NOTE is for a midi note timer
 #define TIMER_TEXT_COOKIE 0
@@ -45,12 +47,18 @@ uint8_t tempoLUTRef[18] = {4, 8, 16, 32, 64, 128, //         32nd, 16th, 8th, 4t
 
 uint8_t mainTempoLUT[18]; //contains the delays between notes in prepared beats
 
-uint8_t sidChoiceToVoice[6] = {0x00, 0x07, 0x0E, 0x00, 0x07, 0x0E};
-uint8_t sidInstPerVoice[6] = {0x10, 0x20, 0x40, 0x80, 0x10, 0x10};
 uint8_t diagBuffer[255]; //info dump on screen
 
-uint8_t sidPolyCount=0; //must go down to 0 to gate off the sid. increases by +1 whenever a note is pressed. allows monophony without multitouch interference
-uint8_t polyPSGcount=0;
+uint8_t polyPSGBuffer[6] = {0,0,0,0,0,0};
+uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
+
+uint8_t polySIDBuffer[6] = {0,0,0,0,0,0};
+uint8_t sidChoiceToVoice[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
+uint8_t sidInstPerVoice[6] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+
+uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
+uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
+
 uint8_t *testArray;
 
 bool instSelectMode = false; //is currently in the mode where you see the whole instrument list
@@ -59,6 +67,24 @@ bool altHit = false, shiftHit = false; //keyboard modifiers
 
 bool noteColors[88]={1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1};
 
+int8_t findFreeChannel(uint8_t *ptr, uint8_t howMany)
+	{
+	uint8_t i;
+	for(i=0;i<howMany;i++)
+		{
+		if(ptr[i] == 0) return i;
+		}
+	return -1;
+	}
+int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howMany)
+	{
+	uint8_t i;
+	for(i=0;i<howMany;i++)
+		{
+		if(ptr[i] == note) return i;
+		}
+	return -1;
+	}
 void prepTempoLUT()
 {
 	uint8_t t;
@@ -75,7 +101,6 @@ void prepTempoLUT()
 //setup is called just once during initial launching of the program
 void setup()
 {
-	opl3I inst1, inst2;
 	uint16_t c;
 
 	//Foenix Vicky stuff
@@ -105,7 +130,6 @@ void setup()
 	gPtr = malloc(sizeof(globalThings));
 	resetGlobals(gPtr);
 	
-	
 	//Beats
 	theBeats = malloc(sizeof(aBeat) * 4);
 	setupBeats(theBeats);
@@ -113,6 +137,8 @@ void setup()
 	//Screen stuff
 	//realTextClear();
 	textTitle(gPtr);
+	
+	
 	refreshInstrumentText(gPtr);
 	
 	//prep the tempoLUT
@@ -138,40 +164,17 @@ void setup()
 	//Prep SID stuff
 	clearSIDRegisters();
 	prepSIDinstruments();
+	setMonoSID();
+	
+	//Prep PSG stuff
+	setMonoPSG();
+	shutPSG();
 	
 	//Prep OPL3 stuff
 	opl3_initialize();
-	
-	inst1.chan = 0;
-	inst1.OP1_TVSKF  = 0xC0; inst1.OP2_TVSKF  = 0x21;
-	inst1.OP1_KSLVOL = 0x15; inst1.OP2_KSLVOL = 0x01;
-	inst1.OP1_AD     = 0xF2; inst1.OP2_AD     = 0xF4;
-	inst1.OP1_SR     = 0x40; inst1.OP2_SR     = 0x25;
-	inst1.OP1_WAV    = 0x07; inst1.OP2_WAV    = 0x04;
-	opl3_setInstrument(inst1);
-	
-	/* twang attack?
-	inst1.chan = 0;
-	inst1.OP1_TVSKF  = 0x10; inst1.OP2_TVSKF  = 0x01;
-	inst1.OP1_KSLVOL = 0x00; inst1.OP2_KSLVOL = 0x00;
-	inst1.OP1_AD     = 0x75; inst1.OP2_AD     = 0xF5;
-	inst1.OP1_SR     = 0x93; inst1.OP2_SR     = 0x82;
-	inst1.OP1_WAV    = 0x01; inst1.OP2_WAV    = 0x01;
-	opl3_setInstrument(inst1);
-	*/
-	
-	/* bass
-	inst1.chan = 0;
-	inst1.OP1_TVSKF  = 0x20; inst1.OP2_TVSKF  = 0x30;
-	inst1.OP1_KSLVOL = 0x12; inst1.OP2_KSLVOL = 0x00;
-	inst1.OP1_AD     = 0xF5; inst1.OP2_AD     = 0xF3;
-	inst1.OP1_SR     = 0x44; inst1.OP2_SR     = 0xF4;
-	inst1.OP1_WAV    = 0x00; inst1.OP2_WAV    = 0x00;
-	opl3_setInstrument(inst1);
-	*/
-	
+	opl3_setDefaultInstruments();
+
 	for(c=0;c<255;c++) diagBuffer[c] = 0;
-	
 }
 
 void shutAllMIDIchans()
@@ -185,6 +188,7 @@ midiShutAChannel(9, gPtr->wantVS1053);
 void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt)
 {
 	uint16_t sidTarget, sidVoiceBase;
+	int8_t foundFreeChan=-1; //used when digging for a free channel for polyphony
 	
 	if(gPtr->chipChoice==0) //MIDI
 	{
@@ -201,46 +205,82 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 	}
 	if(gPtr->chipChoice==1) //SID
 	{
-		if(gPtr->sidInstChoice>=0 && gPtr->sidInstChoice<3) sidTarget = SID1; //means SID 1
-		else sidTarget = SID2; //otherwise SID2
-	
-		sidVoiceBase = sidTarget + sidChoiceToVoice[gPtr->sidInstChoice];
 		if(isOn)
 		{
-			sidPolyCount+=1;
-			POKE(sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
-			POKE(sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-			sidNoteOnOrOff(sidVoiceBase+SID_CTRL, sidInstPerVoice[gPtr->sidInstChoice], isOn);
+			foundFreeChan = findFreeChannel(polySIDBuffer, 6);
+			if(foundFreeChan != -1)
+				{
+				sidTarget = foundFreeChan>2?SID2:SID1;
+				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
+				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
+				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
+				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, sidInstPerVoice[foundFreeChan], isOn);
+				polySIDBuffer[foundFreeChan] = note;
+				textGotoXY(0,3);printf("%02x %02x %02x %02x %02x %02x",polySIDBuffer[0],polySIDBuffer[1],polySIDBuffer[2],polySIDBuffer[3],polySIDBuffer[4],polySIDBuffer[5]);
+				}
 		}
 		else
 		{
-			sidPolyCount-=1;
-			if(sidPolyCount==0)
-			{
-				POKE(sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
-				POKE(sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-				sidNoteOnOrOff(sidVoiceBase+SID_CTRL, sidInstPerVoice[gPtr->sidInstChoice], isOn);
-			}
+			foundFreeChan = liberateChannel(note, polySIDBuffer, 6);
+			sidTarget = foundFreeChan>2?SID2:SID1;
+			sidVoiceBase = sidChoiceToVoice[foundFreeChan];
+			polySIDBuffer[foundFreeChan] = 0;
+			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
+			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
+			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, sidInstPerVoice[foundFreeChan], isOn);
+			textGotoXY(0,3);
+			printf("%02x %02x %02x %02x %02x %02x",polySIDBuffer[0],polySIDBuffer[1],polySIDBuffer[2],polySIDBuffer[3],polySIDBuffer[4],polySIDBuffer[5]);
 		}
 		return;
 	}
 	if(gPtr->chipChoice==2) //PSG
 	{
-		//psgNoteOff();
 		if(isOn) {
-			psgNoteOn(psgLow[note-45],psgHigh[note-45]);
-			polyPSGcount++;
+			foundFreeChan = findFreeChannel(polyPSGBuffer, 6);
+			if(foundFreeChan != -1)
+				{
+				psgNoteOn(  polyPSGChanBits[foundFreeChan], //used to correctly address the channel in the PSG command
+							foundFreeChan>2?PSG_RIGHT:PSG_LEFT, //used to send the command to the right left or right PSG
+							psgLow[note-45],psgHigh[note-45],
+							speed);
+			    polyPSGBuffer[foundFreeChan] = note;
+				textGotoXY(0,3);
+				printf("%02x %02x %02x %02x %02x %02x",polyPSGBuffer[0],polyPSGBuffer[1],polyPSGBuffer[2],polyPSGBuffer[3],polyPSGBuffer[4],polyPSGBuffer[5]);
+				}
 			}
 		else
 		{
-			polyPSGcount--;
-			if(polyPSGcount==0)	psgNoteOff();
+			foundFreeChan = liberateChannel(note, polyPSGBuffer, 6);
+			polyPSGBuffer[foundFreeChan] = 0;
+			psgNoteOff(polyPSGChanBits[foundFreeChan], foundFreeChan>2?PSG_RIGHT:PSG_LEFT);
+			textGotoXY(0,3);
+			printf("%02x %02x %02x %02x %02x %02x",polyPSGBuffer[0],polyPSGBuffer[1],polyPSGBuffer[2],polyPSGBuffer[3],polyPSGBuffer[4],polyPSGBuffer[5]);
 		}
 		return;
 	}
 	if(gPtr->chipChoice==3) //OPL3
 	{
-		opl3_note(channel, opl3_fnums[(note+5)%12], (note+5)/12-2, isOn);
+		if(isOn)
+			{
+			foundFreeChan = findFreeChannel(polyOPL3Buffer, 9);
+			if(foundFreeChan != -1)
+				{
+				opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, true);
+				polyOPL3Buffer[foundFreeChan] = note;
+				textGotoXY(0,3);
+				printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x",polyOPL3Buffer[0],polyOPL3Buffer[1],polyOPL3Buffer[2],polyOPL3Buffer[3],polyOPL3Buffer[4],polyOPL3Buffer[5],polyOPL3Buffer[6],polyOPL3Buffer[7],polyOPL3Buffer[8]);
+				}
+	
+
+			}
+		else
+			{
+			foundFreeChan = liberateChannel(note, polyOPL3Buffer, 9);
+			opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, false);
+			polyOPL3Buffer[foundFreeChan] = 0;
+			textGotoXY(0,3);
+			printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x",polyOPL3Buffer[0],polyOPL3Buffer[1],polyOPL3Buffer[2],polyOPL3Buffer[3],polyOPL3Buffer[4],polyOPL3Buffer[5],polyOPL3Buffer[6],polyOPL3Buffer[7],polyOPL3Buffer[8]);
+			}
 	}
 }
 
@@ -269,6 +309,7 @@ void dealKeyPressed(uint8_t keyRaw)
 			refreshInstrumentText(gPtr);
 			textTitle(gPtr);
 			shutAllSIDVoices();
+			shutPSG();
 			instSelectMode=false; //returns to default mode
 			break;
 		case 129: //F1
@@ -533,9 +574,10 @@ void dealKeyPressed(uint8_t keyRaw)
 			gPtr->chipChoice+=1;
 			if(gPtr->chipChoice==1) prepSIDinstruments(); //just arrived in sid, prep sid
 			if(gPtr->chipChoice==2) clearSIDRegisters(); //just left sid, so clear sid
-			if(gPtr->chipChoice==3) psgNoteOff(); //just left PSG, so clear PSG
+			if(gPtr->chipChoice==3) shutPSG();
 			if(gPtr->chipChoice>3)gPtr->chipChoice=0; //loop back to midi at the start of the cyle
 			showChipChoiceText(gPtr);
+			textGotoXY(0,3);textPrint("                                        ");
 			break;
 		case 100: // D - diagnostics info dump
 			printf("\nbuffer Dump=");
@@ -561,7 +603,7 @@ void dealKeyPressed(uint8_t keyRaw)
 			break;
 	}
 	//the following line can be used to get keyboard codes
-	printf("\n %d",kernelEventData.key.raw);
+	//printf("\n %d",kernelEventData.key.raw);
 }
 
 void delayKeyReleased(uint8_t rawKey)
@@ -575,7 +617,6 @@ switch(rawKey)
 		shiftHit = false;
 		break;
 	case 32: //space
-		if(gPtr->chipChoice==1) sidPolyCount=1;
 		dispatchNote(false, gPtr->chSelect ,note+0x15,0x3F, gPtr->wantVS1053);
 		break;
 	}
@@ -640,26 +681,24 @@ int main(int argc, char *argv[]) {
 							case 1:
 								if(sidActive)
 									{
-									dispatchNote(false, gPtr->chSelect,lastNote,recByte<0x70?0x70:recByte, gPtr->wantVS1053);
-									textPrint(".");
+									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053);
 									}
 								break;
 							case 2:
 								if(psgActive)
 									{
-									dispatchNote(false, gPtr->chSelect,lastNote,recByte<0x70?0x70:recByte, gPtr->wantVS1053);
+									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053);
 									}
 								break;
 							case 3:
 								if(opl3Active)
 									{
-									dispatchNote(false, gPtr->chSelect,lastNote,recByte<0x70?0x70:recByte, gPtr->wantVS1053);
+									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053);
 									}
 								break;
 							}
 						}
-					dispatchNote(isHit, gPtr->chSelect,storedNote,recByte<0x70?0x70:recByte, gPtr->wantVS1053); //do the note or turn off the note
-					textPrint(isHit?"-":".");
+					dispatchNote(isHit, gPtr->chSelect,storedNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053); //do the note or turn off the note
 					if(isHit == false) //turn 'em off if the note is ended
 						{
 						switch(gPtr->chipChoice)

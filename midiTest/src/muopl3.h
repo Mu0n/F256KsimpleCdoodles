@@ -23,7 +23,7 @@
 //Scope: channel
 #define OPL_CH_F_LO     0xA0     //Base address of channel frequency num low byte
 #define OPL_CH_KBF_HI   0xB0     //Base address of keyon, block, freq num hi byte
-#define OPL_CH_FEED     0xC0     //Base address of panning, feedback, synth type
+#define OPL_CH_FEED     0xC0     // 7: out_chan_d 6: out_chan_r 5: R 4:L 3-1: feedback 0: syn with 0=freqmod 1=additive_syn
 
 //Scope: operator
 #define OPL_OP_TVSKF    0x20     //Base address of Tremolo, vibrator, sustain, KSR, F multimap
@@ -32,7 +32,6 @@
 #define OPL_OP_SR       0x80     //Base address of sustain, release
 #define OPL_OP_WAV      0xE0     //Base address of waveform select
 
-//the following three structs are for midi event playback. keep every aMIDIEvent's content in far memory
 typedef struct opl3Instrument {
     uint8_t chan;
 	uint8_t OP1_TVSKF, OP2_TVSKF;
@@ -46,6 +45,7 @@ void opl3_initialize(void);
 void opl3_write(uint16_t, uint8_t);
 void opl3_note(uint8_t, uint16_t, uint8_t, bool);
 void opl3_setInstrument(struct opl3Instrument);
+void opl3_setDefaultInstruments(void);
 
 extern const uint16_t opl3_fnums[12];
 

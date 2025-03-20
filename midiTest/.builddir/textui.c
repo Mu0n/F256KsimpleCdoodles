@@ -123,7 +123,7 @@ void chipSelectTextMenu(struct glTh *gT)
 {
 	textSetColor(textColorGreen,0x00);
 	textGotoXY(5,57);textPrint("C to Cycle chip choice: ");
-	textSetColor(textColorGreen,0x00); textPrint("SID   PSG   OPL3 ");
+	textSetColor(textColorGreen,0x00);
 	textGotoXY(5,58);textPrint("M to toggle MIDI:");
 	showChipChoiceText(gT);
 }
@@ -134,9 +134,10 @@ void textTitle(struct glTh *gT)
 	uint16_t c;
 	//Text Title area
 	textSetColor(textColorRed,0x00);
-	textGotoXY(17,0);for(c=8;c>0;c--) printf("%c",0x15+c);
-	textGotoXY(26,0);printf("Mu0n's MIDI test v1.0");
-	textGotoXY(48,0);for(c=1;c<9;c++) printf("%c",0x15+c);
+	textGotoXY(21,0);for(c=8;c>0;c--) printf("%c",0x15+c);
+	textGotoXY(30,0);printf("FireJam  v1.0");
+	textGotoXY(44,0);for(c=1;c<9;c++) printf("%c",0x15+c);
+	textGotoXY(33,1);textPrint("by Mu0n");
     textDefineForegroundColor(0,0xff,0xff,0xff);
 	textSetColor(textColorBlue,0x00);
 	textGotoXY(0,2); textPrint("Plug in a midi controller in the MIDI IN port and play!");
@@ -153,6 +154,7 @@ void textTitle(struct glTh *gT)
 	textGotoXY(0,40);textPrint("[Space] to play a short note under the red line cursor");
 	textGotoXY(0,41);printf("[%c] / [%c] to move the cursor",0xF9,0xFA);
 	textGotoXY(0,42);printf("[Shift-%c] / [Shift-%c] to move an octave - [Alt-%c] / [Alt-%c] go to the ends ",0xF9,0xFA,0xF9,0xFA);
+	
 	
 	//Chip status, midi chip choice status
 	chipSelectTextMenu(gT);
@@ -197,7 +199,7 @@ void showChipChoiceText(struct glTh *gT)
 			break;
 		case 1: //SID
 			showMIDIChoiceText(gT);
-			textGotoXY(44,57);textSetColor(textColorOrange,0x00);textPrint("[SID] ");
+	textGotoXY(44,57);textSetColor(textColorOrange,0x00);textPrint("[SID] ");
 			textGotoXY(50,57);textSetColor(textColorGreen,0x00);textPrint(" PSG   OPL3  ");
 			break;
 		case 2: //PSG
@@ -233,7 +235,7 @@ void instListShow(struct glTh *gT)
 	{
 		textGotoXY(0,0);textPrint("Select your instrument for channel");printf(" %d",gT->chSelect);textPrint(". [Arrows] [Enter] [Space] [Back]");
 		textSetColor(textColorGray,0x00);
-		for(i=0; i<sid_instrumentsSize;i++)
+		for(i=0; i<sizeof(midi_instruments)/sizeof(midi_instruments[0]);i++)
 		{
 			textGotoXY(2,y);printf("%003d %s ",i,midi_instruments[i]);
 			i++;

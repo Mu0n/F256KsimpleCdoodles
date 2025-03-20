@@ -7,10 +7,30 @@ const char *sid_instruments[] = {
 	"Triangle",
 	"SawTooth",
 	"Pulse",
-	"Noise",
-	"Misc",
-	"Weird"
+	"Noise"
 };
+
+
+	
+	
+const struct sidInstrument sidI_triangle = {
+.maxVolume = 0x0F, .pwdLo = 0x44, .pwdHi = 0x00,
+.ad = 0x27, .sr = 0x5B, .ctrl = 0x10
+};
+const struct sidInstrument sidI_sawtooth = {
+.maxVolume = 0x0F, .pwdLo = 0x88, .pwdHi = 0x00,
+.ad = 0x61, .sr = 0xC8, .ctrl = 0x20
+};
+const struct sidInstrument sidI_pulse = {
+.maxVolume = 0x0F, .pwdLo = 0x88, .pwdHi = 0x00,
+.ad = 0x61, .sr = 0xC8, .ctrl = 0x40
+};
+const struct sidInstrument sidI_noise = {
+.maxVolume = 0x0F, .pwdLo = 0x44, .pwdHi = 0x00,
+.ad = 0x17, .sr = 0xC8, .ctrl = 0x80
+};
+
+
 
 const uint8_t sid_instrumentsSize = 6;
 
@@ -40,7 +60,7 @@ const uint8_t sidLow[] = {
 void clearSIDRegisters(void)
 {
 	uint8_t i;
-	for(i=0;i<0x18;i++)
+	for(i=0;i<=0x18;i++)
 	{
 		POKE(SID1+i,0);
 		POKE(SID2+i,0);
@@ -65,57 +85,36 @@ void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn)
 	POKE(voice, isOn?(ctrl|0x01):(ctrl&0xFE));
 }
 
+void prepASIDInstrument(uint16_t addrVoice, struct sidInstrument inst)
+{
+	POKE(addrVoice+SID_FM_VC, inst.maxVolume);   // MAX VOLUME
+	POKE(addrVoice+SID_LO_PWDC, inst.pwdLo); // SET PULSE WAVE DUTY LOW BYTE
+	POKE(addrVoice+SID_HI_PWDC, inst.pwdHi); // SET PULSE WAVE DUTY HIGH BYTE
+	POKE(addrVoice+SID_ATK_DEC, inst.ad); // SET ATTACK;DECAY
+	POKE(addrVoice+SID_SUS_REL, inst.sr); // SET SUSTAIN;RELEASE
+	POKE(addrVoice+SID_CTRL, inst.ctrl); 	 // SET CTRL as triangle
 	
+}
+
 void prepSIDinstruments()
 {
-	//Triangle SID 1 VOICE 1
-	POKE(SID1+SID_VOICE1+SID_FM_VC, 0x0F);   // MAX VOLUME
-	POKE(SID1+SID_VOICE1+SID_LO_PWDC, 0x44); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(SID1+SID_VOICE1+SID_HI_PWDC, 0x00); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(SID1+SID_VOICE1+SID_ATK_DEC, 0x27); // SET ATTACK;DECAY
-	POKE(SID1+SID_VOICE1+SID_SUS_REL, 0x5B); // SET SUSTAIN;RELEASE
-	POKE(SID1+SID_VOICE1+SID_CTRL, 0x10); 	 // SET CTRL as triangle
+	sidI inst;
+	inst.maxVolume = 0x0F;
+	inst.pwdLo = 0x44;
+	inst.pwdHi = 0x00;
+	inst.ad = 0x27;
+	inst.sr = 0x5B;
+	inst.ctrl = 0x20;
 	
-	//Sawtooth SID 1 VOICE 2
-	POKE(SID1+SID_VOICE2+SID_FM_VC, 0x0F);   // MAX VOLUME
-	POKE(SID1+SID_VOICE2+SID_LO_PWDC, 0x88); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(SID1+SID_VOICE2+SID_HI_PWDC, 0x00); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(SID1+SID_VOICE2+SID_ATK_DEC, 0x61); // SET ATTACK;DECAY
-	POKE(SID1+SID_VOICE2+SID_SUS_REL, 0xC8); // SET SUSTAIN;RELEASE
-	POKE(SID1+SID_VOICE2+SID_CTRL, 0x20); 	 // SET CTRL as sawtooth
+	prepASIDInstrument(SID1+SID_VOICE1, inst);
+	prepASIDInstrument(SID1+SID_VOICE2, inst);
+	prepASIDInstrument(SID1+SID_VOICE3, inst);
+	prepASIDInstrument(SID2+SID_VOICE1, inst);
+	prepASIDInstrument(SID2+SID_VOICE2, inst);
+	prepASIDInstrument(SID2+SID_VOICE3, inst);
 	
-	//Pulse SID 1 VOICE 3
-	POKE(SID1+SID_VOICE3+SID_FM_VC, 0x0F);   // MAX VOLUME
-	POKE(SID1+SID_VOICE3+SID_LO_PWDC, 0x88); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(SID1+SID_VOICE3+SID_HI_PWDC, 0x00); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(SID1+SID_VOICE3+SID_ATK_DEC, 0x61); // SET ATTACK;DECAY
-	POKE(SID1+SID_VOICE3+SID_SUS_REL, 0xC8); // SET SUSTAIN;RELEASE
-	POKE(SID1+SID_VOICE3+SID_CTRL, 0x40); 	 // SET CTRL as pulse
-	
-	//Noise SID 2 VOICE 1
-	POKE(SID2+SID_VOICE1+SID_FM_VC, 0x0F);   // MAX VOLUME
-	POKE(SID2+SID_VOICE1+SID_LO_PWDC, 0x44); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(SID2+SID_VOICE1+SID_HI_PWDC, 0x00); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(SID2+SID_VOICE1+SID_ATK_DEC, 0x17); // SET ATTACK;DECAY
-	POKE(SID2+SID_VOICE1+SID_SUS_REL, 0xC8); // SET SUSTAIN;RELEASE
-	POKE(SID2+SID_VOICE1+SID_CTRL, 0x80); 	 // SET CTRL as noise
-	
-	//Sawtooth SID 2 VOICE 2
-	POKE(SID2+SID_VOICE2+SID_FM_VC, 0x0F);   // MAX VOLUME
-	POKE(SID2+SID_VOICE2+SID_LO_PWDC, 0x88); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(SID2+SID_VOICE2+SID_HI_PWDC, 0x00); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(SID2+SID_VOICE2+SID_ATK_DEC, 0x61); // SET ATTACK;DECAY
-	POKE(SID2+SID_VOICE2+SID_SUS_REL, 0xC8); // SET SUSTAIN;RELEASE
-	POKE(SID2+SID_VOICE2+SID_CTRL, 0x20); 	 // SET CTRL as sawtooth
-	
-	//Pulse SID 2 VOICE 3
-	POKE(SID2+SID_VOICE3+SID_FM_VC, 0x0F);   // MAX VOLUME
-	POKE(SID2+SID_VOICE3+SID_LO_PWDC, 0x88); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(SID2+SID_VOICE3+SID_HI_PWDC, 0x00); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(SID2+SID_VOICE3+SID_ATK_DEC, 0x61); // SET ATTACK;DECAY
-	POKE(SID2+SID_VOICE3+SID_SUS_REL, 0xC8); // SET SUSTAIN;RELEASE
-	POKE(SID2+SID_VOICE3+SID_CTRL, 0x40); 	 // SET CTRL as pulse
-	
+	/*
+
 	POKE(SID1+SID_LO_FCF,0x2A);
 	POKE(SID1+SID_HI_FCF,0x00);
 	POKE(SID1+SID_FRR, 0x00);
@@ -125,4 +124,22 @@ void prepSIDinstruments()
 	POKE(SID2+SID_HI_FCF,0x00);
 	POKE(SID2+SID_FRR, 0x00);
 	POKE(SID2+SID_FM_VC, 0x0F);
+	*/
+}
+
+void setMonoSID()
+{
+	uint8_t sys1;
+	
+	sys1=PEEK(SID_SYS1);
+	sys1 = sys1 & 0b11110111;
+	POKE(SID_SYS1,sys1);
+}
+void setStereoSID()
+{
+	uint8_t sys1;
+	
+	sys1=PEEK(SID_SYS1);
+	sys1 = sys1 & 0b11111111;
+	POKE(SID_SYS1,sys1);
 }

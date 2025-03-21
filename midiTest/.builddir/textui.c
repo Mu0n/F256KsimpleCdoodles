@@ -199,7 +199,7 @@ void showChipChoiceText(struct glTh *gT)
 			break;
 		case 1: //SID
 			showMIDIChoiceText(gT);
-	textGotoXY(44,57);textSetColor(textColorOrange,0x00);textPrint("[SID] ");
+			textGotoXY(44,57);textSetColor(textColorOrange,0x00);textPrint("[SID] ");
 			textGotoXY(50,57);textSetColor(textColorGreen,0x00);textPrint(" PSG   OPL3  ");
 			break;
 		case 2: //PSG

@@ -450,7 +450,7 @@ int main(int argc, char *argv[]) {
 	
 	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
 	boostVSClock();
-	initVS1053MIDI();  //if the VS1053b is used
+	//initVS1053MIDI();  //if the VS1053b is used
 	
 	wipeBitmapBackground(0x2F,0x2F,0x2F);
 	POKE(MMU_IO_CTRL, 0x00);
@@ -529,7 +529,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 	}
 	
-#define SEGMENT_FIRST
+	
 //Opens the std MIDI file
 uint8_t loadSMFile(char *name, uint32_t targetAddress)
 {

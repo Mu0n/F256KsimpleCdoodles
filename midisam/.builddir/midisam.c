@@ -452,7 +452,7 @@ int main(int argc, char *argv[]) {
 	
 	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions
 	boostVSClock();
-	initVS1053MIDI();  //if the VS1053b is used
+	//initVS1053MIDI();  //if the VS1053b is used
 	
 	wipeBitmapBackground(0x2F,0x2F,0x2F);
 	POKE(MMU_IO_CTRL, 0x00);
@@ -531,10 +531,10 @@ int main(int argc, char *argv[]) {
 	return 0;
 	}
 	
-#define SEGMENT_FIRST
+	
 //Opens the std MIDI file
 uint8_t loadSMFile(char *name, uint32_t targetAddress)
- {
+{
 	FILE *theMIDIfile;
 	uint8_t buffer[255];
 	size_t bytesRead = 0;
@@ -564,7 +564,7 @@ uint8_t loadSMFile(char *name, uint32_t targetAddress)
 
 //high level function that directs the reading and parsing of the MIDI file
 int16_t getAndAnalyzeMIDI(struct midiRecord *rec, struct bigParsedEventList *list)
-	 {
+	{
 	int16_t indexToStart=0; //MThd should be at position 0, but it might not, so we'll find it
 	indexToStart = findPositionOfHeader(); //find the start index of 'MThd'
 	if(indexToStart == -1)
@@ -577,7 +577,7 @@ int16_t getAndAnalyzeMIDI(struct midiRecord *rec, struct bigParsedEventList *lis
 
 //checks the tempo, number of tracks, etc
 void detectStructure(uint16_t startIndex, struct midiRecord *rec, struct bigParsedEventList *list)
-	 {
+	{
     uint32_t trackLength = 0; //size in bytes of the current track
     uint32_t i = startIndex; // #main array parsing index
     uint32_t j=0;
@@ -638,7 +638,7 @@ void detectStructure(uint16_t startIndex, struct midiRecord *rec, struct bigPars
 
 //this opens a .mid file and ignores everything until 'MThd' is encountered
 int16_t findPositionOfHeader()
-	 {
+	{
 	char targetSequence[] = "MThd";
     char *position;
     int16_t thePosition = 0;
@@ -658,7 +658,7 @@ int16_t findPositionOfHeader()
 	}
 
 void adjustOffsets(struct bigParsedEventList *list)
- {
+{
 	uint16_t i=0,k=0, currentEventCount=0;
 	
 	for(i=0;i<list->trackcount;i++)
@@ -675,7 +675,7 @@ void adjustOffsets(struct bigParsedEventList *list)
 //assuming a byte buffer that starts with MThd, read all tracks and produce a structure of aMIDIEvent arrays
 // wantCmds is when it's ready to record the relevant commands in an array
 int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct bigParsedEventList *list)
-	 {
+	{
 	uint8_t j=0; //simple index
     uint32_t trackLength = 0; //size in bytes of the current track
     uint32_t i = startIndex; // #main array parsing index

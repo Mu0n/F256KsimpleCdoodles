@@ -16,13 +16,23 @@ void opl3_initialize() {
 	opl3_write(OPL_FOE, 0x00); //four operator enable
 	opl3_write(OPL_OPL3, 0x01); //enable opl3
 	opl3_write(OPL_CSW, 0x00); //composite sine wave mode off
-	
 	//channel wide settings
 	for(i=0;i<9;i++)
 		{
 		opl3_write(OPL_CH_FEED + i,   0x30);
 		}
 	
+	opl3_quietAll();
+
+	
+}
+void opl3_quietAll()
+{
+	uint8_t channel;
+	for(channel=0;channel<9;channel++)
+		{
+		opl3_write(OPL_CH_KBF_HI | channel, 0x00);
+		}
 }
 
 void opl3_setInstrument(struct opl3Instrument inst)

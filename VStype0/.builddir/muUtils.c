@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\VStype0\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\VSType0\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muUtils.h"

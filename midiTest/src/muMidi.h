@@ -43,15 +43,6 @@
 #define AME_MSG 5 //up to 3 bytes long
 #define MIDI_EVENT_FAR_SIZE 8 //total size of an aMIDIEvent
 
-
-//VS1053b serial bus
-#define VS_SCI_CTRL  0xD700
-#define VS_SCI_ADDR  0xD701
-#define VS_SCI_DATA  0xD702   //2 bytes
-#define VS_FIFO_STAT 0xD704   //2 bytes
-#define VS_FIFO_DATA 0xD707
-
-
 #include "f256lib.h"
 
 //keeps track of tempo changes and pre-calculations of usPerTick and usPerTimer0 to make it lighter during parsing
@@ -98,10 +89,8 @@ typedef struct bigParsedEventList {
 	aTOEPtr TrackEventList;
 	} bigParsed, *bigParsedPtr;
 
-
-
-void emptyMIDIINBuffer(void);
 void resetInstruments(bool);
+void emptyMIDIINBuffer(void);
 void midiShutAChannel(uint8_t, bool);
 void midiShutAllChannels(bool);
 void midiShutUp(bool);
@@ -109,8 +98,6 @@ void prgChange(uint8_t, uint8_t, bool);
 void midiNoteOff(uint8_t, uint8_t, uint8_t, bool);
 void midiNoteOn(uint8_t, uint8_t, uint8_t, bool);
 
-void initVS1053MIDI(void);
-void boostVSClock(void);
 void initMidiRecord(struct midiRecord *);
 void initBigList(struct bigParsedEventList *);
 uint32_t getTotalLeft(struct bigParsedEventList *);

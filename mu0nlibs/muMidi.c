@@ -102,55 +102,6 @@ void midiNoteOn(uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt)
 		POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, note);
 		POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, speed);
 	}
-	
-//this is a small code to enable the VS1053b's midi mode; present on the Jr2 and K2. It is necessary for the first revs of these 2 machines
-void initVS1053MIDI(void) {
-    uint8_t n;
-    uint16_t addr, val, i=0;
-
-  while (i<sizeof(plugin)/sizeof(plugin[0])) {
-    addr = plugin[i++];
-    n = plugin[i++];
-    if (n & 0x8000) { /* RLE run, replicate n samples */
-      n &= 0x7FFF;
-      val = plugin[i++];
-      while (n--) {
-        //WriteVS10xxRegister(addr, val);
-        POKE(VS_SCI_ADDR,addr);
-        POKEW(VS_SCI_DATA,val);
-        POKE(VS_SCI_CTRL,1);
-        POKE(VS_SCI_CTRL,0);
-		while (PEEK(VS_SCI_CTRL) & 0x80);
-      }
-    } else {           /* Copy run, copy n samples */
-      while (n--) {
-        val = plugin[i++];
-        //WriteVS10xxRegister(addr, val);
-        POKE(VS_SCI_ADDR,addr);
-        POKEW(VS_SCI_DATA,val);
-        POKE(VS_SCI_CTRL,1);
-        POKE(VS_SCI_CTRL,0);
-		while (PEEK(VS_SCI_CTRL) & 0x80);
-      }
-    }
-  }
-}
-
-void boostVSClock()
-{
-//target the clock register
-POKE(VS_SCI_ADDR,0x03);
-//aim for 2.5X clock multiplier, no frills
-POKE(VS_SCI_DATA,0x00);
-POKE(VS_SCI_DATA+1,0x80);
-//trigger the command
-POKE(VS_SCI_CTRL,1);
-POKE(VS_SCI_CTRL,0);
-//check to see if it's done
-	while (PEEK(VS_SCI_CTRL) & 0x80)
-		;
-}
-
 
 void initMidiRecord(struct midiRecord *rec)
 {
@@ -167,6 +118,15 @@ void initMidiRecord(struct midiRecord *rec)
 	rec->bb=8;
 	rec->currentSec=0;
 	rec->totalSec=0;
+}
+void emptyMIDIINBuffer()
+{
+	uint16_t i, toDo;
+	if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
+		{
+		toDo = PEEKW(MIDI_RXD) & 0x0FFF;
+		for(i=0;i<toDo;i++) PEEK(MIDI_FIFO);
+		}
 }
 
 void initBigList(struct bigParsedEventList *list)

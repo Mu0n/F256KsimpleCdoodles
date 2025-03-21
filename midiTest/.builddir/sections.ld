@@ -2,5 +2,3 @@
 
   .palpiano : { *(.palpiano .palpiano*) } >palpiano end_palpiano = .;
   .pia1 : { *(.pia1 .pia1*) } >pia1 end_pia1 = .;
-  .pia2 : { *(.pia2 .pia2*) } >pia2 end_pia2 = .;
-  .pia3 : { *(.pia3 .pia3*) } >pia3 end_pia3 = .;

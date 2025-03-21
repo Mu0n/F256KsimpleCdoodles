@@ -12,15 +12,3 @@
   BYTE((end_pia1 - __pia1_lma)>>16)
   TRIM(pia1)
 
-  SHORT(ORIGIN(pia2))
-  BYTE(ORIGIN(pia2)>>16)
-  SHORT(end_pia2 - __pia2_lma)
-  BYTE((end_pia2 - __pia2_lma)>>16)
-  TRIM(pia2)
-
-  SHORT(ORIGIN(pia3))
-  BYTE(ORIGIN(pia3)>>16)
-  SHORT(end_pia3 - __pia3_lma)
-  BYTE((end_pia3 - __pia3_lma)>>16)
-  TRIM(pia3)
-

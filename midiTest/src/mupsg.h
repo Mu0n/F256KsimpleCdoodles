@@ -8,7 +8,6 @@
 
 #define PSG_SILENCE 0x0F //use with bitwise OR with your attenuation command
 
-#define MIN(x,y) (x>y)?y:x
 #include "f256lib.h"
 
 void shutPSG(void);

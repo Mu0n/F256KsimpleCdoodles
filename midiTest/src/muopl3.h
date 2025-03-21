@@ -42,6 +42,7 @@ typedef struct opl3Instrument {
    } opl3I;
 		
 void opl3_initialize(void);
+void opl3_quietAll(void);
 void opl3_write(uint16_t, uint8_t);
 void opl3_note(uint8_t, uint16_t, uint8_t, bool);
 void opl3_setInstrument(struct opl3Instrument);

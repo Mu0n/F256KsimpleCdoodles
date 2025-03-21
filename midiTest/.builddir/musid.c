@@ -9,9 +9,6 @@ const char *sid_instruments[] = {
 	"Pulse",
 	"Noise"
 };
-
-
-	
 	
 const struct sidInstrument sidI_triangle = {
 .maxVolume = 0x0F, .pwdLo = 0x44, .pwdHi = 0x00,
@@ -31,8 +28,7 @@ const struct sidInstrument sidI_noise = {
 };
 
 
-
-const uint8_t sid_instrumentsSize = 6;
+const uint8_t sid_instrumentsSize = 4;
 
 const uint8_t sidHigh[] = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02,

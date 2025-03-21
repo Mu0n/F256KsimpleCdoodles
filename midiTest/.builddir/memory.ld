@@ -2,5 +2,3 @@
 
   palpiano : ORIGIN = __palpiano_lma, LENGTH = __palpiano_size
   pia1 : ORIGIN = __pia1_lma, LENGTH = __pia1_size
-  pia2 : ORIGIN = __pia2_lma, LENGTH = __pia2_size
-  pia3 : ORIGIN = __pia3_lma, LENGTH = __pia3_size

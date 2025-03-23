@@ -978,6 +978,8 @@ int main(int argc, char *argv[]) {
 		POKE(0xD632,0);
 		POKE(0xD633,3);
 	
+		POKE(0xD632,0b11100111);
+		POKE(0xD631,0);
 	}
 	
 	initMidiRecord(&myRecord);

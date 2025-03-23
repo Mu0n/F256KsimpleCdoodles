@@ -46,6 +46,13 @@ Known bug: type 1 which have several tempo changes will disrupt the song duratio
 
 if you put the program in a root folder called _apps and rename the program as midiplayer.pgz, you can use Micah's f/manager https://github.com/WartyMN/F256-FileManager/releases to auto-launch this program when you pick and execute .mid files from its interface.
 
+## FusionDrive v0.2 WIP
+(its code in FusionDrive - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
+
+![image](https://github.com/user-attachments/assets/d7277ea1-f64d-4f29-b15c-f18489e08cc2)
+
+plays midi background music with the SAM2695 (so it requires a K2 or Jr2 to hear something). Can move the car smoothly around using NES pad #1 if you have a FNX4N4S. Arrow keys left and right have crude movement for now. 
+
 ## Sprite
 
 ![Screenshot 2025-01-17 16-30-14](https://github.com/user-attachments/assets/b6ed8445-34f7-447d-9877-c3cb20900a3b)

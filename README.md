@@ -21,6 +21,19 @@ Foenix Retro Systems is a homebrew effort to bring 8/16/32-bit era processors in
 
 Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pick a selection of a few demos that are standalone .pgz executable programs.
 
+## FireJam v1.0
+
+(its code in midiTest - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
+
+![FireJam1](https://github.com/user-attachments/assets/6e1ad396-ddc7-4137-8092-c87c8d91e477)
+
+FireJam v1.0, my most ambitious program yet. 
+
+MIDI in and out capable, it will still partially work with a Jr. (PSG, and SID if you have them), a K (PSG, SID, OPL3) and the newest wave 2 Jr2 and K2 (PSG, SID, OPL3, SAM, VS1053b).
+Best to use with a MIDI in controller, but it'll be controllable with arrows and space to make notes individually, or the F keys to start beats.
+
+Has polyphony (infinite for MIDI, 6 for PSG and SID, 9 for OPL3) with a MIDI in controller.
+
 ## F256amp 
 (its code in mp3wSA - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 

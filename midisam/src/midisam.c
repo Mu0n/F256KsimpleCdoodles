@@ -16,7 +16,7 @@
 #define TIMER_SHIMMER_COOKIE 2
 #define TIMER_SHIMMER_DELAY 3
 
-#define CLONE_TO_UART_EMWHITE 0
+#define CLONE_TO_UART_EMWHITE 1
 
 //STRUCTS
 struct timer_t playbackTimer, shimmerTimer;
@@ -940,7 +940,7 @@ int main(int argc, char *argv[]) {
 	int16_t indexStart = 0; //keeps note of the byte where the MIDI string 'MThd' is, sometimes they're not at the very start of the file!
 	uint8_t i=0,j=0;
 	uint8_t machineCheck=0;
-	//openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
+	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
 	//initVS1053MIDI();  //if the VS1053b is used
 
 	//wipeBitmapBackground(0x2F,0x2F,0x2F);
@@ -967,6 +967,17 @@ int main(int argc, char *argv[]) {
 	initRTMIDI();
 	}
 
+	if(CLONE_TO_UART_EMWHITE==1)
+	{
+		//init speed of UART for EMWhite
+		POKE(0xD633,128);
+		POKE(0xD630,50);
+		POKE(0xD631,0);
+		POKE(0xD632,0);
+		POKE(0xD633,3);
+		
+	}
+	
 	initMidiRecord(&myRecord);
 	initBigList(&theBigList);
 	

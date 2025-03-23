@@ -209,9 +209,9 @@ void setup()
 	//Foenix Vicky stuff
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b00101111); //sprite,graph,overlay,text
+	POKE(VKY_MSTR_CTRL_0, 0b00001111); //sprite,graph,overlay,text
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-	POKE(VKY_MSTR_CTRL_1, 0b00010000); //font overlay, 320x240 at 60 Hz;
+	POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, 320x240 at 60 Hz;
 	POKE(VKY_LAYER_CTRL_0, 0b00010000); //bitmap 0 in layer 0, bitmap 1 in layer 1
 	POKE(VKY_LAYER_CTRL_1, 0b00000010); //bitmap 2 in layer 2
 	POKE(0xD00D,0x00); //force black graphics background
@@ -277,7 +277,7 @@ void setup()
 	if(isWave2()) 
 	{
 	//boost the VS1053b clock speed
-		boostVSClock();
+	boostVSClock();
 	//initialize the VS1053b real time midi plugin
 	initRTMIDI();
 	}

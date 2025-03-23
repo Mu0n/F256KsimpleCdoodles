@@ -228,6 +228,10 @@ void setup()
 	}
 	
 	POKE(MMU_IO_CTRL,0); //MMU I/O to page 0
+	POKE(0xD840, 0xFF);  //blue
+	POKE(0xD841, 0xFF); //green
+	POKE(0xD842, 0xFF); //red
+	POKE(0xD843, 0);
 	
 	//piano bitmap at layer 0
 	bitmapSetActive(0);

@@ -31,6 +31,21 @@ F256amp is a mp3 player that uses the VS1053b sound chip only found in the Jr.2 
 /- F256amp yourtune.mp3
 </pre>
 
+if you put the program in a root folder called _apps and rename the program as mp3player.pgz, you can use Micah's f/manager https://github.com/WartyMN/F256-FileManager/releases to auto-launch this program when you pick and execute .mp3 (.wav, .ogg, .wma, etc) files from its interface.
+
+## midiplayer v1.2 
+(its code in midisam - its executable is in NoFussDemos)
+
+![midiplayerv1 2](https://github.com/user-attachments/assets/52fd42fa-7758-4a7a-a53e-640ed4c081ec)
+
+midiplayer plays standard MIDI files, type 0 with 1 track or type 1 with multiple tracks.  It uses the sound chips only found in the Jr.2 and K2, using by default the SAM2695 which sounds best for MIDI playback, but you can also toggle to the VS1053b MIDI playback, which has its own timbre. If you attempt to play it on the original Jr. or K, you will see the visuals, but you will only have silence. 
+Known bug: type 1 which have several tempo changes will disrupt the song duration estimation because it will base it only on the last tempo of the song instead of taking into account every tempo change. The command line is as such:
+<pre>
+/- midiplayer yourtune.mid
+</pre>
+
+if you put the program in a root folder called _apps and rename the program as midiplayer.pgz, you can use Micah's f/manager https://github.com/WartyMN/F256-FileManager/releases to auto-launch this program when you pick and execute .mid files from its interface.
+
 ## Sprite
 
 ![Screenshot 2025-01-17 16-30-14](https://github.com/user-attachments/assets/b6ed8445-34f7-447d-9877-c3cb20900a3b)

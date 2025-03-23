@@ -55,7 +55,6 @@
 
 #include "f256lib.h"
 
-
 //struct for holding info about the midi file itself, for info display purposes
 typedef struct midiRecord {
 	char *fileName;

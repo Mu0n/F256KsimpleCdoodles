@@ -1,25 +1,32 @@
 #include "D:\F256\llvm-mos\code\midisam\.builddir\trampoline.h"
 
-//DEFINES
 #define F256LIB_IMPLEMENTATION
-#define MIDI_BASE   0x10000 //gives a nice 07ffkb until the parsed version happens
-#define MIDI_PARSED 0x40000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
+#include "f256lib.h"
+#include "../src/muUtils.h" //contains helper functions I often use
+#include "../src/setup.h" //contains helper functions I often use
+#include "../src/muVS1053b.h" //VS1053b stuff
+#include "../src/muMidi.h"  //contains basic MIDI functions I often use
+#include "../src/timer0.h"  //contains basic cpu based timer0 functions I often use
+
+#define MIDI_BASE   0x20000 //gives a nice 07ffkb until the parsed version happens
+#define MIDI_PARSED 0x50000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
 
 #define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
 #define TIMER_PLAYBACK_COOKIE 0
 #define TIMER_DELAY_COOKIE 1
+#define TIMER_SHIMMER_COOKIE 2
+#define TIMER_SHIMMER_DELAY 3
 
-#include "../src/muUtils.h" //contains helper functions I often use
-#include "../src/muMidi.h"  //contains basic MIDI functions I often use
-#include "../src/timer0.h"  //contains basic cpu based timer0 functions I often use
+#define CLONE_TO_UART_EMWHITE 0
 
 //STRUCTS
-struct timer_t playbackTimer;
+struct timer_t playbackTimer, shimmerTimer;
 struct time_t time_data;
+bool isPaused = false;
 
 //GLOBALS
-const char *midi_instruments[] = {
+static const char *midi_instruments[] = {
     "Ac. Grand Piano",	   "Bright Ac. Piano",	  "Electric Grand Piano",	"Honky-tonk Piano",
     "Electric Piano 1",	   "Electric Piano 2", 	  "Harpsichord", 		    "Clavinet",
     "Celesta",    		   "Glockenspiel",    	  "Music Box",    			"Vibraphone",
@@ -54,7 +61,9 @@ const char *midi_instruments[] = {
     "Telephone Ring",      "Helicopter",          "Applause",    			"Gunshot"
 };
 
-
+bool shimmerChanged[16][8];
+uint8_t shimmerBuffer[16][8];
+bool midiChip = false; //true = vs1053b, false=sam2695
 //PROTOTYPES
 uint8_t loadSMFile(char *, uint32_t);
 int16_t getAndAnalyzeMIDI(struct midiRecord *, struct bigParsedEventList *);
@@ -62,45 +71,59 @@ void detectStructure(uint16_t, struct midiRecord *, struct bigParsedEventList *)
 int16_t findPositionOfHeader(void);
 void adjustOffsets(struct bigParsedEventList *);
 int8_t parse(uint16_t, bool, struct midiRecord *, struct bigParsedEventList *);
-void playmidi(struct midiRecord *, struct bigParsedEventList *, bool);
+void playmidi(struct midiRecord *, struct bigParsedEventList *);
 uint32_t getTotalLeft(struct bigParsedEventList *);
 void sendAME(aMEPtr, bool);
 void displayInfo(struct midiRecord *);
 void extraInfo(struct midiRecord *,struct bigParsedEventList *);
 void superExtraInfo(struct midiRecord *);
-void wipeStatus(void);
 void midiPlaybackShimmering(uint8_t, uint8_t, bool);
 void updateInstrumentDisplay(uint8_t, uint8_t);
-void updateProgress(uint8_t);
-void drawBorders(void);
-byte bcdToDec(byte);
+short optimizedMIDIShimmering(void);
 
 //FUNCTIONS
 
-//this function will convert binary coded decimals into regular decimals
-byte bcdToDec(byte bcd){
-	uint16_t tens = (bcd >> 4) & 0xF;
-	uint16_t units = bcd & 0xF;
-	return LOW_BYTE(tens * 10 + units);
-}
+
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
-void sendAME(aMEPtr midiEvent, bool wantAlt)
-	{
+void sendAME(aMEPtr midiEvent, bool wantAlt) {
+		uint8_t chan = (midiEvent->msgToSend[0])&0x0F;
+		uint8_t bufferLocation = (midiEvent->msgToSend[1])>>4;
+		uint8_t bitLocation = (midiEvent->msgToSend[1])%8;
 	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, midiEvent->msgToSend[0]);
 	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, midiEvent->msgToSend[1]);
 	if(midiEvent->bytecount == 3) POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, midiEvent->msgToSend[2]);
 	if((midiEvent->msgToSend[0] & 0xF0) == 0x90)
-			midiPlaybackShimmering(midiEvent->msgToSend[0] & 0x0F,  midiEvent->msgToSend[1], false);
+		{
+			shimmerChanged[chan][bufferLocation]=true; //mark this channel as changed
+			SET_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
+		}
+	
 	else if((midiEvent->msgToSend[0] & 0xF0) == 0x80)
-			midiPlaybackShimmering(midiEvent->msgToSend[0] & 0x0F,  midiEvent->msgToSend[1], true);
+		{
+			shimmerChanged[chan][bufferLocation]=true; //mark this channel as changed
+			CLEAR_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
+		}
 	else if((midiEvent->msgToSend[0] & 0xF0) == 0xC0)
+	{
 		 updateInstrumentDisplay(midiEvent->msgToSend[0] & 0x0F, midiEvent->msgToSend[1]);
+		 //send instrument change to the other MIDI device as well! Note the reverse lambda writing
+		 POKE(wantAlt?MIDI_FIFO:MIDI_FIFO_ALT, midiEvent->msgToSend[0]);
+		 POKE(wantAlt?MIDI_FIFO:MIDI_FIFO_ALT, midiEvent->msgToSend[1]);
+	}
+	//for EMWhite, double up the MIDI message towards the UART port
+	if(CLONE_TO_UART_EMWHITE) {
+	POKE(1,0);
+	POKE(0xD630, midiEvent->msgToSend[0]);
+	POKE(0xD630, midiEvent->msgToSend[1]);
+	if(midiEvent->bytecount == 3) POKE(0xD630, midiEvent->msgToSend[2]);
+	}
 	}
 	
 //Opens the std MIDI file
-uint8_t loadSMFile(char *name, uint32_t targetAddress)
-{
+
+
+uint8_t loadSMFile(char *name, uint32_t targetAddress) {
 	FILE *theMIDIfile;
 	uint8_t buffer[255];
 	size_t bytesRead = 0;
@@ -129,8 +152,7 @@ uint8_t loadSMFile(char *name, uint32_t targetAddress)
 }
 
 //high level function that directs the reading and parsing of the MIDI file
-int16_t getAndAnalyzeMIDI(struct midiRecord *rec, struct bigParsedEventList *list)
-	{
+int16_t getAndAnalyzeMIDI(struct midiRecord *rec, struct bigParsedEventList *list) {
 	int16_t indexToStart=0; //MThd should be at position 0, but it might not, so we'll find it
 	indexToStart = findPositionOfHeader(); //find the start index of 'MThd'
 	if(indexToStart == -1)
@@ -202,14 +224,14 @@ void detectStructure(uint16_t startIndex, struct midiRecord *rec, struct bigPars
 		}
 	}
 
+
 //this opens a .mid file and ignores everything until 'MThd' is encountered
-int16_t findPositionOfHeader()
-	{
+int findPositionOfHeader() {
 	char targetSequence[] = "MThd";
     char *position;
-    int16_t thePosition = 0;
+    int thePosition = 0;
 	char buffer[64];
-	uint16_t i=0;
+	int i=0;
 	
 	for(i=0;i<64;i++) buffer[i] = FAR_PEEK(MIDI_BASE + i);
 	
@@ -217,14 +239,13 @@ int16_t findPositionOfHeader()
 
 	if(position != NULL)
 		{
-		thePosition = (int16_t)(position - buffer);
+		thePosition = (int)(position - buffer);
 		return thePosition;
 		}
 	return -1;
 	}
 
-void adjustOffsets(struct bigParsedEventList *list)
-{
+void adjustOffsets(struct bigParsedEventList *list) {
 	uint16_t i=0,k=0, currentEventCount=0;
 	
 	for(i=0;i<list->trackcount;i++)
@@ -240,8 +261,7 @@ void adjustOffsets(struct bigParsedEventList *list)
 
 //assuming a byte buffer that starts with MThd, read all tracks and produce a structure of aMIDIEvent arrays
 // wantCmds is when it's ready to record the relevant commands in an array
-int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct bigParsedEventList *list)
-	{
+int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct bigParsedEventList *list) {
     uint32_t trackLength = 0; //size in bytes of the current track
     uint32_t i = startIndex; // #main array parsing index
     uint16_t currentTrack=0; //index for the current track
@@ -559,9 +579,8 @@ int8_t parse(uint16_t startIndex, bool wantCmds, struct midiRecord *rec, struct 
      }	 //end of parse function
  
 
-
-void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsorsam) //non-destructive version
-{
+//non-destructive version
+void playmidi(struct midiRecord *rec, struct bigParsedEventList *list) {
 	uint16_t i;
 	uint16_t lowestTrack=0;
 	uint16_t localTotalLeft=0;
@@ -574,7 +593,6 @@ void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsor
 	uint32_t *soundBeholders; //keeps a scan of the next delta in line for each track
 	uint8_t progTrack=0;
 	uint16_t progressSeconds=0;
-	bool isPaused = false;
 	byte oldsec=0;
 	
 	aME msgGo;
@@ -595,7 +613,10 @@ void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsor
 		soundBeholders[i] =  (((uint32_t)((FAR_PEEKW((uint32_t) MIDI_PARSED + (uint32_t) whereTo))) << 16)
 							|  (uint32_t) (FAR_PEEKW((uint32_t) MIDI_PARSED + (uint32_t) whereTo + (uint32_t) 2)));
 	}
-	
+
+    shimmerTimer.cookie = TIMER_SHIMMER_COOKIE;
+	shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+	setTimer(&shimmerTimer);
 	while(localTotalLeft > 0 && !exitFlag)
 		{
 		lowestTimeFound = 0xFFFFFFFF; //make it easy to find lower than this
@@ -639,7 +660,8 @@ void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsor
 	
 				if(lowestTimeFound==0) //do these 0 delay events right away, no need to involve a Time Manager
 					{
-					sendAME(&msgGo, vsorsam);
+					sendAME(&msgGo, midiChip);
+					if(optimizedMIDIShimmering()==1) return;
 					}
 				else
 					{ //for all the rest which have a time delay
@@ -647,8 +669,8 @@ void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsor
 						while(overFlow > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
 						{
 							setTimer0(0xFF,0xFF,0xFF);
-							while(isTimer0Done()==0)
-								; //delay up to maximum of 0x00FFFFFF = 2/3rds of a second
+							while(isTimer0Done()==0) if(optimizedMIDIShimmering()==1) return;
+								//delay up to maximum of 0x00FFFFFF = 2/3rds of a second
 							POKE(T0_PEND,0x10); //clear timer0 at 0x10
 							overFlow = overFlow - 0x00FFFFFF; //reduce the max value one by one until there is a remainder smaller than the max amount
 						}
@@ -656,10 +678,10 @@ void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsor
 						setTimer0((uint8_t)(overFlow&0x000000FF),
 							  (uint8_t)((overFlow&0x0000FF00)>>8),
 							  (uint8_t)((overFlow&0x00FF0000)>>16));
-						while(isTimer0Done()==0)
-							;
+						while(isTimer0Done()==0)  if(optimizedMIDIShimmering()==1) return;
+	
 						POKE(T0_PEND,0x10); //clear timer0 at 0x10
-						sendAME(&msgGo, vsorsam);
+						sendAME(&msgGo, midiChip);
 					}
 	
 				//Advance the marker for the track that just did something
@@ -693,38 +715,11 @@ void playmidi(struct midiRecord *rec, struct bigParsedEventList *list, bool vsor
 					}
 	
 			}	//end if is paused
-	
-	kernelNextEvent();
-
-	if(kernelEventData.type == kernelEvent(key.PRESSED))
-		{
-			if(kernelEventData.key.raw == 146)
-				{
-				midiShutAllChannels(false);
-				return;
-				}
-			if(kernelEventData.key.raw == 32)
-			{
-				if(isPaused==false)
-				{
-					midiShutAllChannels(false);
-					isPaused = true;
-					textSetColor(1,0);textGotoXY(26,24);textPrint("pause");
-				}
-				else
-				{
-					isPaused = false;
-					textSetColor(0,0);textGotoXY(26,24);textPrint("pause");
-				}
-
-			}
-		} // end if key pressed
-	
+	else if(optimizedMIDIShimmering()==1) return;
 	}//end of the whole playback
 }//end function
 	
-void playmiditype0(struct midiRecord *rec, struct bigParsedEventList *list, bool vsorsam)
-{
+void playmiditype0(struct midiRecord *rec, struct bigParsedEventList *list) {
 	uint16_t localTotalLeft=0;
 	uint32_t whereTo; //in far memory, keeps adress of event to send
 	uint32_t overFlow;
@@ -732,13 +727,15 @@ void playmiditype0(struct midiRecord *rec, struct bigParsedEventList *list, bool
 	bool exitFlag = false;
 	uint8_t progTrack=0;
 	uint16_t progressSeconds=0;
-	bool isPaused = false;
 	byte oldsec=0;
 	
 	localTotalLeft = getTotalLeft(list);
 	
 	playbackTimer.absolute = getTimerAbsolute(TIMER_SECONDS)+1;
 	setTimer(&playbackTimer);
+	
+	shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES);
+	setTimer(&shimmerTimer);
 	
 	while(localTotalLeft > 0 && !exitFlag)
 	{
@@ -770,8 +767,8 @@ void playmiditype0(struct midiRecord *rec, struct bigParsedEventList *list, bool
 					while(isTimer0Done()==0);
 					POKE(T0_PEND,0x10); //clear timer0 at 0x10
 				}
-			sendAME(&msgGo, vsorsam);
-	
+			sendAME(&msgGo, midiChip);
+			if(optimizedMIDIShimmering()==1) return;
 			rec->parsers[0]++;
 			localTotalLeft--;
 	
@@ -790,42 +787,12 @@ void playmiditype0(struct midiRecord *rec, struct bigParsedEventList *list, bool
 					}
 				}
 	} //end if is not paused
-	kernelNextEvent();
 
-	if(kernelEventData.type == kernelEvent(key.PRESSED))
-		{
-			if(kernelEventData.key.raw == 146)
-			{
-				midiShutAllChannels(false);
-				return;
-			}
-			if(kernelEventData.key.raw == 32)
-			{
-				if(isPaused==false)
-				{
-					midiShutAllChannels(false);
-					isPaused = true;
-					textSetColor(1,0);textGotoXY(26,24);textPrint("pause");
-				}
-				else
-				{
-					isPaused = false;
-					textSetColor(0,0);textGotoXY(26,24);textPrint("pause");
-				}
-
-			}
-		} // end if key pressed
-	
+	else if(optimizedMIDIShimmering()==1) return;
 	}//end of the whole playback
 }//end function
 
-void wipeStatus()
-{
-	textGotoXY(0,25);textPrint("                                        ");
-}
-
-void displayInfo(struct midiRecord *rec)
-{
+void displayInfo(struct midiRecord *rec) {
 	uint8_t i=0;
 	wipeStatus();
 	
@@ -847,8 +814,7 @@ void displayInfo(struct midiRecord *rec)
 	textGotoXY(0,25);printf(" ->Currently parsing file %s...",rec->fileName);
 }
 
-void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list)
-{
+void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list) {
 	
 	wipeStatus();
 	textGotoXY(1,3);
@@ -861,21 +827,21 @@ void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list)
 	textGotoXY(40,3);
 	textSetColor(1,0);textPrint("Time Signature ");
 	textSetColor(0,0);printf("%d:%d",rec->nn,1<<(rec->dd));
-	textGotoXY(0,25);printf("  ->Preparing for playback...");
+	textGotoXY(0,25);printf("  ->Preparing for playback...                   ");
 }
-void superExtraInfo(struct midiRecord *rec)
-{
+void superExtraInfo(struct midiRecord *rec) {
 	uint16_t temp;
 	
 	temp=(uint32_t)((rec->totalDuration)/125000);
 	temp=(uint32_t)((((double)temp))/((double)(rec->fudge)));
 	rec->totalSec = temp;
 	textGotoXY(68,5); printf("%d:%02d",temp/60,temp % 60);
-	textGotoXY(1,24);textPrint("[ESC]: quit    [SPACE]:  pause");
+	textGotoXY(1,24);textPrint("[ESC]: quit    [SPACE]:  pause    [F1] Toggle MIDI Output:  ");
+	textSetColor(1,0);textPrint("SAM2695");
+    textSetColor(0,0);textPrint("   VS1053b");
+	textGotoXY(1,25);textPrint("midiplayer v1.2 by Mu0n, March 2025");
 }
-
-void updateInstrumentDisplay(uint8_t chan, uint8_t pgr)
-{
+void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
 	uint8_t i=0,j=0;
 	textGotoXY(4,8+chan);textSetColor(chan+1,0);
 	if(chan==9)
@@ -894,92 +860,127 @@ void updateInstrumentDisplay(uint8_t chan, uint8_t pgr)
 		printf("%c",midi_instruments[pgr][i]);
 	}
 }
-void initProgress()
-{
-	uint8_t i=0;
-	textSetColor(15,0);textGotoXY(15,5);textPrint("[");
-	for(i=0;i<51;i++) textPrint("_");
-	textPrint("]");
+
+short optimizedMIDIShimmering() {
+	short i,j;
+	
+	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+	{
+		switch(kernelEventData.timer.cookie)
+		{
+			case TIMER_SHIMMER_COOKIE:
+				shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+				setTimer(&shimmerTimer);
+				for(i=0;i<16;i++) //channels
+					{
+					textSetColor(i+1,0);
+					for(j=0;j<8;j++) //number of bytes to represent on screen
+						{
+						textGotoXY(11+(j<<3),8+i);
+						if(shimmerChanged[i][j]==false) continue; //no change, so let's continue
+						shimmerChanged[i][j]=false; //will be dealt with so mark it as changed and done for next evaluation
+						__putchar(shimmerBuffer[i][j]&0x80?42:32);
+						__putchar(shimmerBuffer[i][j]&0x40?42:32);
+						__putchar(shimmerBuffer[i][j]&0x20?42:32);
+						__putchar(shimmerBuffer[i][j]&0x10?42:32);
+						__putchar(shimmerBuffer[i][j]&0x08?42:32);
+						__putchar(shimmerBuffer[i][j]&0x04?42:32);
+						__putchar(shimmerBuffer[i][j]&0x02?42:32);
+						__putchar(shimmerBuffer[i][j]&0x01?42:32);
+						}
+					}
+				break;
+		}
+	}
+	if(kernelEventData.type == kernelEvent(key.PRESSED))
+		{
+			if(kernelEventData.key.raw == 146) //esc
+				{
+				midiShutAllChannels(midiChip);
+				return 1;
+				}
+			if(kernelEventData.key.raw == 32) //space
+			{
+				if(isPaused==false)
+				{
+					midiShutAllChannels(midiChip);
+					isPaused = true;
+					textSetColor(1,0);textGotoXY(26,24);textPrint("pause");
+				}
+				else
+				{
+					isPaused = false;
+					textSetColor(0,0);textGotoXY(26,24);textPrint("pause");
+				}
+			}
+			if(kernelEventData.key.raw == 129) //F1
+			{
+				midiShutAllChannels(midiChip);
+				if(midiChip==true)
+					{
+					textSetColor(1,0);textGotoXY(61,24);textPrint("SAM2695");
+					textSetColor(0,0);textGotoXY(71,24);textPrint("VS1053b");
+					midiChip = false;
+					}
+				else
+					{
+					textSetColor(0,0);textGotoXY(61,24);textPrint("SAM2695");
+					textSetColor(1,0);textGotoXY(71,24);textPrint("VS1053b");
+					midiChip = true;
+					}
+			}
+		} // end if key pressed
+return 0;
 }
 
-void updateProgress(uint8_t prog)
-{
-	uint8_t i=0;
-	textSetColor(5,0);textGotoXY(16,5);
-	for(i=0;i<prog;i++) __putchar(18);
-}
-void midiPlaybackShimmering(uint8_t chan, uint8_t note, bool wantErase)
-{
-	textGotoXY(11+(note>>1),8+chan);textSetColor(chan+1,0);
-	wantErase?__putchar(32):__putchar(42);
-}
-void setColors()
-{
-	uint8_t backup, i;
-	backup = PEEK(MMU_IO_CTRL);
-	POKE(MMU_IO_CTRL,0);
-	POKE(0xD800, 0xFF);  //blue
-	POKE(0xD801, 0xFF); //green
-	POKE(0xD802, 0xFF); //red
-	POKE(0xD803, 0);
-	for(i=1;i<6;i++) //do yellows
-	{
-		POKE(0xD800+4*i,  0);              //blue
-		POKE(0xD800+4*i+1, 0xCD + (i-1) * 10); //green
-		POKE(0xD800+4*i+2, 0xCD + (i-1) * 10); //red
-		POKE(0xD800+4*i+3, 0); 		     //unused alpha
-	}
-	for(i=6;i<11;i++) //do oranges
-	{
-		POKE(0xD800+4*i,  0);              //blue
-		POKE(0xD800+4*i+1, (0xCD + (i-6) * 10)/2); //green
-		POKE(0xD800+4*i+2, 0xCD + (i-6) * 10); //red
-		POKE(0xD800+4*i+3, 0); 		     //unused alpha
-	}
-	for(i=11;i<16;i++) //do reds
-	{
-		POKE(0xD800+4*i,  0);              //blue
-		POKE(0xD800+4*i+1,0); //green
-		POKE(0xD800+4*i+2, 0xCD + (i-11) * 10); //red
-		POKE(0xD800+4*i+3, 0); 		     //unused alpha
-	}
-	POKE(MMU_IO_CTRL, backup);
-}
-void drawBorders()
-{
-	
-}
 int main(int argc, char *argv[]) {
 	bigParsed theBigList; //master structure to keep note of all tracks, nb of midi events, for playback
 	midiRec myRecord; //keeps parsed info about the midi file, tempo, etc, for info display
-	bool midiChip = false; //true = vs1053b, false=sam2695
+
 	bool isDone = false; //to know when to exit the main loop; done playing
 	int16_t indexStart = 0; //keeps note of the byte where the MIDI string 'MThd' is, sometimes they're not at the very start of the file!
-	uint8_t i=0;
-	
+	uint8_t i=0,j=0;
+	uint8_t machineCheck=0;
 	//openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions
 	//initVS1053MIDI();  //if the VS1053b is used
 
-	wipeBitmapBackground(0x2F,0x2F,0x2F);
+	//wipeBitmapBackground(0x2F,0x2F,0x2F);
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b01000001); //sprite,graph,overlay,text
+	POKE(VKY_MSTR_CTRL_0, 0b00000001); //sprite,graph,overlay,text
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
 	
+	for(i=0;i<16;i++)
+	{
+		for(j=0;j<8;j++)
+		{
+			shimmerChanged[i][j]=false;
+			shimmerBuffer[i][j]=0;
+		}
+	}
 	
+	//VS1053b
+	machineCheck=PEEK(0xD6A7)&0x3F;
+	if(machineCheck == 0x22 || machineCheck == 0x11) //22 is Jr2 and 11 is K2
+	{
+	boostVSClock();
+	initRTMIDI();
+	}
+
 	initMidiRecord(&myRecord);
 	initBigList(&theBigList);
 	
 	if(argc > 1)
 	{
 		i=0;
-	
 		while(argv[1][i] != '\0')
 		{
 			myRecord.fileName[i] = argv[1][i];
-			i++;
+		i++;
 		}
+
 		myRecord.fileName[i] = '\0';
 	}
 	else
@@ -990,13 +991,15 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	setColors();
-	drawBorders();
 	textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
 	resetInstruments(false); //resets all channels to piano, for sam2695
 	midiShutUp(false); //ends trailing previous notes if any, for sam2695
 	
 	playbackTimer.units = TIMER_SECONDS;
 	playbackTimer.cookie = TIMER_PLAYBACK_COOKIE;
+	
+	shimmerTimer.units = TIMER_FRAMES;
+	shimmerTimer.cookie = TIMER_SHIMMER_COOKIE;
 	
 	if(loadSMFile(myRecord.fileName, MIDI_BASE))
 	{
@@ -1017,13 +1020,14 @@ int main(int argc, char *argv[]) {
 		adjustOffsets(&theBigList);
 		extraInfo(&myRecord,&theBigList);
 		parse(indexStart,true, &myRecord, &theBigList); //load up the actual event data in the big list
-		superExtraInfo(&myRecord);
 		wipeStatus();
+		superExtraInfo(&myRecord);
+	
 		while(!isDone)
 			{
 			initProgress();
-			if(myRecord.format == 0) playmiditype0(&myRecord, &theBigList, midiChip);
-			else playmidi(&myRecord, &theBigList, midiChip);
+			if(myRecord.format == 0) playmiditype0(&myRecord, &theBigList);
+			else playmidi(&myRecord, &theBigList);
 	
 			isDone=true;
 			//reset the parsers
@@ -1033,6 +1037,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
-	
+	midiShutAllChannels(true);
+	midiShutAllChannels(false);
 	return 0;
 	}

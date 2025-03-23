@@ -22,7 +22,7 @@ Foenix Retro Systems is a homebrew effort to bring 8/16/32-bit era processors in
 Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pick a selection of a few demos that are standalone .pgz executable programs.
 
 ## F256amp 
-(its code in mp3wSA - its executable is in NoFussDemos)
+(its code in mp3wSA - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
 ![Screenshot 2025-03-10 03-05-46](https://github.com/user-attachments/assets/7dc572aa-fb2e-415b-ae45-cee5c28b32e5)
 
@@ -34,7 +34,7 @@ F256amp is a mp3 player that uses the VS1053b sound chip only found in the Jr.2 
 if you put the program in a root folder called _apps and rename the program as mp3player.pgz, you can use Micah's f/manager https://github.com/WartyMN/F256-FileManager/releases to auto-launch this program when you pick and execute .mp3 (.wav, .ogg, .wma, etc) files from its interface.
 
 ## midiplayer v1.2 
-(its code in midisam - its executable is in NoFussDemos)
+(its code in midisam - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
 ![midiplayerv1 2](https://github.com/user-attachments/assets/52fd42fa-7758-4a7a-a53e-640ed4c081ec)
 

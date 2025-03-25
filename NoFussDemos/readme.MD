@@ -13,7 +13,7 @@ mp3-SC.pgz needs terranone.mp3
 ### Special note the some audio playing apps ###
 
 midiplayer.pgz can be used standalone with /- midiplayer filename.mid  
-F256amp.pgz can be used standalone with /- F256amp filename.mp3 (will be added to f/manager soon. rename to generic F256amp name by dropping the version number from the name)
+F256amp.pgz can be used standalone with /- F256amp filename.mp3 (feel free to rename it to a generic 'F256amp.pgz' name by dropping the version number)
 
 ### Integrating some of these with Micah's f/manager ###
 

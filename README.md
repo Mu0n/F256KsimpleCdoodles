@@ -44,7 +44,7 @@ F256amp is a mp3 player that uses the VS1053b sound chip only found in the Jr.2 
 /- F256amp yourtune.mp3
 </pre>
 
-if you put the program in a root folder called _apps and rename the program as mp3player.pgz, you can use Micah's f/manager https://github.com/WartyMN/F256-FileManager/releases to auto-launch this program when you pick and execute .mp3 (.wav, .ogg, .wma, etc) files from its interface.
+if you put the program in a root folder called _apps and rename the program as audioplayer.pgz, you can use Micah's f/manager https://github.com/WartyMN/F256-FileManager/releases to auto-launch this program when you pick and execute .mp3 (.wav, .ogg, .wma, etc) files from its interface.
 
 ## midiplayer v1.2 
 (its code in midisam - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)

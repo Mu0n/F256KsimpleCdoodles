@@ -59,18 +59,20 @@
       30      300        1     1                 _ccolor
       31      301        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       31      301        0     1 __zp_data_size = SIZEOF(.zp.data)
-      31       31        c     1 .zp.bss
+      31       31        e     1 .zp.bss
       31       31        0     1         __zp_bss_start = .
-      31       31        c     1         midisam.lto.o:(.zp.bss)
+      31       31        e     1         midisam.lto.o:(.zp.bss)
       31       31        1     1                 _col
       32       32        1     1                 _row
       33       33        2     1                 __putchar.s
-      35       35        1     1                 kernelError
-      36       36        7     1                 kernelEventData
-      3d       3d        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3d       3d       5e     1 .zp
-      3d       3d       5e     1         midisam.lto.o:(.zp.noinit)
-     302      302     90a6     2 .text
+      35       35        1     1                 midiChip
+      36       36        1     1                 shimmerTimer.1
+      37       37        1     1                 kernelError
+      38       38        7     1                 kernelEventData
+      3f       3f        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      3f       3f       5c     1 .zp
+      3f       3f       5c     1         midisam.lto.o:(.zp.noinit)
+     302      302     91c3     2 .text
      302      302        0     1         _init = .
      302      302        0     1         _start = .
      302      302        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -96,134 +98,132 @@
      54a      54a       13     1                 __zero_zp_bss
      55d      55d       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
      55d      55d       17     1                 __copy_zp_data
-     574      574     29c9     1         midisam.lto.o:(.text.main)
-     574      574     29c9     1                 main
-    2f3d     2f3d      1e0     1         midisam.lto.o:(.text.displayInfo)
-    2f3d     2f3d      1e0     1                 displayInfo
-    311d     311d     155a     1         midisam.lto.o:(.text.parse)
-    311d     311d     155a     1                 parse
-    4677     4677      1e6     1         midisam.lto.o:(.text.sendAME)
-    4677     4677      1e6     1                 sendAME
-    485d     485d      317     1         midisam.lto.o:(.text.optimizedMIDIShimmering)
-    485d     485d      317     1                 optimizedMIDIShimmering
-    4b74     4b74      1b8     1         midisam.lto.o:(.text.textPrint)
-    4b74     4b74      1b8     1                 textPrint
-    4d2c     4d2c       31     1         midisam.lto.o:(.text.updateProgress)
-    4d2c     4d2c       31     1                 updateProgress
-    4d5d     4d5d        5     1         midisam.lto.o:(.text.exit)
-    4d5d     4d5d        5     1                 exit
-    4d62     4d62       db     1         midisam.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    4d62     4d62       db     1                 (anonymous namespace)::put(char, Status*)
-    4e3d     4e3d      10c     1         midisam.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    4e3d     4e3d      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    4f49     4f49      c2c     1         midisam.lto.o:(.text.printf)
-    4f49     4f49      c2c     1                 printf
-    5b75     5b75      1d5     1         midisam.lto.o:(.text.malloc)
-    5b75     5b75      1d5     1                 malloc
-    5d4a     5d4a       2c     1         midisam.lto.o:(.text.memcpy)
-    5d4a     5d4a       2c     1                 memcpy
-    5d76     5d76       20     1         midisam.lto.o:(.text.__memset)
-    5d76     5d76       20     1                 __memset
-    5d96     5d96        b     1         midisam.lto.o:(.text.__ashlqi3)
-    5d96     5d96        b     1                 __ashlqi3
-    5da1     5da1       13     1         midisam.lto.o:(.text.__ashlhi3)
-    5da1     5da1       13     1                 __ashlhi3
-    5db4     5db4       1f     1         midisam.lto.o:(.text.__ashldi3)
-    5db4     5db4       1f     1                 __ashldi3
-    5dd3     5dd3       1f     1         midisam.lto.o:(.text.__lshrdi3)
-    5dd3     5dd3       1f     1                 __lshrdi3
-    5df2     5df2       32     1         midisam.lto.o:(.text.__mulhi3)
-    5df2     5df2       32     1                 __mulhi3
-    5e24     5e24       70     1         midisam.lto.o:(.text.__mulsi3)
-    5e24     5e24       70     1                 __mulsi3
-    5e94     5e94       f8     1         midisam.lto.o:(.text.__muldi3)
-    5e94     5e94       f8     1                 __muldi3
-    5f8c     5f8c       c0     1         midisam.lto.o:(.text.__udivhi3)
-    5f8c     5f8c       c0     1                 __udivhi3
-    604c     604c      16f     1         midisam.lto.o:(.text.__udivsi3)
-    604c     604c      16f     1                 __udivsi3
-    61bb     61bb       db     1         midisam.lto.o:(.text.__udivmodhi4)
-    61bb     61bb       db     1                 __udivmodhi4
-    6296     6296     13e4     1         midisam.lto.o:(.text.__muldf3)
-    6296     6296     13e4     1                 __muldf3
-    767a     767a     1a27     1         midisam.lto.o:(.text.__divdf3)
-    767a     767a     1a27     1                 __divdf3
-    90a1     90a1       83     1         midisam.lto.o:(.text.__fixunsdfsi)
-    90a1     90a1       83     1                 __fixunsdfsi
-    9124     9124      284     1         midisam.lto.o:(.text.__floatunsidf)
-    9124     9124      284     1                 __floatunsidf
-    93a8     93a8        0     1         __init_array_start = .
-    93a8     93a8        0     1         __init_array_end = .
-    93a8     93a8        0     1         __fini_array_start = .
-    93a8     93a8        0     1         __fini_array_end = .
-    93a8     93a8      a52     1 .rodata
-    93a8     93a8        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    93a8     93a8        0     1                 __set_v
-    93a9     93a9       22     1         midisam.lto.o:(.rodata.parse)
-    93cb     93cb       3a     1         midisam.lto.o:(.rodata.printf)
-    9405     9405       30     1         midisam.lto.o:(.rodata.textColors)
-    9405     9405       30     1                 textColors
-    9435     9435      88d     1         <internal>:(.rodata.str1.1)
-    9cc2     9cc2      100     1         midisam.lto.o:(.rodata.midi_instruments)
-    9cc2     9cc2      100     1                 midi_instruments
-    9dc2     9dc2       38     1         midisam.lto.o:(.rodata.rtmplugin)
-    9dc2     9dc2       38     1                 rtmplugin
-    9dfa     9dfa        0     1 .data
-    9dfa     9dfa        0     1         __data_start = .
-    9dfa     9dfa        0     1         __data_end = .
-    9dfa     9dfa        0     1 __data_load_start = LOADADDR(.data)
-    9dfa     9dfa        0     1 __data_size = SIZEOF(.data)
-    9dfa     9dfa      113     1 .bss
-    9dfa     9dfa        0     1         __bss_start = .
-    9dfa     9dfa        1     1         midisam.lto.o:(.bss.isPaused)
-    9dfa     9dfa        1     1                 isPaused
-    9dfb     9dfb        1     1         midisam.lto.o:(.bss.midiChip)
-    9dfb     9dfb        1     1                 midiChip
-    9dfc     9dfc       80     1         midisam.lto.o:(.bss.shimmerChanged)
-    9dfc     9dfc       80     1                 shimmerChanged
-    9e7c     9e7c       80     1         midisam.lto.o:(.bss.shimmerBuffer)
-    9e7c     9e7c       80     1                 shimmerBuffer
-    9efc     9efc        1     1         midisam.lto.o:(.bss.shimmerTimer.1)
-    9efc     9efc        1     1                 shimmerTimer.1
-    9efd     9efd        1     1         midisam.lto.o:(.bss.shimmerTimer.2)
-    9efd     9efd        1     1                 shimmerTimer.2
-    9efe     9efe        8     1         midisam.lto.o:(.bss.time_data)
-    9efe     9efe        8     1                 time_data
-    9f06     9f06        1     1         midisam.lto.o:(.bss.playbackTimer.1)
-    9f06     9f06        1     1                 playbackTimer.1
-    9f07     9f07        1     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    9f07     9f07        1     1                 (anonymous namespace)::initialized
-    9f08     9f08        1     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    9f08     9f08        1     1                 (anonymous namespace)::last_free
-    9f09     9f09        2     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    9f09     9f09        2     1                 (anonymous namespace)::free_size
-    9f0b     9f0b        2     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    9f0b     9f0b        2     1                 (anonymous namespace)::free_list
-    9f0d     9f0d        0     1         __bss_end = .
-    9f0d     9f0d        0     1 __bss_size = SIZEOF(.bss)
-    9f0d     9f0d        0     1 .noinit
-    9f0d     9f0d        0     1         __heap_start = ALIGN(., 2)
-    9f0d     9f0d        0     1 end_block8 = .
-    9f0d     9f0d        0     1 end_block9 = .
-    9f0d     9f0d        0     1 end_block10 = .
-    9f0d     9f0d        0     1 end_block11 = .
-    9f0d     9f0d        0     1 end_block12 = .
-    9f0d     9f0d        0     1 end_block13 = .
-    9f0d     9f0d        0     1 end_block14 = .
-    9f0d     9f0d        0     1 end_block15 = .
-    9f0d     9f0d        0     1 end_block16 = .
-    9f0d     9f0d        0     1 end_block17 = .
-    9f0d     9f0d        0     1 end_block18 = .
-    9f0d     9f0d        0     1 end_block19 = .
-    9f0d     9f0d        0     1 end_block20 = .
-    9f0d     9f0d        0     1 end_block21 = .
-    9f0d     9f0d        0     1 end_block22 = .
-    9f0d     9f0d        0     1 end_block23 = .
+     574      574     2aa9     1         midisam.lto.o:(.text.main)
+     574      574     2aa9     1                 main
+    301d     301d      1e0     1         midisam.lto.o:(.text.displayInfo)
+    301d     301d      1e0     1                 displayInfo
+    31fd     31fd     155a     1         midisam.lto.o:(.text.parse)
+    31fd     31fd     155a     1                 parse
+    4757     4757      1e6     1         midisam.lto.o:(.text.sendAME)
+    4757     4757      1e6     1                 sendAME
+    493d     493d      354     1         midisam.lto.o:(.text.optimizedMIDIShimmering)
+    493d     493d      354     1                 optimizedMIDIShimmering
+    4c91     4c91      1b8     1         midisam.lto.o:(.text.textPrint)
+    4c91     4c91      1b8     1                 textPrint
+    4e49     4e49       31     1         midisam.lto.o:(.text.updateProgress)
+    4e49     4e49       31     1                 updateProgress
+    4e7a     4e7a        5     1         midisam.lto.o:(.text.exit)
+    4e7a     4e7a        5     1                 exit
+    4e7f     4e7f       db     1         midisam.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    4e7f     4e7f       db     1                 (anonymous namespace)::put(char, Status*)
+    4f5a     4f5a      10c     1         midisam.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    4f5a     4f5a      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    5066     5066      c2c     1         midisam.lto.o:(.text.printf)
+    5066     5066      c2c     1                 printf
+    5c92     5c92      1d5     1         midisam.lto.o:(.text.malloc)
+    5c92     5c92      1d5     1                 malloc
+    5e67     5e67       2c     1         midisam.lto.o:(.text.memcpy)
+    5e67     5e67       2c     1                 memcpy
+    5e93     5e93       20     1         midisam.lto.o:(.text.__memset)
+    5e93     5e93       20     1                 __memset
+    5eb3     5eb3        b     1         midisam.lto.o:(.text.__ashlqi3)
+    5eb3     5eb3        b     1                 __ashlqi3
+    5ebe     5ebe       13     1         midisam.lto.o:(.text.__ashlhi3)
+    5ebe     5ebe       13     1                 __ashlhi3
+    5ed1     5ed1       1f     1         midisam.lto.o:(.text.__ashldi3)
+    5ed1     5ed1       1f     1                 __ashldi3
+    5ef0     5ef0       1f     1         midisam.lto.o:(.text.__lshrdi3)
+    5ef0     5ef0       1f     1                 __lshrdi3
+    5f0f     5f0f       32     1         midisam.lto.o:(.text.__mulhi3)
+    5f0f     5f0f       32     1                 __mulhi3
+    5f41     5f41       70     1         midisam.lto.o:(.text.__mulsi3)
+    5f41     5f41       70     1                 __mulsi3
+    5fb1     5fb1       f8     1         midisam.lto.o:(.text.__muldi3)
+    5fb1     5fb1       f8     1                 __muldi3
+    60a9     60a9       c0     1         midisam.lto.o:(.text.__udivhi3)
+    60a9     60a9       c0     1                 __udivhi3
+    6169     6169      16f     1         midisam.lto.o:(.text.__udivsi3)
+    6169     6169      16f     1                 __udivsi3
+    62d8     62d8       db     1         midisam.lto.o:(.text.__udivmodhi4)
+    62d8     62d8       db     1                 __udivmodhi4
+    63b3     63b3     13e4     1         midisam.lto.o:(.text.__muldf3)
+    63b3     63b3     13e4     1                 __muldf3
+    7797     7797     1a27     1         midisam.lto.o:(.text.__divdf3)
+    7797     7797     1a27     1                 __divdf3
+    91be     91be       83     1         midisam.lto.o:(.text.__fixunsdfsi)
+    91be     91be       83     1                 __fixunsdfsi
+    9241     9241      284     1         midisam.lto.o:(.text.__floatunsidf)
+    9241     9241      284     1                 __floatunsidf
+    94c5     94c5        0     1         __init_array_start = .
+    94c5     94c5        0     1         __init_array_end = .
+    94c5     94c5        0     1         __fini_array_start = .
+    94c5     94c5        0     1         __fini_array_end = .
+    94c5     94c5      a75     1 .rodata
+    94c5     94c5        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    94c5     94c5        0     1                 __set_v
+    94c6     94c6       22     1         midisam.lto.o:(.rodata.parse)
+    94e8     94e8       3a     1         midisam.lto.o:(.rodata.printf)
+    9522     9522       30     1         midisam.lto.o:(.rodata.textColors)
+    9522     9522       30     1                 textColors
+    9552     9552      8b0     1         <internal>:(.rodata.str1.1)
+    9e02     9e02      100     1         midisam.lto.o:(.rodata.midi_instruments)
+    9e02     9e02      100     1                 midi_instruments
+    9f02     9f02       38     1         midisam.lto.o:(.rodata.rtmplugin)
+    9f02     9f02       38     1                 rtmplugin
+    9f3a     9f3a        0     1 .data
+    9f3a     9f3a        0     1         __data_start = .
+    9f3a     9f3a        0     1         __data_end = .
+    9f3a     9f3a        0     1 __data_load_start = LOADADDR(.data)
+    9f3a     9f3a        0     1 __data_size = SIZEOF(.data)
+    9f3a     9f3a      112     1 .bss
+    9f3a     9f3a        0     1         __bss_start = .
+    9f3a     9f3a        1     1         midisam.lto.o:(.bss.isPaused)
+    9f3a     9f3a        1     1                 isPaused
+    9f3b     9f3b        1     1         midisam.lto.o:(.bss.repeatFlag)
+    9f3b     9f3b        1     1                 repeatFlag
+    9f3c     9f3c       80     1         midisam.lto.o:(.bss.shimmerChanged)
+    9f3c     9f3c       80     1                 shimmerChanged
+    9fbc     9fbc       80     1         midisam.lto.o:(.bss.shimmerBuffer)
+    9fbc     9fbc       80     1                 shimmerBuffer
+    a03c     a03c        1     1         midisam.lto.o:(.bss.shimmerTimer.2)
+    a03c     a03c        1     1                 shimmerTimer.2
+    a03d     a03d        8     1         midisam.lto.o:(.bss.time_data)
+    a03d     a03d        8     1                 time_data
+    a045     a045        1     1         midisam.lto.o:(.bss.playbackTimer.1)
+    a045     a045        1     1                 playbackTimer.1
+    a046     a046        1     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    a046     a046        1     1                 (anonymous namespace)::initialized
+    a047     a047        1     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    a047     a047        1     1                 (anonymous namespace)::last_free
+    a048     a048        2     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    a048     a048        2     1                 (anonymous namespace)::free_size
+    a04a     a04a        2     1         midisam.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    a04a     a04a        2     1                 (anonymous namespace)::free_list
+    a04c     a04c        0     1         __bss_end = .
+    a04c     a04c        0     1 __bss_size = SIZEOF(.bss)
+    a04c     a04c        0     1 .noinit
+    a04c     a04c        0     1         __heap_start = ALIGN(., 2)
+    a04c     a04c        0     1 end_block8 = .
+    a04c     a04c        0     1 end_block9 = .
+    a04c     a04c        0     1 end_block10 = .
+    a04c     a04c        0     1 end_block11 = .
+    a04c     a04c        0     1 end_block12 = .
+    a04c     a04c        0     1 end_block13 = .
+    a04c     a04c        0     1 end_block14 = .
+    a04c     a04c        0     1 end_block15 = .
+    a04c     a04c        0     1 end_block16 = .
+    a04c     a04c        0     1 end_block17 = .
+    a04c     a04c        0     1 end_block18 = .
+    a04c     a04c        0     1 end_block19 = .
+    a04c     a04c        0     1 end_block20 = .
+    a04c     a04c        0     1 end_block21 = .
+    a04c     a04c        0     1 end_block22 = .
+    a04c     a04c        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      9a0     4 .symtab
-       0        0      9a0     4         <internal>:(.symtab)
+       0        0      9b0     4 .symtab
+       0        0      9b0     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      750     1 .strtab
-       0        0      750     1         <internal>:(.strtab)
+       0        0      75b     1 .strtab
+       0        0      75b     1         <internal>:(.strtab)

@@ -52,7 +52,6 @@ uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
 
 uint8_t polySIDBuffer[6] = {0,0,0,0,0,0};
 uint8_t sidChoiceToVoice[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
-uint8_t sidInstPerVoice[6] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 
 uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
 uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
@@ -133,7 +132,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
 				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
 				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, sidInstPerVoice[foundFreeChan], isOn);
+				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, fetchCtrl(gPtr->sidInstChoice), isOn);
 				polySIDBuffer[foundFreeChan] = note;
 				}
 		}
@@ -145,7 +144,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			polySIDBuffer[foundFreeChan] = 0;
 			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
 			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, sidInstPerVoice[foundFreeChan], isOn);
+			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, fetchCtrl(gPtr->sidInstChoice), isOn);
 		}
 		return;
 	}
@@ -274,7 +273,7 @@ void setup()
 	
 	//Prep OPL3 stuff
 	opl3_initialize();
-	opl3_setDefaultInstruments();
+	opl3_setInstrumentAllChannels(0);
 
 	for(c=0;c<255;c++) diagBuffer[c] = 0;
 	
@@ -407,6 +406,7 @@ void dealKeyPressed(uint8_t keyRaw)
 					{
 						if(gPtr->sidInstChoice<5) gPtr->sidInstChoice++;
 					}
+					if(gPtr->chipChoice==3) if(gPtr->opl3InstChoice<5) gPtr->opl3InstChoice++;
 					refreshInstrumentText(gPtr);
 				}
 				else if(instSelectMode==true)
@@ -420,7 +420,16 @@ void dealKeyPressed(uint8_t keyRaw)
 							prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, !gPtr->wantVS1053);
 						}
 					}
-					if(gPtr->chipChoice==1 && gPtr->sidInstChoice>0) modalMoveUp(gPtr, shiftHit);
+					if(gPtr->chipChoice==1 && gPtr->sidInstChoice>0)
+						{
+						modalMoveUp(gPtr, shiftHit);
+						sid_setInstrumentAllChannels(gPtr->sidInstChoice);
+						}
+					if(gPtr->chipChoice==3 && gPtr->opl3InstChoice>0)
+					{
+						modalMoveUp(gPtr, shiftHit);
+						opl3_setInstrumentAllChannels(gPtr->opl3InstChoice);
+					}
 				}
 			break;
 		case 0xb7: //down arrow
@@ -433,15 +442,12 @@ void dealKeyPressed(uint8_t keyRaw)
 						prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, gPtr->wantVS1053);
 						prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, !gPtr->wantVS1053);
 						}
-					if(gPtr->chipChoice==1)
-						{
-							if(gPtr->sidInstChoice>0) gPtr->sidInstChoice--;
-						}
+					if(gPtr->chipChoice==1) if(gPtr->sidInstChoice>0) gPtr->sidInstChoice--;
 						refreshInstrumentText(gPtr);
 					}
 				else if(instSelectMode==true)
 				{
-					if(gPtr->chipChoice==0)
+					if(gPtr->chipChoice==0) //MIDI
 						{
 							if(gPtr->prgInst[gPtr->chSelect] < (shiftHit?98:125))
 							{
@@ -450,7 +456,16 @@ void dealKeyPressed(uint8_t keyRaw)
 								prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, !gPtr->wantVS1053);
 							}
 						}
-					if(gPtr->chipChoice==1 && gPtr->sidInstChoice<5) modalMoveDown(gPtr, shiftHit);
+					if(gPtr->chipChoice==1 && gPtr->sidInstChoice<(sid_instrumentsSize-1)) //SID
+					{
+					modalMoveDown(gPtr, shiftHit);
+					sid_setInstrumentAllChannels(gPtr->sidInstChoice);
+					}
+					if(gPtr->chipChoice==3 && gPtr->opl3InstChoice<(opl3_instrumentsSize-1))  //OPL3
+					{
+						modalMoveDown(gPtr, shiftHit);
+						opl3_setInstrumentAllChannels(gPtr->opl3InstChoice);
+					}
 				}
 			break;
 		case 0xb8: //left arrow
@@ -474,25 +489,25 @@ void dealKeyPressed(uint8_t keyRaw)
 				}
 			break;
 		case 0xb9: //right arrow
-			if(instSelectMode==false)
-				{
-				if(note < 87 - shiftHit*11)
+				if(instSelectMode==false)
 					{
-					if(gPtr->chipChoice > 0) dispatchNote(false, 0, note+0x15, 0, false);
-					note = note + 1 + shiftHit * 11;
-					}
-				if(altHit) note = 87; //go to the rightmost note
+					if(note < 87 - shiftHit*11)
+						{
+						if(gPtr->chipChoice > 0) dispatchNote(false, 0, note+0x15, 0, false);
+						note = note + 1 + shiftHit * 11;
+						}
+					if(altHit) note = 87; //go to the rightmost note
 	
-				graphicsDefineColor(0, oldCursorNote+0x61,0x00,0x00,0x00);//remove old cursor position
-				graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); //set new cursor position
-				oldCursorNote = note;
-				}
-			else if(instSelectMode==true)
-				{
-				if(gPtr->prgInst[gPtr->chSelect] < 127) modalMoveRight(gPtr);
-				prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, gPtr->wantVS1053);
-				prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, !gPtr->wantVS1053);
-				}
+					graphicsDefineColor(0, oldCursorNote+0x61,0x00,0x00,0x00);//remove old cursor position
+					graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); //set new cursor position
+					oldCursorNote = note;
+					}
+				else if(instSelectMode==true)
+					{
+					if(gPtr->prgInst[gPtr->chSelect] < 127) modalMoveRight(gPtr);
+					prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, gPtr->wantVS1053);
+					prgChange(gPtr->prgInst[gPtr->chSelect],gPtr->chSelect, !gPtr->wantVS1053);
+					}
 			break;
 		case 32: //space
 				//Send a Note
@@ -597,6 +612,8 @@ void dealKeyPressed(uint8_t keyRaw)
 			showMIDIChoiceText(gPtr);
 			break;
 		case 99: // C - chip select mode: 0=MIDI, 1=SID, (todo) 2= PSG, (todo) 3=OPL3
+		if(instSelectMode==false){
+
 			gPtr->chipChoice+=1;
 			if(gPtr->chipChoice==1) prepSIDinstruments(); //just arrived in sid, prep sid
 			if(gPtr->chipChoice==2)
@@ -617,6 +634,7 @@ void dealKeyPressed(uint8_t keyRaw)
 			}
 			showChipChoiceText(gPtr);
 			textGotoXY(0,3);textPrint("                                        ");
+					}
 			break;
 		case 100: // D - diagnostics info dump
 			printf("\nbuffer Dump=");

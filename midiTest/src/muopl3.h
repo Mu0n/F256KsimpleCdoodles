@@ -33,21 +33,22 @@
 #define OPL_OP_WAV      0xE0     //Base address of waveform select
 
 typedef struct opl3Instrument {
-    uint8_t chan;
-	uint8_t OP1_TVSKF, OP2_TVSKF;
-	uint8_t OP1_KSLVOL, OP2_KSLVOL;
-	uint8_t OP1_AD, OP2_AD;
-	uint8_t OP1_SR, OP2_SR;
-	uint8_t OP1_WAV, OP2_WAV;
+	//OP2 Carrier, OP1 Modulator - they're in this order for easy copying from AdlibTracker 1.2 instrument information
+	uint8_t OP2_TVSKF, OP1_TVSKF;
+	uint8_t OP2_KSLVOL, OP1_KSLVOL;
+	uint8_t OP2_AD, OP1_AD;
+	uint8_t OP2_SR, OP1_SR;
+	uint8_t OP2_WAV, OP1_WAV;
    } opl3I;
 		
 void opl3_initialize(void);
 void opl3_quietAll(void);
 void opl3_write(uint16_t, uint8_t);
 void opl3_note(uint8_t, uint16_t, uint8_t, bool);
-void opl3_setInstrument(struct opl3Instrument);
-void opl3_setDefaultInstruments(void);
+void opl3_setInstrument(struct opl3Instrument, uint8_t);
+void opl3_setInstrumentAllChannels(uint8_t);
 
-extern const uint16_t opl3_fnums[12];
-
+extern const uint16_t opl3_fnums[];
+extern const uint8_t opl3_instrumentsSize;
+extern const char *opl3_instrument_names[];
 #endif // MUOPL3_H

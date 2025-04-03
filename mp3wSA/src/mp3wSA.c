@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
 	for(i=0;i<NB_BANDS;i++) 
 		{
 		saVals[i]=0;
-		oldVals[i]=16;
+		oldVals[i]=0;
 		}
 	for(i=0;i<64;i++) zeroes[i]=0;
 	
@@ -233,8 +233,8 @@ int main(int argc, char *argv[]) {
 	read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file	
 
 	textSetColor(6,0);
-	textGotoXY(66,1);textPrint("F256Amp v0.8");
-	textGotoXY(68,2);textPrint("2025-03-12");
+	textGotoXY(66,1);textPrint("F256Amp v0.9");
+	textGotoXY(68,2);textPrint("2025-03-25");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	
 	textGotoXY(0,0);printf("Loading %s ...",fileName);

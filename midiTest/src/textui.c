@@ -1,5 +1,6 @@
 #include "f256lib.h"
 #include "../src/textui.h"
+#include "../src/muopl3.h"
 #include "../src/muMidi.h"
 #include "../src/musid.h"
 #include "../src/muUtils.h"
@@ -133,7 +134,7 @@ void textTitle(struct glTh *gT)
 	//Text Title area
 	textSetColor(textColorRed,0x00);
 	textGotoXY(21,0);for(c=8;c>0;c--) printf("%c",0x15+c);
-	textGotoXY(30,0);printf("FireJam  v1.0"); 
+	textGotoXY(30,0);printf("FireJam  v1.1"); 
 	textGotoXY(44,0);for(c=1;c<9;c++) printf("%c",0x15+c);
 	textGotoXY(33,1);textPrint("by Mu0n");
     textDefineForegroundColor(0,0xff,0xff,0xff);
@@ -217,6 +218,7 @@ void showChipChoiceText(struct glTh *gT)
 
 //In this Instrument Picking mode called by hitting [F1], display all General MIDI instruments in 3 columns
 //and highlight the currently activated one for the selected channel
+//SID and OPL3 can also be shown, probably in 1 column at first
 void instListShow(struct glTh *gT)
 {
 	uint8_t i, y=1;
@@ -226,6 +228,7 @@ void instListShow(struct glTh *gT)
 	midiShutAChannel(9, gT->wantVS1053);
 	}
 	if(gT->chipChoice==1) shutAllSIDVoices();
+	if(gT->chipChoice==3) opl3_quietAll();
 	realTextClear();
 	
 	textSetColor(textColorOrange,0x00);
@@ -249,11 +252,21 @@ void instListShow(struct glTh *gT)
 		textSetColor(textColorGray,0x00);
 		for(i=0; i<sid_instrumentsSize;i++)
 		{
-			textGotoXY(2,1+y+i);printf("%003d %s ",i,sid_instruments[i]);
+			textGotoXY(2,1+y+i);printf("%003d %s ",i,sid_instruments_names[i]);
 
 		}
 	}
-	highLightInstChoice(false, gT);
+	if(gT->chipChoice==3) //OPL3
+	{
+		textGotoXY(0,0);textPrint("Select your instrument for OPL3. [Arrows] [Enter] [Space] [Back]");
+		textSetColor(textColorGray,0x00);
+		for(i=0; i<opl3_instrumentsSize;i++)
+		{
+			textGotoXY(2,1+y+i);printf("%003d %s ",i,opl3_instrument_names[i]);
+
+		}
+	}
+	highLightInstChoice(true, gT);
 }
 
 //This function highlights or de-highlights a choice in Instrument Picking mode
@@ -272,7 +285,13 @@ void highLightInstChoice(bool isNew, struct glTh *gT)
 	{
 		x= 2;
 		y= 2 + gT->sidInstChoice;
-		textGotoXY(x,y);printf("%003d %s",gT->sidInstChoice,sid_instruments[gT->sidInstChoice]);
+		textGotoXY(x,y);printf("%003d %s",gT->sidInstChoice,sid_instruments_names[gT->sidInstChoice]);
+	}
+	if(gT->chipChoice==3) //OPL3
+	{
+		x= 2;
+		y= 2 + gT->opl3InstChoice;
+		textGotoXY(x,y);printf("%003d %s",gT->opl3InstChoice,opl3_instrument_names[gT->opl3InstChoice]);
 	}
 }
 
@@ -282,6 +301,7 @@ void modalMoveUp(struct glTh *gT, bool shift)
 	highLightInstChoice(false,gT);
 	if(gT->chipChoice==0)gT->prgInst[gT->chSelect] -= (3 + shift*27);
 	if(gT->chipChoice==1)gT->sidInstChoice--;
+	if(gT->chipChoice==3)gT->opl3InstChoice--;
 	highLightInstChoice(true,gT);
 }
 void modalMoveDown(struct glTh *gT, bool shift)
@@ -289,20 +309,19 @@ void modalMoveDown(struct glTh *gT, bool shift)
 	highLightInstChoice(false,gT);
 	if(gT->chipChoice==0)gT->prgInst[gT->chSelect] += (3 + shift*27);
 	if(gT->chipChoice==1)gT->sidInstChoice++;
+	if(gT->chipChoice==3)gT->opl3InstChoice++;
 	highLightInstChoice(true,gT);
 }
 void modalMoveLeft(struct glTh *gT)
 {
 	highLightInstChoice(false,gT);
 	if(gT->chipChoice==0)gT->prgInst[gT->chSelect] -= 1;
-	if(gT->chipChoice==1)gT->sidInstChoice--;
 	highLightInstChoice(true,gT); 
 }
 void modalMoveRight(struct glTh *gT)
 {
 	highLightInstChoice(false,gT);
 	if(gT->chipChoice==0)gT->prgInst[gT->chSelect] += 1;
-	if(gT->chipChoice==1)gT->sidInstChoice++;
 	highLightInstChoice(true,gT);
 }
 

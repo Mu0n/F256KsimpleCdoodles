@@ -1,32 +1,28 @@
 #include "f256lib.h"
 #include "../src/musid.h"
 
-const char *sid_instruments[] = {
+const char *sid_instruments_names[] = {
 	"Triangle",
 	"SawTooth",
 	"Pulse",
-	"Noise"
+	"Noise",
+	"Pad",
 };
-	
-const struct sidInstrument sidI_triangle = {
-.maxVolume = 0x0F, .pwdLo = 0x44, .pwdHi = 0x00,
-.ad = 0x27, .sr = 0x5B, .ctrl = 0x10	
+
+sidI sid_instrument_defs[] = {
+	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x27,.sr=0x5B,.ctrl=0x10,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0F,.pwdLo=0x88,.pwdHi=0x00,.ad=0x61,.sr=0xC8,.ctrl=0x20,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0F,.pwdLo=0x00,.pwdHi=0x08,.ad=0x3B,.sr=0x69,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x17,.sr=0xC8,.ctrl=0x80,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0A,.pwdLo=0x90,.pwdHi=0x04,.ad=0xD6,.sr=0xBA,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00}
 };
-const struct sidInstrument sidI_sawtooth = {
-.maxVolume = 0x0F, .pwdLo = 0x88, .pwdHi = 0x00,
-.ad = 0x61, .sr = 0xC8, .ctrl = 0x20	
-};
-const struct sidInstrument sidI_pulse = {
-.maxVolume = 0x0F, .pwdLo = 0x88, .pwdHi = 0x00,
-.ad = 0x61, .sr = 0xC8, .ctrl = 0x40	
-};
-const struct sidInstrument sidI_noise = {
-.maxVolume = 0x0F, .pwdLo = 0x44, .pwdHi = 0x00,
-.ad = 0x17, .sr = 0xC8, .ctrl = 0x80	
-};	
 
 
-const uint8_t sid_instrumentsSize = 4;
+uint8_t fetchCtrl(uint8_t which)
+{
+	return sid_instrument_defs[which].ctrl;
+}
+const uint8_t sid_instrumentsSize = 5;
 
 const uint8_t sidHigh[] = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02,
@@ -79,46 +75,44 @@ void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn)
 	POKE(voice, isOn?(ctrl|0x01):(ctrl&0xFE));
 }
 
-void prepASIDInstrument(uint16_t addrVoice, struct sidInstrument inst)
-{
-	POKE(addrVoice+SID_FM_VC, inst.maxVolume);   // MAX VOLUME	
-	POKE(addrVoice+SID_LO_PWDC, inst.pwdLo); // SET PULSE WAVE DUTY LOW BYTE
-	POKE(addrVoice+SID_HI_PWDC, inst.pwdHi); // SET PULSE WAVE DUTY HIGH BYTE
-	POKE(addrVoice+SID_ATK_DEC, inst.ad); // SET ATTACK;DECAY
-	POKE(addrVoice+SID_SUS_REL, inst.sr); // SET SUSTAIN;RELEASE
-	POKE(addrVoice+SID_CTRL, inst.ctrl); 	 // SET CTRL as triangle
+void sid_setInstrument(uint8_t sidChip, uint8_t voice, struct sidInstrument inst)
+{ 
+	uint16_t addrVoice = (sidChip==0?(uint16_t)SID1:(uint16_t)SID2);
+	if(voice==1) addrVoice += (uint16_t)SID_VOICE2;
+	if(voice==2) addrVoice += (uint16_t)SID_VOICE3;
 	
+	POKE(addrVoice+(uint16_t)SID_LO_PWDC, inst.pwdLo); // SET PULSE WAVE DUTY LOW BYTE
+	POKE(addrVoice+(uint16_t)SID_HI_PWDC, inst.pwdHi); // SET PULSE WAVE DUTY HIGH BYTE
+	POKE(addrVoice+(uint16_t)SID_ATK_DEC, inst.ad); // SET ATTACK;DECAY
+	POKE(addrVoice+(uint16_t)SID_SUS_REL, inst.sr); // SET SUSTAIN;RELEASE
+	POKE(addrVoice+(uint16_t)SID_CTRL, inst.ctrl); 	 // SET CTRL as triangle
+
+}			
+
+void sid_setInstrumentAllChannels(uint8_t which)
+{
+	uint8_t c;
+	textGotoXY(0,10);
+	for(c=0;c<3;c++)
+	{
+	sid_setInstrument(0,c,sid_instrument_defs[which]);
+	sid_setInstrument(1,c,sid_instrument_defs[which]);
+	}
+	
+	POKE(SID1+SID_LO_FCF,sid_instrument_defs[which].fcfLo);
+	POKE(SID1+SID_HI_FCF,sid_instrument_defs[which].fcfHi);
+	POKE(SID1+SID_FRR, sid_instrument_defs[which].frr);
+	POKE(SID1+SID_FM_VC, sid_instrument_defs[which].maxVolume);
+	
+	POKE(SID2+SID_LO_FCF,sid_instrument_defs[which].fcfLo);
+	POKE(SID2+SID_HI_FCF,sid_instrument_defs[which].fcfHi);
+	POKE(SID2+SID_FRR, sid_instrument_defs[which].frr);
+	POKE(SID2+SID_FM_VC, sid_instrument_defs[which].maxVolume);
 }
 
 void prepSIDinstruments()
 {
-	sidI inst;
-	inst.maxVolume = 0x0F;
-	inst.pwdLo = 0x44;
-	inst.pwdHi = 0x00;
-	inst.ad = 0x27;
-	inst.sr = 0x5B;
-	inst.ctrl = 0x20;
-	
-	prepASIDInstrument(SID1+SID_VOICE1, inst);
-	prepASIDInstrument(SID1+SID_VOICE2, inst);
-	prepASIDInstrument(SID1+SID_VOICE3, inst);
-	prepASIDInstrument(SID2+SID_VOICE1, inst);
-	prepASIDInstrument(SID2+SID_VOICE2, inst);
-	prepASIDInstrument(SID2+SID_VOICE3, inst);
-	
-	/*
-
-	POKE(SID1+SID_LO_FCF,0x2A);
-	POKE(SID1+SID_HI_FCF,0x00);
-	POKE(SID1+SID_FRR, 0x00);
-	POKE(SID1+SID_FM_VC, 0x0F);
-		
-	POKE(SID2+SID_LO_FCF,0x2A);
-	POKE(SID2+SID_HI_FCF,0x00);
-	POKE(SID2+SID_FRR, 0x00);
-	POKE(SID2+SID_FM_VC, 0x0F);
-	*/
+	sid_setInstrumentAllChannels(0);
 }
 
 void setMonoSID()

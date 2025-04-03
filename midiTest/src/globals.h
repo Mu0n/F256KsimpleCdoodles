@@ -9,6 +9,7 @@ typedef struct glTh
 	bool wantVS1053;  
 	uint8_t *prgInst;
 	uint8_t sidInstChoice;
+	uint8_t opl3InstChoice;
 	uint8_t chSelect;
 	uint8_t chipChoice; 
 	bool isTwinLinked;

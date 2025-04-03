@@ -9,7 +9,8 @@ void resetGlobals(struct glTh *gT)
 	gT->wantVS1053 = false;
 	gT->prgInst = malloc(sizeof(uint8_t)*10);
     if(gT->prgInst == NULL) printf("\n error allocating");
-	gT->sidInstChoice = 0; //from 0 to 5 for all 6 voices of the 2 SIDs
+	gT->sidInstChoice = 0; //from 0 to whatever is inside the array for sid
+	gT->opl3InstChoice = 0; //from 0 to whatever is inside the array for opl3
 	gT->chSelect = 0; //restricted to channel 0, 1 or 9 (for percs)
 //lowest note on 88-key piano is a A more than 3 octaves below middle CLUT
 //midi note number of that lowest note is dec=21

@@ -35,7 +35,7 @@ Best to use with a MIDI in controller, but it'll be controllable with arrows and
 Has polyphony (infinite for MIDI, 6 for PSG and SID, 9 for OPL3) with a MIDI in controller.
 * 128 instrument choice for MIDI.
 * 5 instrument choice for SID (and growing)
-* 8 instrument choice for OPL3 (and growing)
+* 9 instrument choice for OPL3 (and growing)
 
 Planned features:
 * construct a simplified "multi-chip tune" with arrays that contain midi note values and frames-based timer values

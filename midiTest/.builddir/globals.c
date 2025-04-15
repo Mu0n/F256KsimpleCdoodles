@@ -18,7 +18,7 @@ void resetGlobals(struct glTh *gT)
 //midi note number of that lowest note is dec=21
     gT->chipChoice = 0; //0=MIDI, 1=SID, 2=PSG, 3=OPL3
 	gT->isTwinLinked = false; //when true, sends out midi notes to both channels when using a midi controller or space bar
-    gT->selectBeat = 0; //selected beat preset from 0 to 3
+    gT->selectBeat = 0;
 	gT->mainTempo = 120;
 	
 	for(i=0;i<10;i++) gT->prgInst[i] = 0; /* program change value, the MIDI instrument number, for chan 0, 1 and 9=percs */

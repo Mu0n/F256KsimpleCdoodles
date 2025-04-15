@@ -6,6 +6,7 @@
 #define textColorRed    0x91
 #define textColorBlue   0x07
 #define textColorGray   0x05
+#define textColorWhite  0xFF
 
 #include "f256lib.h"
 

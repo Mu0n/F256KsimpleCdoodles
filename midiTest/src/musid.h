@@ -43,6 +43,7 @@ void clearSIDRegisters(void);
 void sidNoteOnOrOff(uint16_t, uint8_t, bool);
 void shutAllSIDVoices(void);
 void sid_setInstrument(uint8_t, uint8_t, struct sidInstrument);
+void sid_setSIDWide(uint8_t);
 void sid_setInstrumentAllChannels(uint8_t);
 void prepSIDinstruments(void);
 void setMonoSID(void);
@@ -52,6 +53,7 @@ uint8_t fetchCtrl(uint8_t);
 
 extern const char *sid_instruments_names[];
 extern const uint8_t sid_instrumentsSize;
+extern sidI sid_instrument_defs[];
 extern const uint8_t sidLow[];
 extern const uint8_t sidHigh[];
 

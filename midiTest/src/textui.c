@@ -1,10 +1,38 @@
 #include "f256lib.h"
+#include "../src/presetBeats.h"
 #include "../src/textui.h"
 #include "../src/muopl3.h"
 #include "../src/muMidi.h"
 #include "../src/musid.h"
 #include "../src/muUtils.h"
 #include "../src/globals.h"
+
+#define CHAR_EMPTY_CIRC 179
+#define CHAR_FILLED_CIRC 180
+
+//chip activity:
+void layoutChipAct()
+{
+	textGotoXY(60,3);textPrint("MIDI Sam");printf(" %c",CHAR_EMPTY_CIRC);
+	textGotoXY(60,4);textPrint("MIDI  VS");printf(" %c",CHAR_EMPTY_CIRC);
+	textGotoXY(60,5);textPrint("     SID");printf(" %c",CHAR_EMPTY_CIRC);
+	textGotoXY(60,6);textPrint(" T/I PSG");printf(" %c",CHAR_EMPTY_CIRC);
+	textGotoXY(60,7);textPrint("  YMF262");printf(" %c",CHAR_EMPTY_CIRC);
+}
+
+void refreshChipAct(uint8_t *status)
+{
+	textGotoXY(69,3); if(status[0]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);} 
+	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
+	textGotoXY(69,4); if(status[1]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);}
+	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
+	textGotoXY(69,5); if(status[2]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);}
+	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
+	textGotoXY(69,6); if(status[3]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);}
+	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
+	textGotoXY(69,7); if(status[4]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);}
+	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
+}
 
 
 //This is part of the text instructions and interface during regular play mode
@@ -71,36 +99,9 @@ void channelTextMenu(struct glTh *gT)
 
 void refreshBeatTextChoice(struct glTh *gT)
 {	
-	switch(gT->selectBeat)
-		{
-			case 0: //beat1
-				textSetColor(textColorOrange,0x00);
-				textGotoXY(45,29); textPrint("[WaveS] ");
-				textSetColor(textColorGreen,0x00);textPrint(" Da Da   Jazzy   Funky ");
-				break;
-			case 1: //beat2
-				textSetColor(textColorGreen,0x00);
-				textGotoXY(45,29); textPrint(" WaveS  ");
-				textSetColor(textColorOrange,0x00);
-				textPrint("[Da Da] ");
-				textSetColor(textColorGreen,0x00);
-				textPrint(" Jazzy   Funky ");
-				break;
-			case 2: //beat3
-				textSetColor(textColorGreen,0x00);
-				textGotoXY(45,29); textPrint(" WaveS   Da Da  ");
-				textSetColor(textColorOrange,0x00);
-				textPrint("[Jazzy] ");
-				textSetColor(textColorGreen,0x00);
-				textPrint(" Funky ");
-				break;
-			case 3: //Funky
-				textSetColor(textColorGreen,0x00);
-				textGotoXY(45,29); textPrint(" WaveS   Da Da   Jazzy  ");
-				textSetColor(textColorOrange,0x00);
-				textPrint("[Funky]");
-				break;
-		}
+	textSetColor(textColorOrange,0x00);
+	textGotoXY(46,29); textPrint("          ");
+	textGotoXY(46,29); printf("%s",presetBeatCount_names[gT->selectBeat]);
 }
 
 //This is part of the text instructions and interface during regular play mode
@@ -113,9 +114,6 @@ void beatsTextMenu(struct glTh *gT)
 	textGotoXY(45,27);textPrint("[F7] play/stop toggle the beat");
 	refreshBeatTextChoice(gT);
 }
-
-
-
 
 //This is the part of the text instructions and interface for selecting the sound output of the keyboard
 void chipSelectTextMenu(struct glTh *gT)
@@ -132,11 +130,11 @@ void textTitle(struct glTh *gT)
 {
 	uint16_t c;
 	//Text Title area
-	textSetColor(textColorRed,0x00);
-	textGotoXY(21,0);for(c=8;c>0;c--) printf("%c",0x15+c);
-	textGotoXY(30,0);printf("FireJam  v1.1"); 
-	textGotoXY(44,0);for(c=1;c<9;c++) printf("%c",0x15+c);
-	textGotoXY(33,1);textPrint("by Mu0n");
+	
+	textSetColor(textColorRed,0x00);textGotoXY(21,0);for(c=8;c>0;c--) printf("%c",0x15+c);
+	textGotoXY(30,0);textSetColor(textColorWhite,0x00);printf("FireJam  v1.2"); 
+	textSetColor(textColorRed,0x00);textGotoXY(44,0);for(c=1;c<9;c++) printf("%c",0x15+c);
+	textGotoXY(33,1);textSetColor(textColorWhite,0x00);textPrint("by Mu0n");
     textDefineForegroundColor(0,0xff,0xff,0xff);
 	textSetColor(textColorBlue,0x00);
 	textGotoXY(0,2); textPrint("Plug in a midi controller in the MIDI IN port and play!");
@@ -146,6 +144,7 @@ void textTitle(struct glTh *gT)
 	beatsTextMenu(gT);
 
 	//Instrument selection instructions
+	textSetColor(textColorGreen,0x00);
 	textGotoXY(0,35);printf("[%c] / [%c] to change the instrument",0xF8,0xFB);
 	textGotoXY(0,36);printf("[Shift-%c] / [Shift-%c] to move by 10 - [Alt-%c] / [Alt-%c] go to the ends ",0xF8,0xFB,0xF8,0xFB);
 
@@ -157,6 +156,9 @@ void textTitle(struct glTh *gT)
 	
 	//Chip status, midi chip choice status
 	chipSelectTextMenu(gT);
+	
+	//Chip activity
+	layoutChipAct();
 }
 
 

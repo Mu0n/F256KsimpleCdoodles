@@ -39,6 +39,7 @@ typedef struct opl3Instrument {
 	uint8_t OP2_AD, OP1_AD;
 	uint8_t OP2_SR, OP1_SR;
 	uint8_t OP2_WAV, OP1_WAV;
+	uint8_t CHAN_FEED; //channel wide feed
    } opl3I;
 		
 void opl3_initialize(void);
@@ -51,4 +52,5 @@ void opl3_setInstrumentAllChannels(uint8_t);
 extern const uint16_t opl3_fnums[];
 extern const uint8_t opl3_instrumentsSize;
 extern const char *opl3_instrument_names[];
+extern opl3I opl3_instrument_defs[];
 #endif // MUOPL3_H

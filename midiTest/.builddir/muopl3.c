@@ -3,7 +3,6 @@
 #include "f256lib.h"
 #include "../src/muopl3.h"
 
-
 const char *opl3_instrument_names[] = {
 	"Twang",
 	"Fuzz Guitar",
@@ -30,7 +29,8 @@ const char *opl3_instrument_names[] = {
 };
 	
 opl3I opl3_instrument_defs[] = {
-	{.OP2_TVSKF=0x21,.OP1_TVSKF=0xC0,.OP2_KSLVOL=0x01,.OP1_KSLVOL=0x15,.OP2_AD=0xF4,.OP1_AD=0xF2,.OP2_SR=0x25,.OP1_SR=0x40,.OP2_WAV=0x04,.OP1_WAV=0x07,.CHAN_FEED=0x30},
+	{.OP2_TVSKF=0x21,.OP1_TVSKF=0xC0,.OP2_KSLVOL=0x01,.OP1_KSLVOL=0x15,.OP2_AD=0xF4,.OP1_AD=0xF2,.OP2_SR=0x25,.OP1_SR=0x40,.OP2_WAV=0x04,.OP1_WAV=0x07,.CHAN_FEED=0x30}
+	/*,
 	{.OP2_TVSKF=0x72,.OP1_TVSKF=0x71,.OP2_KSLVOL=0x00,.OP1_KSLVOL=0x48,.OP2_AD=0xF2,.OP1_AD=0xF1,.OP2_SR=0x27,.OP1_SR=0x53,.OP2_WAV=0x02,.OP1_WAV=0x00,.CHAN_FEED=0x30},
 	{.OP2_TVSKF=0x23,.OP1_TVSKF=0x21,.OP2_KSLVOL=0x80,.OP1_KSLVOL=0x4D,.OP2_AD=0x72,.OP1_AD=0x71,.OP2_SR=0x06,.OP1_SR=0x12,.OP2_WAV=0x00,.OP1_WAV=0x01,.CHAN_FEED=0x30},
 	{.OP2_TVSKF=0x21,.OP1_TVSKF=0x22,.OP2_KSLVOL=0x00,.OP1_KSLVOL=0x59,.OP2_AD=0xFF,.OP1_AD=0xFF,.OP2_SR=0x0F,.OP1_SR=0x03,.OP2_WAV=0x00,.OP1_WAV=0x02,.CHAN_FEED=0x30},
@@ -56,11 +56,11 @@ opl3I opl3_instrument_defs[] = {
 	{.OP2_TVSKF=0x00,.OP1_TVSKF=0x61,.OP2_KSLVOL=0x0,.OP1_KSLVOL=0x1E,.OP2_AD=0x66,.OP1_AD=0xF5,.OP2_SR=0x5A,.OP1_SR=0x00,.OP2_WAV=0x0,.OP1_WAV=0x00,.CHAN_FEED=0x32},
 	{.OP2_TVSKF=0x62,.OP1_TVSKF=0x21,.OP2_KSLVOL=0x8D,.OP1_KSLVOL=0x83,.OP2_AD=0x65,.OP1_AD=0x74,.OP2_SR=0x17,.OP1_SR=0x17,.OP2_WAV=0x00,.OP1_WAV=0x00,.CHAN_FEED=0x37},
 	{.OP2_TVSKF=0x21,.OP1_TVSKF=0x21,.OP2_KSLVOL=0x14,.OP1_KSLVOL=0x26,.OP2_AD=0x7F,.OP1_AD=0x61,.OP2_SR=0xA,.OP1_SR=0x6A,.OP2_WAV=0x00,.OP1_WAV=0x00,.CHAN_FEED=0x32}
-	
+	*/
 
 };
 
-const uint8_t opl3_instrumentsSize = 22;
+const uint8_t opl3_instrumentsSize = 1;
 
 //these are used the build the base frequencies for notes of a full octave (12 semi-tones in equal temperament). read the docs because it's not 1:1 to frequency in Hz here.
 const uint16_t opl3_fnums[] = {0x205, 0x223, 0x244, 0x267, 0x28B, 0x2B2,

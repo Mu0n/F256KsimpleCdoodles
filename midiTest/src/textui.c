@@ -13,15 +13,18 @@
 //chip activity:
 void layoutChipAct()
 {
+	/*
+	textSetColor(textColorGreen,00);
 	textGotoXY(60,3);textPrint("MIDI Sam");printf(" %c",CHAR_EMPTY_CIRC);
 	textGotoXY(60,4);textPrint("MIDI  VS");printf(" %c",CHAR_EMPTY_CIRC);
 	textGotoXY(60,5);textPrint("     SID");printf(" %c",CHAR_EMPTY_CIRC);
 	textGotoXY(60,6);textPrint(" T/I PSG");printf(" %c",CHAR_EMPTY_CIRC);
 	textGotoXY(60,7);textPrint("  YMF262");printf(" %c",CHAR_EMPTY_CIRC);
+	*/
 }
 
 void refreshChipAct(uint8_t *status)
-{
+{/*
 	textGotoXY(69,3); if(status[0]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);} 
 	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
 	textGotoXY(69,4); if(status[1]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);}
@@ -32,12 +35,14 @@ void refreshChipAct(uint8_t *status)
 	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
 	textGotoXY(69,7); if(status[4]>0) {textSetColor(textColorOrange,0); printf("%c",CHAR_FILLED_CIRC);}
 	else {textSetColor(textColorGreen,0); printf("%c",CHAR_EMPTY_CIRC);}
+	*/
 }
 
 
 //This is part of the text instructions and interface during regular play mode
 void refreshInstrumentText(struct glTh *gT)
 {
+	/*
 	textGotoXY(5,30); textPrint("                                   ");
 	textGotoXY(5,31); textPrint("                                   ");
 	
@@ -79,6 +84,7 @@ void refreshInstrumentText(struct glTh *gT)
 			textGotoXY(0,31);printf("%c",0xFA);
 			textGotoXY(0,32);textPrint(" ");
 	}
+*/
 }
 
 //This is part of the text instructions and interface during regular play mode

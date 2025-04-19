@@ -11,14 +11,19 @@
 #define TIMER_TEXT_DELAY 9
 
 #include "../src/muVS1053b.h"  //contains basic MIDI functions I often use
-#include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
-#include "../src/musid.h"   //contains SID chip functions
 #include "../src/mupsg.h"   //contains PSG chip functions
 #include "../src/muopl3.h"   //contains OPL3 chip functions
-#include "../src/textui.h"   //has the text ui elements, specific to this project
 #include "../src/globals.h"   //contains the globalThings structure
 #include "../src/presetBeats.h"   //contains preset Beats
+#include "../src/beatFileOps.h"   //can save or restore beats from files
+
+#include "../src/musid.h"   //contains SID chip functions
+#include "../src/textui.h"   //has the text ui elements, specific to this project
+#include "../src/muUtils.h" //contains helper functions I often use
+#include "stdio.h"
+
+#define PSG_DEFAULT_VOL 0x4C
 
 #define WITHOUT_TILE
 #define WITHOUT_SPRITE
@@ -220,6 +225,8 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			}
 	}
 }	
+
+
 void prepTempoLUT()
 {
 	uint8_t t;
@@ -236,9 +243,13 @@ void prepTempoLUT()
 	mainTempoLUT[11] = mainTempoLUT[17] /3 * 2;
 	
 	textGotoXY(0,10);
-	for(t=0;t<18;t++) printf("%d ",mainTempoLUT[t]);
+	for(t=0;t<18;t++) printf("%02d ",mainTempoLUT[t]);
+	printf("\n");
+	
+	for(t=0;t<18;t++) printf("%02d ",t);
 	//same with triplet eights
 }
+
 
 //setup is called just once during initial launching of the program
 void setup()
@@ -345,6 +356,7 @@ void escReset()
 	
 }
 
+
 void shutAllMIDIchans()
 {
 	midiShutAChannel(0, true);midiShutAChannel(0, false);
@@ -367,19 +379,15 @@ void launchBeat()
 				if(theT->chip == 1) {
 					for(uint8_t i=0;i < 6;i++) if(reservedSID[i]==1) reservedSID[i]=0;
 					
-		textGotoXY(0,12);printf("deactivated SID");
 				}
 				if(theT->chip == 2) {
 					for(uint8_t i=0;i < 6;i++) if(reservedPSG[i]==1) reservedPSG[i]=0;
-		textGotoXY(0,13);printf("deactivated PSG");
 				}
 				if(theT->chip == 3) {
 					for(uint8_t i=0;i < 9;i++) if(reservedOPL3[i]==1) reservedOPL3[i]=0;
-		textGotoXY(0,14);printf("deactivated OPL3");
 				}
 			}
 		free(theT);
-		textGotoXY(0,15);printf("needsToWaitExpiration %d", needsToWaitExpiration);
 		return; //we're not done finishing the beat, do nothing new
 	}
 	if(theBeats[gPtr->selectBeat].isActive == false) //starts the beat
@@ -395,7 +403,7 @@ void launchBeat()
 				getBeatTrackNoteInfo(theBeats, gPtr->selectBeat, j, &noteScoop, &delayScoop, theT);
 				
 				beatSetInstruments(theT);
-				dispatchNote(true, theT->chan, noteScoop,0x7F, gPtr->wantVS1053, theT->chip, true, theT->inst);
+				dispatchNote(true, theT->chan, noteScoop,theT->chip==2?PSG_DEFAULT_VOL:0x7F, gPtr->wantVS1053, theT->chip, true, theT->inst);
 
 				if(theT->chip == 1) reservedSID[theT->chan] = 1;
 				theBeats[gPtr->selectBeat].activeCount+=1;
@@ -716,33 +724,9 @@ void dealKeyPressed(uint8_t keyRaw)
 			showChipChoiceText(gPtr);
 					}
 			break;
-			/*
-		case 100: // D - diagnostics info dump
-			printf("\nbuffer Dump=");
-			for(i=0;i<12;i++)
-			{
-				for(j=0;j<80;j++) textPrint(" ");
-			}
-			textGotoXY(0,5);
-			for(j=0;j<255;j++)
-				{
-				printf("%02x ",diagBuffer[j]);
-				}
-				printf(" hit space to go on");
-				hitspace();
-			break;
-		case 101: // E - empty buffer for diagnostics info dump
-			
-			for(j=0;j<255;j++)
-				{
-				diagBuffer[j]=0;
-				}
-				printf("emptied buffer");
-			break;
-			*/
 	}
 	//the following line can be used to get keyboard codes
-	//printf("\n %d",kernelEventData.key.raw);
+	printf("\n %d",kernelEventData.key.raw);
 }
 
 void dealKeyReleased(uint8_t rawKey)
@@ -761,7 +745,7 @@ switch(rawKey)
 	}
 }
 
-#define SEGMENT_MAIN
+
 int main(int argc, char *argv[]) {
 	uint16_t toDo;
 	uint16_t i;
@@ -861,7 +845,7 @@ int main(int argc, char *argv[]) {
 					
 					//first case is when the last command is a 0x90 'NoteOn' command
 					if(isHit) {graphicsDefineColor(0, detectedNote,0xFF,0x00,0xFF); //paint it as a hit note
-					textPrintInt(detectedNote);
+					textPrintInt(recByte);
 					}
 					//otherwise it's a 0x80 'NoteOff' command
 					else {
@@ -914,7 +898,7 @@ int main(int argc, char *argv[]) {
 				case TIMER_TEXT_COOKIE:
 					refTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_TEXT_DELAY;
 					setTimer(&refTimer); 
-					refreshChipAct(chipAct);
+					if(instSelectMode==false) refreshChipAct(chipAct);
 					break;
 				case TIMER_BEAT_1A ... 255:
 					if(theBeats[gPtr->selectBeat].isActive)
@@ -979,7 +963,7 @@ int main(int argc, char *argv[]) {
 								if (theBeats[gPtr->selectBeat].pending2x[j]==0) theBeats[gPtr->selectBeat].pending2x[j]=1;
 								}
 								
-							dispatchNote(true,  theT->chan, noteScoop&0x7F, 0x7F, gPtr->wantVS1053,  theT->chip, true, theT->inst);
+							dispatchNote(true,  theT->chan, noteScoop&0x7F, theT->chip==2?PSG_DEFAULT_VOL:0x7F, gPtr->wantVS1053,  theT->chip, true, theT->inst);
 							theBeats[gPtr->selectBeat].activeCount++;
 							theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + mainTempoLUT[delayScoop];
 							setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
@@ -1001,4 +985,3 @@ int main(int argc, char *argv[]) {
 		
 free(theT);
 return 0;}
-}

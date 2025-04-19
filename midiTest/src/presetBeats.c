@@ -6,18 +6,22 @@
 #include "../src/muMidi.h"
 #include "../src/muopl3.h"
 
-#define BASE_PRESETS 0x10000
+#define BASE_PRESETS 0x20000
 
-const uint8_t presetBeatCount = 4;
+const uint8_t presetBeatCount = 1;
 const char *presetBeatCount_names[] = {
-	"WaveSynth        ",
+//	"WaveSynth        ",
 //	"Da Da Da         ",
 //	"Jazzy",
 //	"Funky",
-	"M.U.L.E.         ",
-	"Ultima Underworld",
-	"Multi            "
+//	"M.U.L.E.         ",
+//	"Ultima Underworld",
+	"Multi 001        ",
+//	"Multi 002        ",
 };
+
+/*
+
 	//Beat 0, simple kick drum + snare beat
 const uint8_t beat00_notes[] = {0x24,0x26};  //0x24 kick drum, 0x26 snare
 const uint8_t beat00_delays[] = {3,3};  
@@ -30,7 +34,7 @@ const uint8_t beat11_notes[] = {0x4B,0x63,0x00,0x63,0x4B,0x63,0x4B,0x63};
 const uint8_t beat11_delays[] = {2,2,2,2,2,2,2,2};  
 const struct aT beat10 = {.chip=0,.chan=9,.inst=0   ,.count=5};
 const struct aT beat11 = {.chip=0,.chan=2,.inst=0x73,.count=8};
-/*
+
 	//Beat 2, jazz cymbal ride
 static const uint8_t beat20_notes[] = {0x24,0x26,0x24,0x26};  //0x24 kick drum, 0x28 bright snare
 static const uint8_t beat20_delays[] = {3,3,3,3};  
@@ -38,9 +42,9 @@ static const uint8_t beat21_notes[] = {0x39,0x39,0x39,0x39,0x39,0x39};
 static const uint8_t beat21_delays[] = {3,13,12,3,13,12};  
 static const struct aT beat20 = {.chip=0,.chan=9,.inst=0,.count=4};
 static const struct aT beat21 = {.chip=0,.chan=9,.inst=0,.count=6};
-*/
+
 	//Beat 3, funk swung 16th note
-	/*
+	
 static const uint8_t beat30_notes[] = {0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,
 								0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2E,0x2E,0x2E,0x2E,0x2C,0x2C}; 
 static const uint8_t beat30_delays[] = {16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15};  
@@ -48,7 +52,7 @@ static const uint8_t beat31_notes[] = {0x24,0x00,0x24,0x26,0x00,0x24,0x00,0x24,0
 static const uint8_t beat31_delays[] = {17,16,15,17,16,15,16,15,17,17,16,15};
 static const struct aT beat30 = {.chip=0,.chan=9,.inst=0,.count=32};
 static const struct aT beat31 = {.chip=0,.chan=9,.inst=0,.count=12};  
-*/
+
 	//Beat 4, Mule bassline
 const uint8_t beat40_notes[] =  {0,0,0,0,
 								41,53,33,45,34,46,35,47,
@@ -115,9 +119,9 @@ const uint8_t beat51_delays[] = {1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
 									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1};
 //static const struct aT beat50 = {.chip=3,.chan=2,.inst=20,.count=12};
 const struct aT beat51 = {.chip=3,.chan=3,.inst=18, .count=216}; 	
-	
-		//Beat 6, famous casio beat used in Da Da Da
-const uint8_t beat60_notes[] = {33,40,40,40,38,38,38,35,35,35,33,33};  //0x24 kick drum, 0x28 bright snare
+*/	
+		//Beat 6, Multi chip 01
+const uint8_t beat60_notes[] = {33,40,40,40,38,38,38,35,35,35,33,33};
 const uint8_t beat60_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};  
 const uint8_t beat61_notes[] = {44,42,42,44,42,42,44,42};  
 const uint8_t beat61_delays[] = {9,3,3,9,3,9,3,3};  
@@ -127,12 +131,20 @@ const uint8_t beat63_notes[] = {76,79,79,79,79,79,79,76,76,76,76,76};
 const uint8_t beat63_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};   
 const uint8_t beat64_notes[] = {81,83,83,83,83,83,83,79,79,79,81,81};  
 const uint8_t beat64_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};  
+const uint8_t beat65_notes[] = {57,62, 59,64,67,64,59,64,59,64, 57,62,66,62,57,62,57,62, 55,60,64,60,55,60,55,60, 57,60,64,60,57,60};  
+const uint8_t beat65_delays[] = {9,9, 9,9,9,9,9,9,9,9, 9,9,9,9,9,9,9,9, 9,9,9,9,9,9,9,9, 9,9,9,9,9,9};  
 const struct aT beat60 = {.chip=3,.chan=1,.inst=12,.count=12};
 const struct aT beat61 = {.chip=0,.chan=9,.inst=1,.count=8};
 const struct aT beat62 = {.chip=0,.chan=2,.inst=10,.count=12};
 const struct aT beat63 = {.chip=0,.chan=2,.inst=10,.count=12};
 const struct aT beat64 = {.chip=0,.chan=2,.inst=10,.count=12};
+const struct aT beat65 = {.chip=2,.chan=1,.inst=0,.count=32};
 	
+		//Beat 7, Multi chip 02
+const uint8_t beat70_notes[] = {};
+const uint8_t beat70_delays[] = {};  
+const struct aT beat70 = {.chip=3,.chan=1,.inst=12,.count=12};
+
 void beatSetInstruments(struct aT *theT)
 {
 	switch(theT->chip)
@@ -227,11 +239,11 @@ void setupMem4Track(struct aT track, uint32_t *whereAt, const uint8_t *notes, co
 
 void setupBeats(struct aB *theBeats){
 	uint32_t whereAt = BASE_PRESETS;
-
+/*	
 	//Beat 0, simple kick drum + snare beat	
 	if(setupMem4ABeat(theBeats, 0, 90, 1, &whereAt) == -1) printf("ERROR");
 	setupMem4Track(beat00, &whereAt, beat00_notes, beat00_delays, sizeof(beat00_notes));
-/*		
+	
 	//Beat 1, famous casio beat used in Da Da Da
 	setupMem4ABeat(theBeats, 1, 128, 2, &whereAt); 
 	setupMem4Track(beat10, &whereAt, beat10_notes, beat10_delays, sizeof(beat10_notes));
@@ -246,7 +258,7 @@ void setupBeats(struct aB *theBeats){
 	setupMem4ABeat(theBeats, 3, 80, 2, &whereAt);
 	setupMem4Track(beat30, &whereAt, beat30_notes, beat30_delays, sizeof(beat30_notes));
 	setupMem4Track(beat31, &whereAt, beat31_notes, beat31_delays, sizeof(beat31_notes));
-*/	
+	
 	//Beat 4, Mule bassline
 	if(setupMem4ABeat(theBeats, 1, 120, 2, &whereAt) == -1) printf("ERROR");
 	setupMem4Track(beat40, &whereAt, beat40_notes, beat40_delays, sizeof(beat40_notes));
@@ -256,13 +268,19 @@ void setupBeats(struct aB *theBeats){
 	if(setupMem4ABeat(theBeats, 2, 92, 1, &whereAt) == -1) printf("ERROR");
 //	setupMem4Track(beat50, &whereAt, beat50_notes, beat50_delays, sizeof(beat50_notes));
 	setupMem4Track(beat51, &whereAt, beat51_notes, beat51_delays, sizeof(beat51_notes));
-	
-		//Beat 5, Ultima Underworld "Descent"
-	if(setupMem4ABeat(theBeats, 3, 120, 5, &whereAt) == -1) printf("ERROR");
+*/	
+		//Beat 6, Multi 001"
+	if(setupMem4ABeat(theBeats, 0, 120, 6, &whereAt) == -1) printf("ERROR");
 	setupMem4Track(beat60, &whereAt, beat60_notes, beat60_delays, sizeof(beat60_notes));
 	setupMem4Track(beat61, &whereAt, beat61_notes, beat61_delays, sizeof(beat61_notes));
 	setupMem4Track(beat62, &whereAt, beat62_notes, beat62_delays, sizeof(beat62_notes));
 	setupMem4Track(beat63, &whereAt, beat63_notes, beat63_delays, sizeof(beat63_notes));
 	setupMem4Track(beat64, &whereAt, beat64_notes, beat64_delays, sizeof(beat64_notes));
+	setupMem4Track(beat65, &whereAt, beat65_notes, beat65_delays, sizeof(beat65_notes));
+/*			
+		//Beat 7, Multi 002"
+	if(setupMem4ABeat(theBeats, 1, 90, 1, &whereAt) == -1) printf("ERROR");
+	setupMem4Track(beat00, &whereAt, beat00_notes, beat00_delays, sizeof(beat00_notes));	
+	*/
 }
 }

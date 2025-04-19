@@ -1,0 +1,165 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+      30       30        0     1 .zp.data
+      30       30        0     1         __zp_data_start = .
+      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
+      30       30        4     1 .zp.bss
+      30       30        0     1         __zp_bss_start = .
+      30       30        4     1         overlay.lto.o:(.zp.bss)
+      30       30        1     1                 _col
+      31       31        1     1                 _row
+      32       32        2     1                 __putchar.s
+      34       34        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      34       34       6a     1 .zp
+      34       34       6a     1         overlay.lto.o:(.zp.noinit)
+     300      300     1507     1 .text
+     300      300        0     1         _init = .
+     300      300        0     1         _start = .
+     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     300      300        0     1                 __do_init_stack
+     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     308      308        0     1                 __do_zero_bss
+     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30b      30b        0     1                 __do_zero_zp_bss
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     311      311        0     1                 __after_main
+     314      314        0     1         _fini = .
+     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     315      315       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     315      315       13     1                 __zero_bss
+     328      328       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     328      328       13     1                 __zero_zp_bss
+     33b      33b      384     1         overlay.lto.o:(.text.main)
+     33b      33b      384     1                 main
+     6bf      6bf       7b     1         overlay.lto.o:(.text.firstSegment)
+     6bf      6bf       7b     1                 firstSegment
+     73a      73a       81     1         overlay.lto.o:(.text.secondSegment)
+     73a      73a       81     1                 secondSegment
+     7bb      7bb       81     1         overlay.lto.o:(.text.moreFirstSegment)
+     7bb      7bb       81     1                 moreFirstSegment
+     83c      83c        5     1         overlay.lto.o:(.text.exit)
+     83c      83c        5     1                 exit
+     841      841       d3     1         overlay.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+     841      841       d3     1                 (anonymous namespace)::put(char, Status*)
+     914      914      10c     1         overlay.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+     914      914      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+     a20      a20      bd9     1         overlay.lto.o:(.text.printf)
+     a20      a20      bd9     1                 printf
+    15f9     15f9      1c2     1         overlay.lto.o:(.text.putchar)
+    15f9     15f9      1c2     1                 putchar
+    17bb     17bb       2c     1         overlay.lto.o:(.text.memcpy)
+    17bb     17bb       2c     1                 memcpy
+    17e7     17e7       20     1         overlay.lto.o:(.text.__memset)
+    17e7     17e7       20     1                 __memset
+    1807     1807        0     1         __init_array_start = .
+    1807     1807        0     1         __init_array_end = .
+    1807     1807        0     1         __fini_array_start = .
+    1807     1807        0     1         __fini_array_end = .
+    1807     1807       a9     1 .rodata
+    1807     1807        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    1807     1807        0     1                 __set_v
+    1808     1808       3a     1         overlay.lto.o:(.rodata.printf)
+    1842     1842       30     1         overlay.lto.o:(.rodata.textColors)
+    1842     1842       30     1                 textColors
+    1872     1872       3e     1         <internal>:(.rodata.str1.1)
+    18b0     18b0        0     1 .data
+    18b0     18b0        0     1         __data_start = .
+    18b0     18b0        0     1         __data_end = .
+    18b0     18b0        0     1 __data_load_start = LOADADDR(.data)
+    18b0     18b0        0     1 __data_size = SIZEOF(.data)
+    18b0     18b0        8     1 .bss
+    18b0     18b0        0     1         __bss_start = .
+    18b0     18b0        7     1         overlay.lto.o:(.bss.kernelEventData)
+    18b0     18b0        7     1                 kernelEventData
+    18b7     18b7        1     1         overlay.lto.o:(.bss.kernelError)
+    18b7     18b7        1     1                 kernelError
+    18b8     18b8        0     1         __bss_end = .
+    18b8     18b8        0     1 __bss_size = SIZEOF(.bss)
+    18b8     18b8        0     1 .noinit
+    18b8     18b8        0     1         __heap_start = ALIGN(., 2)
+ 800c000  800c000       96     1 .block8
+ 800c000  800c000       96     1         overlay.lto.o:(.block8)
+ 800c000  800c000       5c     1                 FAR8_firstSegment
+ 800c05c  800c05c       3a     1                 FAR8_moreFirstSegment
+ 800c096  800c096        0     1 end_block8 = .
+ 900c000  900c000       5c     1 .block9
+ 900c000  900c000       5c     1         overlay.lto.o:(.block9)
+ 900c000  900c000       5c     1                 FAR9_secondSegment
+ 900c05c  900c05c        0     1 end_block9 = .
+ 900c05c  900c05c        0     1 end_block10 = .
+ 900c05c  900c05c        0     1 end_block11 = .
+ 900c05c  900c05c        0     1 end_block12 = .
+ 900c05c  900c05c        0     1 end_block13 = .
+ 900c05c  900c05c        0     1 end_block14 = .
+ 900c05c  900c05c        0     1 end_block15 = .
+ 900c05c  900c05c        0     1 end_block16 = .
+ 900c05c  900c05c        0     1 end_block17 = .
+ 900c05c  900c05c        0     1 end_block18 = .
+ 900c05c  900c05c        0     1 end_block19 = .
+ 900c05c  900c05c        0     1 end_block20 = .
+ 900c05c  900c05c        0     1 end_block21 = .
+ 900c05c  900c05c        0     1 end_block22 = .
+ 900c05c  900c05c        0     1 end_block23 = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      780     4 .symtab
+       0        0      780     4         <internal>:(.symtab)
+       0        0       6a     1 .shstrtab
+       0        0       6a     1         <internal>:(.shstrtab)
+       0        0      55f     1 .strtab
+       0        0      55f     1         <internal>:(.strtab)

@@ -1,0 +1,86 @@
+void saveMidiNames()
+{
+	FILE *fileNum =0;
+	char newLine[2] = {'\n','\0'};
+	
+	//making a file and writing in it, in the root
+	printf("\nAttempting to save midi instrument names");
+	fileNum = fileOpen("0:music/midi.txt","w");
+	for(uint8_t i=0;i<128;i++)
+		{
+		strcpy(assemb, midi_instruments[i]);
+		strcat(assemb, newLine);
+		
+		fileWrite(assemb, sizeof(char), strlen(assemb), fileNum);
+		}
+	fileClose(fileNum);
+	kernelNextEvent();
+}
+
+void saveOPL3Names()
+{
+	FILE *fileNum =0;
+	char newLine[2] = {'\n','\0'};
+	
+	printf("\nAttempting to save opl3 instrument names");
+	fileNum = fileOpen("0:music/opl3.txt","w");
+	for(uint8_t i=0;i<22;i++)
+		{
+		strcpy(assemb, opl3_instrument_names[i]);
+		strcat(assemb, newLine);
+		
+		fileWrite(assemb, sizeof(char), strlen(assemb), fileNum);
+		}
+	fileClose(fileNum);
+	kernelNextEvent();
+}
+void saveOPL3Defs()
+{
+	FILE *fileNum =0;
+	struct opl3Instrument *ptr;
+	
+	ptr = opl3_instrument_defs;
+	
+	printf("\nAttempting to save opl3 instrument definitions");
+	fileNum = fileOpen("0:music/opl3defs.bin","w");
+	for(uint8_t i=0;i<22;i++)
+		{
+		fileWrite(ptr++, sizeof(struct opl3Instrument), 1, fileNum);
+		}
+	fileClose(fileNum);
+	kernelNextEvent();
+}
+
+void saveSIDNames()
+{
+	FILE *fileNum =0;
+	char newLine[2] = {'\n','\0'};
+	
+	printf("\nAttempting to save sid instrument names");
+	fileNum = fileOpen("0:music/sid.txt","w");
+	for(uint8_t i=0;i<5;i++)
+		{
+		strcpy(assemb, sid_instruments_names[i]);
+		strcat(assemb, newLine);
+		
+		fileWrite(assemb, sizeof(char), strlen(assemb), fileNum);
+		}
+	fileClose(fileNum);
+	kernelNextEvent();
+}
+void saveSIDDefs()
+{
+	FILE *fileNum =0;
+	struct sidInstrument *ptr;
+	
+	ptr = sid_instrument_defs;
+	
+	printf("\nAttempting to save sid instrument definitions");
+	fileNum = fileOpen("0:music/siddefs.bin","w");
+	for(uint8_t i=0;i<5;i++)
+		{
+		fileWrite(ptr++, sizeof(struct sidInstrument), 1, fileNum);
+		}
+	fileClose(fileNum);
+	kernelNextEvent();
+}

@@ -2,3 +2,6 @@
 
   .starspal : { *(.starspal .starspal*) } >starspal end_starspal = .;
   .starsbm : { *(.starsbm .starsbm*) } >starsbm end_starsbm = .;
+  .planetBM : { *(.planetBM .planetBM*) } >planetBM end_planetBM = .;
+  .shipSP : { *(.shipSP .shipSP*) } >shipSP end_shipSP = .;
+  .shotBM : { *(.shotBM .shotBM*) } >shotBM end_shotBM = .;

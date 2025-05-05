@@ -2,3 +2,6 @@
 
   starspal : ORIGIN = __starspal_lma, LENGTH = __starspal_size
   starsbm : ORIGIN = __starsbm_lma, LENGTH = __starsbm_size
+  planetBM : ORIGIN = __planetBM_lma, LENGTH = __planetBM_size
+  shipSP : ORIGIN = __shipSP_lma, LENGTH = __shipSP_size
+  shotBM : ORIGIN = __shotBM_lma, LENGTH = __shotBM_size

@@ -12,3 +12,21 @@
   BYTE((end_starsbm - __starsbm_lma)>>16)
   TRIM(starsbm)
 
+  SHORT(ORIGIN(planetBM))
+  BYTE(ORIGIN(planetBM)>>16)
+  SHORT(end_planetBM - __planetBM_lma)
+  BYTE((end_planetBM - __planetBM_lma)>>16)
+  TRIM(planetBM)
+
+  SHORT(ORIGIN(shipSP))
+  BYTE(ORIGIN(shipSP)>>16)
+  SHORT(end_shipSP - __shipSP_lma)
+  BYTE((end_shipSP - __shipSP_lma)>>16)
+  TRIM(shipSP)
+
+  SHORT(ORIGIN(shotBM))
+  BYTE(ORIGIN(shotBM)>>16)
+  SHORT(end_shotBM - __shotBM_lma)
+  BYTE((end_shotBM - __shotBM_lma)>>16)
+  TRIM(shotBM)
+

@@ -6,3 +6,12 @@
   __starsbm_lma  = 0x10400;
   __starsbm_size = 0x12c00;
 
+  __planetBM_lma  = 0x23000;
+  __planetBM_size = 0x1000;
+
+  __shipSP_lma  = 0x24000;
+  __shipSP_size = 0x800;
+
+  __shotBM_lma  = 0x24800;
+  __shotBM_size = 0x40;
+

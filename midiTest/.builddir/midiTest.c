@@ -419,7 +419,6 @@ void launchBeat()
 void dealKeyPressed(uint8_t keyRaw)
 {
 	uint8_t j;
-	FILE *filePtr=0;
 	
 	switch(keyRaw)
 	{
@@ -848,7 +847,7 @@ int main(int argc, char *argv[]) {
 	
 					//first case is when the last command is a 0x90 'NoteOn' command
 					if(isHit) {graphicsDefineColor(0, detectedNote,0xFF,0x00,0xFF); //paint it as a hit note
-					textPrintInt(recByte);
+					textGotoXY(0,20);textPrintInt(recByte);
 					}
 					//otherwise it's a 0x80 'NoteOff' command
 					else {

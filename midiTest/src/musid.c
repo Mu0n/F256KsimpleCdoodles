@@ -11,9 +11,9 @@ const char *sid_instruments_names[] = {
 
 sidI sid_instrument_defs[] = {
 	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x27,.sr=0x5B,.ctrl=0x10,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
-	{.maxVolume=0x0F,.pwdLo=0x88,.pwdHi=0x00,.ad=0x61,.sr=0xC8,.ctrl=0x20,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
-	{.maxVolume=0x0F,.pwdLo=0x00,.pwdHi=0x08,.ad=0x3B,.sr=0x69,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
-	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x17,.sr=0xC8,.ctrl=0x80,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0F,.pwdLo=0x88,.pwdHi=0x00,.ad=0x09,.sr=0x00,.ctrl=0x20,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0F,.pwdLo=0x00,.pwdHi=0x08,.ad=0x00,.sr=0x40,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x70,.sr=0x00,.ctrl=0x80,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
 	{.maxVolume=0x0A,.pwdLo=0x90,.pwdHi=0x04,.ad=0xD6,.sr=0xBA,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00}
 };
 
@@ -86,19 +86,9 @@ void sid_setInstrument(uint8_t sidChip, uint8_t voice, struct sidInstrument inst
 	POKE(addrVoice+(uint16_t)SID_ATK_DEC, inst.ad); // SET ATTACK;DECAY
 	POKE(addrVoice+(uint16_t)SID_SUS_REL, inst.sr); // SET SUSTAIN;RELEASE
 	POKE(addrVoice+(uint16_t)SID_CTRL, inst.ctrl); 	 // SET CTRL as triangle
-
 }			
-
-void sid_setInstrumentAllChannels(uint8_t which)
+void sid_setSIDWide(uint8_t which)
 {
-	uint8_t c;
-	textGotoXY(0,10);
-	for(c=0;c<3;c++)
-	{
-	sid_setInstrument(0,c,sid_instrument_defs[which]);
-	sid_setInstrument(1,c,sid_instrument_defs[which]);
-	}
-	
 	POKE(SID1+SID_LO_FCF,sid_instrument_defs[which].fcfLo);
 	POKE(SID1+SID_HI_FCF,sid_instrument_defs[which].fcfHi);
 	POKE(SID1+SID_FRR, sid_instrument_defs[which].frr);
@@ -108,6 +98,17 @@ void sid_setInstrumentAllChannels(uint8_t which)
 	POKE(SID2+SID_HI_FCF,sid_instrument_defs[which].fcfHi);
 	POKE(SID2+SID_FRR, sid_instrument_defs[which].frr);
 	POKE(SID2+SID_FM_VC, sid_instrument_defs[which].maxVolume);
+}
+
+void sid_setInstrumentAllChannels(uint8_t which)
+{
+	uint8_t c;
+	for(c=0;c<3;c++)
+	{
+	sid_setInstrument(0,c,sid_instrument_defs[which]);
+	sid_setInstrument(1,c,sid_instrument_defs[which]);
+	}
+	sid_setSIDWide(which);
 }
 
 void prepSIDinstruments()

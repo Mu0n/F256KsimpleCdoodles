@@ -9,6 +9,10 @@
 #define textColorBlue   0x07
 #define textColorGray   0x05
 
+#define CHAR_EMPTY_CIRC 179
+#define CHAR_FILLED_CIRC 180
+
+
 
 void refreshInstrumentText(struct glTh*);
 void channelTextMenu(struct glTh*);
@@ -25,5 +29,7 @@ void modalMoveUp(struct glTh*, bool);
 void modalMoveDown(struct glTh*, bool);
 void modalMoveLeft(struct glTh*);
 void modalMoveRight(struct glTh*);
+void layoutChipAct();
+void refreshChipAct(uint8_t *);
 
 #endif // TEXTUI_H

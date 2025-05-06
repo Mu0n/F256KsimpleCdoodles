@@ -1,264 +1,287 @@
 #include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
+#include "string.h"
 #include "../src/presetBeats.h"
 #include "../src/timerDefs.h"
+#include "../src/musid.h"
+#include "../src/muMidi.h"
+#include "../src/muopl3.h"
 
-//assumes you've malloc'ed it beforehand!
-void setupBeats(struct aB *theBeats)
-{
+#define BASE_PRESETS 0x20000
+
+const uint8_t presetBeatCount = 1;
+const char *presetBeatCount_names[] = {
+//	"WaveSynth        ",
+//	"Da Da Da         ",
+//	"Jazzy",
+//	"Funky",
+//	"M.U.L.E.         ",
+//	"Ultima Underworld",
+	"Multi 001        ",
+//	"Multi 002        ",
+};
+
+/*
+
 	//Beat 0, simple kick drum + snare beat
-	theBeats[0].isActive = false;
-	theBeats[0].activeCount=0;
-	theBeats[0].suggTempo = 90;
-	theBeats[0].howMany = 1;
-	theBeats[0].channel = malloc(sizeof(uint8_t) * 1);
-	theBeats[0].channel[0] = 0x09; //percussion
-	theBeats[0].index = malloc(sizeof(uint8_t) * 1);
-	theBeats[0].index[0] = 0;
-	theBeats[0].timers = malloc(sizeof(struct timer_t) * 1);
-	theBeats[0].timers[0].units = TIMER_FRAMES;
-	theBeats[0].timers[0].cookie = TIMER_BEAT_0;
-	theBeats[0].notes = (uint8_t **)malloc(1 * sizeof(uint8_t *)); //1 track
-	theBeats[0].delays = (uint8_t **)malloc(1 * sizeof(uint8_t *));//1 track
-	theBeats[0].notes[0] = 	malloc(sizeof(uint8_t) * 2); //just 2 notes!
-	theBeats[0].delays[0] = malloc(sizeof(uint8_t) * 2); //just 2 notes!
-	theBeats[0].notes[0][0] = 0x24; //kick drum
-	theBeats[0].notes[0][1] = 0x26; //snare drum
-	theBeats[0].delays[0][0] = 3; //3rd element of tempo LUT, quarter notes
-	theBeats[0].delays[0][1] = 3;
-	theBeats[0].noteCount = malloc(sizeof(uint8_t) * 1);
-	theBeats[0].noteCount[0] = 2;
+const uint8_t beat00_notes[] = {0x24,0x26};  //0x24 kick drum, 0x26 snare
+const uint8_t beat00_delays[] = {3,3};
+const struct aT beat00 = {.chip=0,.chan=9,.inst=0,.count=2};
+
+	//Beat 1, famous casio beat used in Da Da Da
+const uint8_t beat10_notes[] = {0x24,0x28,0x28,0x24,0x28};  //0x24 kick drum, 0x28 bright snare
+const uint8_t beat10_delays[] = {3,2,2,3,3};
+const uint8_t beat11_notes[] = {0x4B,0x63,0x00,0x63,0x4B,0x63,0x4B,0x63};
+const uint8_t beat11_delays[] = {2,2,2,2,2,2,2,2};
+const struct aT beat10 = {.chip=0,.chan=9,.inst=0   ,.count=5};
+const struct aT beat11 = {.chip=0,.chan=2,.inst=0x73,.count=8};
+
+	//Beat 2, jazz cymbal ride
+static const uint8_t beat20_notes[] = {0x24,0x26,0x24,0x26};  //0x24 kick drum, 0x28 bright snare
+static const uint8_t beat20_delays[] = {3,3,3,3};
+static const uint8_t beat21_notes[] = {0x39,0x39,0x39,0x39,0x39,0x39};
+static const uint8_t beat21_delays[] = {3,13,12,3,13,12};
+static const struct aT beat20 = {.chip=0,.chan=9,.inst=0,.count=4};
+static const struct aT beat21 = {.chip=0,.chan=9,.inst=0,.count=6};
+
+	//Beat 3, funk swung 16th note
+	
+static const uint8_t beat30_notes[] = {0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,
+								0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2C,0x2E,0x2E,0x2E,0x2E,0x2C,0x2C};
+static const uint8_t beat30_delays[] = {16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15};
+static const uint8_t beat31_notes[] = {0x24,0x00,0x24,0x26,0x00,0x24,0x00,0x24,0x24,0x26,0x00,0x24};
+static const uint8_t beat31_delays[] = {17,16,15,17,16,15,16,15,17,17,16,15};
+static const struct aT beat30 = {.chip=0,.chan=9,.inst=0,.count=32};
+static const struct aT beat31 = {.chip=0,.chan=9,.inst=0,.count=12};
+
+	//Beat 4, Mule bassline
+const uint8_t beat40_notes[] =  {0,0,0,0,
+								41,53,33,45,34,46,35,47,
+								36,48,38,50,39,51,40,52,
+								41,53,33,45,34,46,35,47,
+								36,48,38,50,39,51,40,52,
+								41,53,33,45,34,46,35,47,
+								39,51,37,49,39,51,37,49,
+								41,53,33,45,34,46,35,47,
+								39,51,37,49,39,51,37,49,
+								41,53,33,45,34,46,35,47,
+								39,51,37,49,39,51,37,49,
+								41,53,33,45,34,46,35,47,
+								39,51,37,49,39,51,37,49,
+								53,0,53,53,53,0};
+const uint8_t beat40_delays[] = {5,5,5,5,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 2,2,2,2,2,2,2,2,
+								 3,2,1,1,3,3};
+const uint8_t beat41_notes[] = {23,35,47,35,23,35,47,35,
+							    23,35,47,23,47,23,47,35}; //23 35 47
+const uint8_t beat41_delays[] = {2,2,2,2,2,2,2,2,
+							     2,2,2,2,2,2,2,2};
+const struct aT beat40 = {.chip=1,.chan=0,.inst=1,.count=105};
+const struct aT beat41 = {.chip=1,.chan=2,.inst=3,.count=16};
+
+
+	//Beat 5, Ultima Underworld "Descent"
+//static const uint8_t beat50_notes[] = {33,29,160 ,34,33,32,31,30,38,35,37,35};
+//static const uint8_t beat50_delays[]= {17,17,17,11 , 3, 3, 3,17,17,17,17,17};
+const uint8_t beat51_notes[] = {53,56,60,65,68,72,53,56,60,65,68,72,53,56,60,65,68,72,
+									   52,56,61,64,68,73,52,56,61,64,68,73,52,56,61,64,68,73,
+									   52,56,59,64,68,71,52,56,59,64,68,71,52,56,59,64,68,71,
+									   52,55,59,64,67,71,52,55,59,64,67,71,52,55,59,64,67,71,
+									   53,56,60,65,68,72,53,56,60,65,68,72,53,56,60,65,68,72,
+									   53,56,61,65,68,73,53,56,61,65,68,73,53,56,61,65,68,73,
+									   53,58,62,65,70,74,53,58,62,65,70,74,53,58,62,65,70,74,
+									   55,59,62,67,71,74,55,59,62,67,71,74,55,59,62,67,71,74,
+									   53,58,62,65,70,74,53,58,62,65,70,74,53,58,62,65,70,74,
+									   55,59,62,67,71,74,55,59,62,67,71,74,55,59,62,67,71,74,
+									   53,58,62,65,70,74,53,58,62,65,70,74,53,58,62,65,70,74,
+									   55,59,62,67,71,74,55,59,62,67,71,74,55,59,62,67,71,74};
+const uint8_t beat51_delays[] = {1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+									    1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1};
+//static const struct aT beat50 = {.chip=3,.chan=2,.inst=20,.count=12};
+const struct aT beat51 = {.chip=3,.chan=3,.inst=18, .count=216};
+*/
+		//Beat 6, Multi chip 01
+const uint8_t beat60_notes[] = {33,40,40,40,38,38,38,35,35,35,33,33};
+const uint8_t beat60_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};
+const uint8_t beat61_notes[] = {44,42,42,44,42,42,44,42};
+const uint8_t beat61_delays[] = {9,3,3,9,3,9,3,3};
+const uint8_t beat62_notes[] = {72,76,76,76,74,74,74,72,72,72,72,72};
+const uint8_t beat62_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};
+const uint8_t beat63_notes[] = {76,79,79,79,79,79,79,76,76,76,76,76};
+const uint8_t beat63_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};
+const uint8_t beat64_notes[] = {81,83,83,83,83,83,83,79,79,79,81,81};
+const uint8_t beat64_delays[] = {10,4,4,10,4,4,10,4,4,10,4,4};
+const uint8_t beat65_notes[] = {57,62, 59,64,67,64,59,64,59,64, 57,62,66,62,57,62,57,62, 55,60,64,60,55,60,55,60, 57,60,64,60,57,60};
+const uint8_t beat65_delays[] = {9,9, 9,9,9,9,9,9,9,9, 9,9,9,9,9,9,9,9, 9,9,9,9,9,9,9,9, 9,9,9,9,9,9};
+const struct aT beat60 = {.chip=3,.chan=1,.inst=12,.count=12};
+const struct aT beat61 = {.chip=0,.chan=9,.inst=1,.count=8};
+const struct aT beat62 = {.chip=0,.chan=2,.inst=10,.count=12};
+const struct aT beat63 = {.chip=0,.chan=2,.inst=10,.count=12};
+const struct aT beat64 = {.chip=0,.chan=2,.inst=10,.count=12};
+const struct aT beat65 = {.chip=2,.chan=1,.inst=0,.count=32};
+	
+		//Beat 7, Multi chip 02
+const uint8_t beat70_notes[] = {};
+const uint8_t beat70_delays[] = {};
+const struct aT beat70 = {.chip=3,.chan=1,.inst=12,.count=12};
+
+void beatSetInstruments(struct aT *theT)
+{
+	switch(theT->chip)
+		{
+		case 0: // MIDI
+		    if(theT->chan != 0x09) {
+				prgChange(theT->inst,theT->chan,true);
+				prgChange(theT->inst,theT->chan,false);
+				}
+			break;
+		case 1: // SID
+			sid_setInstrument((theT->chan)/3, (theT->chan)-((theT->chan)/3)*3, sid_instrument_defs[theT->inst]);
+			sid_setSIDWide(theT->inst);
+			break;
+		case 3: // OPL3
+			opl3_setInstrument(opl3_instrument_defs[theT->inst],theT->chan);
+			opl3_write(OPL_CH_FEED + theT->chan,   opl3_instrument_defs[theT->inst].CHAN_FEED);
+			break;
+		}
+}
+
+//setup memory for this beat according to how many tracks are used
+int8_t setupMem4ABeat(struct aB *theB, uint8_t whichBeat, uint8_t tempo, uint8_t chanCountNeeded, uint32_t *whereAt)
+{
+	theB[whichBeat].isActive = false;
+	theB[whichBeat].pendingRelaunch = false;
+	theB[whichBeat].activeCount=0;
+	theB[whichBeat].suggTempo = tempo;
+	theB[whichBeat].howManyChans = chanCountNeeded;
+	theB[whichBeat].baseAddr = *whereAt;
+	
+	theB[whichBeat].index = malloc(sizeof(uint8_t) * chanCountNeeded);
+	if(theB[whichBeat].index == NULL) return -1;
+	theB[whichBeat].pending2x = malloc(sizeof(uint8_t) * chanCountNeeded);
+	if(theB[whichBeat].pending2x == NULL) return -1;
+	theB[whichBeat].timers = malloc(sizeof(struct timer_t) * chanCountNeeded);
+	if(theB[whichBeat].timers == NULL) return -1;
+	
+	for(uint8_t i = 0; i<chanCountNeeded; i++) {
+		theB[whichBeat].index[i] = 0;
+		theB[whichBeat].pending2x[i]=0;
+		theB[whichBeat].timers[i].units = TIMER_FRAMES;
+		theB[whichBeat].timers[i].cookie = TIMER_BEAT_1A + i;
+		}
+	return 0;
+}
+
+void punchInFar(uint8_t value, uint32_t *whereTo)
+{
+	FAR_POKE(*whereTo, value);
+	(*whereTo)++;
+}
+void punchInFarArray(const uint8_t *theArray, uint8_t howMany, uint32_t *whereTo)
+{
+	for(uint8_t i=0; i < howMany; i++){
+		FAR_POKE((*whereTo)++, theArray[i]);
+	}
+}
+
+void getBeatTrackNoteInfo(struct aB *theB, uint8_t whichBeat, uint8_t track, uint8_t *farNote, uint8_t *farDelay, struct aT *theT)
+{
+	uint32_t addr = theB[whichBeat].baseAddr; //go to noteCount
+	uint8_t farCount=0;
+	
+	for(uint8_t i = 0; i < theB[whichBeat].howManyChans; i++)
+		{
+	
+		farCount = FAR_PEEK(addr+3);
+		if(i==track){
+			theT->chip = FAR_PEEK(addr);
+			theT->chan = FAR_PEEK(addr+1);
+			theT->inst = FAR_PEEK(addr+2);
+			theT->count = FAR_PEEK(addr+3);
+			*farNote  = FAR_PEEK(addr + 4 + (uint32_t)theB[whichBeat].index[track]);
+			*farDelay = FAR_PEEK(addr + 4 + (uint32_t)(farCount) + (uint32_t)theB[whichBeat].index[track]);
+			}
+		else{
+			addr += (uint32_t)(2*(farCount)+4);
+			}
+		}
+}
+
+void setupMem4Track(struct aT track, uint32_t *whereAt, const uint8_t *notes, const uint8_t *delays, uint8_t howMany)
+{
+	punchInFar(track.chip, whereAt);
+	punchInFar(track.chan, whereAt);
+	punchInFar(track.inst, whereAt);
+	punchInFar(howMany, whereAt);
+	punchInFarArray(notes, howMany, whereAt);
+	punchInFarArray(delays, howMany, whereAt);
+}
+
+void setupBeats(struct aB *theBeats){
+	uint32_t whereAt = BASE_PRESETS;
+/*
+	//Beat 0, simple kick drum + snare beat
+	if(setupMem4ABeat(theBeats, 0, 90, 1, &whereAt) == -1) printf("ERROR");
+	setupMem4Track(beat00, &whereAt, beat00_notes, beat00_delays, sizeof(beat00_notes));
 	
 	//Beat 1, famous casio beat used in Da Da Da
-	theBeats[1].isActive = false;
-	theBeats[1].activeCount=0;
-	theBeats[1].suggTempo = 128;
-	theBeats[1].howMany = 2;
-	theBeats[1].channel = malloc(sizeof(uint8_t) * 2); // percs and woodblock, 2 channels
-	theBeats[1].channel[0] = 0x09; //percussion
-	theBeats[1].channel[1] = 0x02; //woodblock
-	theBeats[1].index = malloc(sizeof(uint8_t) * 2);
-	theBeats[1].index[0] = theBeats[1].index[1] = 0;
-	theBeats[1].timers = malloc(sizeof(struct timer_t) * 2);
-	theBeats[1].timers[0].units = TIMER_FRAMES;
-	theBeats[1].timers[1].units = TIMER_FRAMES;
-	theBeats[1].timers[0].cookie = TIMER_BEAT_1A;
-	theBeats[1].timers[1].cookie = TIMER_BEAT_1B;
-	theBeats[1].notes = (uint8_t **)malloc(2 * sizeof(uint8_t *)); // 2 tracks
-	theBeats[1].delays = (uint8_t **)malloc(2 * sizeof(uint8_t *)); // 2 tracks
-	theBeats[1].notes[0] = malloc(sizeof(uint8_t) * 5);
-	theBeats[1].delays[0] = malloc(sizeof(uint8_t) * 5);
-	
-	theBeats[1].notes[1] = malloc(sizeof(uint8_t) * 8);
-	theBeats[1].delays[1] = malloc(sizeof(uint8_t) * 8);
-	
-	theBeats[1].noteCount = malloc(sizeof(uint8_t) * 2);
-	theBeats[1].noteCount[0]=5;
-	theBeats[1].noteCount[1]=8;
-	
-	theBeats[1].notes[0][0] =  0x24; //kick drum
-	theBeats[1].notes[0][1] =  0x28; //snare drum
-	theBeats[1].notes[0][2] =  0x28;
-	theBeats[1].notes[0][3] =  0x24;
-	theBeats[1].notes[0][4] =  0x28;
-	
-	theBeats[1].delays[0][0] =  3;
-	theBeats[1].delays[0][1] =  2;
-	theBeats[1].delays[0][2] =  2;
-	theBeats[1].delays[0][3] =  3;
-	theBeats[1].delays[0][4] =  3;
-	
-	theBeats[1].noteCount[0] = 5;
-	
-	theBeats[1].notes[1][0] =  0x4B;
-	theBeats[1].notes[1][1] =  0x63;
-	theBeats[1].notes[1][2] =  0x00;
-	theBeats[1].notes[1][3] =  0x63;
-	theBeats[1].notes[1][4] =  0x4B;
-	theBeats[1].notes[1][5] =  0x63;
-	theBeats[1].notes[1][6] =  0x4B;
-	theBeats[1].notes[1][7] =  0x63;
-	
-	theBeats[1].delays[1][0] =  2;
-	theBeats[1].delays[1][1] =  2;
-	theBeats[1].delays[1][2] =  2;
-	theBeats[1].delays[1][3] =  2;
-	theBeats[1].delays[1][4] =  2;
-	theBeats[1].delays[1][5] =  2;
-	theBeats[1].delays[1][6] =  2;
-	theBeats[1].delays[1][7] =  2;
-	
-	theBeats[1].noteCount[1] = 8;
-	
-	
-	//Beat 2, jazz cymbal ride
-	theBeats[2].isActive = false;
-	theBeats[2].activeCount=0;
-	theBeats[2].suggTempo = 100;
-	theBeats[2].howMany = 2;
-	theBeats[2].channel = malloc(sizeof(uint8_t) * 2); // 2 tracks all percs
-	theBeats[2].channel[0] = 0x09; //cymbal
-	theBeats[2].channel[1] = 0x09; //kick snare
-	theBeats[2].index = malloc(sizeof(uint8_t) * 2);
-	theBeats[2].index[0] = 0;
-	theBeats[2].index[1] = 0;
-	theBeats[2].timers = malloc(sizeof(struct timer_t) * 2);
-	theBeats[2].timers[0].units = TIMER_FRAMES;
-	theBeats[2].timers[0].cookie = TIMER_BEAT_2A;
-	theBeats[2].timers[1].units = TIMER_FRAMES;
-	theBeats[2].timers[1].cookie = TIMER_BEAT_2B;
-	theBeats[2].notes = (uint8_t **)malloc(2 * sizeof(uint8_t *)); //2 track
-	theBeats[2].delays = (uint8_t **)malloc(2 * sizeof(uint8_t *));//2 track
-	theBeats[2].noteCount = malloc(sizeof(uint8_t) * 2);//2 track
-	
-	theBeats[2].notes[0] = 	malloc(sizeof(uint8_t) * 6); //6 notes!
-	theBeats[2].notes[1] = 	malloc(sizeof(uint8_t) * 4); //4 notes!
-	theBeats[2].delays[0] = malloc(sizeof(uint8_t) * 4); //6 notes!
-	theBeats[2].delays[1] = malloc(sizeof(uint8_t) * 6); //6 notes!
-	
-	theBeats[2].noteCount[0] = 4;
-	theBeats[2].notes[0][0] = 0x24;
-	theBeats[2].notes[0][1] = 0x26;
-	theBeats[2].notes[0][2] = 0x24;
-	theBeats[2].notes[0][3] = 0x26;
-	theBeats[2].delays[0][0] = 3;
-	theBeats[2].delays[0][1] = 3;
-	theBeats[2].delays[0][2] = 3;
-	theBeats[2].delays[0][3] = 3;
-	
-	theBeats[2].noteCount[1] = 6;
-	theBeats[2].notes[1][0] = 0x39;
-	theBeats[2].notes[1][1] = 0x39;
-	theBeats[2].notes[1][2] = 0x39;
-	theBeats[2].notes[1][3] = 0x39;
-	theBeats[2].notes[1][4] = 0x39;
-	theBeats[2].notes[1][5] = 0x39;
-	theBeats[2].delays[1][0] = 3;
-	theBeats[2].delays[1][1] = 13;
-	theBeats[2].delays[1][2] = 12;
-	theBeats[2].delays[1][3] = 3;
-	theBeats[2].delays[1][4] = 13;
-	theBeats[2].delays[1][5] = 12;
-	
-	
-	//Beat 3, funk swung 16th note
-	theBeats[3].isActive = false;
-	theBeats[3].activeCount=0;
-	theBeats[3].suggTempo = 80;
-	theBeats[3].howMany = 2;
-	theBeats[3].channel = malloc(sizeof(uint8_t) * 2); // 2 tracks all percs
-	theBeats[3].channel[0] = 0x09; //hit hat
-	theBeats[3].channel[1] = 0x09; //kick, rim
-	theBeats[3].index = malloc(sizeof(uint8_t) * 2);
-	theBeats[3].index[0] = 0;
-	theBeats[3].index[1] = 0;
-	theBeats[3].timers = malloc(sizeof(struct timer_t) * 2);
-	theBeats[3].timers[0].units = TIMER_FRAMES;
-	theBeats[3].timers[0].cookie = TIMER_BEAT_3A;
-	theBeats[3].timers[1].units = TIMER_FRAMES;
-	theBeats[3].timers[1].cookie = TIMER_BEAT_3B;
-	theBeats[3].notes = (uint8_t **)malloc(2 * sizeof(uint8_t *)); //2 track
-	theBeats[3].delays = (uint8_t **)malloc(2 * sizeof(uint8_t *));//2 track
-	theBeats[3].noteCount = malloc(sizeof(uint8_t) * 2); //2 track
+	setupMem4ABeat(theBeats, 1, 128, 2, &whereAt);
+	setupMem4Track(beat10, &whereAt, beat10_notes, beat10_delays, sizeof(beat10_notes));
+	setupMem4Track(beat11, &whereAt, beat11_notes, beat11_delays, sizeof(beat11_notes));
 
-	theBeats[3].notes[0] = 	malloc(sizeof(uint8_t) * 32); //32 notes!
-	theBeats[3].notes[1] = 	malloc(sizeof(uint8_t) * 12); //8 notes!
-	theBeats[3].delays[0] = malloc(sizeof(uint8_t) * 32); //32 notes!
-	theBeats[3].delays[1] = malloc(sizeof(uint8_t) * 12); //8 notes!
+	//Beat 2, jazz cymbal ride
+	setupMem4ABeat(theBeats, 2, 100, 2, &whereAt);
+	setupMem4Track(beat20, &whereAt, beat20_notes, beat20_delays, sizeof(beat20_notes));
+	setupMem4Track(beat21, &whereAt, beat21_notes, beat21_delays, sizeof(beat21_notes));
+
+	//Beat 3, funk swung 16th note
+	setupMem4ABeat(theBeats, 3, 80, 2, &whereAt);
+	setupMem4Track(beat30, &whereAt, beat30_notes, beat30_delays, sizeof(beat30_notes));
+	setupMem4Track(beat31, &whereAt, beat31_notes, beat31_delays, sizeof(beat31_notes));
 	
-	theBeats[3].noteCount[0] = 32;
-	theBeats[3].notes[0][0]  = 0x2C;
-	theBeats[3].notes[0][1]  = 0x2C;
-	theBeats[3].notes[0][2]  = 0x2C;
-	theBeats[3].notes[0][3]  = 0x2C;
-	theBeats[3].notes[0][4]  = 0x2C;
-	theBeats[3].notes[0][5]  = 0x2C;
-	theBeats[3].notes[0][6]  = 0x2C;
-	theBeats[3].notes[0][7]  = 0x2C;
-	theBeats[3].notes[0][8]  = 0x2C;
-	theBeats[3].notes[0][9]  = 0x2C;
-	theBeats[3].notes[0][10] = 0x2C;
-	theBeats[3].notes[0][11] = 0x2C;
-	theBeats[3].notes[0][12] = 0x2C;
-	theBeats[3].notes[0][13] = 0x2C;
-	theBeats[3].notes[0][14] = 0x2C;
-	theBeats[3].notes[0][15] = 0x2C;
+	//Beat 4, Mule bassline
+	if(setupMem4ABeat(theBeats, 1, 120, 2, &whereAt) == -1) printf("ERROR");
+	setupMem4Track(beat40, &whereAt, beat40_notes, beat40_delays, sizeof(beat40_notes));
+	setupMem4Track(beat41, &whereAt, beat41_notes, beat41_delays, sizeof(beat41_notes));
 	
-	theBeats[3].notes[0][16] = 0x2C;
-	theBeats[3].notes[0][17] = 0x2C;
-	theBeats[3].notes[0][18] = 0x2C;
-	theBeats[3].notes[0][19] = 0x2C;
-	theBeats[3].notes[0][20] = 0x2C;
-	theBeats[3].notes[0][21] = 0x2C;
-	theBeats[3].notes[0][22] = 0x2C;
-	theBeats[3].notes[0][23] = 0x2C;
-	theBeats[3].notes[0][24] = 0x2C;
-	theBeats[3].notes[0][25] = 0x2C;
-	theBeats[3].notes[0][26] = 0x2E;
-	theBeats[3].notes[0][27] = 0x2E;
-	theBeats[3].notes[0][28] = 0x2C;
-	theBeats[3].notes[0][29] = 0x2C;
-	theBeats[3].notes[0][30] = 0x2C;
-	theBeats[3].notes[0][31] = 0x2C;
-	
-	theBeats[3].delays[0][0]  = 16;
-	theBeats[3].delays[0][1]  = 15;
-	theBeats[3].delays[0][2]  = 16;
-	theBeats[3].delays[0][3]  = 15;
-	theBeats[3].delays[0][4]  = 16;
-	theBeats[3].delays[0][5]  = 15;
-	theBeats[3].delays[0][6]  = 16;
-	theBeats[3].delays[0][7]  = 15;
-	theBeats[3].delays[0][8]  = 16;
-	theBeats[3].delays[0][9]  = 15;
-	theBeats[3].delays[0][10] = 16;
-	theBeats[3].delays[0][11] = 15;
-	theBeats[3].delays[0][12] = 16;
-	theBeats[3].delays[0][13] = 15;
-	theBeats[3].delays[0][14] = 16;
-	theBeats[3].delays[0][15] = 15;
-	
-	theBeats[3].delays[0][16] = 16;
-	theBeats[3].delays[0][17] = 15;
-	theBeats[3].delays[0][18] = 16;
-	theBeats[3].delays[0][19] = 15;
-	theBeats[3].delays[0][20] = 16;
-	theBeats[3].delays[0][21] = 15;
-	theBeats[3].delays[0][22] = 16;
-	theBeats[3].delays[0][23] = 15;
-	theBeats[3].delays[0][24] = 16;
-	theBeats[3].delays[0][25] = 15;
-	theBeats[3].delays[0][26] = 16;
-	theBeats[3].delays[0][27] = 15;
-	theBeats[3].delays[0][28] = 16;
-	theBeats[3].delays[0][29] = 15;
-	theBeats[3].delays[0][30] = 16;
-	theBeats[3].delays[0][31] = 15;
-	
-	theBeats[3].noteCount[1] = 12; //alt: floor tom:0x2D or kick drum 0x24; rim: 0x25 snare 0x26
-	theBeats[3].notes[1][0]  = 0x24;
-	theBeats[3].notes[1][1]  = 0x00;
-	theBeats[3].notes[1][2]  = 0x24;
-	theBeats[3].notes[1][3]  = 0x26;
-	theBeats[3].notes[1][4]  = 0x00;
-	theBeats[3].notes[1][5]  = 0x24;
-	theBeats[3].notes[1][6]  = 0x00;
-	theBeats[3].notes[1][7]  = 0x24;
-	theBeats[3].notes[1][8]  = 0x24;
-	theBeats[3].notes[1][9]  = 0x26;
-	theBeats[3].notes[1][10] = 0x00;
-	theBeats[3].notes[1][11] = 0x24;
-	theBeats[3].delays[1][0]  = 17;
-	theBeats[3].delays[1][1]  = 16;
-	theBeats[3].delays[1][2]  = 15;
-	theBeats[3].delays[1][3]  = 17;
-	theBeats[3].delays[1][4]  = 16;
-	theBeats[3].delays[1][5]  = 15;
-	theBeats[3].delays[1][6]  = 16;
-	theBeats[3].delays[1][7]  = 15;
-	theBeats[3].delays[1][8]  = 17;
-	theBeats[3].delays[1][9]  = 17;
-	theBeats[3].delays[1][10] = 16;
-	theBeats[3].delays[1][11] = 15;
+	//Beat 5, Ultima Underworld "Descent"
+	if(setupMem4ABeat(theBeats, 2, 92, 1, &whereAt) == -1) printf("ERROR");
+//	setupMem4Track(beat50, &whereAt, beat50_notes, beat50_delays, sizeof(beat50_notes));
+	setupMem4Track(beat51, &whereAt, beat51_notes, beat51_delays, sizeof(beat51_notes));
+*/
+		//Beat 6, Multi 001"
+	if(setupMem4ABeat(theBeats, 0, 120, 6, &whereAt) == -1) printf("ERROR");
+	setupMem4Track(beat60, &whereAt, beat60_notes, beat60_delays, sizeof(beat60_notes));
+	setupMem4Track(beat61, &whereAt, beat61_notes, beat61_delays, sizeof(beat61_notes));
+	setupMem4Track(beat62, &whereAt, beat62_notes, beat62_delays, sizeof(beat62_notes));
+	setupMem4Track(beat63, &whereAt, beat63_notes, beat63_delays, sizeof(beat63_notes));
+	setupMem4Track(beat64, &whereAt, beat64_notes, beat64_delays, sizeof(beat64_notes));
+	setupMem4Track(beat65, &whereAt, beat65_notes, beat65_delays, sizeof(beat65_notes));
+/*
+		//Beat 7, Multi 002"
+	if(setupMem4ABeat(theBeats, 1, 90, 1, &whereAt) == -1) printf("ERROR");
+	setupMem4Track(beat00, &whereAt, beat00_notes, beat00_delays, sizeof(beat00_notes));
+	*/
 }

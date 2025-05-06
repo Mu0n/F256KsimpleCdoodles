@@ -8,17 +8,22 @@
  //TIMER_TEXT for the 1-frame long text refresh timer for data display
  //TIMER_NOTE is for a midi note timer
 #define TIMER_TEXT_COOKIE 0
-#define TIMER_TEXT_DELAY 1
+#define TIMER_TEXT_DELAY 9
 
 #include "../src/muVS1053b.h"  //contains basic MIDI functions I often use
-#include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
-#include "../src/musid.h"   //contains SID chip functions
 #include "../src/mupsg.h"   //contains PSG chip functions
 #include "../src/muopl3.h"   //contains OPL3 chip functions
-#include "../src/textui.h"   //has the text ui elements, specific to this project
 #include "../src/globals.h"   //contains the globalThings structure
 #include "../src/presetBeats.h"   //contains preset Beats
+#include "../src/beatFileOps.h"   //can save or restore beats from files
+
+#include "../src/musid.h"   //contains SID chip functions
+#include "../src/textui.h"   //has the text ui elements, specific to this project
+#include "../src/muUtils.h" //contains helper functions I often use
+#include "stdio.h"
+
+#define PSG_DEFAULT_VOL 0x4C
 
 #define WITHOUT_TILE
 #define WITHOUT_SPRITE
@@ -39,7 +44,8 @@ uint16_t note = 0x36, oldNote, oldCursorNote; /*note is the current midi hex not
 //reference tempoLUT, close to 112.5 bpm where a quarter note = 32 frames = 0,533s
 uint8_t tempoLUTRef[18] = {4, 8, 16, 32, 64, 128, //         32nd, 16th, 8th, 4th, half, whole
 						   8,12, 24, 48, 96, 192, //dotted   32nd, 16th, 8th, 4th, half, whole
-					      	11, 21, 32, 5, 11, 16}; //triplets of 4th: lengths of 1, 2, 3,  triplets of 8ths of length 1, 2, 3
+					      11,21, 32,  5, 11,  144}; //triplets of 4th: lengths of 1, 2, 3,  triplets of 8ths of length 1, 2, 3
+						   
 
 uint8_t mainTempoLUT[18]; //contains the delays between notes in prepared beats
 
@@ -47,13 +53,17 @@ uint8_t diagBuffer[255]; //info dump on screen
 
 uint8_t polyPSGBuffer[6] = {0,0,0,0,0,0};
 uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
+uint8_t reservedPSG[6]={0,0,0,0,0,0};
 
 uint8_t polySIDBuffer[6] = {0,0,0,0,0,0};
 uint8_t sidChoiceToVoice[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
+uint8_t reservedSID[6] = {0,0,0,0,0,0};
 
 uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
 uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
+uint8_t reservedOPL3[9]={0,0,0,0,0,0,0,0,0};
 
+uint8_t blockCharacters[] = {22,21,19,20,22,23,26,27,28,29,24,23,24,25,25,22,23,24,21,20,21,23,20};
 uint8_t *testArray;
 
 bool instSelectMode = false; //is currently in the mode where you see the whole instrument list
@@ -62,8 +72,8 @@ bool altHit = false, shiftHit = false; //keyboard modifiers
 
 bool noteColors[88]={1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1};
 
-
-
+uint8_t chipAct[5] ={0,0,0,0,0}; //used for text UI to show chip activity in real time
+	
 void escReset(void);
 
 
@@ -82,19 +92,20 @@ void emptyPSGBuffer()
 	uint8_t i;
 	for(i=0;i<6;i++) polyPSGBuffer[i]=0;
 }
-int8_t findFreeChannel(uint8_t *ptr, uint8_t howMany)
+int8_t findFreeChannel(uint8_t *ptr, uint8_t howManyChans, uint8_t *reserved)
 	{
 	uint8_t i;
-	for(i=0;i<howMany;i++)
+	for(i=0;i<howManyChans;i++)
 		{
+		if(reserved[i]) continue;
 		if(ptr[i] == 0) return i;	
 		}
 	return -1;
 	}
-int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howMany)
+int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howManyChans)
 	{
 	uint8_t i;
-	for(i=0;i<howMany;i++)
+	for(i=0;i<howManyChans;i++)
 		{
 		if(ptr[i] == note) return i;	
 		}
@@ -102,54 +113,77 @@ int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howMany)
 	}
 	
 //dispatchNote deals with all possibilities
-void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt)
+void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt, uint8_t whichChip, bool isBeat, uint8_t beatChan)
 {
 	uint16_t sidTarget, sidVoiceBase;
 	int8_t foundFreeChan=-1; //used when digging for a free channel for polyphony
-	if(gPtr->chipChoice==0) //MIDI
+	
+	if(isOn && note ==0) return;
+	if(whichChip==0 || whichChip == 4) //MIDI
 	{
 		if(isOn) {
-			midiNoteOn(channel, note, speed, wantAlt);
-			if(gPtr->isTwinLinked) midiNoteOn(1, note,speed, wantAlt);
+			midiNoteOn(channel, note, speed, whichChip==4?true:wantAlt);
+			if(gPtr->isTwinLinked) midiNoteOn(1, note,speed, whichChip==4?true:wantAlt);
+			if(wantAlt) chipAct[1]++;
+			else chipAct[0]++;
 		}
 		else 
 		{
-			midiNoteOff(channel, note, speed, wantAlt);
-			if(gPtr->isTwinLinked) midiNoteOff(1, note,speed, wantAlt);
+			midiNoteOff(channel, note, speed, whichChip==4?true:wantAlt);
+		if(wantAlt) {if(chipAct[1])chipAct[1]--;}
+		else {if(chipAct[0])chipAct[0]--;}
+			
+			if(gPtr->isTwinLinked) 
+			{
+			midiNoteOff(1, note,speed, whichChip==4?true:wantAlt);
+			if(wantAlt) {if(chipAct[1])chipAct[1]--;}
+			else {if(chipAct[0])chipAct[0]--;}
+			}
 		}
 		return;
 	}
-	if(gPtr->chipChoice==1) //SID
+	if(whichChip==1) //SID
 	{
 		if(isOn)
 		{
-			foundFreeChan = findFreeChannel(polySIDBuffer, 6);
+			if(isBeat) {
+				foundFreeChan = channel; //if it's a preset, we already know which channel to target
+				polySIDBuffer[channel]=note;
+				}
+			else foundFreeChan = findFreeChannel(polySIDBuffer, 6, reservedSID);
 			if(foundFreeChan != -1)
 				{
 				sidTarget = foundFreeChan>2?SID2:SID1;
 				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
 				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
 				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
-				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, fetchCtrl(gPtr->sidInstChoice), isOn);
-				polySIDBuffer[foundFreeChan] = note;	
+				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):fetchCtrl(gPtr->sidInstChoice), isOn);//if isBeat false, usually gPtr->sidInstChoice
+				chipAct[2]++;
+				polySIDBuffer[foundFreeChan] = note;					
 				}
 		}
 		else 
 		{
-			foundFreeChan = liberateChannel(note, polySIDBuffer, 6);
+			if(isBeat) {
+				foundFreeChan = channel; //if it's a preset, we already know which channel to target
+				polySIDBuffer[channel]=0;
+				}
+			else foundFreeChan = liberateChannel(note, polySIDBuffer, 6);
 			sidTarget = foundFreeChan>2?SID2:SID1;
 			sidVoiceBase = sidChoiceToVoice[foundFreeChan];
 			polySIDBuffer[foundFreeChan] = 0;
 			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
 			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
-			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, fetchCtrl(gPtr->sidInstChoice), isOn);
+			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):fetchCtrl(gPtr->sidInstChoice), isOn); //if isBeat false, usually gPtr->sidInstChoice
+			if(chipAct[2])chipAct[2]--;
 		}
 		return;
 	}
-	if(gPtr->chipChoice==2) //PSG
+	if(whichChip==2) //PSG
 	{
 		if(isOn) {
-			foundFreeChan = findFreeChannel(polyPSGBuffer, 6);
+			if(isBeat) foundFreeChan = channel; //if it's a preset, we already know which channel to target
+			else foundFreeChan = findFreeChannel(polyPSGBuffer, 6, reservedPSG);
 			if(foundFreeChan != -1)
 				{
 				psgNoteOn(  polyPSGChanBits[foundFreeChan], //used to correctly address the channel in the PSG command
@@ -157,7 +191,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 							psgLow[note-45],psgHigh[note-45],
 							speed);
 			    polyPSGBuffer[foundFreeChan] = note;
-
+				chipAct[3]++;	
 				}
 			}
 		else 
@@ -165,18 +199,21 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			foundFreeChan = liberateChannel(note, polyPSGBuffer, 6);
 			polyPSGBuffer[foundFreeChan] = 0;
 			psgNoteOff(polyPSGChanBits[foundFreeChan], foundFreeChan>2?PSG_RIGHT:PSG_LEFT);
+			if(chipAct[3])chipAct[3]--;
 		}
 		return;
 	}
-	if(gPtr->chipChoice==3) //OPL3
+	if(whichChip==3) //OPL3
 	{
 		if(isOn) 
 			{
-			foundFreeChan = findFreeChannel(polyOPL3Buffer, 9);
+			if(isBeat) foundFreeChan = channel; //if it's a preset, we already know which channel to target
+			else foundFreeChan = findFreeChannel(polyOPL3Buffer, 9, reservedOPL3);
 			if(foundFreeChan != -1)
 				{
 				opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, true);	
 				polyOPL3Buffer[foundFreeChan] = note;
+				chipAct[4]++;
 				}
 			}
 		else 
@@ -184,21 +221,35 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			foundFreeChan = liberateChannel(note, polyOPL3Buffer, 9);
 			opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, false);	
 			polyOPL3Buffer[foundFreeChan] = 0;
+			if(chipAct[4])chipAct[4]--;
 			}
 	}
 }	
+
+
 void prepTempoLUT()
 {
 	uint8_t t;
-	for(t=0;t<18;t++) {
-		mainTempoLUT[t] = (uint8_t)(1.0f*112.5f*tempoLUTRef[t]/(1.0f*gPtr->mainTempo)); 
-	}
-	mainTempoLUT[12] = mainTempoLUT[14]-mainTempoLUT[13]; 
-	//corrects rounding error and makes these triplets compatible with a quarter note
+	mainTempoLUT[0] = (uint8_t)(1.0f*112.5f*tempoLUTRef[0]/(1.0f*gPtr->mainTempo));
 	
-	mainTempoLUT[15] = mainTempoLUT[17]-mainTempoLUT[16]; 
+	for(t=1;t<6;t++) {
+		 mainTempoLUT[t] = mainTempoLUT[0];
+		 for(uint8_t i=0;i<t;i++) mainTempoLUT[t] = mainTempoLUT[t]<<1;
+	}
+	for(t=6;t<12;t++) {
+		 mainTempoLUT[t] = (mainTempoLUT[t-6]*2/3);
+	}
+	mainTempoLUT[17] = mainTempoLUT[1] * 18;
+	mainTempoLUT[11] = mainTempoLUT[17] /3 * 2;
+	
+	textGotoXY(0,10);
+	for(t=0;t<18;t++) printf("%02d ",mainTempoLUT[t]);
+	printf("\n");
+	
+	for(t=0;t<18;t++) printf("%02d ",t);
 	//same with triplet eights
 }
+
 
 //setup is called just once during initial launching of the program
 void setup()
@@ -242,7 +293,7 @@ void setup()
 	gPtr = malloc(sizeof(globalThings));
 	
 	//Beats
-	theBeats = malloc(sizeof(aBeat) * 4);
+	theBeats = malloc(sizeof(aBeat) * presetBeatCount);
 	setupBeats(theBeats);
 	
 	//super preparation
@@ -265,6 +316,7 @@ void setup()
 	clearSIDRegisters();
 	prepSIDinstruments();
 	setMonoSID();
+	
 	
 	//Prep PSG stuff
 	setMonoPSG();
@@ -289,30 +341,81 @@ void escReset()
 {
 	resetInstruments(gPtr->wantVS1053);
 	resetInstruments(~gPtr->wantVS1053);		
-	POKE(gPtr->wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0xC2);
-	POKE(gPtr->wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO,0x73);//woodblock
 	resetGlobals(gPtr);						
 	realTextClear();
 	refreshInstrumentText(gPtr);
 	textTitle(gPtr);
 	shutAllSIDVoices();
 	shutPSG();
-	instSelectMode=false; //returns to default mode	
+	instSelectMode=false; //returns to default mode
+	POKE(MIDI_FIFO_ALT,0xC2);
+	POKE(MIDI_FIFO_ALT,0x73);//woodblock
+	POKE(MIDI_FIFO,0xC2);
+	POKE(MIDI_FIFO,0x73);//woodblock
+	gPtr->prgInst[0]=0;gPtr->prgInst[1]=0;gPtr->prgInst[9]=0;
+	
 }
+
 
 void shutAllMIDIchans()
 {
-midiShutAChannel(0, gPtr->wantVS1053);
-midiShutAChannel(1, gPtr->wantVS1053);
-midiShutAChannel(9, gPtr->wantVS1053);
+	midiShutAChannel(0, true);midiShutAChannel(0, false);
+	midiShutAChannel(1, true);midiShutAChannel(1, false);
+	midiShutAChannel(9, true);midiShutAChannel(9, false);
 }
 
+void launchBeat()
+{
+	uint8_t j, noteScoop=0, delayScoop=0;
+	struct aT *theT;
 
+	theT = malloc(sizeof(aTrack));
+	
+	if(theBeats[gPtr->selectBeat].isActive) needsToWaitExpiration = true; //orders a dying down of the beat
+	if(needsToWaitExpiration) {
+		for(j=0;j<theBeats[gPtr->selectBeat].howManyChans;j++)
+			{
+				getBeatTrackNoteInfo(theBeats, gPtr->selectBeat, j, &noteScoop, &delayScoop, theT);
+				if(theT->chip == 1) {
+					for(uint8_t i=0;i < 6;i++) if(reservedSID[i]==1) reservedSID[i]=0;
+					
+				}
+				if(theT->chip == 2) {
+					for(uint8_t i=0;i < 6;i++) if(reservedPSG[i]==1) reservedPSG[i]=0;
+				}
+				if(theT->chip == 3) {
+					for(uint8_t i=0;i < 9;i++) if(reservedOPL3[i]==1) reservedOPL3[i]=0;
+				}
+			}
+		free(theT);
+		return; //we're not done finishing the beat, do nothing new
+	}
+	if(theBeats[gPtr->selectBeat].isActive == false) //starts the beat
+		{
+		theBeats[gPtr->selectBeat].isActive = true;
+		gPtr->mainTempo = theBeats[gPtr->selectBeat].suggTempo;
+		
+		prepTempoLUT();
+		updateTempoText(gPtr->mainTempo);
+		for(j=0;j<theBeats[gPtr->selectBeat].howManyChans;j++)
+			{
+				theBeats[gPtr->selectBeat].index[j] = 0;
+				getBeatTrackNoteInfo(theBeats, gPtr->selectBeat, j, &noteScoop, &delayScoop, theT);
+				
+				beatSetInstruments(theT);
+				dispatchNote(true, theT->chan, noteScoop,theT->chip==2?PSG_DEFAULT_VOL:0x7F, gPtr->wantVS1053, theT->chip, true, theT->inst);
 
+				if(theT->chip == 1) reservedSID[theT->chan] = 1;
+				theBeats[gPtr->selectBeat].activeCount+=1;
+				theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + mainTempoLUT[delayScoop];
+				setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
+			}
+		}
+		
+	free(theT);
+}
 void dealKeyPressed(uint8_t keyRaw)
 {
-	
-	uint16_t i;
 	uint8_t j;
 					
 	switch(keyRaw)
@@ -352,42 +455,21 @@ void dealKeyPressed(uint8_t keyRaw)
 			break;
 		case 133: //F5
 			if(instSelectMode==false) {
-				
 				if(theBeats[gPtr->selectBeat].isActive) needsToWaitExpiration = true; //orders a dying down of the beat
 				if(needsToWaitExpiration) break; //we're not done finishing the beat, do nothing new
 				
 				if(theBeats[gPtr->selectBeat].isActive == false) //cycles the beat
 					{
-					gPtr->selectBeat+=1;
-					if(gPtr->selectBeat==4)gPtr->selectBeat=0;
+					gPtr->selectBeat++;
+					if((gPtr->selectBeat)==presetBeatCount)gPtr->selectBeat=0;
 					refreshBeatTextChoice(gPtr);
 					}
 			}
 			break;
 		case 135: //F7
 			if(instSelectMode==false) {
-				
-				if(theBeats[gPtr->selectBeat].isActive) needsToWaitExpiration = true; //orders a dying down of the beat
-				if(needsToWaitExpiration) break; //we're not done finishing the beat, do nothing new
-				
-				if(theBeats[gPtr->selectBeat].isActive == false) //starts the beat
-				{
-					theBeats[gPtr->selectBeat].isActive = true;
-					gPtr->mainTempo = theBeats[gPtr->selectBeat].suggTempo;
-					prepTempoLUT();
-					updateTempoText(gPtr->mainTempo);
-					for(j=0;j<theBeats[gPtr->selectBeat].howMany;j++)
-					{
-						theBeats[gPtr->selectBeat].index[j] = 0;
-						midiNoteOn(theBeats[gPtr->selectBeat].channel[j],  //channel
-								   theBeats[gPtr->selectBeat].notes[j][0],    //note
-								   0x7F,								//speed
-								   gPtr->wantVS1053);							//midi chip selection    
-						theBeats[gPtr->selectBeat].activeCount+=1;
-						theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + 		mainTempoLUT[theBeats[gPtr->selectBeat].delays[j][0]];
-						setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
-					}
-				}
+	
+					launchBeat();
 			}
 			break;
 		case 0xb6: //up arrow
@@ -471,7 +553,7 @@ void dealKeyPressed(uint8_t keyRaw)
 					{
 					if(note > (0 + shiftHit*11)) 
 						{
-						if(gPtr->chipChoice > 0) dispatchNote(false, 0, note+0x15, 0, false);
+						if(gPtr->chipChoice > 0) dispatchNote(false, 0, note+0x15, 0, false, gPtr->chipChoice, false, 0);
 						note = note - 1 - shiftHit * 11;
 						}
 					if(altHit) note = 0; //go to the leftmost note
@@ -491,7 +573,7 @@ void dealKeyPressed(uint8_t keyRaw)
 					{
 					if(note < 87 - shiftHit*11) 
 						{
-						if(gPtr->chipChoice > 0) dispatchNote(false, 0, note+0x15, 0, false);
+						if(gPtr->chipChoice > 0) dispatchNote(false, 0, note+0x15, 0, false, gPtr->chipChoice, false, 0);
 						note = note + 1 + shiftHit * 11;
 						}
 					if(altHit) note = 87; //go to the rightmost note
@@ -511,14 +593,14 @@ void dealKeyPressed(uint8_t keyRaw)
 				//Send a Note
 				if(gPtr->chipChoice !=3)
 				{
-				dispatchNote(true, 0x90 | gPtr->chSelect ,note+0x15,0x7F, gPtr->wantVS1053);	
+				dispatchNote(true, 0x90 | gPtr->chSelect ,note+0x15,0x7F, gPtr->wantVS1053, gPtr->chipChoice, false, 0);	
 				//keep track of that note so we can Note_Off it when needed
 				oldNote = note+0x15; //make it possible to do the proper NoteOff when the timer expires
 				}
 				else
 					{
 					
-					dispatchNote(true, 0,note+0x15,0,false);
+					dispatchNote(true, 0,note+0x15,0,false, gPtr->chipChoice, false, 0);
 					}
 
 			break;
@@ -551,7 +633,7 @@ void dealKeyPressed(uint8_t keyRaw)
 				updateTempoText(gPtr->mainTempo);
 				
 				shutAllMIDIchans();
-				for(j=0;j<theBeats[gPtr->selectBeat].howMany;j++) theBeats[gPtr->selectBeat].index[j]=0;
+				for(j=0;j<theBeats[gPtr->selectBeat].howManyChans;j++) theBeats[gPtr->selectBeat].index[j]=0;
 			}
 			break;
 		case 93: // ']'
@@ -575,7 +657,7 @@ void dealKeyPressed(uint8_t keyRaw)
 				updateTempoText(gPtr->mainTempo);
 				
 				shutAllMIDIchans();
-				for(j=0;j<theBeats[gPtr->selectBeat].howMany;j++) theBeats[gPtr->selectBeat].index[j]=0;
+				for(j=0;j<theBeats[gPtr->selectBeat].howManyChans;j++) theBeats[gPtr->selectBeat].index[j]=0;
 			}
 			break;
 		case 120: // X - twin link mode
@@ -606,6 +688,8 @@ void dealKeyPressed(uint8_t keyRaw)
 			shutAllMIDIchans();
 			gPtr->wantVS1053 = ~(gPtr->wantVS1053);
 			shutAllMIDIchans();
+			if(gPtr->wantVS1053) chipAct[0]=0;
+			else chipAct[1]=0;
 			
 			showMIDIChoiceText(gPtr);
 			break;
@@ -613,52 +697,36 @@ void dealKeyPressed(uint8_t keyRaw)
 		if(instSelectMode==false){
 
 			gPtr->chipChoice+=1;
-			if(gPtr->chipChoice==1) prepSIDinstruments(); //just arrived in sid, prep sid
+			if(gPtr->chipChoice==1) 
+			{
+				prepSIDinstruments(); //just arrived in sid, prep sid
+				chipAct[0]=0; chipAct[1]=0;
+			}
 			if(gPtr->chipChoice==2) 
 			{
 				clearSIDRegisters();
 				emptySIDBuffer();
+				chipAct[2]=0;
 			}
 			if(gPtr->chipChoice==3) 
 			{
 				emptyPSGBuffer();
 				shutPSG();
+				chipAct[3]=0;
 			}
 			if(gPtr->chipChoice>3)
 			{
 				opl3_quietAll();
 				emptyOPL3Buffer();
 				gPtr->chipChoice=0; //loop back to midi at the start of the cyle
+				chipAct[4]=0;
 			}
 			showChipChoiceText(gPtr);
-			textGotoXY(0,3);textPrint("                                        ");
 					}
-			break;
-		case 100: // D - diagnostics info dump
-			printf("\nbuffer Dump=");
-			for(i=0;i<12;i++)
-			{
-				for(j=0;j<80;j++) textPrint(" ");
-			}
-			textGotoXY(0,5);
-			for(j=0;j<255;j++)
-				{
-				printf("%02x ",diagBuffer[j]);
-				}
-				printf(" hit space to go on");
-				hitspace();
-			break;
-		case 101: // E - empty buffer for diagnostics info dump
-			
-			for(j=0;j<255;j++)
-				{
-				diagBuffer[j]=0;
-				}
-				printf("emptied buffer");
 			break;
 	}
 	//the following line can be used to get keyboard codes
-	//printf("\n %d",kernelEventData.key.raw);
+	printf("\n %d",kernelEventData.key.raw);
 }
 
 void dealKeyReleased(uint8_t rawKey)
@@ -672,12 +740,12 @@ switch(rawKey)
 		shiftHit = false;
 		break;
 	case 32: //space
-		dispatchNote(false, gPtr->chSelect ,note+0x15,0x3F, gPtr->wantVS1053);						
+		dispatchNote(false, gPtr->chSelect ,note+0x15,0x3F, gPtr->wantVS1053, gPtr->chipChoice, false, 0);						
 		break;
 	}
 }
 
-#define SEGMENT_MAIN
+
 int main(int argc, char *argv[]) {
 	uint16_t toDo;
 	uint16_t i;
@@ -693,13 +761,15 @@ int main(int argc, char *argv[]) {
 	bool opl3Active = false;
 	bool psgActive = false;
 	bool sidActive = false;
-
+	uint8_t noteScoop=0, delayScoop=0;
+	struct aT *theT;
+	
+	theT = malloc(sizeof(aTrack));
 	setup();
 	
 	note=39;
 	oldCursorNote=39;
 	graphicsDefineColor(0, note+0x61,0xFF,0x00,0x00); 
-	
 
 	
 	while(true) 
@@ -710,7 +780,7 @@ int main(int argc, char *argv[]) {
 				
 				//erase the region where the last midi bytes received are shown
 				if(instSelectMode==false){
-					textGotoXY(5,4);textPrint("                                                                                ");textGotoXY(5,4);
+					textGotoXY(5,4);textPrint("                        ");textGotoXY(5,4);
 				}
 					
 				//deal with the MIDI bytes and exhaust the FIFO buffer
@@ -733,24 +803,24 @@ int main(int argc, char *argv[]) {
 							case 1:
 								if(sidActive) 
 									{
-									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053);
+									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0);
 									}
 								break;
 							case 2:
 								if(psgActive) 
 									{
-									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053);
+									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0);
 									}
 								break;
 							case 3:
 								if(opl3Active) 
 									{
-									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053);
+									dispatchNote(false, gPtr->chSelect,lastNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0);
 									}
 								break;
 							}
 						}
-					dispatchNote(isHit, gPtr->chSelect,storedNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053); //do the note or turn off the note
+					dispatchNote(isHit, gPtr->chSelect,storedNote,recByte<VELO_MIN?VELO_MIN:recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0); //do the note or turn off the note
 					if(isHit == false) //turn 'em off if the note is ended
 						{
 						switch(gPtr->chipChoice)
@@ -774,7 +844,9 @@ int main(int argc, char *argv[]) {
 					detectedNote = recByte-0x14;
 					
 					//first case is when the last command is a 0x90 'NoteOn' command
-					if(isHit) graphicsDefineColor(0, detectedNote,0xFF,0x00,0xFF); //paint it as a hit note
+					if(isHit) {graphicsDefineColor(0, detectedNote,0xFF,0x00,0xFF); //paint it as a hit note
+					textGotoXY(0,20);textPrintInt(recByte);
+					}
 					//otherwise it's a 0x80 'NoteOff' command
 					else {
 						detectedColor = noteColors[detectedNote-1]?0xFF:0x00;
@@ -814,13 +886,9 @@ int main(int argc, char *argv[]) {
 							break;
 						}
 					}
-
 				//else if(gPtr->chipChoice==0 && nextIsNote == false && nextIsSpeed == false) POKE(gPtr->wantVS1053?MIDI_FIFO_ALT:MIDI_FIFO, recByte); //all other bytes are sent normally	
-
-					
 				}
 			}
-		
 		kernelNextEvent();
         if(kernelEventData.type == kernelEvent(timer.EXPIRED))
             {
@@ -830,135 +898,76 @@ int main(int argc, char *argv[]) {
 				case TIMER_TEXT_COOKIE:
 					refTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_TEXT_DELAY;
 					setTimer(&refTimer); 
+					if(instSelectMode==false) refreshChipAct(chipAct);
 					break;
-				case  TIMER_BEAT_0:
+				case TIMER_BEAT_1A ... 255:
 					if(theBeats[gPtr->selectBeat].isActive)
-					{
-						midiNoteOff(theBeats[gPtr->selectBeat].channel[0], //channel
-								    theBeats[gPtr->selectBeat].notes[0][theBeats[gPtr->selectBeat].index[0]], //note
-									0x7F, //speed
-									gPtr->wantVS1053 //midi chip selection
-						);
-						theBeats[gPtr->selectBeat].activeCount-=1;
-						//check if we need to expire the beat and act to die things down
-						if(needsToWaitExpiration)
-							{
-								if(theBeats[gPtr->selectBeat].activeCount > 0)
-								{
-									break;
-								}
-								else 
-								{
-									needsToWaitExpiration = false;
-									theBeats[gPtr->selectBeat].isActive = false;
-									if(theBeats[gPtr->selectBeat].pendingRelaunch) //oops, need to relaunch it at the end of it dying down
-									{
-										theBeats[gPtr->selectBeat].pendingRelaunch = false; //the relaunch will happen, so stop further relaunches for now
-										theBeats[gPtr->selectBeat].isActive = true;
-										//mainTempo = theBeats[selectBeat].suggTempo;
-										prepTempoLUT();
-										updateTempoText(gPtr->mainTempo);
-										for(j=0;j<theBeats[gPtr->selectBeat].howMany;j++)
-										{
-											theBeats[gPtr->selectBeat].index[j] = 0;
-											midiNoteOn(theBeats[gPtr->selectBeat].channel[j],  //channel
-													   theBeats[gPtr->selectBeat].notes[j][0],    //note
-													   0x7F,                         //speed
-														gPtr->wantVS1053); //midi chip selection);								    
-											theBeats[gPtr->selectBeat].activeCount+=1;
-											theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + 		mainTempoLUT[theBeats[gPtr->selectBeat].delays[j][0]];
-											setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
-										}
-									}
-									break;
-								}
-							}
-						
-						//otherwise proceed as normal and get the next note of that beat's track
-						theBeats[gPtr->selectBeat].index[0]+=1;
-						
-						if(theBeats[gPtr->selectBeat].index[0] == theBeats[gPtr->selectBeat].noteCount[0]) theBeats[gPtr->selectBeat].index[0] = 0;
-						
-						midiNoteOn(theBeats[gPtr->selectBeat].channel[0], //channel
-								    theBeats[gPtr->selectBeat].notes[0][theBeats[gPtr->selectBeat].index[0]], //note
-									0x7F, //speed
-									gPtr->wantVS1053 //midi chip selection
-						);
-						theBeats[gPtr->selectBeat].activeCount+=1;
-						theBeats[gPtr->selectBeat].timers[0].absolute = getTimerAbsolute(TIMER_FRAMES) + mainTempoLUT[
-																							theBeats[gPtr->selectBeat].delays[0][theBeats[gPtr->selectBeat].index[0]]
-																						];
-																												
-						setTimer(&(theBeats[gPtr->selectBeat].timers[0]));
-					}
-					break;
-				case TIMER_BEAT_1A ... TIMER_BEAT_3B:
-					if(theBeats[gPtr->selectBeat].isActive)
-					{
-						switch(kernelEventData.timer.cookie)
 						{
-						case TIMER_BEAT_1A:
-						case TIMER_BEAT_1B:
-							j = kernelEventData.timer.cookie -TIMER_BEAT_1A; //find the right track of the beat to deal with				
-							break;
-						case TIMER_BEAT_2A:
-						case TIMER_BEAT_2B:
-							j = kernelEventData.timer.cookie -TIMER_BEAT_2A;
-							break;
-						case TIMER_BEAT_3A:
-						case TIMER_BEAT_3B:
-							j = kernelEventData.timer.cookie -TIMER_BEAT_3A;
-							break;
-						}
+						switch(kernelEventData.timer.cookie)
+							{
+								default:
+								j = kernelEventData.timer.cookie -TIMER_BEAT_1A; //find the right track of the beat to deal with				
+								break;
+							}
+							
+						if (theBeats[gPtr->selectBeat].pending2x[j]== 2)theBeats[gPtr->selectBeat].pending2x[j]= 0; //restore for next pass
 						
-						midiNoteOff(theBeats[gPtr->selectBeat].channel[j], //channel
-								    theBeats[gPtr->selectBeat].notes[j][theBeats[gPtr->selectBeat].index[j]], //note
-									0x7F, //speed
-									gPtr->wantVS1053); //midi chip selection
+						if (theBeats[gPtr->selectBeat].pending2x[j]== 1){
+							theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + mainTempoLUT[delayScoop];
+							setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
+							theBeats[gPtr->selectBeat].pending2x[j]= 2;
+							break;
+							}	
+
+	
+						getBeatTrackNoteInfo(theBeats, gPtr->selectBeat, j, &noteScoop, &delayScoop, theT);								
+						dispatchNote(false, theT->chan, noteScoop&0x7F,0x7F, gPtr->wantVS1053, theT->chip, true, theT->inst); // silence old note
 						theBeats[gPtr->selectBeat].activeCount-=1;
+							
+						textGotoXY(0,16);printf("activeCount %d",theBeats[gPtr->selectBeat].activeCount);
+								
 						//check if we need to expire the beat and act to die things down
 						if(needsToWaitExpiration)
 							{
+								
 								if(theBeats[gPtr->selectBeat].activeCount > 0)
 								{
 									break;
 								}
 								else 
 								{
+									textGotoXY(0,17);printf("reached end of activeCount");
 									needsToWaitExpiration = false;
 									theBeats[gPtr->selectBeat].isActive = false;
 									if(theBeats[gPtr->selectBeat].pendingRelaunch) //oops, need to relaunch it at the end of it dying down
 									{
 										theBeats[gPtr->selectBeat].pendingRelaunch = false; //the relaunch will happen, so stop further relaunches for now
-										theBeats[gPtr->selectBeat].isActive = true;
-										//mainTempo = theBeats[selectBeat].suggTempo;
-										prepTempoLUT();
-										updateTempoText(gPtr->mainTempo);
-										for(j=0;j<theBeats[gPtr->selectBeat].howMany;j++)
-										{
-											theBeats[gPtr->selectBeat].index[j] = 0;
-											midiNoteOn(theBeats[gPtr->selectBeat].channel[j],  //channel
-													   theBeats[gPtr->selectBeat].notes[j][0],    //note
-													   0x7F,								//speed
-													   gPtr->wantVS1053);							//midi chip selection	    
-											theBeats[gPtr->selectBeat].activeCount+=1;
-											theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + 		mainTempoLUT[theBeats[gPtr->selectBeat].delays[j][0]];
-											setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
-										}
+										launchBeat();
 									}
 									break;
 								}
 							}
-						//otherwise proceed as normal and get the next note of that beat's track	
-						theBeats[gPtr->selectBeat].index[j]+=1;
-						if(theBeats[gPtr->selectBeat].index[j] == theBeats[gPtr->selectBeat].noteCount[j]) theBeats[gPtr->selectBeat].index[j] = 0;
-						midiNoteOn(theBeats[gPtr->selectBeat].channel[j], //channel
-								    theBeats[gPtr->selectBeat].notes[j][theBeats[gPtr->selectBeat].index[j]], //note
-									0x7F, //speed
-									gPtr->wantVS1053); //midi chip selection
-						theBeats[gPtr->selectBeat].activeCount+=1;
-						theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + mainTempoLUT[theBeats[gPtr->selectBeat].delays[j][theBeats[gPtr->selectBeat].index[j]]];
-						setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
+							//otherwise proceed as normal and get the next note of that beat's track	
+						else {
+							
+							theBeats[gPtr->selectBeat].index[j]++;	
+							getBeatTrackNoteInfo(theBeats, gPtr->selectBeat, j, &noteScoop, &delayScoop, theT);
+							if(theBeats[gPtr->selectBeat].index[j] ==  theT->count) 
+								{
+								theBeats[gPtr->selectBeat].index[j] = 0;
+								getBeatTrackNoteInfo(theBeats, gPtr->selectBeat, j, &noteScoop, &delayScoop, theT);
+								}
+								
+														
+							if((noteScoop&0x80)==0x80) {
+								if (theBeats[gPtr->selectBeat].pending2x[j]==0) theBeats[gPtr->selectBeat].pending2x[j]=1;
+								}
+								
+							dispatchNote(true,  theT->chan, noteScoop&0x7F, theT->chip==2?PSG_DEFAULT_VOL:0x7F, gPtr->wantVS1053,  theT->chip, true, theT->inst);
+							theBeats[gPtr->selectBeat].activeCount++;
+							theBeats[gPtr->selectBeat].timers[j].absolute = getTimerAbsolute(TIMER_FRAMES) + mainTempoLUT[delayScoop];
+							setTimer(&(theBeats[gPtr->selectBeat].timers[j]));
+							}
 						}
 					break;
 				}	
@@ -973,5 +982,6 @@ int main(int argc, char *argv[]) {
 			dealKeyReleased(kernelEventData.key.raw);
 			}		
 		}
+		
+free(theT);
 return 0;}
-}

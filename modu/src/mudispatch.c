@@ -2,15 +2,27 @@
 #include "../src/mudispatch.h"
 #include "../src/muMidi.h"
 #include "../src/musid.h"
+#include "../src/muopl3.h"
+#include "../src/mupsg.h"
 
-uint8_t chipAct[5] ={0,0,0,0,0}; //used for text UI to show chip activity in real time
+//used for text UI to show chip activity in real time
+uint8_t chipAct[5] ={0,0,0,0,0}; 
 
+// The following is for polyphony for these 3 chips
 uint8_t polySIDBuffer[6] = {0,0,0,0,0,0};
 uint8_t sidChoiceToVoice[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
-uint8_t reservedSID[6] = {0,0,0,0,0,0};
+uint8_t reservedSID[6] = {0,0,0,0,0,0}; //reserved array tells if a certain channel is being used by a ongoing beat and removes itself from being available for polyphony real time playing
 
+uint8_t polyPSGBuffer[6] = {0,0,0,0,0,0};
+uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
+uint8_t reservedPSG[6]={0,0,0,0,0,0};
 
-struct glTh *gPtr; //needs this global pointer defined in globals.c
+uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
+uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
+uint8_t reservedOPL3[9]={0,0,0,0,0,0,0,0,0};
+
+//needs this global pointer defined in globals.c
+struct glTh *gPtr; 
 
 
 void resetGlobals(struct glTh *gT)
@@ -120,7 +132,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 		}
 		return;
 	}
-	/*
+	
 	if(whichChip==2) //PSG
 	{
 		if(isOn) {
@@ -145,8 +157,8 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 		}
 		return;
 	}
-	*/
-	/*
+	
+	
 	if(whichChip==3) //OPL3
 	{
 		if(isOn) 
@@ -168,6 +180,6 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			if(chipAct[4])chipAct[4]--;
 			}
 	}
-	*/
+	
 }
 }

@@ -22,8 +22,12 @@ void dispatchNote(bool, uint8_t, uint8_t, uint8_t, bool, uint8_t, bool, uint8_t)
 
 void resetGlobals(struct glTh*);
 extern uint8_t chipAct[];
+/*
 extern uint8_t sidChoiceToVoice[];
 extern uint8_t reservedSID[];
+extern uint8_t reservedPSG[];
+extern uint8_t reservedOPL3[];
+*/
 extern struct glTh *gPtr;
 
 #endif // MUDISPATCH_H

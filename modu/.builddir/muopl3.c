@@ -1,3 +1,5 @@
+#include "D:\F256\llvm-mos\code\modu\.builddir\trampoline.h"
+
 #include "f256lib.h"
 #include "../src/muopl3.h"
 
@@ -43,7 +45,7 @@ opl3I opl3_instrument_defs[] = {
 	{.OP2_TVSKF=0x22,.OP1_TVSKF=0x22,.OP2_KSLVOL=0x08,.OP1_KSLVOL=0x08,.OP2_AD=0x51,.OP1_AD=0x83,.OP2_SR=0x88,.OP1_SR=0x88,.OP2_WAV=0x00,.OP1_WAV=0x01,.CHAN_FEED=0x38},
 	{.OP2_TVSKF=0x00,.OP1_TVSKF=0x00,.OP2_KSLVOL=0x00,.OP1_KSLVOL=0x00,.OP2_AD=0xE9,.OP1_AD=0xE9,.OP2_SR=0x05,.OP1_SR=0x07,.OP2_WAV=0x00,.OP1_WAV=0x02,.CHAN_FEED=0x3D},
 	{.OP2_TVSKF=0x01,.OP1_TVSKF=0x01,.OP2_KSLVOL=0x00,.OP1_KSLVOL=0x00,.OP2_AD=0x99,.OP1_AD=0xA9,.OP2_SR=0x08,.OP1_SR=0x03,.OP2_WAV=0x00,.OP1_WAV=0x02,.CHAN_FEED=0x3E},
-//Wacky Wheels	
+//Wacky Wheels
 	{.OP2_TVSKF=0x21,.OP1_TVSKF=0x21,.OP2_KSLVOL=0x0,.OP1_KSLVOL=0x1D,.OP2_AD=0x81,.OP1_AD=0x71,.OP2_SR=0x9E,.OP1_SR=0xAE,.OP2_WAV=0x00,.OP1_WAV=0x00,.CHAN_FEED=0x3E},
 	{.OP2_TVSKF=0xE0,.OP1_TVSKF=0xF0,.OP2_KSLVOL=0x0,.OP1_KSLVOL=0x93,.OP2_AD=0xF0,.OP1_AD=0xF5,.OP2_SR=0x44,.OP1_SR=0x59,.OP2_WAV=0x3,.OP1_WAV=0x3,.CHAN_FEED=0x3E},
 	{.OP2_TVSKF=0x1,.OP1_TVSKF=0x50,.OP2_KSLVOL=0x0,.OP1_KSLVOL=0x0,.OP2_AD=0xF3,.OP1_AD=0xFA,.OP2_SR=0x7A,.OP1_SR=0x71,.OP2_WAV=0x00,.OP1_WAV=0x1,.CHAN_FEED=0x30},
@@ -63,14 +65,14 @@ const uint8_t opl3_instrumentsSize = 1;
 //these are used the build the base frequencies for notes of a full octave (12 semi-tones in equal temperament). read the docs because it's not 1:1 to frequency in Hz here.
 const uint16_t opl3_fnums[] = {0x205, 0x223, 0x244, 0x267, 0x28B, 0x2B2,
 						       0x2DB, 0x306, 0x334, 0x365, 0x399, 0x3CF};
-							   
+	
 void opl3_initialize() {
 	uint8_t i;
 	
 	//chip wide operators
 	opl3_write(OPL_EN, 0x20); //chip wide reset
-	opl3_write(OPL_T1, 0x00); 
-	opl3_write(OPL_T2, 0x00); 
+	opl3_write(OPL_T1, 0x00);
+	opl3_write(OPL_T2, 0x00);
 	opl3_write(OPL_FOE, 0x00); //four operator enable
 	opl3_write(OPL_OPL3, 0x01); //enable opl3
 	opl3_write(OPL_CSW, 0x00); //composite sine wave mode off
@@ -79,7 +81,7 @@ void opl3_initialize() {
 		{
 		opl3_write(OPL_CH_FEED + i,   0x30);
 		}
-		
+	
 	opl3_quietAll();
 
 	
@@ -94,7 +96,7 @@ void opl3_quietAll()
 }
 
 void opl3_setInstrument(struct opl3Instrument inst, uint8_t chan)
-{ 
+{
 	uint8_t offset= chan + 0x00;
 	if(chan>2) offset += 0x05;
 	if(chan>5) offset += 0x05;
@@ -149,4 +151,3 @@ void opl3_note(uint8_t channel, uint16_t fnum, uint8_t block, bool onOrOff) {
 
 }
 
-}

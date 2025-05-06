@@ -1,3 +1,5 @@
+#include "D:\F256\llvm-mos\code\modu\.builddir\trampoline.h"
+
 #include "f256lib.h"
 #include "../src/mupsg.h"
 
@@ -55,5 +57,4 @@ void setStereoPSG()
 	sys1=PEEK(PSG_SYS1);
 	sys1 = sys1 & 0b11111111;
 	POKE(PSG_SYS1,sys1);
-}
 }

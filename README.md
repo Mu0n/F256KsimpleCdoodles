@@ -62,7 +62,8 @@ if you put the program in a root folder called _apps and rename the program as a
 ## midiplayer v1.2 
 (its code in midisam - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
-![midiplayerv1 2](https://github.com/user-attachments/assets/52fd42fa-7758-4a7a-a53e-640ed4c081ec)
+![firejam12](https://github.com/user-attachments/assets/ee03b1b4-efad-4a7a-9901-f9a2bf666375)
+
 
 midiplayer plays standard MIDI files, type 0 with 1 track or type 1 with multiple tracks.  It uses the sound chips only found in the Jr.2 and K2, using by default the SAM2695 which sounds best for MIDI playback, but you can also toggle to the VS1053b MIDI playback, which has its own timbre. If you attempt to play it on the original Jr. or K, you will see the visuals, but you will only have silence. 
 Known bug: type 1 which have several tempo changes will disrupt the song duration estimation because it will base it only on the last tempo of the song instead of taking into account every tempo change. The command line is as such:

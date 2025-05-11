@@ -28,7 +28,7 @@ Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pi
 ![firejam12](https://github.com/user-attachments/assets/b3227864-2b17-47d5-886a-88fb8598b0dc)
 
 
-FireJam v1.1, my most ambitious program yet. 
+FireJam v1.2, my most ambitious program yet. 
 
 MIDI in and out capable, it will still partially work with a Jr. (PSG, and SID if you have them), a K (PSG, SID, OPL3) and the newest wave 2 Jr2 and K2 (PSG, SID, OPL3, SAM, VS1053b).
 Best to use with a MIDI in controller, but it'll be controllable with arrows and space to make notes individually, or the F keys to start beats.

@@ -25,7 +25,8 @@ Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pi
 
 (its code in midiTest - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
-![FireJam1](https://github.com/user-attachments/assets/6e1ad396-ddc7-4137-8092-c87c8d91e477)
+![firejam12](https://github.com/user-attachments/assets/b3227864-2b17-47d5-886a-88fb8598b0dc)
+
 
 FireJam v1.1, my most ambitious program yet. 
 
@@ -62,7 +63,8 @@ if you put the program in a root folder called _apps and rename the program as a
 ## midiplayer v1.2 
 (its code in midisam - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
-![firejam12](https://github.com/user-attachments/assets/ee03b1b4-efad-4a7a-9901-f9a2bf666375)
+![image](https://github.com/user-attachments/assets/9ece1880-1e98-4ee7-859e-d0e974a8cb7e)
+
 
 
 midiplayer plays standard MIDI files, type 0 with 1 track or type 1 with multiple tracks.  It uses the sound chips only found in the Jr.2 and K2, using by default the SAM2695 which sounds best for MIDI playback, but you can also toggle to the VS1053b MIDI playback, which has its own timbre. If you attempt to play it on the original Jr. or K, you will see the visuals, but you will only have silence. 

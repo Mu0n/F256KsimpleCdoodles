@@ -21,7 +21,7 @@ Foenix Retro Systems is a homebrew effort to bring 8/16/32-bit era processors in
 
 Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pick a selection of a few demos that are standalone .pgz executable programs.
 
-## FireJam v1.1
+## FireJam v1.2
 
 (its code in midiTest - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
@@ -35,10 +35,11 @@ Best to use with a MIDI in controller, but it'll be controllable with arrows and
 Has polyphony (infinite for MIDI, 6 for PSG and SID, 9 for OPL3) with a MIDI in controller.
 * 128 instrument choice for MIDI.
 * 5 instrument choice for SID (and growing)
-* 9 instrument choice for OPL3 (and growing)
+* 22 instrument choice for OPL3 (and growing)
 
+* construct a simplified "multi-chip tune" with arrays that contain midi note values and frames-based timer values - one example is set as the (now) lone preset beat.
+ 
 Planned features:
-* construct a simplified "multi-chip tune" with arrays that contain midi note values and frames-based timer values
 * composition through loops and save those to files with plans to use this raw data as a soundtrack for game dev
 * LCD bitmap flair
 * Better layout with toggleable screen help

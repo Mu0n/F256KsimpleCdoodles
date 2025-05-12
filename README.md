@@ -21,13 +21,14 @@ Foenix Retro Systems is a homebrew effort to bring 8/16/32-bit era processors in
 
 Go there https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos to pick a selection of a few demos that are standalone .pgz executable programs.
 
-## FireJam v1.1
+## FireJam v1.2
 
 (its code in midiTest - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
-![FireJam1](https://github.com/user-attachments/assets/6e1ad396-ddc7-4137-8092-c87c8d91e477)
+![firejam12](https://github.com/user-attachments/assets/b3227864-2b17-47d5-886a-88fb8598b0dc)
 
-FireJam v1.1, my most ambitious program yet. 
+
+FireJam v1.2, my most ambitious program yet. 
 
 MIDI in and out capable, it will still partially work with a Jr. (PSG, and SID if you have them), a K (PSG, SID, OPL3) and the newest wave 2 Jr2 and K2 (PSG, SID, OPL3, SAM, VS1053b).
 Best to use with a MIDI in controller, but it'll be controllable with arrows and space to make notes individually, or the F keys to start beats.
@@ -35,10 +36,11 @@ Best to use with a MIDI in controller, but it'll be controllable with arrows and
 Has polyphony (infinite for MIDI, 6 for PSG and SID, 9 for OPL3) with a MIDI in controller.
 * 128 instrument choice for MIDI.
 * 5 instrument choice for SID (and growing)
-* 9 instrument choice for OPL3 (and growing)
+* 22 instrument choice for OPL3 (and growing)
 
+* construct a simplified "multi-chip tune" with arrays that contain midi note values and frames-based timer values - one example is set as the (now) lone preset beat.
+ 
 Planned features:
-* construct a simplified "multi-chip tune" with arrays that contain midi note values and frames-based timer values
 * composition through loops and save those to files with plans to use this raw data as a soundtrack for game dev
 * LCD bitmap flair
 * Better layout with toggleable screen help
@@ -61,7 +63,9 @@ if you put the program in a root folder called _apps and rename the program as a
 ## midiplayer v1.2 
 (its code in midisam - its executable is in NoFussDemos https://github.com/Mu0n/F256KsimpleCdoodles/tree/main/NoFussDemos)
 
-![midiplayerv1 2](https://github.com/user-attachments/assets/52fd42fa-7758-4a7a-a53e-640ed4c081ec)
+![image](https://github.com/user-attachments/assets/9ece1880-1e98-4ee7-859e-d0e974a8cb7e)
+
+
 
 midiplayer plays standard MIDI files, type 0 with 1 track or type 1 with multiple tracks.  It uses the sound chips only found in the Jr.2 and K2, using by default the SAM2695 which sounds best for MIDI playback, but you can also toggle to the VS1053b MIDI playback, which has its own timbre. If you attempt to play it on the original Jr. or K, you will see the visuals, but you will only have silence. 
 Known bug: type 1 which have several tempo changes will disrupt the song duration estimation because it will base it only on the last tempo of the song instead of taking into account every tempo change. The command line is as such:

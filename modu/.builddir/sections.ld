@@ -2,3 +2,5 @@
 
   .gui : { *(.gui .gui*) } >gui end_gui = .;
   .pal : { *(.pal .pal*) } >pal end_pal = .;
+  .pianopal : { *(.pianopal .pianopal*) } >pianopal end_pianopal = .;
+  .keys : { *(.keys .keys*) } >keys end_keys = .;

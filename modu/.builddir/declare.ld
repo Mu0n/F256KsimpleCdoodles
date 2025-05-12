@@ -6,3 +6,9 @@
   __pal_lma  = 0x11000;
   __pal_size = 0x400;
 
+  __pianopal_lma  = 0x30000;
+  __pianopal_size = 0x3fc;
+
+  __keys_lma  = 0x30400;
+  __keys_size = 0x12c00;
+

@@ -2,3 +2,5 @@
 
   gui : ORIGIN = __gui_lma, LENGTH = __gui_size
   pal : ORIGIN = __pal_lma, LENGTH = __pal_size
+  pianopal : ORIGIN = __pianopal_lma, LENGTH = __pianopal_size
+  keys : ORIGIN = __keys_lma, LENGTH = __keys_size

@@ -243,12 +243,13 @@ void prepTempoLUT()
 	}
 	mainTempoLUT[17] = mainTempoLUT[1] * 18;
 	mainTempoLUT[11] = mainTempoLUT[17] /3 * 2;
-	
+	/*
 	textGotoXY(0,10);
 	for(t=0;t<18;t++) printf("%02d ",mainTempoLUT[t]);
 	printf("\n");
 	
 	for(t=0;t<18;t++) printf("%02d ",t);
+	*/
 	//same with triplet eights
 }
 
@@ -330,7 +331,6 @@ void setup()
 	for(c=0;c<255;c++) diagBuffer[c] = 0;
 	
 	//codec enable all lines
-	//openAllCODEC();
 	if(isWave2())
 	{
 	//boost the VS1053b clock speed
@@ -728,7 +728,7 @@ void dealKeyPressed(uint8_t keyRaw)
 			break;
 	}
 	//the following line can be used to get keyboard codes
-	printf("\n %d",kernelEventData.key.raw);
+	//printf("\n %d",kernelEventData.key.raw);
 }
 
 void dealKeyReleased(uint8_t rawKey)
@@ -926,7 +926,7 @@ int main(int argc, char *argv[]) {
 						dispatchNote(false, theT->chan, noteScoop&0x7F,0x7F, gPtr->wantVS1053, theT->chip, true, theT->inst); // silence old note
 						theBeats[gPtr->selectBeat].activeCount-=1;
 	
-						textGotoXY(0,16);printf("activeCount %d",theBeats[gPtr->selectBeat].activeCount);
+						//textGotoXY(0,16);printf("activeCount %d",theBeats[gPtr->selectBeat].activeCount);
 	
 						//check if we need to expire the beat and act to die things down
 						if(needsToWaitExpiration)
@@ -938,7 +938,7 @@ int main(int argc, char *argv[]) {
 								}
 								else
 								{
-									textGotoXY(0,17);printf("reached end of activeCount");
+									//textGotoXY(0,17);printf("reached end of activeCount");
 									needsToWaitExpiration = false;
 									theBeats[gPtr->selectBeat].isActive = false;
 									if(theBeats[gPtr->selectBeat].pendingRelaunch) //oops, need to relaunch it at the end of it dying down

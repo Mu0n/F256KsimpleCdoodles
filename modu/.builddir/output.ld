@@ -12,3 +12,15 @@
   BYTE((end_pal - __pal_lma)>>16)
   TRIM(pal)
 
+  SHORT(ORIGIN(pianopal))
+  BYTE(ORIGIN(pianopal)>>16)
+  SHORT(end_pianopal - __pianopal_lma)
+  BYTE((end_pianopal - __pianopal_lma)>>16)
+  TRIM(pianopal)
+
+  SHORT(ORIGIN(keys))
+  BYTE(ORIGIN(keys)>>16)
+  SHORT(end_keys - __keys_lma)
+  BYTE((end_keys - __keys_lma)>>16)
+  TRIM(keys)
+

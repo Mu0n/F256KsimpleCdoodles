@@ -21,28 +21,17 @@ uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
 uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
 uint8_t reservedOPL3[9]={0,0,0,0,0,0,0,0,0};
 
-//needs this global pointer defined in globals.c
-struct glTh *gPtr; 
 
+struct glTh *gPtr; 
 
 void resetGlobals(struct glTh *gT)
 {
-	uint8_t i;
-
 	gT->wantVS1053 = false;
-	gT->prgInst = malloc(sizeof(uint8_t)*10);
-    if(gT->prgInst == NULL) printf("\n error allocating");
 	gT->sidInstChoice = 0; //from 0 to whatever is inside the array for sid
 	gT->opl3InstChoice = 0; //from 0 to whatever is inside the array for opl3
-	gT->chSelect = 0; //restricted to channel 0, 1 or 9 (for percs)
 //lowest note on 88-key piano is a A more than 3 octaves below middle CLUT
 //midi note number of that lowest note is dec=21
     gT->chipChoice = 0; //0=MIDI, 1=SID, 2=PSG, 3=OPL3
-	gT->isTwinLinked = false; //when true, sends out midi notes to both channels when using a midi controller or space bar
-    gT->selectBeat = 0; 
-	gT->mainTempo = 120;
-	
-	for(i=0;i<10;i++) gT->prgInst[i] = 0; /* program change value, the MIDI instrument number, for chan 0, 1 and 9=percs */
 }
 
 int8_t findFreeChannel(uint8_t *ptr, uint8_t howManyChans, uint8_t *reserved)
@@ -76,7 +65,6 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 	{
 		if(isOn) {
 			midiNoteOn(channel, note, speed, whichChip==4?true:wantAlt);
-			if(gPtr->isTwinLinked) midiNoteOn(1, note,speed, whichChip==4?true:wantAlt);
 			if(wantAlt) chipAct[1]++;
 			else chipAct[0]++;
 		}
@@ -86,12 +74,6 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 		if(wantAlt) {if(chipAct[1])chipAct[1]--;}
 		else {if(chipAct[0])chipAct[0]--;}
 			
-			if(gPtr->isTwinLinked) 
-			{
-			midiNoteOff(1, note,speed, whichChip==4?true:wantAlt);
-			if(wantAlt) {if(chipAct[1])chipAct[1]--;}
-			else {if(chipAct[0])chipAct[0]--;}
-			}
 		}
 		return;
 	}
@@ -110,7 +92,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
 				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
 				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
-				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):fetchCtrl(gPtr->sidInstChoice), isOn);//if isBeat false, usually gPtr->sidInstChoice
+				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn);//if isBeat false, usually gPtr->sidInstChoice
 				chipAct[2]++;
 				polySIDBuffer[foundFreeChan] = note;					
 				}
@@ -127,7 +109,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			polySIDBuffer[foundFreeChan] = 0;
 			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
 			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
-			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):fetchCtrl(gPtr->sidInstChoice), isOn); //if isBeat false, usually gPtr->sidInstChoice
+			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn); //if isBeat false, usually gPtr->sidInstChoice
 			if(chipAct[2])chipAct[2]--;
 		}
 		return;

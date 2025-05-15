@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\modu\.builddir\trampoline.h"
+#include "C:\F256\f256llvm-mos\F256KsimpleCdoodles\modu\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/mudispatch.h"
@@ -34,6 +34,7 @@ void resetGlobals(struct glTh *gT)
 //lowest note on 88-key piano is a A more than 3 octaves below middle CLUT
 //midi note number of that lowest note is dec=21
     gT->chipChoice = 0; //0=MIDI, 1=SID, 2=PSG, 3=OPL3
+	
 }
 
 int8_t findFreeChannel(uint8_t *ptr, uint8_t howManyChans, uint8_t *reserved)

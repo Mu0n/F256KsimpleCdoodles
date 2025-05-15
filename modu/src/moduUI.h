@@ -49,6 +49,12 @@ typedef struct radioB_UI
 	uint8_t groupID;
 } radioB_UI;
 
+typedef struct lighter_UI
+{
+	struct generic_UI gen;
+	uint8_t value;
+} lighter_UI;
+
 uint8_t getEigth(uint16_t, uint16_t, uint16_t);
 void setGeneric(uint8_t, uint16_t, uint16_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, struct generic_UI *);
 void updateGeneric(struct generic_UI *, uint8_t, uint32_t);
@@ -62,4 +68,7 @@ void setSlider(struct slider_UI *, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t
 
 void updateDial(struct dial_UI *, uint32_t);
 void setDial(struct dial_UI *, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint32_t);
+
+void updateLighter(struct lighter_UI *, uint32_t);
+void setLighter(struct lighter_UI *, uint8_t, uint32_t);
 #endif // MODUUI_H

@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\modu\.builddir\trampoline.h"
+#include "C:\F256\f256llvm-mos\F256KsimpleCdoodles\modu\.builddir\trampoline.h"
 
 
 #include "f256lib.h"
@@ -123,3 +123,19 @@ void setSlider(struct slider_UI *sli, uint8_t value8, uint8_t min8, uint8_t max8
 	updateSlider(sli, base);
 	
 }
+
+
+void updateLighter(struct lighter_UI *lit, uint32_t base)
+{
+	lit->gen.addr = base + (uint32_t)(UI_STAT + lit->value)*(uint32_t)(lit->gen.size*lit->gen.size);
+	spriteDefine(lit->gen.s, lit->gen.addr,lit->gen.size, 0, 0);
+	spriteSetPosition(lit->gen.s, lit->gen.x, lit->gen.y);
+	spriteSetVisible(lit->gen.s, true);
+}
+void setLighter(struct lighter_UI *lit, uint8_t value, uint32_t base)
+{
+	lit->value = value;
+	updateLighter(lit,base);
+}
+
+

@@ -1,6 +1,5 @@
 #define F256LIB_IMPLEMENTATION
 
-#define SPR_BASE 0x10000
 
 //Chip selection high level
 #define ACT_MID 0
@@ -89,10 +88,6 @@
 #define ACT_OPL_FD_L 167
 #define ACT_OPL_FR_L 168
 
-
-
-
-
 #include "f256lib.h"
 #include "../src/mumouse.h"
 #include "../src/musid.h"
@@ -141,9 +136,14 @@ uint8_t oplSpriteAction[64] = {ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, ACT_OPL_OPL2,
 
 void dispatchAction(struct generic_UI *, bool);
 void resetActivity(void);
-
-EMBED(gui, "../assets/gui.bin", 0x10000); //4kb
-EMBED(pal, "../assets/gui.pal", 0x11000); //1kb
+#define SIZE8 8
+#define SIZE16 16
+#define SPR_BASE  0x10000
+#define SPR_BASE8 0x14000
+#define SPR_BASE16 0x10000
+EMBED(gui16, "../assets/gui16.bin", 0x10000); //16kb
+EMBED(gui8,  "../assets/gui8.bin" , 0x14000); //4kb
+EMBED(pal,   "../assets/gui.pal",     0x15000); //1kb
 EMBED(pianopal, "../assets/piano.pal", 0x30000);
 EMBED(keys, "../assets/piano.raw", 0x30400);
 
@@ -196,7 +196,7 @@ void loadGUISID()
 	//radio button group 0: switch between chips radio buttons
 	for(uint8_t i=0; i<4; i++)
 		{
-		setGeneric(sprSoFar, 64, 64+8*i, SPR_BASE+UI_SWTCH, i, 8, 0,6,2,5, sidSpriteAction[sprSoFar], &(radios[i].gen));
+		setGeneric(sprSoFar, 40, 40+10*i, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
 		setRadioB(&radios[i], true, 0, i==1?true:false); // groupID 0
 		sprSoFar++;
 		}
@@ -206,7 +206,7 @@ void loadGUISID()
 	//radio button group 1: SID waveform
 	for(uint8_t i=4; i<8; i++)
 	{
-	setGeneric(sprSoFar, 144, 64+8*(i-4), SPR_BASE+UI_SWTCH, i, 8, 0,6,2,5, sidSpriteAction[sprSoFar], &(radios[i].gen));
+	setGeneric(sprSoFar, 144, 64+SIZE16*(i-4), SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
 	setRadioB(&radios[i], true, 1, i==5?true:false);
 	sprSoFar++;
 	}
@@ -214,7 +214,7 @@ void loadGUISID()
 	//sliders for ASDR for SID
 	for(uint8_t i=0; i<4; i++)
 	{
-	setGeneric(sprSoFar , 99+i*8 , 64, SPR_BASE+UI_SLIDS, i, 8, 1,5,3,12, sidSpriteAction[sprSoFar], &(sliders[i].gen));
+	setGeneric(sprSoFar , 99+i*SIZE16 , 64, SPR_BASE+(uint32_t)(UI_SLIDS*SIZE16*SIZE16), i, SIZE16, 3,10,6,25, sidSpriteAction[sprSoFar], &(sliders[i].gen));
 	sprSoFar+=2;
 	}
 	setSlider(&sliders[0], (gPtr->sidValues->ad & 0xF0)>>4, 0, 15, 0, 0, 0, SPR_BASE); //A
@@ -224,29 +224,29 @@ void loadGUISID()
 	
 	for(uint8_t i=0; i<4; i++) //and their labels
 	{	
-	setGeneric(sprSoFar, 99+i*8 , 79, SPR_BASE, i, 8, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[i]));
+	setGeneric(sprSoFar, 99+i*SIZE16 , 79, SPR_BASE, i, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[i]));
 	showGeneric(&(sliders_labels[i]));
 	updateGeneric(&(sliders_labels[i]), sliders[i].value8, SPR_BASE);
 	sprSoFar++;
 	}
 	
 	//dial for pulse width
-	setGeneric(sprSoFar, 98, 99, SPR_BASE+UI_DIALS, 0, 8, 0,6,0,6, sidSpriteAction[sprSoFar],&(dials[0].gen));
+	setGeneric(sprSoFar, 98, 99, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 0, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[0].gen));
 	setDial(&dials[0], (gPtr->sidValues->pwdHi & 0x0F), 0, 15, 0, 0, 0, SPR_BASE);
 	sprSoFar++;
-	setGeneric(sprSoFar, 109, 99, SPR_BASE+UI_DIALS, 1, 8, 0,6,0,6, sidSpriteAction[sprSoFar],&(dials[1].gen));
+	setGeneric(sprSoFar, 109, 99, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 1, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[1].gen));
 	setDial(&dials[1], gPtr->sidValues->pwdLo , 0, 255, 0, 0, 0, SPR_BASE);
 	sprSoFar++;
 	
-	setGeneric(sprSoFar, 97 , 108, SPR_BASE, 4, 8, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[4]));
+	setGeneric(sprSoFar, 97 , 108, SPR_BASE, 4, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[4]));
 	showGeneric(&(sliders_labels[4]));
 	updateGeneric(&(sliders_labels[4]), dials[0].value8, SPR_BASE);
 	sprSoFar++;
-	setGeneric(sprSoFar, 103 , 108, SPR_BASE, 5, 8, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[5]));
+	setGeneric(sprSoFar, 103 , 108, SPR_BASE, 5, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[5]));
 	showGeneric(&(sliders_labels[5]));
 	updateGeneric(&(sliders_labels[5]), (dials[1].value8 & 0xF0)>>4, SPR_BASE);
 	sprSoFar++;
-	setGeneric(sprSoFar, 109 , 108, SPR_BASE, 6, 8, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[6]));
+	setGeneric(sprSoFar, 109 , 108, SPR_BASE, 6, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[6]));
 	showGeneric(&(sliders_labels[6]));
 	updateGeneric(&(sliders_labels[6]), dials[1].value8 & 0x0F, SPR_BASE);
 	sprSoFar++;
@@ -274,7 +274,7 @@ void backgroundSetup()
 	//prep to copy over the palette to the CLUT
 	for(c=0;c<1023;c++) 
 	{
-		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(0x11000+c)); //palette for GUI
+		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(0x15000+c)); //palette for GUI
 	}
 	for(c=0;c<1023;c++) 
 	{
@@ -297,6 +297,9 @@ void backgroundSetup()
 	bitmapSetVisible(0,true);
 	bitmapSetVisible(1,true);
 	bitmapSetVisible(2,false);
+	
+
+	
 }
 
 void resetActivity()
@@ -348,6 +351,38 @@ void setup()
 	
 	loadGUISID();
 	resetActivity();
+	/*
+	for(uint8_t j=0; j<8;j++)
+		{
+		for(uint8_t i=0; i<8; i++)
+			{
+			spriteDefine(i+8*j, SPR_BASE8 + SIZE8*SIZE8 * i + SIZE8*SIZE8 * 8 * j, SIZE8, 0, 0);
+			spriteSetPosition(i+8*j,32+SIZE8*i,32+SIZE8*j);
+			spriteSetVisible(i+8*j,true);
+			}
+		}
+		*/
+	/*
+	for(uint8_t j=0; j<4;j++)
+		{
+		for(uint8_t i=0; i<8; i++)
+			{
+			spriteDefine(i+8*j, SPR_BASE8 + SIZE8*SIZE8 * i + SIZE8*SIZE8 * 8 * j, SIZE8, 0, 0);
+			spriteSetPosition(i+8*j,32+SIZE16*i,32+SIZE16*j);
+			spriteSetVisible(i+8*j,true);
+			}
+		}
+		
+	for(uint8_t j=4; j<8;j++)
+		{
+		for(uint8_t i=0; i<8; i++)
+			{
+			spriteDefine(i+8*j, SPR_BASE16 + SIZE16*SIZE16 * i + SIZE16*SIZE16 * 8 * j, SIZE16, 0, 0);
+			spriteSetPosition(i+8*j,32+SIZE16*i,32+SIZE16*j);
+			spriteSetVisible(i+8*j,true);
+			}
+		}
+		*/
 	}
 
 void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch what the click behavior means in this specific project

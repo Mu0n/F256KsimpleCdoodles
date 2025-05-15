@@ -2,13 +2,13 @@
 #define MODUUI_H
 
 //Offsets from SPR_BASE in the sprite sheet
-#define UI_ORA_NB 16*64
-#define UI_DIALS  32*64
-#define UI_SLIDS  40*64
-#define UI_SWTCH  56*64
-#define UI_STAT   58*64
-#define UI_ACTIV  64
-#define UI_ROW    8*64
+
+#define UI_ROW    8
+#define UI_ORA_NB 16
+#define UI_DIALS  32
+#define UI_SLIDS  40
+#define UI_SWTCH  56
+#define UI_STAT   58
 
 #include "f256lib.h"
 

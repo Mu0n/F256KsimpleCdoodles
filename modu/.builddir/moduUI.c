@@ -39,7 +39,7 @@ void showGeneric(struct generic_UI *gen)
 }
 void updateGeneric(struct generic_UI *gen, uint8_t val, uint32_t base)
 {
-	spriteDefine(gen->s, base+ val*UI_ACTIV, gen->size, 0, 0);
+	spriteDefine(gen->s, base+ (uint32_t)(val*gen->size*gen->size), gen->size, 0, 0);
 	spriteSetVisible(gen->s,true);
 }
 
@@ -47,11 +47,11 @@ void updateRadioB(struct radioB_UI *but)
 {
 	if(but->gen.isClicked)
 	{
-		but->gen.addr += (uint32_t)UI_ACTIV;
+		but->gen.addr += (uint32_t)(but->gen.size * but->gen.size);
 	}
 	else
 	{
-		but->gen.addr -= (uint32_t)UI_ACTIV;
+		but->gen.addr -= (uint32_t)(but->gen.size * but->gen.size);
 	}
 	
 	spriteDefine(but->gen.s, but->gen.addr, but->gen.size, 0, 0);
@@ -77,7 +77,7 @@ void setRadioB(struct radioB_UI *but, bool isExcl, uint8_t groupID, bool startAc
 void updateDial(struct dial_UI *dia, uint32_t base)
 {
 	
-	dia->gen.addr = base + (uint32_t)UI_DIALS + (uint32_t)(getEigth((uint16_t)dia->value8, (uint16_t)dia->min8, (uint16_t)dia->max8) * UI_ACTIV);
+	dia->gen.addr = base + (uint32_t)32*dia->gen.size*dia->gen.size + (uint32_t)(getEigth((uint16_t)dia->value8, (uint16_t)dia->min8, (uint16_t)dia->max8) * (uint32_t)dia->gen.size*dia->gen.size);
 	
 	spriteDefine(dia->gen.s, dia->gen.addr, dia->gen.size, 0, 0);
 	spriteSetPosition(dia->gen.s,dia->gen.x,dia->gen.y);
@@ -100,11 +100,11 @@ void setDial(struct dial_UI *dia, uint8_t value8, uint8_t min8, uint8_t max8, ui
 
 void updateSlider(struct slider_UI *sli, uint32_t base)
 {
-	sli->gen.addr = base + (uint32_t)UI_SLIDS + (uint32_t)(getEigth((uint16_t)sli->value8, (uint16_t)sli->min8, (uint16_t)sli->max8) * UI_ACTIV);
+	sli->gen.addr = base + (uint32_t)(UI_SLIDS*sli->gen.size*sli->gen.size) + (uint32_t)(getEigth((uint16_t)sli->value8, (uint16_t)sli->min8, (uint16_t)sli->max8) *(uint16_t)(sli->gen.size* sli->gen.size));
 	
 	spriteDefine(sli->gen.s, sli->gen.addr, sli->gen.size, 0, 0);
 	spriteSetPosition(sli->gen.s,sli->gen.x,sli->gen.y);
-	spriteDefine(sli->gen.s + 1, sli->gen.addr + UI_ROW, sli->gen.size, 0, 0);
+	spriteDefine(sli->gen.s + 1, sli->gen.addr + (uint32_t)(UI_ROW*sli->gen.size*sli->gen.size), sli->gen.size, 0, 0);
 	spriteSetPosition(sli->gen.s + 1,sli->gen.x,sli->gen.y + sli->gen.size);
 	
 	spriteSetVisible(sli->gen.s  ,true);

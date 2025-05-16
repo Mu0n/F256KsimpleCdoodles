@@ -49,6 +49,8 @@ void setMonoSID(void);
 void setStereoSID(void);
 uint8_t fetchCtrl(uint8_t);
 
+void sid_setPWM(uint8_t, uint8_t);
+void sid_adsr(uint8_t, uint8_t);
 
 extern const char *sid_instruments_names[];
 extern const uint8_t sid_instrumentsSize;

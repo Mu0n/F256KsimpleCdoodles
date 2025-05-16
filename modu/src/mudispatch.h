@@ -36,5 +36,6 @@ extern uint8_t reservedPSG[];
 extern uint8_t reservedOPL3[];
 */
 extern struct glTh *gPtr;
+extern uint8_t chipAct[];
 
 #endif // MUDISPATCH_H

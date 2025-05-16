@@ -1,4 +1,4 @@
-#include "C:\F256\f256llvm-mos\F256KsimpleCdoodles\modu\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\modu\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
 
@@ -105,6 +105,10 @@
 #define GUI_N_SLIDERS 4
 #define GUI_N_DIALS 4
 
+#define TIMER_FRAMES 0
+#define TIMER_POLY_DELAY 1
+#define TIMER_POLY_COOKIE 1
+
 typedef struct sliderActivity{
 	uint8_t index;
 	int16_t iMX, iMY;
@@ -138,6 +142,7 @@ uint8_t oplSpriteAction[64] = {ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, ACT_OPL_OPL2,
 							   ACT_OPL_FA, ACT_OPL_FS, ACT_OPL_FD, ACT_OPL_FR, ACT_OPL_FA_L, ACT_OPL_FS_L, ACT_OPL_FD_L, ACT_OPL_FR_L
 };
 
+
 void dispatchAction(struct generic_UI *, bool);
 void resetActivity(void);
 #define SIZE8 8
@@ -156,15 +161,40 @@ int16_t mX, mY; //mouse coordinates
 struct sliderActivity sliAct;
 struct dialActivity   diaAct;
 
+struct timer_t polyTimer;
+
 struct radioB_UI radios[8];
 struct slider_UI sliders[4];
 struct generic_UI sliders_labels[7];
-struct lighter_UI lights[6];
+struct lighter_UI lights[21];
 struct dial_UI dials[2];
 bool noteColors[88]={1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1};
 
+
+//Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
+bool setTimer(const struct timer_t *timer)
+{
+    *(uint8_t*)0xf3 = timer->units;
+    *(uint8_t*)0xf4 = timer->absolute;
+    *(uint8_t*)0xf5 = timer->cookie;
+    kernelCall(Clock.SetTimer);
+	return !kernelError;
+}
+//getTimerAbsolute:
+//This is essential if you want to retrigger a timer properly. The old value of the absolute
+//field has a high chance of being desynchronized when you arrive at the moment when a timer
+//is expired and you must act upon it.
+//get the value returned by this, add the delay you want, and use setTimer to send it off
+//ex: myTimer.absolute = getTimerAbsolute(TIMES_SECONDS) + TIMER_MYTIMER_DELAY
+uint8_t getTimerAbsolute(uint8_t units)
+{
+    *(uint8_t*)0xf3 = units | 0x80;
+    return kernelCall(Clock.SetTimer);
+}
+
 void textLayerMIDI()
 {
+	textGotoXY(12,28);textPrint("Infinite!");
 }
 void textLayerPSG()
 {
@@ -219,15 +249,39 @@ void loadGUIMIDI()
 }
 void loadGUIPSG()
 {
-	uint8_t sprSoFar = 0;
+	#define GROUP4_PSG_POLY_X 79
+	#define GROUP4_PSG_POLY_Y 253
+	#define GROUP4_PSG_POLY_SPACE 16
+	uint8_t sprSoFar = 4;
 	textLayerGen();
 	textLayerPSG();
+	
+		//polyphony for OPL (9 indicators)
+	for(uint8_t i=15;i<21; i++)
+	{
+		setGeneric(sprSoFar,GROUP4_PSG_POLY_X + (i-15)*GROUP4_PSG_POLY_SPACE, GROUP4_PSG_POLY_Y, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(lights[i].gen));
+		setLighter(&(lights[i]),0, SPR_BASE);
+		sprSoFar++;
+	}
+	
 }
 void loadGUIOPL()
 {
-	uint8_t sprSoFar = 0;
+	#define GROUP4_OPL_POLY_X 79
+	#define GROUP4_OPL_POLY_Y 253
+	#define GROUP4_OPL_POLY_SPACE 16
+	uint8_t sprSoFar = 4;
 	textLayerGen();
 	textLayerOPL();
+	
+	//polyphony for OPL (9 indicators)
+	for(uint8_t i=6;i<15; i++)
+	{
+		setGeneric(sprSoFar,GROUP4_OPL_POLY_X + (i-6)*GROUP4_OPL_POLY_SPACE, GROUP4_OPL_POLY_Y, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(lights[i].gen));
+		setLighter(&(lights[i]),0, SPR_BASE);
+		sprSoFar++;
+	}
+	
 }
 
 void loadGUISID()
@@ -255,10 +309,10 @@ void loadGUISID()
 	#define GROUP3_SID_PWML_Y  GROUP3_SID_PWM_Y+18
 	#define GROUP3_SID_PWML_SPACE  10
 	
+	
 	#define GROUP4_SID_POLY_X 79
 	#define GROUP4_SID_POLY_Y 253
 	#define GROUP4_SID_POLY_SPACE 16
-	
 	#define GrOU
 	uint8_t sprSoFar = 0;
 	
@@ -462,6 +516,10 @@ void setup()
 			}
 		}
 		*/
+	
+	//GUI timer for polyphony
+	polyTimer.units = TIMER_FRAMES;
+	polyTimer.cookie = TIMER_POLY_COOKIE;
 	}
 
 void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch what the click behavior means in this specific project
@@ -594,11 +652,7 @@ void updateChip(struct slider_UI *sli)
 			gPtr->sidValues->sr = (gPtr->sidValues->sr&0xF0) | (sli->value8);
 			break;
 	}
-	for(uint8_t c=0;c<3;c++)
-	{
-	sid_setInstrument(0,c,*(gPtr->sidValues));
-	sid_setInstrument(1,c,*(gPtr->sidValues));
-	}
+	sid_adsr(gPtr->sidValues->ad, gPtr->sidValues->sr);
 }
 void updateChipDial(struct dial_UI *dia)
 {
@@ -611,16 +665,19 @@ void updateChipDial(struct dial_UI *dia)
 			gPtr->sidValues->pwdHi = dia->value8 & 0x0F;
 			break;
 	}
-	for(uint8_t c=0;c<3;c++)
-	{
-	sid_setInstrument(0,c,*(gPtr->sidValues));
-	sid_setInstrument(1,c,*(gPtr->sidValues));
-	}
+	sid_setPWM(gPtr->sidValues->pwdLo, gPtr->sidValues->pwdHi);
 }
 void checkMIDIIn()
 {
 }
 	
+void LightUp(struct lighter_UI *lit, uint8_t min, uint8_t max)
+{
+	for(uint8_t i=min; i<=max; i++)
+	{
+		updateLighter(&lit[i], SPR_BASE);
+	}
+}
 int main(int argc, char *argv[]) {
 uint16_t midiPending;
 uint8_t recByte, detectedNote, detectedColor, lastCmd=0x90; //for MIDI In event detection
@@ -639,6 +696,10 @@ uint16_t i;
 
 setup();
 
+
+		polyTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_POLY_DELAY;
+		setTimer(&polyTimer);
+	
 	while(true)
 	{
 	//MIDI in
@@ -751,6 +812,32 @@ setup();
 	
 	//events
 	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+	{
+		if(kernelEventData.timer.cookie == TIMER_POLY_COOKIE)
+		{
+		switch(gPtr->chipChoice)
+		{
+			case 1: //SID
+				for(uint8_t j=0;j<chipAct[2];j++)   lights[j].value = 1;
+				for(uint8_t j=chipAct[2]; j<6; j++) lights[j].value=0;
+				LightUp(lights, 0,5);
+				break;
+			case 3: //OPL
+				for(uint8_t j=6;j<chipAct[4]+6;j++) lights[j].value = 1;
+				for(uint8_t j=chipAct[4]+6;j<15;j++) lights[j].value = 0;
+				LightUp(lights, 6,14);
+				break;
+			case 2: //PSG
+				for(uint8_t j=15;j<chipAct[3]+15;j++) lights[j].value = 1;
+				for(uint8_t j=chipAct[3]+15;j<21;j++) lights[j].value = 0;
+				LightUp(lights, 15,20);
+				break;
+		}
+		polyTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_POLY_DELAY;
+		setTimer(&polyTimer);
+		}
+	}
 	if(kernelEventData.type == kernelEvent(mouse.CLICKS))
 	{
 		//dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt, uint8_t whichChip, bool isBeat, uint8_t beatChan)

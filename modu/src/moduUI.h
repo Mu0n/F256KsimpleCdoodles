@@ -26,9 +26,16 @@ typedef struct generic_UI
 	uint8_t actionID; //used by your piece of code to drive their behavior in a switch case
 } generic_UI;
 
+typedef struct number_UI
+{
+	struct generic_UI gen;
+	uint8_t tile;
+} number_UI;
+
 typedef struct slider_UI
 {
 	struct generic_UI gen;
+	struct number_UI num;
 	
 	uint8_t value8,min8,max8;
 	uint16_t value16,min16,max16;
@@ -37,6 +44,11 @@ typedef struct slider_UI
 typedef struct dial_UI
 {
 	struct generic_UI gen;
+	struct number_UI numCoarse;
+	struct number_UI numFine;
+	
+	uint8_t maskCoarse,maskFine;
+	int8_t shiftCoarse,shiftFine;
 	
 	uint8_t value8,min8,max8;
 	uint16_t value16,min16,max16;
@@ -52,8 +64,9 @@ typedef struct radioB_UI
 typedef struct lighter_UI
 {
 	struct generic_UI gen;
-	uint8_t value;
+	uint8_t tile;
 } lighter_UI;
+
 
 uint8_t getEigth(uint16_t, uint16_t, uint16_t);
 void setGeneric(uint8_t, uint16_t, uint16_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, struct generic_UI *);
@@ -63,12 +76,17 @@ void showGeneric(struct generic_UI *);
 void setRadioB(struct radioB_UI *, bool, uint8_t, bool);
 void updateRadioB(struct radioB_UI *);
 
-void updateSlider(struct slider_UI *, uint32_t);
-void setSlider(struct slider_UI *, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint32_t);
+void updateSlider(struct slider_UI *, uint32_t, uint32_t);
+void setSlider(struct slider_UI *, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint32_t, uint32_t);
 
-void updateDial(struct dial_UI *, uint32_t);
-void setDial(struct dial_UI *, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint32_t);
+void updateDial(struct dial_UI *, uint32_t, uint32_t);
+void setDial(struct dial_UI *, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint32_t, uint32_t, uint8_t, int8_t, uint8_t, int8_t);
 
 void updateLighter(struct lighter_UI *, uint32_t);
 void setLighter(struct lighter_UI *, uint8_t, uint32_t);
+
+void updateNumber(struct number_UI *, uint32_t);
+void setANumber(struct number_UI *, uint16_t, uint32_t);
+
+void setATile(uint8_t, uint8_t, uint16_t, uint32_t);
 #endif // MODUUI_H

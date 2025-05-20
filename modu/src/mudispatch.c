@@ -94,9 +94,9 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
 				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
 				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn);//if isBeat false, usually gPtr->sidInstChoice
-				chipAct[2]++;
 				polySIDBuffer[foundFreeChan] = note;					
 				}
+				chipAct[2]++;
 		}
 		else 
 		{
@@ -128,8 +128,8 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 							psgLow[note-45],psgHigh[note-45],
 							speed);
 			    polyPSGBuffer[foundFreeChan] = note;
-				chipAct[3]++;	
 				}
+			chipAct[3]++;	
 			}
 		else 
 		{
@@ -152,8 +152,9 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 				{
 				opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, true);	
 				polyOPL3Buffer[foundFreeChan] = note;
-				chipAct[4]++;
 				}
+			
+			chipAct[4]++;
 			}
 		else 
 			{

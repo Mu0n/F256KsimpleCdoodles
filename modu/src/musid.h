@@ -35,6 +35,7 @@ typedef struct sidInstrument {
 	uint8_t ctrl;           // CTRL 
 	uint8_t fcfLo, fcfHi;   //filter cutoff freqs
 	uint8_t frr;            //filter resonance & routing
+	uint8_t v3Lo,v3Hi;      //voice 3 frequency for modulation
    } sidI; 
 		
 		
@@ -51,6 +52,11 @@ uint8_t fetchCtrl(uint8_t);
 
 void sid_setPWM(uint8_t, uint8_t);
 void sid_adsr(uint8_t, uint8_t);
+void sid_setFILT(uint8_t);
+void sid_setModVol(uint8_t);
+void sid_setFF(uint8_t, uint8_t);
+void sid_setCTRL(uint8_t);
+void sid_setV3(uint8_t, uint8_t);
 
 extern const char *sid_instruments_names[];
 extern const uint8_t sid_instrumentsSize;

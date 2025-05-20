@@ -30,9 +30,23 @@
 //SID pulse width mod
 #define ACT_SID_PWMHI 36
 #define ACT_SID_PWMLO 37
-#define ACT_SID_PWML1 38
-#define ACT_SID_PWML2 39
-#define ACT_SID_PWML3 40
+
+
+//SID filtering
+#define ACT_SID_FLT  41
+#define ACT_SID_FFH  42
+#define ACT_SID_FFL  43
+
+#define ACT_SID_FLP  44
+#define ACT_SID_FBP  45
+#define ACT_SID_FHP  46
+#define ACT_SID_F3O  47
+#define ACT_SID_RNG  48
+#define ACT_SID_SYN  49
+
+#define ACT_SID_RES  50
+#define ACT_SID_V3H  51
+#define ACT_SID_V3L  52
 
 
 //OPL3 area
@@ -99,9 +113,7 @@
 #include "../src/muopl3.h"
 #include "../src/mupsg.h"
 
-#define GUI_N_RADIOS 8
-#define GUI_N_SLIDERS 4
-#define GUI_N_DIALS 4
+
 
 #define TIMER_FRAMES 0
 #define TIMER_POLY_DELAY 1
@@ -120,39 +132,47 @@ typedef struct dialActivity{
 	uint16_t value16;
 } dialActivity;
 	
-uint8_t sidSpriteAction[64] = {ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, ACT_SID_TRI, ACT_SID_SAW, ACT_SID_PUL, ACT_SID_NOI,
-							   ACT_SID_A, 0xFF, ACT_SID_D, 0xFF, ACT_SID_S, 0xFF, ACT_SID_R, 0xFF,
-							   ACT_SID_A_L, ACT_SID_D_L, ACT_SID_S_L, ACT_SID_R_L, ACT_SID_PWMHI, ACT_SID_PWMLO, ACT_SID_PWML1, ACT_SID_PWML2,
-							   ACT_SID_PWML3, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+
+uint8_t sidSpriteAction[64] = {0xFF, ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, //5
+                               ACT_SID_TRI, ACT_SID_SAW, ACT_SID_PUL, ACT_SID_NOI, //9
+							   ACT_SID_A, 0xFF, ACT_SID_D, 0xFF,  ACT_SID_S, 0xFF, ACT_SID_R, 0xFF, //17    
+							   ACT_SID_PWMHI, ACT_SID_PWMLO,       //19 
+							   ACT_SID_FLT, ACT_SID_FFH, ACT_SID_FFL, //22
+							   ACT_SID_FLP, ACT_SID_FBP, ACT_SID_FHP, ACT_SID_F3O,   //26
+							   ACT_SID_RES, 0xFF,         //28
+							   ACT_SID_RNG, ACT_SID_SYN,  //30
+							   ACT_SID_V3H, ACT_SID_V3L,0xFF,0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,  0xFF, //40
+							   0xFF,0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,  //48
+							   0xFF,0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, //56
+							   0xFF,0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF //64
+};		
+
+uint8_t oplSpriteAction[64] = {ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, ACT_OPL_OPL2, ACT_OPL_OPL3_03, ACT_OPL_WLEFT, ACT_OPL_WRIGHT,
+							   ACT_OPL_TREMO, ACT_OPL_VIBRA, ACT_OPL_PERCM, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
-uint8_t oplSpriteAction[64] = {ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, ACT_OPL_OPL2, ACT_OPL_OPL3_03, ACT_OPL_WLEFT, ACT_OPL_WRIGHT,
-							   ACT_OPL_TREMO, ACT_OPL_VIBRA, ACT_OPL_PERCM, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-							   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-							   ACT_OPL_MA, ACT_OPL_MS, ACT_OPL_MD, ACT_OPL_MR, ACT_OPL_MA_L, ACT_OPL_MS_L, ACT_OPL_MD_L, ACT_OPL_MR_L,
-							   ACT_OPL_CA, ACT_OPL_CS, ACT_OPL_CD, ACT_OPL_CR, ACT_OPL_CA_L, ACT_OPL_CS_L, ACT_OPL_CD_L, ACT_OPL_CR_L,
-							   ACT_OPL_TA, ACT_OPL_TS, ACT_OPL_TD, ACT_OPL_TR, ACT_OPL_TA_L, ACT_OPL_TS_L, ACT_OPL_TD_L, ACT_OPL_TR_L,
-							   ACT_OPL_FA, ACT_OPL_FS, ACT_OPL_FD, ACT_OPL_FR, ACT_OPL_FA_L, ACT_OPL_FS_L, ACT_OPL_FD_L, ACT_OPL_FR_L
-};
-
 
 void dispatchAction(struct generic_UI *, bool);
 void resetActivity(void);
+
 #define SIZE8 8
 #define SIZE16 16
 #define SPR_BASE  0x10000
 #define SPR_BASE8 0x14000
 #define SPR_BASE16 0x10000
+#define TILEMAP_BASE 0x15400
 EMBED(gui16, "../assets/gui16.bin", 0x10000); //16kb
 EMBED(gui8,  "../assets/gui8.bin" , 0x14000); //4kb
 EMBED(pal,   "../assets/gui.pal",     0x15000); //1kb
-EMBED(pianopal, "../assets/piano.pal", 0x30000);
-EMBED(keys, "../assets/piano.raw", 0x30400);
+//next chunk at 0x15400
+EMBED(pianopal, "../assets/piano.pal", 0x30000); //1kb
+EMBED(keys, "../assets/piano.raw", 0x30400); //
 
 int16_t mX, mY; //mouse coordinates
 
@@ -161,13 +181,16 @@ struct dialActivity   diaAct;
 
 struct timer_t polyTimer;
 
-struct radioB_UI radios[8];
-struct slider_UI sliders[4];
-struct generic_UI sliders_labels[7];
+#define GUI_N_RADIOS 15
+#define GUI_N_SLIDERS 5
+#define GUI_N_DIALS 6
+struct radioB_UI radios[15];
+struct slider_UI sliders[5];
 struct lighter_UI lights[21];
-struct dial_UI dials[2];
+struct dial_UI dials[6];
 bool noteColors[88]={1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1};
 
+uint16_t oldMX, oldMY; //keep track of the mouse area when dealing with sliders and dials to bring it back to it when done
 
 //Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
 bool setTimer(const struct timer_t *timer)
@@ -199,14 +222,28 @@ void textLayerPSG()
 }
 void textLayerSID()
 {
-	textGotoXY(30,2);textPrint("TRI");
-	textGotoXY(30,4);textPrint("SAW");
-	textGotoXY(30,6);textPrint("PUL");
-	textGotoXY(30,8);textPrint("NOI");
+	textGotoXY(12,2);textPrint("Voice  1");
+	textGotoXY(33,2);textPrint("TRI");
+	textGotoXY(33,4);textPrint("SAW");
+	textGotoXY(33,6);textPrint("PUL");
+	textGotoXY(33,8);textPrint("NOI");
 	
-	textGotoXY(13,2);textPrint("A  D  S  R");
+	textGotoXY(12,4);textPrint("A   D   S   R");
 	
-	textGotoXY(13,9);textPrint("PWM");
+	textGotoXY(13,8);textPrint("PWM");
+	
+	textGotoXY(50,13);textPrint("Filter       Ring");
+	textGotoXY(50,15);textPrint("Low          Sync");
+	textGotoXY(50,17);textPrint("Band");
+	textGotoXY(50,19);textPrint("High");
+	textGotoXY(50,21);textPrint("V3Off");
+	
+	textGotoXY(70,14);textPrint("Res");
+	textGotoXY(67,17);textPrint("FCut");
+	
+	textGotoXY(40,2);textPrint("Voice 3");
+	textGotoXY(46,4);textPrint("Frq");
+	
 	
 }
 void textLayerOPL()
@@ -237,71 +274,81 @@ POKE(MMU_IO_CTRL,0);
 
 void hideGUI()
 {
-	for(uint8_t i=4; i<64; i++) spriteSetVisible(i,false);
+	for(uint8_t i=5; i<63; i++) spriteSetVisible(i,false);
 }
-void loadGUIMIDI()
+
+void loadGUIGen()
 {
+	
+	#define GROUP0_CHIP_RADS_X 40
+	#define GROUP0_CHIP_RADS_Y 44
+	#define GROUP0_CHIP_SPACE  16
+	
+	uint8_t sprSoFar = 1; //skip 0th, seems to be a bug, it auto-disappears and I don't know why!
+	//radio button group 0: switch between chips radio buttons
+	for(uint8_t i=0; i<4; i++)
+		{
+		setGeneric(sprSoFar, GROUP0_CHIP_RADS_X, GROUP0_CHIP_RADS_Y+GROUP0_CHIP_SPACE*i, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
+		setRadioB(&radios[i], true, 0, i==1?true:false); // groupID 0
+		sprSoFar++;
+		}	
+}
+
+void loadGUIMIDI()
+{/*
+	for(uint8_t k=0;k<9;k++) setATile(3+k,14,63, TILEMAP_BASE); //clear polyphony
+	*/
 	uint8_t sprSoFar = 0;
 	textLayerGen();
 	textLayerMIDI();
 }
 void loadGUIPSG()
 {	
+
+	for(uint8_t k=0;k<9;k++) setATile(3+k,14,63, TILEMAP_BASE); //clear polyphony
+	/*
+	for(uint8_t k=0;k<6;k++) setATile(3+k,14,58, TILEMAP_BASE); //polyphony
+	*/
 	#define GROUP4_PSG_POLY_X 79
 	#define GROUP4_PSG_POLY_Y 253
 	#define GROUP4_PSG_POLY_SPACE 16
 	uint8_t sprSoFar = 4;
 	textLayerGen();
 	textLayerPSG();
-	
-		//polyphony for OPL (9 indicators)
-	for(uint8_t i=15;i<21; i++)
-	{		
-		setGeneric(sprSoFar,GROUP4_PSG_POLY_X + (i-15)*GROUP4_PSG_POLY_SPACE, GROUP4_PSG_POLY_Y, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(lights[i].gen));
-		setLighter(&(lights[i]),0, SPR_BASE);
-		sprSoFar++;
-	}
-	
+
 }
 void loadGUIOPL()
 {
+	
+	for(uint8_t k=0;k<9;k++) setATile(3+k,14,63, TILEMAP_BASE); //clear polyphony
+	/*
+	for(uint8_t k=0;k<9;k++) setATile(3+k,14,58, TILEMAP_BASE); //polyphony
+	*/
 	#define GROUP4_OPL_POLY_X 79
 	#define GROUP4_OPL_POLY_Y 253
 	#define GROUP4_OPL_POLY_SPACE 16
 	uint8_t sprSoFar = 4;
 	textLayerGen();
 	textLayerOPL();
-	
-	//polyphony for OPL (9 indicators)
-	for(uint8_t i=6;i<15; i++)
-	{		
-		setGeneric(sprSoFar,GROUP4_OPL_POLY_X + (i-6)*GROUP4_OPL_POLY_SPACE, GROUP4_OPL_POLY_Y, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(lights[i].gen));
-		setLighter(&(lights[i]),0, SPR_BASE);
-		sprSoFar++;
-	}
-	
 }
 
 void loadGUISID()
 {
-	#define GROUP0_CHIP_RADS_X 40
-	#define GROUP0_CHIP_RADS_Y 44
-	#define GROUP0_CHIP_SPACE  16
-	
-	#define GROUP1_SID_ADSR_SLIDS_X 79
-	#define GROUP1_SID_ADSR_SLIDS_Y 50
-	#define GROUP1_SID_ADSR_SLIDS_SPACE 12
+
+	#define GROUP1_SID_ADSR_SLIDS_X 81
+	#define GROUP1_SID_ADSR_SLIDS_Y 49
+	#define GROUP1_SID_ADSR_SLIDS_SPACE 16
 	#define GROUP1_SID_ADSR_SLIDSL_X GROUP1_SID_ADSR_SLIDS_X-1
 	#define GROUP1_SID_ADSR_SLIDSL_Y GROUP1_SID_ADSR_SLIDS_Y+28
 	#define GROUP1_SID_ADSR_SLIDSL_SPACE 12
 	
-	#define GROUP2_SID_WAVE_X 136
+	#define GROUP2_SID_WAVE_X 149
 	#define GROUP2_SID_WAVE_Y GROUP0_CHIP_RADS_Y
 	#define GROUP2_SID_WAVE_SPACE 16
 	
-	#define GROUP3_SID_PWM_X  98
-	#define GROUP3_SID_PWM_Y  99
-	#define GROUP3_SID_PWN_SPACE  16
+	#define GROUP3_SID_PWM_X  106
+	#define GROUP3_SID_PWM_Y  93
+	#define GROUP3_SID_PWN_SPACE  23
 	
 	#define GROUP3_SID_PWML_X  GROUP3_SID_PWM_X-3
 	#define GROUP3_SID_PWML_Y  GROUP3_SID_PWM_Y+18
@@ -311,80 +358,212 @@ void loadGUISID()
 	#define GROUP4_SID_POLY_X 79
 	#define GROUP4_SID_POLY_Y 253
 	#define GROUP4_SID_POLY_SPACE 16
-	#define GrOU
-	uint8_t sprSoFar = 0;
+	
+	#define GROUP5_SID_FILTER_X 245
+	#define GROUP5_SID_FILTER_Y GROUP2_SID_WAVE_Y +103
+	#define GROUP5_SID_FFREQ_X GROUP5_SID_FILTER_X + 16
+	#define GROUP5_SID_FFREQ_Y GROUP5_SID_FILTER_Y + 20
+	#define GROUP5_SID_FFREQ_SPACE  10
+	#define GROUP5_SID_RES_X 320
+	#define GROUP5_SID_RES_Y 143
+	#define GROUP5_SID_WAVE_SPACE 13
+	
+	#define GROUP6_SID_V3_FREQ_X 202
+	#define GROUP6_SID_V3_FREQ_Y 60
+	#define GROUP6_SID_WAVE_SPACE 30
+	
+	uint8_t sprSoFar = 5;
+	uint8_t radSoFar = 4;
+	uint8_t sliSoFar = 0;
+	uint8_t numSoFar = 0;
+	uint8_t diaSoFar = 0;
+	uint8_t litSoFar = 0;
 	
 	textLayerGen();
 	textLayerSID();
-	
-	//radio button group 0: switch between chips radio buttons
-	for(uint8_t i=0; i<4; i++)
-		{
-		setGeneric(sprSoFar, GROUP0_CHIP_RADS_X, GROUP0_CHIP_RADS_Y+GROUP0_CHIP_SPACE*i, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
-		setRadioB(&radios[i], true, 0, i==1?true:false); // groupID 0
-		sprSoFar++;
-		}
 
-	//SID
-			
+
+//5 sprites added so far	
+//4 radios added so far
+	
 	//radio button group 1: SID waveform
-	for(uint8_t i=4; i<8; i++)
+	for(uint8_t i=radSoFar; i<radSoFar+4; i++)
 	{
-	setGeneric(sprSoFar, GROUP2_SID_WAVE_X, GROUP2_SID_WAVE_Y+(i-4)*GROUP2_SID_WAVE_SPACE, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
-	setRadioB(&radios[i], true, 1, i==5?true:false);
+	setGeneric(sprSoFar, GROUP2_SID_WAVE_X, GROUP2_SID_WAVE_Y+(i-radSoFar)*GROUP2_SID_WAVE_SPACE, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
+	setRadioB(&radios[i], false, 1, i==5?true:false);
 	sprSoFar++;
 	}
-	
+	radSoFar+=4;
+		
+//9 sprites added so far	
+//8 radios added so far
+
 	//sliders for ASDR for SID
 	for(uint8_t i=0; i<4; i++)
 	{
 	setGeneric(sprSoFar , GROUP1_SID_ADSR_SLIDS_X+i*GROUP1_SID_ADSR_SLIDS_SPACE , GROUP1_SID_ADSR_SLIDS_Y, SPR_BASE+(uint32_t)(UI_SLIDS*SIZE16*SIZE16), i, SIZE16, 3,10,6,25, sidSpriteAction[sprSoFar], &(sliders[i].gen));
+	
+	setGeneric(0xFF, 3 + i , 3, TILEMAP_BASE, i, SIZE16, 0,0,0,0, 0xFF, &(sliders[i].num.gen)); //associated number
+	
 	sprSoFar+=2;
+	sliSoFar++;
 	}
-	setSlider(&sliders[0], (gPtr->sidValues->ad & 0xF0)>>4, 0, 15, 0, 0, 0, SPR_BASE); //A
-	setSlider(&sliders[1], (gPtr->sidValues->ad & 0x0F),    0, 15, 0, 0, 0, SPR_BASE); //D
-	setSlider(&sliders[2], (gPtr->sidValues->sr & 0xF0)>>4, 0, 15, 0, 0, 0, SPR_BASE); //S
-	setSlider(&sliders[3], (gPtr->sidValues->sr & 0x0F),    0, 15, 0, 0, 0, SPR_BASE); //R
+	setSlider(&sliders[0], (gPtr->sidValues->ad & 0xF0)>>4, 0, 15, 0, 0, 0, SPR_BASE, TILEMAP_BASE); //A
+	setSlider(&sliders[1], (gPtr->sidValues->ad & 0x0F),    0, 15, 0, 0, 0, SPR_BASE, TILEMAP_BASE); //D
+	setSlider(&sliders[2], (gPtr->sidValues->sr & 0xF0)>>4, 0, 15, 0, 0, 0, SPR_BASE, TILEMAP_BASE); //S
+	setSlider(&sliders[3], (gPtr->sidValues->sr & 0x0F),    0, 15, 0, 0, 0, SPR_BASE, TILEMAP_BASE); //R
+
+
+//17 sprites added so far	
+//8 radios added so far
+//4 sliders
 	
-	for(uint8_t i=0; i<4; i++) //and their labels
-	{	
-	setGeneric(sprSoFar, GROUP1_SID_ADSR_SLIDSL_X+i*GROUP1_SID_ADSR_SLIDSL_SPACE , GROUP1_SID_ADSR_SLIDSL_Y, SPR_BASE, i, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[i]));
-	showGeneric(&(sliders_labels[i]));
-	updateGeneric(&(sliders_labels[i]), sliders[i].value8, SPR_BASE);
-	sprSoFar++;
-	}
-	
-	//dial for pulse width
+	//dial for pulse width, coarse
 	setGeneric(sprSoFar, GROUP3_SID_PWM_X, GROUP3_SID_PWM_Y, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 0, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[0].gen));
-	setDial(&dials[0], (gPtr->sidValues->pwdHi & 0x0F), 0, 15, 0, 0, 0, SPR_BASE);
+	
+	//set its 2 associated numbers
+	setGeneric(0xFF, 4, 5, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[0].numCoarse.gen)); //associated coarse number
+	setGeneric(0xFF, 5, 5, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[0].numFine.gen));   //associated fine number
+	
+	setDial(&dials[0], ((gPtr->sidValues->pwdHi & 0x0F)<<4) | (gPtr->sidValues->pwdLo & 0xF0)>>4 , 0, 255, 0, 0, 0, SPR_BASE, TILEMAP_BASE, 0xF0, 4, 0x0F, 0);
 	sprSoFar++;
+	//dial for pulse width, fine
 	setGeneric(sprSoFar, GROUP3_SID_PWM_X+GROUP3_SID_PWN_SPACE, GROUP3_SID_PWM_Y, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 1, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[1].gen));
-	setDial(&dials[1], gPtr->sidValues->pwdLo , 0, 255, 0, 0, 0, SPR_BASE);
+	
+	//set its 1 associated number
+	setGeneric(0xFF, 6, 5, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[1].numCoarse.gen)); //associated coarse number
+	
+	setDial(&dials[1], gPtr->sidValues->pwdLo & 0x0F , 0, 0xF, 0, 0, 0, SPR_BASE, TILEMAP_BASE, 0x0F, 0, 0x00, 0);
 	sprSoFar++;
 	
-	setGeneric(sprSoFar, GROUP3_SID_PWML_X , GROUP3_SID_PWML_Y, SPR_BASE, 4, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[4]));
-	showGeneric(&(sliders_labels[4]));
-	updateGeneric(&(sliders_labels[4]), dials[0].value8, SPR_BASE);
-	sprSoFar++;
-	setGeneric(sprSoFar, GROUP3_SID_PWML_X+GROUP3_SID_PWML_SPACE , GROUP3_SID_PWML_Y, SPR_BASE, 5, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[5]));
-	showGeneric(&(sliders_labels[5]));
-	updateGeneric(&(sliders_labels[5]), (dials[1].value8 & 0xF0)>>4, SPR_BASE);
-	sprSoFar++;
-	setGeneric(sprSoFar, GROUP3_SID_PWML_X+2*GROUP3_SID_PWML_SPACE , GROUP3_SID_PWML_Y, SPR_BASE, 6, SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(sliders_labels[6]));
-	showGeneric(&(sliders_labels[6]));
-	updateGeneric(&(sliders_labels[6]), dials[1].value8 & 0x0F, SPR_BASE);
-	sprSoFar++;
+	diaSoFar+=2;
+ 
+//22 sprites added so far	
+//8 radios added so far
+//4 sliders
+//2 dials
+
+//polyphony for SID (6 indicators)
 	
-	//polyphony for SID (6 indicators)
 	for(uint8_t i=0;i<6; i++)
 	{		
-		setGeneric(sprSoFar,GROUP4_SID_POLY_X + i*GROUP4_SID_POLY_SPACE, GROUP4_SID_POLY_Y, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, sidSpriteAction[sprSoFar], &(lights[i].gen));
+		setGeneric(0xFF,3+i,14, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, 0xFF, &(lights[i].gen));
 		setLighter(&(lights[i]),0, SPR_BASE);
-		sprSoFar++;
-		
+		litSoFar++;
 	}
+
+//22 sprites added so far	
+//8 radios added so far
+//4 sliders
+//2 dials
+//6 lights	
+	
+	//filter section
+	setGeneric(sprSoFar, GROUP5_SID_FILTER_X-32, GROUP5_SID_FILTER_Y-GROUP2_SID_WAVE_SPACE, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), radSoFar, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[radSoFar].gen));
+	setRadioB(&radios[radSoFar], false, 0xFF, false);
+	sprSoFar++;
+	radSoFar++;
+
+//23 sprites added so far	
+//9 radios added so far
+//4 sliders
+//2 dials
+//6 lights
+	//dial for filter frequency
+	setGeneric(sprSoFar, GROUP5_SID_FFREQ_X, GROUP5_SID_FFREQ_Y, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 2, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[2].gen));
+	//set its 2 associated numbers
+	setGeneric(0xFF, 14, 10, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[2].numCoarse.gen)); //associated coarse number
+	setGeneric(0xFF, 15, 10, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[2].numFine.gen));   //associated fine number
+
+	setDial(&dials[2], (gPtr->sidValues->fcfHi<<4)|(gPtr->sidValues->fcfLo>>4), 0, 127, 0, 0, 0, SPR_BASE, TILEMAP_BASE, 0xF0, 4, 0x0F, 0);
+	sprSoFar++;
+	
+	setGeneric(sprSoFar, GROUP5_SID_FFREQ_X+GROUP3_SID_PWN_SPACE, GROUP5_SID_FFREQ_Y, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 3, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[3].gen));
+	//set its associated number
+	setGeneric(0xFF, 16, 10, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[3].numCoarse.gen)); //associated coarse number
+	setDial(&dials[3], gPtr->sidValues->fcfLo&0x0F , 0, 15, 0, 0, 0, SPR_BASE, TILEMAP_BASE, 0x0F, 0, 0x00, 0);
+	sprSoFar++;
+	diaSoFar+=2;
+
+//25 sprites added so far	
+//9 radios added so far
+//4 sliders
+//4 dials
+//6 lights	
+ 
+	//radios for low, band, high and v3off filter toggles
+	for(uint8_t i=radSoFar; i<radSoFar+4; i++)
+	{
+	setGeneric(sprSoFar, GROUP5_SID_FILTER_X-32, GROUP5_SID_FILTER_Y+(i-radSoFar)*GROUP2_SID_WAVE_SPACE, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), i, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[i].gen));
+	setRadioB(&radios[i], false, 0xFF, false);
+	sprSoFar++;
+	}
+	radSoFar+=4;
 	
 	
+	
+//29 sprites added so far	
+//13 radios added so far
+//4 sliders
+//4 dials
+//6 lights	
+	//slider for Resonance
+	setGeneric(sprSoFar , GROUP5_SID_RES_X, GROUP5_SID_RES_Y, SPR_BASE+(uint32_t)(UI_SLIDS*SIZE16*SIZE16), sliSoFar, SIZE16, 3,10,6,25, sidSpriteAction[sprSoFar], &(sliders[sliSoFar].gen));
+	setGeneric(0xFF, 18 , 9, TILEMAP_BASE, sliSoFar, SIZE16, 0,0,0,0, 0xFF, &(sliders[sliSoFar].num.gen)); //associated number
+	setSlider(&sliders[sliSoFar], (gPtr->sidValues->frr & 0xF0)>>4, 0, 15, 0, 0, 0, SPR_BASE, TILEMAP_BASE); //res
+	sprSoFar+=2;
+	sliSoFar++;
+
+	
+	
+	
+
+	
+//31 sprites added so far	
+//13 radios added so far
+//5 sliders
+//4 dials
+//6 lights	
+	//radio buttons for ring and sync
+	setGeneric(sprSoFar, GROUP5_SID_FFREQ_X+GROUP5_SID_WAVE_SPACE-5, GROUP5_SID_FILTER_Y-GROUP2_SID_WAVE_SPACE, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), radSoFar, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[radSoFar].gen));
+	setRadioB(&radios[radSoFar], false, 0xFF, false);
+	sprSoFar++;
+	radSoFar++;
+	
+	setGeneric(sprSoFar, GROUP5_SID_FFREQ_X+GROUP5_SID_WAVE_SPACE-5, GROUP5_SID_FILTER_Y, SPR_BASE+(uint32_t)(UI_SWTCH*SIZE16*SIZE16), radSoFar, SIZE16, 0,13,4,11, sidSpriteAction[sprSoFar], &(radios[radSoFar].gen));
+	setRadioB(&radios[radSoFar], false, 0xFF, false);
+	sprSoFar++;
+	radSoFar++;
+	
+//33 sprites added so far	
+//15 radios added so far
+//5 sliders
+//4 dials
+//6 lights
+
+	//dial for frequency of voice 3
+	setGeneric(sprSoFar, GROUP6_SID_V3_FREQ_X, GROUP6_SID_V3_FREQ_Y, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 4, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[4].gen));
+	//set its 2 associated numbers
+	setGeneric(0xFF, 10, 3, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[4].numCoarse.gen)); //associated coarse number
+	setGeneric(0xFF, 11, 3, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[4].numFine.gen));   //associated fine number
+
+	setDial(&dials[4], (gPtr->sidValues->v3Hi), 0, 255, 0, 0, 0, SPR_BASE, TILEMAP_BASE, 0xF0, 4, 0x0F, 0);
+	sprSoFar++;
+	
+	setGeneric(sprSoFar, GROUP6_SID_V3_FREQ_X+GROUP6_SID_WAVE_SPACE, GROUP6_SID_V3_FREQ_Y, SPR_BASE+(uint32_t)(UI_DIALS*SIZE16*SIZE16), 5, SIZE16, 0,13,0,13, sidSpriteAction[sprSoFar],&(dials[5].gen));
+	//set its 2 associated numbers
+	setGeneric(0xFF, 12, 3, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[5].numCoarse.gen)); //associated coarse number
+	setGeneric(0xFF, 13, 3, TILEMAP_BASE, 0, SIZE16, 0,0,0,0, 0xFF, &(dials[5].numFine.gen)); //associated coarse number
+	setDial(&dials[5], gPtr->sidValues->v3Lo , 0, 255, 0, 0, 0, SPR_BASE, TILEMAP_BASE, 0xF0, 4, 0x0F, 0);
+	sprSoFar++;
+	diaSoFar+=2;
+	
+//35 sprites added so far	
+//15 radios added so far
+//5 sliders
+//6 dials
+//6 lights
+
 }
 
 void backgroundSetup()
@@ -393,11 +572,11 @@ void backgroundSetup()
 	
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b00101111); //sprite,graph,overlay,text
+	POKE(VKY_MSTR_CTRL_0, 0b00111111); //sprite,graph,overlay,text
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
-	POKE(VKY_LAYER_CTRL_0, 0b00000001); //bitmap 1 in layer 0, bitmap 0 in layer 1
-	POKE(VKY_LAYER_CTRL_1, 0b00000010); //bitmap 2 in layer 2
+	POKE(VKY_LAYER_CTRL_0, 0b00010100); //bitmap 1 in layer 0, bitmap 0 in layer 1
+	POKE(VKY_LAYER_CTRL_1, 0b00000000); //tile map 0 in layer 2
 
 	POKE(0xD00D,0x00); //force black graphics background
 	POKE(0xD00E,0x00);
@@ -431,8 +610,18 @@ void backgroundSetup()
 	bitmapSetVisible(1,true);
 	bitmapSetVisible(2,false);
 	
-
+	tileDefineTileMap(0, TILEMAP_BASE, 16, 20, 16); //tile map 0, 16 pixels size, 20x15 map
+	tileDefineTileSet(0, SPR_BASE, false);       //tile set 0, uses the same graphic as the sprite sheet
+	tileSetVisible(0,true);
+	tileSetScroll(0, 0, 0, 4, 0);
 	
+	for(uint8_t z=0;z<16;z++)
+	{
+		for(uint8_t y=0; y<20; y++)
+		{
+			setATile(y,z,63,TILEMAP_BASE);
+		}
+	}
 }
 
 void resetActivity()
@@ -470,54 +659,27 @@ void setup()
 	//global values
 	gPtr->chipChoice = 1;
 	gPtr->sidValues->maxVolume = 0x0F;
-	gPtr->sidValues->pwdLo = 0x88;
+	gPtr->sidValues->pwdLo = 0x8B;
 	gPtr->sidValues->pwdHi = 0x02;
 	gPtr->sidValues->ad = 0x19;
 	gPtr->sidValues->sr = 0x23;
 	gPtr->sidValues->ctrl = 0x20;
-	gPtr->sidValues->fcfLo = 0x00;
-	gPtr->sidValues->fcfHi = 0x00;
-	gPtr->sidValues->frr = 0x00;
-
+	gPtr->sidValues->fcfLo = 0x34;
+	gPtr->sidValues->fcfHi = 0x01;
+	gPtr->sidValues->frr = 0x20;
+	gPtr->sidValues->v3Lo = 0x55;
+	gPtr->sidValues->v3Hi = 0x01;
 	
+
+	loadGUIGen();
 	loadGUISID();
 	resetActivity();
-	/*
-	for(uint8_t j=0; j<8;j++)
-		{
-		for(uint8_t i=0; i<8; i++)
-			{
-			spriteDefine(i+8*j, SPR_BASE8 + SIZE8*SIZE8 * i + SIZE8*SIZE8 * 8 * j, SIZE8, 0, 0);
-			spriteSetPosition(i+8*j,32+SIZE8*i,32+SIZE8*j);
-			spriteSetVisible(i+8*j,true);
-			}
-		}
-		
-	
-	for(uint8_t j=0; j<4;j++)
-		{
-		for(uint8_t i=0; i<8; i++)
-			{
-			spriteDefine(i+8*j, SPR_BASE8 + SIZE8*SIZE8 * i + SIZE8*SIZE8 * 8 * j, SIZE8, 0, 0);
-			spriteSetPosition(i+8*j,32+SIZE16*i,32+SIZE16*j);
-			spriteSetVisible(i+8*j,true);
-			}
-		}
-		
-	for(uint8_t j=4; j<8;j++)
-		{
-		for(uint8_t i=0; i<8; i++)
-			{
-			spriteDefine(i+8*j, SPR_BASE16 + SIZE16*SIZE16 * i + SIZE16*SIZE16 * 8 * j, SIZE16, 0, 0);
-			spriteSetPosition(i+8*j,32+SIZE16*i,32+SIZE16*j);
-			spriteSetVisible(i+8*j,true);
-			}
-		}
-		*/
 		
 	//GUI timer for polyphony
 	polyTimer.units = TIMER_FRAMES;
 	polyTimer.cookie = TIMER_POLY_COOKIE;
+	
+	
 	}
 
 void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch what the click behavior means in this specific project
@@ -528,6 +690,9 @@ void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch w
 	{
 		case ACT_MID ... ACT_OPL:
 		case ACT_SID_TRI ... ACT_SID_NOI:
+		case ACT_SID_FLT:
+		case ACT_SID_FLP ... ACT_SID_SYN:
+		
 			gen->isClicked = !gen->isClicked;
 
 			updateRadioB(&radios[gen->parentIndex]); //toggle the current one
@@ -571,35 +736,57 @@ void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch w
 				}
 
 			}
-			if(gen->actionID == ACT_SID_TRI) {gPtr->sidValues->ctrl = ((gPtr->sidValues->ctrl) & 0x0F) | 0x10;wChange=true;}
-			if(gen->actionID == ACT_SID_SAW) {gPtr->sidValues->ctrl = ((gPtr->sidValues->ctrl) & 0x0F) | 0x20;wChange=true;}
-			if(gen->actionID == ACT_SID_PUL) {gPtr->sidValues->ctrl = ((gPtr->sidValues->ctrl) & 0x0F) | 0x40;wChange=true;}
-			if(gen->actionID == ACT_SID_NOI) {gPtr->sidValues->ctrl = ((gPtr->sidValues->ctrl) & 0x0F) | 0x80;wChange=true;}
-			
-		//textGotoXY(33,3);printf("%02x ",gPtr->sidValues->ctrl);
-			if(wChange){
-				for(c=0;c<3;c++)
-					{
-					sid_setInstrument(0,c,*(gPtr->sidValues));
-					sid_setInstrument(1,c,*(gPtr->sidValues));
-					}
+			if(gen->actionID == ACT_SID_TRI) {if(gen->isClicked) gPtr->sidValues->ctrl |= 0x10; else gPtr->sidValues->ctrl ^= 0x10; sid_setCTRL(gPtr->sidValues->ctrl);}
+			if(gen->actionID == ACT_SID_SAW) {if(gen->isClicked) gPtr->sidValues->ctrl |= 0x20; else gPtr->sidValues->ctrl ^= 0x20; sid_setCTRL(gPtr->sidValues->ctrl);}
+			if(gen->actionID == ACT_SID_PUL) {if(gen->isClicked) gPtr->sidValues->ctrl |= 0x40; else gPtr->sidValues->ctrl ^= 0x40; sid_setCTRL(gPtr->sidValues->ctrl);}
+			if(gen->actionID == ACT_SID_NOI) {if(gen->isClicked) gPtr->sidValues->ctrl |= 0x80; else gPtr->sidValues->ctrl ^= 0x80; sid_setCTRL(gPtr->sidValues->ctrl);}
+			if(gen->actionID == ACT_SID_SYN) {if(gen->isClicked) gPtr->sidValues->ctrl |= 0x02; else gPtr->sidValues->ctrl ^= 0x02; sid_setCTRL(gPtr->sidValues->ctrl);}
+			if(gen->actionID == ACT_SID_SYN) {if(gen->isClicked) gPtr->sidValues->frr  |= 0x01; else gPtr->sidValues->frr ^= 0x01; sid_setFILT(gPtr->sidValues->frr);}
+			if(gen->actionID == ACT_SID_FLP) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x10; else gPtr->sidValues->maxVolume ^= 0x10; sid_setModVol(gPtr->sidValues->maxVolume);}
+			if(gen->actionID == ACT_SID_FBP) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x20; else gPtr->sidValues->maxVolume ^= 0x20; sid_setModVol(gPtr->sidValues->maxVolume);}
+			if(gen->actionID == ACT_SID_FHP) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x40; else gPtr->sidValues->maxVolume ^= 0x40; sid_setModVol(gPtr->sidValues->maxVolume);}
+			if(gen->actionID == ACT_SID_F3O) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x80; else gPtr->sidValues->maxVolume ^= 0x80; sid_setModVol(gPtr->sidValues->maxVolume);}
+
+			if(gen->actionID == ACT_SID_RNG) 
+			{
+				if(gen->isClicked)
+				{					
+					gPtr->sidValues->ctrl |= 0x04;
+					reservedSID[2] = true;
+					reservedSID[5] = true;
+					
 				}
+				else 
+				{
+					gPtr->sidValues->ctrl ^= 0x04; 
+					sid_setCTRL(gPtr->sidValues->ctrl);
+					reservedSID[2] = false;
+					reservedSID[5] = false;
+				}
+			}
+			textGotoXY(0,20);printf("acID: %d ctrl %02x maxVol %02x",gen->actionID,gPtr->sidValues->ctrl, gPtr->sidValues->maxVolume);
 			break;
 		
 		case ACT_SID_A ... ACT_SID_R:
+		case ACT_SID_RES:
 			gen->isClicked = true;
 			sliAct.iMX = mX;
 			sliAct.iMY = mY;
 			sliAct.index = gen->parentIndex;
+			oldMX = mX; oldMY = mY;
 			hideMouse();
 			break;
 		case ACT_SID_PWMHI ... ACT_SID_PWMLO:
+		case ACT_SID_FFH ... ACT_SID_FFL:
+		case ACT_SID_V3H ... ACT_SID_V3L:
 			gen->isClicked = true;
 			diaAct.iMX = mX;
 			diaAct.iMY = mY;
 			diaAct.index = gen->parentIndex;
+			oldMX = mX; oldMY = mY;
 			hideMouse();
 			break;
+
 	}
 }
 
@@ -639,31 +826,58 @@ void updateChip(struct slider_UI *sli)
 	{
 		case ACT_SID_A:
 			gPtr->sidValues->ad = (gPtr->sidValues->ad&0x0F) | (sli->value8<<4);
+			sid_adsr(gPtr->sidValues->ad, gPtr->sidValues->sr);
 			break;
 		case ACT_SID_D:
 			gPtr->sidValues->ad = (gPtr->sidValues->ad&0xF0) | (sli->value8);
+			sid_adsr(gPtr->sidValues->ad, gPtr->sidValues->sr);
 			break;
 		case ACT_SID_S:
 			gPtr->sidValues->sr = (gPtr->sidValues->sr&0x0F) | (sli->value8<<4);
+			sid_adsr(gPtr->sidValues->ad, gPtr->sidValues->sr);
 			break;
 		case ACT_SID_R:
 			gPtr->sidValues->sr = (gPtr->sidValues->sr&0xF0) | (sli->value8);
+			sid_adsr(gPtr->sidValues->ad, gPtr->sidValues->sr);
+			break;
+		case ACT_SID_RES:
+			gPtr->sidValues->frr = (gPtr->sidValues->frr&0x0F) | (sli->value8<<4);
+			sid_setFILT(gPtr->sidValues->frr);
 			break;
 	}
-	sid_adsr(gPtr->sidValues->ad, gPtr->sidValues->sr);
 }
 void updateChipDial(struct dial_UI *dia)
 {
 	switch(dia->gen.actionID)
 	{
 		case ACT_SID_PWMLO:
-			gPtr->sidValues->pwdLo = dia->value8;
+			gPtr->sidValues->pwdLo = (gPtr->sidValues->pwdLo & 0xF0) | (0x0F & dia->value8);
+			sid_setPWM(gPtr->sidValues->pwdLo, gPtr->sidValues->pwdHi);
 			break;
 		case ACT_SID_PWMHI:
-			gPtr->sidValues->pwdHi = dia->value8 & 0x0F;
+			gPtr->sidValues->pwdHi = (dia->value8 & 0xF0)>>4;
+			gPtr->sidValues->pwdLo = (gPtr->sidValues->pwdLo & 0x0F) | ((0x0F & dia->value8)<<4);
+			sid_setPWM(gPtr->sidValues->pwdLo, gPtr->sidValues->pwdHi);
 			break;
+		case ACT_SID_FFH:
+			gPtr->sidValues->fcfHi = dia->value8>>4;
+			gPtr->sidValues->fcfLo = (gPtr->sidValues->fcfLo&0x0F) | ((dia->value8&0x0F)<<4);
+			sid_setFF(gPtr->sidValues->fcfLo, gPtr->sidValues->fcfHi);
+			break;
+		case ACT_SID_FFL:
+			gPtr->sidValues->fcfLo = (gPtr->sidValues->fcfLo&0xF0) | dia->value8;
+			sid_setFF(gPtr->sidValues->fcfLo,gPtr->sidValues->fcfHi);
+			break;
+		case ACT_SID_V3H:
+			gPtr->sidValues->v3Hi = dia->value8;
+			sid_setV3(gPtr->sidValues->v3Lo,gPtr->sidValues->v3Hi);
+			break;		
+		case ACT_SID_V3L:
+			gPtr->sidValues->v3Lo = dia->value8;
+			sid_setV3(gPtr->sidValues->v3Lo,gPtr->sidValues->v3Hi);
+			break;
+			
 	}
-	sid_setPWM(gPtr->sidValues->pwdLo, gPtr->sidValues->pwdHi);
 }
 void checkMIDIIn()
 {
@@ -673,7 +887,7 @@ void LightUp(struct lighter_UI *lit, uint8_t min, uint8_t max)
 {
 	for(uint8_t i=min; i<=max; i++)
 	{
-		updateLighter(&lit[i], SPR_BASE);
+		updateLighter(&lit[i], TILEMAP_BASE);
 	}
 }
 int main(int argc, char *argv[]) {
@@ -690,16 +904,16 @@ bool sidActive = false;
 uint8_t storedNote; //stored values when twinlinked
 uint8_t lastNote = 0; // for monophonic chips, store this to mute last note before doing 
 
-uint16_t i;
-
+uint16_t i,absX,absY;
 setup();
 
 
 		polyTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_POLY_DELAY;
 		setTimer(&polyTimer);
+
 		
 	while(true)
-	{
+	{		
 	//MIDI in
 	if(!(PEEK(MIDI_CTRL) & 0x02)) //rx not empty
 		{
@@ -817,23 +1031,24 @@ setup();
 		switch(gPtr->chipChoice)
 		{
 			case 1: //SID
-				for(uint8_t j=0;j<chipAct[2];j++)   lights[j].value = 1;			
-				for(uint8_t j=chipAct[2]; j<6; j++) lights[j].value=0;
+				for(uint8_t j=0;j<chipAct[2];j++)   lights[j].tile = 59;			
+				for(uint8_t j=chipAct[2]; j<6; j++) lights[j].tile=58;
 				LightUp(lights, 0,5);
 				break;
 			case 3: //OPL
-				for(uint8_t j=6;j<chipAct[4]+6;j++) lights[j].value = 1;
-				for(uint8_t j=chipAct[4]+6;j<15;j++) lights[j].value = 0;
+				for(uint8_t j=6;j<chipAct[4]+6;j++) lights[j].tile = 59;
+				for(uint8_t j=chipAct[4]+6;j<15;j++) lights[j].tile = 58;
 				LightUp(lights, 6,14);
 				break;
 			case 2: //PSG
-				for(uint8_t j=15;j<chipAct[3]+15;j++) lights[j].value = 1;
-				for(uint8_t j=chipAct[3]+15;j<21;j++) lights[j].value = 0;
+				for(uint8_t j=15;j<chipAct[3]+15;j++) lights[j].tile = 59;
+				for(uint8_t j=chipAct[3]+15;j<21;j++) lights[j].tile = 58;
 				LightUp(lights, 15,20);
 				break;
 		}
 		polyTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_POLY_DELAY;
 		setTimer(&polyTimer);
+
 		}	
 	}
 	if(kernelEventData.type == kernelEvent(mouse.CLICKS))
@@ -842,8 +1057,10 @@ setup();
 	}
 	else if(kernelEventData.type == kernelEvent(mouse.DELTA))
 	{
-		mX = PEEKW(PS2_M_X_LO)+(int8_t)kernelEventData.mouse.delta.x;
-		mY = PEEKW(PS2_M_Y_LO)+(int8_t)kernelEventData.mouse.delta.y;
+		absX = kernelEventData.mouse.delta.x>0?kernelEventData.mouse.delta.x:-kernelEventData.mouse.delta.x;
+		absY = kernelEventData.mouse.delta.y>0?kernelEventData.mouse.delta.y:-kernelEventData.mouse.delta.y;
+		mX = PEEKW(PS2_M_X_LO)+(int8_t)(absX>16?2*kernelEventData.mouse.delta.x:kernelEventData.mouse.delta.x);
+		mY = PEEKW(PS2_M_Y_LO)+(int8_t)(absY>16?2*kernelEventData.mouse.delta.y:kernelEventData.mouse.delta.y);
 		
 		if(mX<0) mX=0; if(mX>640-16) mX=640-16;
 		if(mY<0) mY=0; if(mY>480-16) mY=480-16;
@@ -859,9 +1076,8 @@ setup();
 				if(temp > (int16_t)sliders[sliAct.index].max8) temp = sliders[sliAct.index].max8;
 				
 				sliders[sliAct.index].value8 = (uint8_t)temp;
-				updateSlider(&(sliders[sliAct.index]),SPR_BASE);
+				updateSlider(&(sliders[sliAct.index]),SPR_BASE, TILEMAP_BASE);
 				updateChip(&(sliders[sliAct.index]));
-				updateGeneric(&(sliders_labels[sliAct.index]),sliders[sliAct.index].value8,SPR_BASE);
 			}
 		if(diaAct.index != 0xFF)  //keep track of dial technology
 			{
@@ -872,14 +1088,8 @@ setup();
 				if(temp > (int16_t)dials[diaAct.index].max8) temp = dials[diaAct.index].max8;
 				
 				dials[diaAct.index].value8 = (uint8_t)temp;
-				updateDial(&(dials[diaAct.index]),SPR_BASE);
+				updateDial(&(dials[diaAct.index]),SPR_BASE,TILEMAP_BASE);
 				updateChipDial(&(dials[diaAct.index]));
-				if(dials[diaAct.index].gen.actionID == ACT_SID_PWMHI) updateGeneric(&(sliders_labels[4]),dials[0].value8,SPR_BASE);
-				if(dials[diaAct.index].gen.actionID == ACT_SID_PWMLO) 
-					{ 
-					updateGeneric(&(sliders_labels[5]),(dials[1].value8&0xF0)>>4,SPR_BASE);
-					updateGeneric(&(sliders_labels[6]),dials[1].value8&0x0F,SPR_BASE);	
-					}
 			}
 		if((kernelEventData.mouse.delta.buttons&0x01)==0x01 && mPressed==false)
 			{
@@ -893,12 +1103,16 @@ setup();
 						sliders[sliAct.index].gen.isClicked = false;
 						sliAct.index = 0xFF;
 						showMouse();
+						POKEW(PS2_M_X_LO,oldMX);
+						POKEW(PS2_M_Y_LO,oldMY);
 					}
 				if(diaAct.index != 0xFF) 
 					{
 						dials[diaAct.index].gen.isClicked = false;
 						diaAct.index = 0xFF;
 						showMouse();
+						POKEW(PS2_M_X_LO,oldMX);
+						POKEW(PS2_M_Y_LO,oldMY);
 					}
 				mPressed=false; //release the latch
 			}

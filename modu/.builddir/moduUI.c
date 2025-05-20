@@ -31,6 +31,7 @@ uint8_t parentIndex, uint8_t size, uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y
 	gen->actionID = actionID;
 }
 
+
 void showGeneric(struct generic_UI *gen)
 {
 	spriteDefine(gen->s, gen->addr, gen->size, 0, 0);
@@ -74,18 +75,46 @@ void setRadioB(struct radioB_UI *but, bool isExcl, uint8_t groupID, bool startAc
 	spriteSetVisible(but->gen.s,true);
 }
 
-void updateDial(struct dial_UI *dia, uint32_t base)
+void updateDial(struct dial_UI *dia, uint32_t base, uint32_t tileBase)
 {
+	uint8_t eigth = getEigth((uint16_t)dia->value8, (uint16_t)dia->min8, (uint16_t)dia->max8);
+	uint8_t eigthC, eigthF;
+	uint8_t absShift = 0;
 	
-	dia->gen.addr = base + (uint32_t)32*dia->gen.size*dia->gen.size + (uint32_t)(getEigth((uint16_t)dia->value8, (uint16_t)dia->min8, (uint16_t)dia->max8) * (uint32_t)dia->gen.size*dia->gen.size);
+	if(dia->shiftCoarse < 0)
+		{
+		absShift = (uint8_t)(-1* dia->shiftCoarse);
+		eigthC= (dia->value8 & dia->maskCoarse)<<absShift;
+		}
+	else
+	{
+		absShift = dia->shiftCoarse;
+		eigthC=(dia->value8 & dia->maskCoarse)>>absShift;
+	}
+	setANumber(&(dia->numCoarse), (uint16_t)(0x0F & eigthC), tileBase);
+	if(dia->maskFine!=0x00)
+		{
+		if(dia->shiftFine < 0)
+		{
+			absShift = (uint8_t)(-1*dia->shiftFine);
+			eigthF = (dia->value8 & dia->maskFine)<<absShift;
+		}
+		else
+			{
+			absShift = dia->shiftFine;
+			eigthF= (dia->value8 & dia->maskFine)>>absShift;
+			}
+		setANumber(&(dia->numFine), (uint16_t)(0x0F & eigthF), tileBase);
+		}
+	
+	dia->gen.addr = base + (uint32_t)32*dia->gen.size*dia->gen.size + (uint32_t)(eigth * (uint32_t)dia->gen.size*dia->gen.size);
 	
 	spriteDefine(dia->gen.s, dia->gen.addr, dia->gen.size, 0, 0);
 	spriteSetPosition(dia->gen.s,dia->gen.x,dia->gen.y);
 	
 	spriteSetVisible(dia->gen.s  ,true);
-	
 }
-void setDial(struct dial_UI *dia, uint8_t value8, uint8_t min8, uint8_t max8, uint16_t value16, uint16_t min16, uint16_t max16, uint32_t base)
+void setDial(struct dial_UI *dia, uint8_t value8, uint8_t min8, uint8_t max8, uint16_t value16, uint16_t min16, uint16_t max16, uint32_t base, uint32_t tileBase, uint8_t maskCoarse, int8_t shiftCoarse, uint8_t maskFine, int8_t shiftFine)
 {
 	dia->value8 = value8;
 	dia->min8 = min8;
@@ -94,13 +123,18 @@ void setDial(struct dial_UI *dia, uint8_t value8, uint8_t min8, uint8_t max8, ui
 	dia->min16 = min16;
 	dia->max16 = max16;
 	
-	updateDial(dia, base);
-
+	dia->maskCoarse = maskCoarse;
+	dia->shiftCoarse = shiftCoarse;
+	dia->maskFine = maskFine;
+	dia->shiftFine = shiftFine;
+	
+	updateDial(dia, base,tileBase);
 }
 
-void updateSlider(struct slider_UI *sli, uint32_t base)
+void updateSlider(struct slider_UI *sli, uint32_t base, uint32_t tileBase)
 {
-	sli->gen.addr = base + (uint32_t)(UI_SLIDS*sli->gen.size*sli->gen.size) + (uint32_t)(getEigth((uint16_t)sli->value8, (uint16_t)sli->min8, (uint16_t)sli->max8) *(uint16_t)(sli->gen.size* sli->gen.size));
+	uint8_t eigth = getEigth((uint16_t)sli->value8, (uint16_t)sli->min8, (uint16_t)sli->max8);
+	sli->gen.addr = base + (uint32_t)(UI_SLIDS*sli->gen.size*sli->gen.size) + (uint32_t)(eigth *(uint16_t)(sli->gen.size* sli->gen.size));
 	
 	spriteDefine(sli->gen.s, sli->gen.addr, sli->gen.size, 0, 0);
 	spriteSetPosition(sli->gen.s,sli->gen.x,sli->gen.y);
@@ -110,8 +144,10 @@ void updateSlider(struct slider_UI *sli, uint32_t base)
 	spriteSetVisible(sli->gen.s  ,true);
 	spriteSetVisible(sli->gen.s+1,true);
 	
+	setANumber(&(sli->num), (uint16_t)(0x0F & sli->value8), tileBase);
+	
 }
-void setSlider(struct slider_UI *sli, uint8_t value8, uint8_t min8, uint8_t max8, uint16_t value16, uint16_t min16, uint16_t max16, uint32_t base)
+void setSlider(struct slider_UI *sli, uint8_t value8, uint8_t min8, uint8_t max8, uint16_t value16, uint16_t min16, uint16_t max16, uint32_t base, uint32_t tileBase)
 {
 	sli->value8 = value8;
 	sli->min8 = min8;
@@ -120,22 +156,31 @@ void setSlider(struct slider_UI *sli, uint8_t value8, uint8_t min8, uint8_t max8
 	sli->min16 = min16;
 	sli->max16 = max16;
 	
-	updateSlider(sli, base);
+	updateSlider(sli, base, tileBase);
 	
 }
 
-
 void updateLighter(struct lighter_UI *lit, uint32_t base)
 {
-	lit->gen.addr = base + (uint32_t)(UI_STAT + lit->value)*(uint32_t)(lit->gen.size*lit->gen.size);
-	spriteDefine(lit->gen.s, lit->gen.addr,lit->gen.size, 0, 0);
-	spriteSetPosition(lit->gen.s, lit->gen.x, lit->gen.y);
-	spriteSetVisible(lit->gen.s, true);
+	FAR_POKEW(base + (uint32_t)(2*lit->gen.x + 40*lit->gen.y), lit->tile);
 }
-void setLighter(struct lighter_UI *lit, uint8_t value, uint32_t base)
+void setLighter(struct lighter_UI *lit, uint8_t tile, uint32_t base)
 {
-	lit->value = value;
+	lit->tile = tile;
 	updateLighter(lit,base);
 }
+void updateNumber(struct number_UI *num, uint32_t base)
+{
+	FAR_POKEW(base + (uint32_t)(2*num->gen.x + 40*num->gen.y), num->tile);
+}
 
+void setANumber(struct number_UI *num, uint16_t tile, uint32_t base)
+{
+	num->tile = tile;
+	updateNumber(num, base);
+}
 
+void setATile(uint8_t x, uint8_t y, uint16_t tile, uint32_t base)
+{
+	FAR_POKEW(base + (uint32_t)(2*x + 40*y), tile);
+}

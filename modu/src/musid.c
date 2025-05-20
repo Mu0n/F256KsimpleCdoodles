@@ -75,6 +75,23 @@ void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn)
 	POKE(voice, isOn?(ctrl|0x01):(ctrl&0xFE));
 }
 
+void sid_setV3(uint8_t lo, uint8_t hi)
+{
+	POKE(SID1 + SID_VOICE3 + SID_LO_B, lo);
+	POKE(SID2 + SID_VOICE3 + SID_LO_B, lo);
+	POKE(SID1 + SID_VOICE3 + SID_HI_B, hi);
+	POKE(SID2 + SID_VOICE3 + SID_HI_B, hi);
+}
+
+void sid_setCTRL(uint8_t ctrl)
+{
+	POKE(SID1 + SID_VOICE1 + SID_CTRL, ctrl);
+	POKE(SID1 + SID_VOICE2 + SID_CTRL, ctrl);
+	POKE(SID1 + SID_VOICE3 + SID_CTRL, ctrl);
+	POKE(SID2 + SID_VOICE1 + SID_CTRL, ctrl);
+	POKE(SID2 + SID_VOICE2 + SID_CTRL, ctrl);
+	POKE(SID2 + SID_VOICE3 + SID_CTRL, ctrl);
+}
 void sid_setPWM(uint8_t lo, uint8_t hi)
 {
 	POKE(SID1 + SID_VOICE1 + SID_LO_PWDC, lo);
@@ -92,6 +109,33 @@ void sid_setPWM(uint8_t lo, uint8_t hi)
 	POKE(SID2 + SID_VOICE3 + SID_HI_PWDC, hi);
 }
 
+void sid_setFF(uint8_t lo, uint8_t hi)
+{
+	POKE(SID1 + SID_VOICE1 + SID_LO_FCF, lo);
+	POKE(SID1 + SID_VOICE2 + SID_LO_FCF, lo);
+	POKE(SID1 + SID_VOICE3 + SID_LO_FCF, lo);
+	POKE(SID2 + SID_VOICE1 + SID_LO_FCF, lo);
+	POKE(SID2 + SID_VOICE2 + SID_LO_FCF, lo);
+	POKE(SID2 + SID_VOICE3 + SID_LO_FCF, lo);
+	
+	POKE(SID1 + SID_VOICE1 + SID_HI_FCF, hi);
+	POKE(SID1 + SID_VOICE2 + SID_HI_FCF, hi);
+	POKE(SID1 + SID_VOICE3 + SID_HI_FCF, hi);
+	POKE(SID2 + SID_VOICE1 + SID_HI_FCF, hi);
+	POKE(SID2 + SID_VOICE2 + SID_HI_FCF, hi);
+	POKE(SID2 + SID_VOICE3 + SID_HI_FCF, hi);
+}
+
+void sid_setModVol(uint8_t data)
+{
+	POKE(SID1 + SID_FM_VC, data);
+	POKE(SID2 + SID_FM_VC, data);
+}
+void sid_setFILT(uint8_t data)
+{
+	POKE(SID1 + SID_FRR, data);
+	POKE(SID2 + SID_FRR, data);
+}
 void sid_adsr(uint8_t ad, uint8_t sr)
 {
 	POKE(SID1 + SID_VOICE1 + SID_ATK_DEC, ad);

@@ -7,7 +7,7 @@
 #include "../src/muMidi.h"
 #include "../src/musid.h"
 #include "../src/muUtils.h"
-#include "../src/globals.h"
+#include "../src/mudispatch.h"
 
 #define CHAR_EMPTY_CIRC 179
 #define CHAR_FILLED_CIRC 180
@@ -92,15 +92,45 @@ void refreshInstrumentText(struct glTh *gT)
 //This is part of the text instructions and interface during regular play mode
 void channelTextMenu(struct glTh *gT)
 {
-	textSetColor(textColorGreen,0x00);
+	realTextClear();
+	textSetColor(textColorOrange,0x00);
+	textGotoXY(0,25); //chip selection
+	switch(gT->chipChoice)
+	{
+		case 0: //MIDI
+			if(gT->wantVS1053) textPrint(" MIDI - using the VS1053b, unlimited polyphony         ");
+			else  textPrint(" MIDI - using the SAM2695, unlimited polyphony         ");
+			textSetColor(textColorGreen,0x00);
+			textGotoXY(0,26);textPrint("[F1] to pick an instrument from a list");
+			textGotoXY(0,27);textPrint("[F3] to change your output channel");
+			textGotoXY(1,29);textPrint("CH  Instrument");
+			textGotoXY(2,30);textPrint("0: ");
+			textGotoXY(2,31);textPrint("1: ");
+			textGotoXY(2,32);textPrint("9: ");
+			textGotoXY(0,33);textPrint("[X] to twin link channels 0 & 1");
+			break;
 	
-	textGotoXY(0,26);textPrint("[F1] to pick an instrument from a list");
-	textGotoXY(0,27);textPrint("[F3] to change your output channel");
-	textGotoXY(1,29);textPrint("CH  Instrument");
-	textGotoXY(2,30);textPrint("0: ");
-	textGotoXY(2,31);textPrint("1: ");
-	textGotoXY(2,32);textPrint("9: ");
-	textGotoXY(0,33);textPrint("[X] to twin link channels 0 & 1");
+		case 1: //SID
+			textPrint(" Dual SID - Sound Interface Device, 6 channel polyphony");
+	
+			textSetColor(textColorGreen,0x00);
+			break;
+	
+		case 2: //PSG
+	
+			textPrint(" Dual PSG - Pulse Signal Generator, 6 channel polyphony");
+	
+			textSetColor(textColorGreen,0x00);
+			break;
+	
+		case 3: //OPL3
+			textPrint(" YMF262 - OPL3, 9 channel polyphony                    ");
+	
+			textSetColor(textColorGreen,0x00);
+			break;
+	
+	}
+
 	refreshInstrumentText(gT);
 }
 

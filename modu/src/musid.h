@@ -56,7 +56,12 @@ void sid_setFILT(uint8_t);
 void sid_setModVol(uint8_t);
 void sid_setFF(uint8_t, uint8_t);
 void sid_setCTRL(uint8_t);
-void sid_setV3(uint8_t, uint8_t);
+void sid_setV3(uint8_t, struct sidInstrument);
+
+void sid_set_all(struct sidInstrument);
+void sid_set_1_chan(uint8_t, struct sidInstrument);
+void sid_set_1_chip(uint8_t, struct sidInstrument);
+void sid_1_adsr(uint8_t, struct sidInstrument);
 
 extern const char *sid_instruments_names[];
 extern const uint8_t sid_instrumentsSize;

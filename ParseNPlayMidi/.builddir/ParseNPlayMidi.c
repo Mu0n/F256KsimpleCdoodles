@@ -1,16 +1,5 @@
 #include "D:\F256\llvm-mos\code\ParseNPlayMidi\.builddir\trampoline.h"
 
-/*
-for a simpler midi player, go check the midisam program
-
-Things achieved in this:
--loads a fixed .mid SMF file human2.mid
--parses its data for lagfree consumption and playback
--loads a bitmap gfx (warcraft 1 background) and a series of peon sprite bitmaps
--plays it while animating the sprite
--forces a percussion for the wood chopping sound effect, also a MIDI note sent in the FIFO
-*/
-
 
 //DEFINES
 #define F256LIB_IMPLEMENTATION
@@ -113,7 +102,6 @@ double fudge = 25.1658; //fudge factor when calculating time delays
 uint16_t *parsers; //indices for the various type 1 tracks during playback
 uint8_t nn=4, dd=2, cc=24, bb=8; //nn numerator of time signature, dd= denom. cc=nb of midi clocks in metro click. bb = nb of 32nd notes in a beat
 
-
 //FUNCTION PROTOTYPES
 void sendAME(aMEPtr midiEvent); //sends a MIDI event message, either a 2-byte or 3-byte one
 int16_t findPositionOfHeader(void);  //this opens a .mid file and ignores everything until 'MThd' is encountered
@@ -131,6 +119,7 @@ uint8_t isTimer0Done(void);
 void loadBM(void);
 void chopSound(void);
 void goToPrison(uint16_t);
+void lilpause(uint8_t);
 
 uint32_t samplesTicks[30];
 uint32_t samplesUs[30];
@@ -289,7 +278,6 @@ int16_t getAndAnalyzeMIDI(void)
 	}
 
 
-
 //Opens the std MIDI file
 uint8_t loadSMFile(char *name)
 {
@@ -329,6 +317,27 @@ uint8_t loadSMFile(char *name)
 	if(gVerbo) printf("%lu chunks read, size of file: %ld\n",j,(uint32_t)totalBytesRead);
 	
 	return 0;
+}
+
+void lilpause(uint8_t timedelay)
+{
+	bool noteExitFlag = false;
+	midiNoteTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + timedelay;
+	setTimer(&midiNoteTimer);
+	noteExitFlag = false;
+	while(!noteExitFlag)
+	{
+		kernelNextEvent();
+		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+		{
+			switch(kernelEventData.timer.cookie)
+			{
+			case TIMER_MIDI_COOKIE:
+				noteExitFlag = true;
+				break;
+			}
+		}
+	}
 }
 
 
@@ -555,7 +564,7 @@ void playmidiND(void) //non-destructive version
 		}
 	}
 	}
-
+	
 
 void wipeBigList(void)
 	{

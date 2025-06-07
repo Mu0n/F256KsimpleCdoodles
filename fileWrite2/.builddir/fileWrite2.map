@@ -1,0 +1,167 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+      30       30        0     1 .zp.data
+      30       30        0     1         __zp_data_start = .
+      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
+      30       30        c     1 .zp.bss
+      30       30        0     1         __zp_bss_start = .
+      30       30        c     1         fileWrite2.lto.o:(.zp.bss)
+      30       30        1     1                 _col
+      31       31        1     1                 _row
+      32       32        2     1                 __putchar.s
+      34       34        1     1                 kernelError
+      35       35        7     1                 kernelEventData
+      3c       3c        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      3c       3c       57     1 .zp
+      3c       3c       57     1         fileWrite2.lto.o:(.zp.noinit)
+     300      300     1c19     2 .text
+     300      300        0     1         _init = .
+     300      300        0     1         _start = .
+     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     300      300        0     1                 __do_init_stack
+     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     308      308        0     1                 __do_zero_bss
+     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30b      30b        0     1                 __do_zero_zp_bss
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     311      311        0     1                 __after_main
+     314      314        0     1         _fini = .
+     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     316      316      13d     2         fileWrite2.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     454      454       df     2         fileWrite2.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     454      454       df     1                 (anonymous namespace)::FreeChunk::remove()
+     533      533       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     533      533       13     1                 __zero_bss
+     546      546       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     546      546       13     1                 __zero_zp_bss
+     559      559      70d     1         fileWrite2.lto.o:(.text.main)
+     559      559      70d     1                 main
+     c66      c66      11f     1         fileWrite2.lto.o:(.text.fileWrite)
+     c66      c66      11f     1                 fileWrite
+     d85      d85      1b8     1         fileWrite2.lto.o:(.text.textPrint)
+     d85      d85      1b8     1                 textPrint
+     f3d      f3d        5     1         fileWrite2.lto.o:(.text.exit)
+     f3d      f3d        5     1                 exit
+     f42      f42       d3     1         fileWrite2.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+     f42      f42       d3     1                 (anonymous namespace)::put(char, Status*)
+    1015     1015      10c     1         fileWrite2.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1015     1015      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1121     1121      bd7     1         fileWrite2.lto.o:(.text.printf)
+    1121     1121      bd7     1                 printf
+    1cf8     1cf8      1d5     1         fileWrite2.lto.o:(.text.malloc)
+    1cf8     1cf8      1d5     1                 malloc
+    1ecd     1ecd       2c     1         fileWrite2.lto.o:(.text.memcpy)
+    1ecd     1ecd       2c     1                 memcpy
+    1ef9     1ef9       20     1         fileWrite2.lto.o:(.text.__memset)
+    1ef9     1ef9       20     1                 __memset
+    1f19     1f19        0     1         __init_array_start = .
+    1f19     1f19        0     1         __init_array_end = .
+    1f19     1f19        0     1         __fini_array_start = .
+    1f19     1f19        0     1         __fini_array_end = .
+    1f19     1f19       8e     1 .rodata
+    1f19     1f19        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    1f19     1f19        0     1                 __set_v
+    1f1a     1f1a       3a     1         fileWrite2.lto.o:(.rodata.printf)
+    1f54     1f54       30     1         fileWrite2.lto.o:(.rodata.textColors)
+    1f54     1f54       30     1                 textColors
+    1f84     1f84        4     1         <internal>:(.rodata.cst4)
+    1f88     1f88       1f     1         <internal>:(.rodata.str1.1)
+    1fa7     1fa7        0     1 .data
+    1fa7     1fa7        0     1         __data_start = .
+    1fa7     1fa7        0     1         __data_end = .
+    1fa7     1fa7        0     1 __data_load_start = LOADADDR(.data)
+    1fa7     1fa7        0     1 __data_size = SIZEOF(.data)
+    1fa7     1fa7        6     1 .bss
+    1fa7     1fa7        0     1         __bss_start = .
+    1fa7     1fa7        1     1         fileWrite2.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    1fa7     1fa7        1     1                 (anonymous namespace)::initialized
+    1fa8     1fa8        1     1         fileWrite2.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    1fa8     1fa8        1     1                 (anonymous namespace)::last_free
+    1fa9     1fa9        2     1         fileWrite2.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    1fa9     1fa9        2     1                 (anonymous namespace)::free_size
+    1fab     1fab        2     1         fileWrite2.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    1fab     1fab        2     1                 (anonymous namespace)::free_list
+    1fad     1fad        0     1         __bss_end = .
+    1fad     1fad        0     1 __bss_size = SIZEOF(.bss)
+    1fad     1fad        0     1 .noinit
+    1fad     1fad        0     1         __heap_start = ALIGN(., 2)
+    1fad     1fad        0     1 end_block8 = .
+    1fad     1fad        0     1 end_block9 = .
+    1fad     1fad        0     1 end_block10 = .
+    1fad     1fad        0     1 end_block11 = .
+    1fad     1fad        0     1 end_block12 = .
+    1fad     1fad        0     1 end_block13 = .
+    1fad     1fad        0     1 end_block14 = .
+    1fad     1fad        0     1 end_block15 = .
+    1fad     1fad        0     1 end_block16 = .
+    1fad     1fad        0     1 end_block17 = .
+    1fad     1fad        0     1 end_block18 = .
+    1fad     1fad        0     1 end_block19 = .
+    1fad     1fad        0     1 end_block20 = .
+    1fad     1fad        0     1 end_block21 = .
+    1fad     1fad        0     1 end_block22 = .
+    1fad     1fad        0     1 end_block23 = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      7a0     4 .symtab
+       0        0      7a0     4         <internal>:(.symtab)
+       0        0       5a     1 .shstrtab
+       0        0       5a     1         <internal>:(.shstrtab)
+       0        0      5ce     1 .strtab
+       0        0      5ce     1         <internal>:(.strtab)

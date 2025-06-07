@@ -143,8 +143,8 @@ void boostVSClock()
 //target the clock register
 POKE(VS_SCI_ADDR,0x03);
 //aim for 2.5X clock multiplier, no frills
-POKE(VS_SCI_DATA,0x00);
-POKE(VS_SCI_DATA+1,0x80);
+POKE(VS_SCI_DATA,0xE8);
+POKE(VS_SCI_DATA+1,0x8B);
 //trigger the command
 POKE(VS_SCI_CTRL,1);
 POKE(VS_SCI_CTRL,0);

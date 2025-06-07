@@ -1,11 +1,11 @@
 /* fake C Stack */
-PROVIDE(__stack = 0xA000);
+PROVIDE(__stack = 0xC000);
 /* entry point to my program - 0x200 to 0x2ff are command line arguments */
 PROVIDE(__f256_start = 0x300);
 /* page size of a block of memory */
 PROVIDE(__BLOCK_SIZE = 0x2000);
 /* swappable block address */
-PROVIDE(__SLOT_ADDR = 0xA000);
+PROVIDE(__SLOT_ADDR = 0xC000);
 
 /* f256k uses first 16 bytes of ZP for mmu control? */
 __rc0 = 0x10;

@@ -48,6 +48,9 @@ const uint8_t sidLow[] = {
     0xCE, 0xE1, 0x6A, 0x80, 0x1A, 0x46, 0x0B, 0x77, 0x8F, 0x61, 0xFA, 0x5B
 };
 
+//these 2 are maps between an index that goes through each 6 channels, and gets the right offsets for CHIP and VOICE
+const uint8_t voiceMap[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
+const uint16_t chipMap[6] = {SID1, SID1, SID1, SID2, SID2, SID2};
 
 void clearSIDRegisters(void)
 {
@@ -77,13 +80,6 @@ void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn)
 	POKE(voice, isOn?(ctrl|0x01):(ctrl&0xFE));
 }
 
-void sid_setV3(uint8_t lo, uint8_t hi)
-{
-	POKE(SID1 + SID_VOICE3 + SID_LO_B, lo);
-	POKE(SID2 + SID_VOICE3 + SID_LO_B, lo);
-	POKE(SID1 + SID_VOICE3 + SID_HI_B, hi);
-	POKE(SID2 + SID_VOICE3 + SID_HI_B, hi);
-}
 
 void sid_setCTRL(uint8_t ctrl)
 {
@@ -154,6 +150,9 @@ void sid_adsr(uint8_t ad, uint8_t sr)
 	POKE(SID2 + SID_VOICE2 + SID_SUS_REL, sr);
 	POKE(SID2 + SID_VOICE3 + SID_SUS_REL, sr);
 }
+
+
+
 void sid_setInstrument(uint8_t sidChip, uint8_t voice, struct sidInstrument inst)
 {
 	uint16_t addrVoice = (sidChip==0?(uint16_t)SID1:(uint16_t)SID2);
@@ -179,10 +178,84 @@ void sid_setSIDWide(uint8_t which)
 	POKE(SID2+SID_FM_VC, sid_instrument_defs[which].maxVolume);
 }
 
+//sets 1 of the voices, or many according to a bitmask whichChan, for the registers that are voice specific
+void sid_set_1_chan(uint8_t whichChan, struct sidInstrument sI)
+{
+	uint8_t j;
+	uint8_t bit = 1;
+	
+	for(uint8_t i=0;i<6;i++)
+		{
+		bit = 1;
+		for(j = 0; j<i; j++) bit=bit<<1;
+		if((whichChan & j)== 0) continue;
+		POKE(chipMap[i] + voiceMap[i] + SID_ATK_DEC, sI.ad);
+		POKE(chipMap[i] + voiceMap[i] + SID_SUS_REL, sI.sr);
+		POKE(chipMap[i] + voiceMap[i] + SID_CTRL,    sI.ctrl);
+		POKE(chipMap[i] + voiceMap[i] + SID_LO_PWDC, sI.pwdLo);
+		POKE(chipMap[i] + voiceMap[i] + SID_HI_PWDC, sI.pwdHi);
+		}
+}
+void sid_set_all(struct sidInstrument sI)
+{
+	for(uint8_t i=0;i<6;i++)
+		{
+		sid_set_1_chan(i,sI);
+		}
+	sid_set_1_chip(0,sI);
+	sid_set_1_chip(1,sI);
+	
+}
+//sets the chipwide settings for one of the chips, or both
+void sid_set_1_chip(uint8_t whichChip, struct sidInstrument sI)
+{
+	uint8_t j;
+	uint8_t bit = 1;
+	
+	for(uint8_t i=0;i<2;i++)
+		{
+		bit = 1;
+		for(j = 0; j<i; j++)  bit=bit<<1;
+		if((whichChip & j)== 0) continue;
+		POKE((i?SID2:SID1)+SID_LO_FCF, sI.fcfLo);
+		POKE((i?SID2:SID1)+SID_HI_FCF, sI.fcfHi);
+		POKE((i?SID2:SID1)+SID_FRR,    sI.frr);
+		POKE((i?SID2:SID1)+SID_FM_VC,  sI.maxVolume);
+		}
+}
+
+
+void sid_setV3(uint8_t whichChip, struct sidInstrument sI)
+{
+	uint8_t j;
+	uint8_t bit = 1;
+	for(uint8_t i=0;i<2;i++)
+		{
+		bit = 1;
+		for(j = 0; j<i; j++)  bit=bit<<1;
+		if((whichChip & j)== 0) continue;
+		POKE((i?SID2:SID1) + SID_VOICE3 + SID_LO_B, sI.v3Lo);
+		POKE((i?SID2:SID1) + SID_VOICE3 + SID_HI_B, sI.v3Hi);
+		}
+}
+
+//whichChan is a bitfield that toggles in or out the channels you want affected
+void sid_1_adsr(uint8_t whichChan, struct sidInstrument sI)
+{
+	uint8_t j;
+	uint8_t bit = 1;
+	for(uint8_t i=0; i<6; i++)
+		{
+		bit = 1;
+		for(j = 0; j<i; j++)  bit=bit<<1;
+		if((whichChan & j)== 0) continue;
+		POKE(chipMap[i] + voiceMap[i] + SID_ATK_DEC, sI.ad);
+		POKE(chipMap[i] + voiceMap[i] + SID_SUS_REL, sI.sr);
+		}
+}
 void sid_setInstrumentAllChannels(uint8_t which)
 {
-	uint8_t c;
-	for(c=0;c<3;c++)
+	for(uint8_t c=0;c<3;c++)
 	{
 	sid_setInstrument(0,c,sid_instrument_defs[which]);
 	sid_setInstrument(1,c,sid_instrument_defs[which]);

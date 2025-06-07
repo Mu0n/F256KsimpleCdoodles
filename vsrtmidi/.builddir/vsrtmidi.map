@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -65,9 +65,9 @@
       38       38        1     1                 _row
       39       39        2     1                 __putchar.s
       3b       3b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3b       3b       58     1 .zp
-      3b       3b       58     1         vsrtmidi.lto.o:(.zp.noinit)
-     300      300     1512     1 .text
+      3b       3b       5a     1 .zp
+      3b       3b       5a     1         vsrtmidi.lto.o:(.zp.noinit)
+     300      300     1542     1 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -89,71 +89,71 @@
      33b      33b      380     1                 f256Init
      6bb      6bb        6     1         vsrtmidi.lto.o:(.text.main)
      6bb      6bb        6     1                 main
-     6c1      6c1      1b8     1         vsrtmidi.lto.o:(.text.f256main)
-     6c1      6c1      1b8     1                 f256main
-     879      879      1ba     1         vsrtmidi.lto.o:(.text.__putchar)
-     879      879      1ba     1                 __putchar
-     a33      a33        5     1         vsrtmidi.lto.o:(.text.exit)
-     a33      a33        5     1                 exit
-     a38      a38       d1     1         vsrtmidi.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-     a38      a38       d1     1                 (anonymous namespace)::put(char, Status*)
-     b09      b09      10d     1         vsrtmidi.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-     b09      b09      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
-     c16      c16      bb0     1         vsrtmidi.lto.o:(.text.printf)
-     c16      c16      bb0     1                 printf
-    17c6     17c6       2c     1         vsrtmidi.lto.o:(.text.memcpy)
-    17c6     17c6       2c     1                 memcpy
-    17f2     17f2       20     1         vsrtmidi.lto.o:(.text.__memset)
-    17f2     17f2       20     1                 __memset
-    1812     1812        0     1         __init_array_start = .
-    1812     1812        0     1         __init_array_end = .
-    1812     1812        0     1         __fini_array_start = .
-    1812     1812        0     1         __fini_array_end = .
-    1812     1812      835     1 .rodata
-    1812     1812        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    1812     1812        0     1                 __set_v
-    1813     1813       3a     1         vsrtmidi.lto.o:(.rodata.printf)
-    184d     184d       30     1         vsrtmidi.lto.o:(.rodata.textColors)
-    184d     184d       30     1                 textColors
-    187d     187d       38     1         vsrtmidi.lto.o:(.rodata.plugin)
-    187d     187d       38     1                 plugin
-    18b5     18b5      692     1         <internal>:(.rodata.str1.1)
-    1f47     1f47      100     1         vsrtmidi.lto.o:(.rodata.midi_instruments)
-    1f47     1f47      100     1                 midi_instruments
-    2047     2047        0     1 .data
-    2047     2047        0     1         __data_start = .
-    2047     2047        0     1         __data_end = .
-    2047     2047        0     1 __data_load_start = LOADADDR(.data)
-    2047     2047        0     1 __data_size = SIZEOF(.data)
-    2047     2047        1     1 .bss
-    2047     2047        0     1         __bss_start = .
-    2047     2047        1     1         vsrtmidi.lto.o:(.bss.kernelError)
-    2047     2047        1     1                 kernelError
-    2048     2048        0     1         __bss_end = .
-    2048     2048        0     1 __bss_size = SIZEOF(.bss)
-    2048     2048        0     1 .noinit
-    2048     2048        0     1         __heap_start = ALIGN(., 2)
-    2048     2048        0     1 end_block8 = .
-    2048     2048        0     1 end_block9 = .
-    2048     2048        0     1 end_block10 = .
-    2048     2048        0     1 end_block11 = .
-    2048     2048        0     1 end_block12 = .
-    2048     2048        0     1 end_block13 = .
-    2048     2048        0     1 end_block14 = .
-    2048     2048        0     1 end_block15 = .
-    2048     2048        0     1 end_block16 = .
-    2048     2048        0     1 end_block17 = .
-    2048     2048        0     1 end_block18 = .
-    2048     2048        0     1 end_block19 = .
-    2048     2048        0     1 end_block20 = .
-    2048     2048        0     1 end_block21 = .
-    2048     2048        0     1 end_block22 = .
-    2048     2048        0     1 end_block23 = .
+     6c1      6c1      1b6     1         vsrtmidi.lto.o:(.text.f256main)
+     6c1      6c1      1b6     1                 f256main
+     877      877        5     1         vsrtmidi.lto.o:(.text.exit)
+     877      877        5     1                 exit
+     87c      87c       d3     1         vsrtmidi.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+     87c      87c       d3     1                 (anonymous namespace)::put(char, Status*)
+     94f      94f      10c     1         vsrtmidi.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+     94f      94f      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+     a5b      a5b      bd9     1         vsrtmidi.lto.o:(.text.printf)
+     a5b      a5b      bd9     1                 printf
+    1634     1634      1c2     1         vsrtmidi.lto.o:(.text.putchar)
+    1634     1634      1c2     1                 putchar
+    17f6     17f6       2c     1         vsrtmidi.lto.o:(.text.memcpy)
+    17f6     17f6       2c     1                 memcpy
+    1822     1822       20     1         vsrtmidi.lto.o:(.text.__memset)
+    1822     1822       20     1                 __memset
+    1842     1842        0     1         __init_array_start = .
+    1842     1842        0     1         __init_array_end = .
+    1842     1842        0     1         __fini_array_start = .
+    1842     1842        0     1         __fini_array_end = .
+    1842     1842      835     1 .rodata
+    1842     1842        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    1842     1842        0     1                 __set_v
+    1843     1843       3a     1         vsrtmidi.lto.o:(.rodata.printf)
+    187d     187d       30     1         vsrtmidi.lto.o:(.rodata.textColors)
+    187d     187d       30     1                 textColors
+    18ad     18ad       38     1         vsrtmidi.lto.o:(.rodata.plugin)
+    18ad     18ad       38     1                 plugin
+    18e5     18e5      692     1         <internal>:(.rodata.str1.1)
+    1f77     1f77      100     1         vsrtmidi.lto.o:(.rodata.midi_instruments)
+    1f77     1f77      100     1                 midi_instruments
+    2077     2077        0     1 .data
+    2077     2077        0     1         __data_start = .
+    2077     2077        0     1         __data_end = .
+    2077     2077        0     1 __data_load_start = LOADADDR(.data)
+    2077     2077        0     1 __data_size = SIZEOF(.data)
+    2077     2077        1     1 .bss
+    2077     2077        0     1         __bss_start = .
+    2077     2077        1     1         vsrtmidi.lto.o:(.bss.kernelError)
+    2077     2077        1     1                 kernelError
+    2078     2078        0     1         __bss_end = .
+    2078     2078        0     1 __bss_size = SIZEOF(.bss)
+    2078     2078        0     1 .noinit
+    2078     2078        0     1         __heap_start = ALIGN(., 2)
+    2078     2078        0     1 end_block8 = .
+    2078     2078        0     1 end_block9 = .
+    2078     2078        0     1 end_block10 = .
+    2078     2078        0     1 end_block11 = .
+    2078     2078        0     1 end_block12 = .
+    2078     2078        0     1 end_block13 = .
+    2078     2078        0     1 end_block14 = .
+    2078     2078        0     1 end_block15 = .
+    2078     2078        0     1 end_block16 = .
+    2078     2078        0     1 end_block17 = .
+    2078     2078        0     1 end_block18 = .
+    2078     2078        0     1 end_block19 = .
+    2078     2078        0     1 end_block20 = .
+    2078     2078        0     1 end_block21 = .
+    2078     2078        0     1 end_block22 = .
+    2078     2078        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
        0        0      760     4 .symtab
        0        0      760     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      524     1 .strtab
-       0        0      524     1         <internal>:(.strtab)
+       0        0      522     1 .strtab
+       0        0      522     1         <internal>:(.strtab)

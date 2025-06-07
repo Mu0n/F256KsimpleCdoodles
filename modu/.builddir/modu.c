@@ -121,6 +121,7 @@
 #define TIMER_POLY_DELAY 1
 #define TIMER_POLY_COOKIE 1
 
+//structures needed to keep track of what's happening with the mouse interacting with a slider or a dial as the mouse button is held and the mouse moved around
 typedef struct sliderActivity{
 	uint8_t index;
 	int16_t iMX, iMY;
@@ -134,7 +135,7 @@ typedef struct dialActivity{
 	uint16_t value16;
 } dialActivity;
 	
-
+//these maps will link each of the 64 possible sprite IDs as the index of this table, to a unique ID related to a specific UI element.
 uint8_t sidSpriteAction[64] = {0xFF, ACT_MID, ACT_SID, ACT_PSG, ACT_OPL, //5
                                ACT_SID_TRI, ACT_SID_SAW, ACT_SID_PUL, ACT_SID_NOI, //9
 							   ACT_SID_A, 0xFF, ACT_SID_D, 0xFF,  ACT_SID_S, 0xFF, ACT_SID_R, 0xFF, //17
@@ -279,6 +280,7 @@ void hideGUI()
 	for(uint8_t i=5; i<63; i++) spriteSetVisible(i,false);
 }
 
+//Buttons for selecting MIDI, SID, PSG or OPL3.
 void loadGUIGen()
 {
 	
@@ -671,7 +673,7 @@ void setup()
 	gPtr->sidValues->frr = 0x20;
 	gPtr->sidValues->v3Lo = 0x55;
 	gPtr->sidValues->v3Hi = 0x01;
-	
+	sid_set_all(*(gPtr->sidValues));
 
 	loadGUIGen();
 	loadGUISID();
@@ -747,9 +749,25 @@ void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch w
 			if(gen->actionID == ACT_SID_FLP) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x10; else gPtr->sidValues->maxVolume ^= 0x10; sid_setModVol(gPtr->sidValues->maxVolume);}
 			if(gen->actionID == ACT_SID_FBP) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x20; else gPtr->sidValues->maxVolume ^= 0x20; sid_setModVol(gPtr->sidValues->maxVolume);}
 			if(gen->actionID == ACT_SID_FHP) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x40; else gPtr->sidValues->maxVolume ^= 0x40; sid_setModVol(gPtr->sidValues->maxVolume);}
-			if(gen->actionID == ACT_SID_F3O) {if(gen->isClicked) gPtr->sidValues->maxVolume  |= 0x80; else gPtr->sidValues->maxVolume ^= 0x80; sid_setModVol(gPtr->sidValues->maxVolume);}
+			if(gen->actionID == ACT_SID_F3O) {
+				if(gen->isClicked)
+					{
+						gPtr->sidValues->maxVolume  |= 0x80;
+						reservedSID[2]=reservedSID[5]=1;
+						setLighter(&lights[4], 63, SPR_BASE);
+						setLighter(&lights[5], 63, SPR_BASE);
+					}
+					else
+					{
+						gPtr->sidValues->maxVolume ^= 0x80; sid_setModVol(gPtr->sidValues->maxVolume);
+						reservedSID[2]=reservedSID[5]=0;
+						setLighter(&lights[4], 58, SPR_BASE);
+						setLighter(&lights[5], 58, SPR_BASE);
+					}
+				}
 
-			if(gen->actionID == ACT_SID_RNG) {
+			if(gen->actionID == ACT_SID_RNG)
+			{
 				if(gen->isClicked)
 				{
 					gPtr->sidValues->ctrl |= 0x04;
@@ -757,10 +775,15 @@ void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch w
 					reservedSID[5] = true;
 	
 				}
-				else gPtr->sidValues->ctrl ^= 0x04;
-				sid_setCTRL(gPtr->sidValues->ctrl);
+				else
+				{
+					gPtr->sidValues->ctrl ^= 0x04;
+					sid_setCTRL(gPtr->sidValues->ctrl);
+					reservedSID[2] = false;
+					reservedSID[5] = false;
 				}
-			textGotoXY(0,20);printf("acID: %d ctrl %02x maxVol %02x",gen->actionID,gPtr->sidValues->ctrl, gPtr->sidValues->maxVolume);
+			}
+			//textGotoXY(0,20);printf("acID: %d ctrl %02x maxVol %02x",gen->actionID,gPtr->sidValues->ctrl, gPtr->sidValues->maxVolume);
 			break;
 	
 		case ACT_SID_A ... ACT_SID_R:
@@ -866,11 +889,13 @@ void updateChipDial(struct dial_UI *dia)
 			break;
 		case ACT_SID_V3H:
 			gPtr->sidValues->v3Hi = dia->value8;
-			sid_setV3(gPtr->sidValues->v3Lo,gPtr->sidValues->v3Hi);
+			sid_setV3(0,*(gPtr->sidValues));
+			sid_setV3(1,*(gPtr->sidValues));
 			break;
 		case ACT_SID_V3L:
 			gPtr->sidValues->v3Lo = dia->value8;
-			sid_setV3(gPtr->sidValues->v3Lo,gPtr->sidValues->v3Hi);
+			sid_setV3(0,*(gPtr->sidValues));
+			sid_setV3(1,*(gPtr->sidValues));
 			break;
 	
 	}
@@ -904,8 +929,8 @@ uint16_t i,absX,absY;
 setup();
 
 
-		polyTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_POLY_DELAY;
-		setTimer(&polyTimer);
+polyTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_POLY_DELAY;
+setTimer(&polyTimer);
 
 	
 	while(true)
@@ -931,24 +956,24 @@ setup();
 								case 1:
 									if(sidActive)
 										{
-										dispatchNote(false,0,lastNote,recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0);
+										dispatchNote(false,0,lastNote,recByte, false, 0, gPtr);
 										}
 									break;
 								case 2:
 									if(psgActive)
 										{
-										dispatchNote(false,0,lastNote,recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0);
+										dispatchNote(false,0,lastNote,recByte, false, 0, gPtr);
 										}
 									break;
 								case 3:
 									if(opl3Active)
 										{
-										dispatchNote(false,0,lastNote,recByte, gPtr->wantVS1053, gPtr->chipChoice, false, 0);
+										dispatchNote(false,0,lastNote,recByte, false, 0, gPtr);
 										}
 									break;
 								}
 							}
-						dispatchNote(isHit,0,storedNote,0x7F, gPtr->wantVS1053, gPtr->chipChoice, false, 0); //do the note or turn off the note
+						dispatchNote(isHit,0,storedNote,0x7F, false, 0, gPtr); //do the note or turn off the note
 						if(isHit == false) //turn 'em off if the note is ended
 							{
 							switch(gPtr->chipChoice)

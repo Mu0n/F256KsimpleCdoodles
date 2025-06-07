@@ -20,12 +20,11 @@ typedef struct glTh
 	uint8_t o_2_sr, o_1_sr;
 	uint8_t o_2_wav, o_1_wav;
 	uint8_t o_chanfeed;
-	
 } globalThings;
 
 int8_t findFreeChannel(uint8_t *, uint8_t, uint8_t *);
 int8_t liberateChannel(uint8_t , uint8_t *, uint8_t);
-void dispatchNote(bool, uint8_t, uint8_t, uint8_t, bool, uint8_t, bool, uint8_t);
+void dispatchNote(bool, uint8_t, uint8_t, uint8_t, bool, uint8_t, struct glTh*);
 
 void resetGlobals(struct glTh*);
 extern uint8_t chipAct[];

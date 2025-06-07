@@ -4,7 +4,7 @@
 #include "../src/muUtils.h" //contains helper functions I often use
 
 int main(int argc, char *argv[]) {
-	FILE *fileNum =0;
+	uint8_t *fileNum =0;
 	int16_t writeResult = 0;
 	char buf[]="Hello my darling coucous!";
 	size_t msgLen = strlen(buf);

@@ -14,9 +14,9 @@
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 #include "../src/mupsg.h"   //contains PSG chip functions
 #include "../src/muopl3.h"   //contains OPL3 chip functions
-#include "../src/globals.h"   //contains the globalThings structure
 #include "../src/presetBeats.h"   //contains preset Beats
 #include "../src/beatFileOps.h"   //can save or restore beats from files
+#include "../src/mudispatch.h"   //sends to various chips
 
 #include "../src/musid.h"   //contains SID chip functions
 #include "../src/textui.h"   //has the text ui elements, specific to this project
@@ -33,7 +33,6 @@ EMBED(palpiano, "../assets/piano.pal", 0x30000);
 EMBED(pia1, "../assets/piano.raw", 0x38000);
 
 struct aB *theBeats;
-struct glTh *gPtr;
 
 struct timer_t spaceNotetimer, refTimer, snareTimer; //spaceNotetimer: used when you hit space, produces a 1s delay before NoteOff comes in
 //refTimer: is 1 frame long, used to display updated text when you hit keys on a midi controller
@@ -51,18 +50,6 @@ uint8_t mainTempoLUT[18]; //contains the delays between notes in prepared beats
 
 uint8_t diagBuffer[255]; //info dump on screen
 
-uint8_t polyPSGBuffer[6] = {0,0,0,0,0,0};
-uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
-uint8_t reservedPSG[6]={0,0,0,0,0,0};
-
-uint8_t polySIDBuffer[6] = {0,0,0,0,0,0};
-uint8_t sidChoiceToVoice[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
-uint8_t reservedSID[6] = {0,0,0,0,0,0};
-
-uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
-uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
-uint8_t reservedOPL3[9]={0,0,0,0,0,0,0,0,0};
-
 uint8_t blockCharacters[] = {22,21,19,20,22,23,26,27,28,29,24,23,24,25,25,22,23,24,21,20,21,23,20};
 uint8_t *testArray;
 
@@ -71,9 +58,24 @@ bool needsToWaitExpiration = false;  //when tempo is changed, must wait to expir
 bool altHit = false, shiftHit = false; //keyboard modifiers
 
 bool noteColors[88]={1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1,0,1,0,1, 1,0,1,0,1,0,1, 1};
-
-uint8_t chipAct[5] ={0,0,0,0,0}; //used for text UI to show chip activity in real time
-	
+uint8_t KeyCodesToMIDINotes[123] = {0,0,0,0,0,0,0,0,  //0-7
+									0,0,0,0,0,0,0,0,  //8-15
+									0,0,0,0,0,0,0,0,  //16-23
+									0,0,0,0,0,0,0,0,  //24-31
+									0,0,0,0,0,0,0,0,  //32-39
+									0,0,0,0,55,0,57,59,  //40-47
+									75,0,61,63,0,66,68,70,  //48-55
+									0,73,0,58,0,78,0,0,  //56-63
+									0,0,0,0,0,0,0,0,  //64-71
+									0,0,0,0,0,0,0,0,  //72-79
+									0,0,0,0,0,0,0,0,  //80-87
+									0,0,0,77,0,79,0,0,  //88-95
+									0,42,50,47,46,64,0,49,  //96-103
+									51,72,0,54,56,53,52,74,  //104-111
+									76,60,65,44,67,71,48,62,  //112-119
+									45,69,43}; //120-122
+									
+									
 void escReset(void);
 
 
@@ -92,139 +94,6 @@ void emptyPSGBuffer()
 	uint8_t i;
 	for(i=0;i<6;i++) polyPSGBuffer[i]=0;
 }
-int8_t findFreeChannel(uint8_t *ptr, uint8_t howManyChans, uint8_t *reserved)
-	{
-	uint8_t i;
-	for(i=0;i<howManyChans;i++)
-		{
-		if(reserved[i]) continue;
-		if(ptr[i] == 0) return i;	
-		}
-	return -1;
-	}
-int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howManyChans)
-	{
-	uint8_t i;
-	for(i=0;i<howManyChans;i++)
-		{
-		if(ptr[i] == note) return i;	
-		}
-	return -1;
-	}
-	
-//dispatchNote deals with all possibilities
-void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt, uint8_t whichChip, bool isBeat, uint8_t beatChan)
-{
-	uint16_t sidTarget, sidVoiceBase;
-	int8_t foundFreeChan=-1; //used when digging for a free channel for polyphony
-	
-	if(isOn && note ==0) return;
-	if(whichChip==0 || whichChip == 4) //MIDI
-	{
-		if(isOn) {
-			midiNoteOn(channel, note, speed, whichChip==4?true:wantAlt);
-			if(gPtr->isTwinLinked) midiNoteOn(1, note,speed, whichChip==4?true:wantAlt);
-			if(wantAlt) chipAct[1]++;
-			else chipAct[0]++;
-		}
-		else 
-		{
-			midiNoteOff(channel, note, speed, whichChip==4?true:wantAlt);
-		if(wantAlt) {if(chipAct[1])chipAct[1]--;}
-		else {if(chipAct[0])chipAct[0]--;}
-			
-			if(gPtr->isTwinLinked) 
-			{
-			midiNoteOff(1, note,speed, whichChip==4?true:wantAlt);
-			if(wantAlt) {if(chipAct[1])chipAct[1]--;}
-			else {if(chipAct[0])chipAct[0]--;}
-			}
-		}
-		return;
-	}
-	if(whichChip==1) //SID
-	{
-		if(isOn)
-		{
-			if(isBeat) {
-				foundFreeChan = channel; //if it's a preset, we already know which channel to target
-				polySIDBuffer[channel]=note;
-				}
-			else foundFreeChan = findFreeChannel(polySIDBuffer, 6, reservedSID);
-			if(foundFreeChan != -1)
-				{
-				sidTarget = foundFreeChan>2?SID2:SID1;
-				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
-				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
-				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
-				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):fetchCtrl(gPtr->sidInstChoice), isOn);//if isBeat false, usually gPtr->sidInstChoice
-				chipAct[2]++;
-				polySIDBuffer[foundFreeChan] = note;					
-				}
-		}
-		else 
-		{
-			if(isBeat) {
-				foundFreeChan = channel; //if it's a preset, we already know which channel to target
-				polySIDBuffer[channel]=0;
-				}
-			else foundFreeChan = liberateChannel(note, polySIDBuffer, 6);
-			sidTarget = foundFreeChan>2?SID2:SID1;
-			sidVoiceBase = sidChoiceToVoice[foundFreeChan];
-			polySIDBuffer[foundFreeChan] = 0;
-			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1 
-			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1 
-			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):fetchCtrl(gPtr->sidInstChoice), isOn); //if isBeat false, usually gPtr->sidInstChoice
-			if(chipAct[2])chipAct[2]--;
-		}
-		return;
-	}
-	if(whichChip==2) //PSG
-	{
-		if(isOn) {
-			if(isBeat) foundFreeChan = channel; //if it's a preset, we already know which channel to target
-			else foundFreeChan = findFreeChannel(polyPSGBuffer, 6, reservedPSG);
-			if(foundFreeChan != -1)
-				{
-				psgNoteOn(  polyPSGChanBits[foundFreeChan], //used to correctly address the channel in the PSG command
-							foundFreeChan>2?PSG_RIGHT:PSG_LEFT, //used to send the command to the right left or right PSG
-							psgLow[note-45],psgHigh[note-45],
-							speed);
-			    polyPSGBuffer[foundFreeChan] = note;
-				chipAct[3]++;	
-				}
-			}
-		else 
-		{
-			foundFreeChan = liberateChannel(note, polyPSGBuffer, 6);
-			polyPSGBuffer[foundFreeChan] = 0;
-			psgNoteOff(polyPSGChanBits[foundFreeChan], foundFreeChan>2?PSG_RIGHT:PSG_LEFT);
-			if(chipAct[3])chipAct[3]--;
-		}
-		return;
-	}
-	if(whichChip==3) //OPL3
-	{
-		if(isOn) 
-			{
-			if(isBeat) foundFreeChan = channel; //if it's a preset, we already know which channel to target
-			else foundFreeChan = findFreeChannel(polyOPL3Buffer, 9, reservedOPL3);
-			if(foundFreeChan != -1)
-				{
-				opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, true);	
-				polyOPL3Buffer[foundFreeChan] = note;
-				chipAct[4]++;
-				}
-			}
-		else 
-			{
-			foundFreeChan = liberateChannel(note, polyOPL3Buffer, 9);
-			opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, false);	
-			polyOPL3Buffer[foundFreeChan] = 0;
-			if(chipAct[4])chipAct[4]--;
-			}
-	}
-}	
 
 
 void prepTempoLUT()
@@ -292,6 +161,7 @@ void setup()
 	
 	//Globals
 	gPtr = malloc(sizeof(globalThings));
+	resetGlobals(gPtr);
 	
 	//Beats
 	theBeats = malloc(sizeof(aBeat) * presetBeatCount);
@@ -484,9 +354,9 @@ void dealKeyPressed(uint8_t keyRaw)
 					}
 					if(gPtr->chipChoice==1)
 					{
-						if(gPtr->sidInstChoice<5) gPtr->sidInstChoice++;
+						if(gPtr->sidInstChoice<sid_instrumentsSize) gPtr->sidInstChoice++;
 					}
-					if(gPtr->chipChoice==3) if(gPtr->opl3InstChoice<5) gPtr->opl3InstChoice++;
+					if(gPtr->chipChoice==3) if(gPtr->opl3InstChoice<opl3_instrumentsSize) gPtr->opl3InstChoice++;
 					refreshInstrumentText(gPtr);
 				}
 				else if(instSelectMode==true)
@@ -724,6 +594,20 @@ void dealKeyPressed(uint8_t keyRaw)
 			showChipChoiceText(gPtr);
 					}
 			break;
+		default:
+				//Send a Note
+				if(gPtr->chipChoice !=3)
+				{
+				dispatchNote(true, 0x90 | gPtr->chSelect ,KeyCodesToMIDINotes[kernelEventData.key.raw],0x7F, gPtr->wantVS1053, gPtr->chipChoice, false, 0);	
+				//keep track of that note so we can Note_Off it when needed
+				oldNote = note+0x15; //make it possible to do the proper NoteOff when the timer expires
+				}
+				else
+					{
+					
+					dispatchNote(true, 0,KeyCodesToMIDINotes[kernelEventData.key.raw],0,false, gPtr->chipChoice, false, 0);
+					}
+		break;
 	}
 	//the following line can be used to get keyboard codes
 	//printf("\n %d",kernelEventData.key.raw);
@@ -845,7 +729,7 @@ int main(int argc, char *argv[]) {
 					
 					//first case is when the last command is a 0x90 'NoteOn' command
 					if(isHit) {graphicsDefineColor(0, detectedNote,0xFF,0x00,0xFF); //paint it as a hit note
-					textGotoXY(0,20);textPrintInt(recByte);
+					textGotoXY(0,57);textPrintInt(recByte);
 					}
 					//otherwise it's a 0x80 'NoteOff' command
 					else {

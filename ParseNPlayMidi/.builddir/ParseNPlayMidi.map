@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -67,152 +67,146 @@
        0        0        0     1 __peon5_size = 0x240
        0        0        0     1 __gfxhuman2gfx_lma = 0x18000
        0        0        0     1 __gfxhuman2gfx_size = 0x12c00
-      30      300       31     1 .zp.data
+      30      300        6     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       31     1         ParseNPlayMidi.lto.o:(.zp.data)
-      30      300       30     1                 textColors
-      60      330        1     1                 _ccolor
-      61      331        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      61      331        0     1 __zp_data_size = SIZEOF(.zp.data)
-      61       61       28     1 .zp.bss
-      61       61        0     1         __zp_bss_start = .
-      61       61       28     1         ParseNPlayMidi.lto.o:(.zp.bss)
-      61       61        7     1                 kernelEventData
-      68       68        1     1                 kernelError
-      69       69        1     1                 _col
-      6a       6a        1     1                 _row
-      6b       6b        4     1                 _BITMAP_BASE.0
-      6f       6f        2     1                 __putchar.s
-      71       71        2     1                 gFormat
-      73       73        2     1                 trackcount
-      75       75        4     1                 tick
-      79       79        1     1                 theBigList.0
-      7a       7a        2     1                 theBigList.1
-      7c       7c        2     1                 theBigList.2
-      7e       7e        2     1                 parsers
-      80       80        2     1                 theMIDIfile
-      82       82        1     1                 midiNoteTimer.1
-      83       83        1     1                 (anonymous namespace)::initialized
-      84       84        1     1                 (anonymous namespace)::last_free
-      85       85        2     1                 (anonymous namespace)::free_size
-      87       87        2     1                 (anonymous namespace)::free_list
-      89       89        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      89       89       58     1 .zp
-      89       89       58     1         ParseNPlayMidi.lto.o:(.zp.noinit)
-     332      332     5ff1     2 .text
-     332      332        0     1         _init = .
-     332      332        0     1         _start = .
-     332      332        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     332      332        0     1                 __do_init_stack
-     33a      33a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     33a      33a        0     1                 __do_zero_bss
-     33d      33d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     33d      33d        0     1                 __do_zero_zp_bss
-     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     340      340        0     1                 __do_copy_zp_data
-     343      343        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     346      346        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     346      346        0     1                 __after_main
-     349      349        0     1         _fini = .
-     349      349        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     34a      34a      133     2         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     34a      34a      133     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     47e      47e       d7     2         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     47e      47e       d7     1                 (anonymous namespace)::FreeChunk::remove()
-     555      555       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     555      555       13     1                 __zero_bss
-     568      568       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     568      568       13     1                 __zero_zp_bss
-     57b      57b       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     57b      57b       17     1                 __copy_zp_data
-     592      592     1bf7     1         ParseNPlayMidi.lto.o:(.text.main)
-     592      592     1bf7     1                 main
-    2189     2189     13eb     1         ParseNPlayMidi.lto.o:(.text.parse)
-    2189     2189     13eb     1                 parse
-    3574     3574      1ba     1         ParseNPlayMidi.lto.o:(.text.__putchar)
-    3574     3574      1ba     1                 __putchar
-    372e     372e        5     1         ParseNPlayMidi.lto.o:(.text.exit)
-    372e     372e        5     1                 exit
-    3733     3733       d1     1         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    3733     3733       d1     1                 (anonymous namespace)::put(char, Status*)
-    3804     3804      10d     1         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    3804     3804      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
-    3911     3911      bb0     1         ParseNPlayMidi.lto.o:(.text.printf)
-    3911     3911      bb0     1                 printf
-    44c1     44c1        c     1         ParseNPlayMidi.lto.o:(.text.putchar)
-    44c1     44c1        c     1                 putchar
-    44cd     44cd       31     1         ParseNPlayMidi.lto.o:(.text.puts)
-    44cd     44cd       31     1                 puts
-    44fe     44fe      1d0     1         ParseNPlayMidi.lto.o:(.text.malloc)
-    44fe     44fe      1d0     1                 malloc
-    46ce     46ce      190     1         ParseNPlayMidi.lto.o:(.text.free)
-    46ce     46ce      190     1                 free
-    485e     485e       2c     1         ParseNPlayMidi.lto.o:(.text.memcpy)
-    485e     485e       2c     1                 memcpy
-    488a     488a       20     1         ParseNPlayMidi.lto.o:(.text.__memset)
-    488a     488a       20     1                 __memset
-    48aa     48aa        5     1         ParseNPlayMidi.lto.o:(.text.strlen)
-    48aa     48aa        5     1                 strlen
-    48af     48af       74     1         ParseNPlayMidi.lto.o:(.text.strstr)
-    48af     48af       74     1                 strstr
-    4923     4923       1f     1         ParseNPlayMidi.lto.o:(.text.__ashldi3)
-    4923     4923       1f     1                 __ashldi3
-    4942     4942       1f     1         ParseNPlayMidi.lto.o:(.text.__lshrdi3)
-    4942     4942       1f     1                 __lshrdi3
-    4961     4961       70     1         ParseNPlayMidi.lto.o:(.text.__mulsi3)
-    4961     4961       70     1                 __mulsi3
-    49d1     49d1       f8     1         ParseNPlayMidi.lto.o:(.text.__muldi3)
-    49d1     49d1       f8     1                 __muldi3
-    4ac9     4ac9      16f     1         ParseNPlayMidi.lto.o:(.text.__udivsi3)
-    4ac9     4ac9      16f     1                 __udivsi3
-    4c38     4c38     13e4     1         ParseNPlayMidi.lto.o:(.text.__muldf3)
-    4c38     4c38     13e4     1                 __muldf3
-    601c     601c       83     1         ParseNPlayMidi.lto.o:(.text.__fixunsdfsi)
-    601c     601c       83     1                 __fixunsdfsi
-    609f     609f      284     1         ParseNPlayMidi.lto.o:(.text.__floatunsidf)
-    609f     609f      284     1                 __floatunsidf
-    6323     6323        0     1         __init_array_start = .
-    6323     6323        0     1         __init_array_end = .
-    6323     6323        0     1         __fini_array_start = .
-    6323     6323        0     1         __fini_array_end = .
-    6323     6323      387     1 .rodata
-    6323     6323        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    6323     6323        0     1                 __set_v
-    6324     6324       22     1         ParseNPlayMidi.lto.o:(.rodata.parse)
-    6346     6346       3a     1         ParseNPlayMidi.lto.o:(.rodata.printf)
-    6380     6380       38     1         ParseNPlayMidi.lto.o:(.rodata.plugin)
-    6380     6380       38     1                 plugin
-    63b8     63b8      2de     1         <internal>:(.rodata.str1.1)
-    6696     6696       14     1         ParseNPlayMidi.lto.o:(.rodata..L__const.playmiditype0.frame)
-    66aa     66aa        0     1 .data
-    66aa     66aa        0     1         __data_start = .
-    66aa     66aa        0     1         __data_end = .
-    66aa     66aa        0     1 __data_load_start = LOADADDR(.data)
-    66aa     66aa        0     1 __data_size = SIZEOF(.data)
-    66aa     66aa       40     1 .bss
-    66aa     66aa        0     1         __bss_start = .
-    66aa     66aa       40     1         ParseNPlayMidi.lto.o:(.bss._spriteCtl)
-    66aa     66aa       40     1                 _spriteCtl
-    66ea     66ea        0     1         __bss_end = .
-    66ea     66ea        0     1 __bss_size = SIZEOF(.bss)
-    66ea     66ea        0     1 .noinit
-    66ea     66ea        0     1         __heap_start = ALIGN(., 2)
-    66ea     66ea        0     1 end_block8 = .
-    66ea     66ea        0     1 end_block9 = .
-    66ea     66ea        0     1 end_block10 = .
-    66ea     66ea        0     1 end_block11 = .
-    66ea     66ea        0     1 end_block12 = .
-    66ea     66ea        0     1 end_block13 = .
-    66ea     66ea        0     1 end_block14 = .
-    66ea     66ea        0     1 end_block15 = .
-    66ea     66ea        0     1 end_block16 = .
-    66ea     66ea        0     1 end_block17 = .
-    66ea     66ea        0     1 end_block18 = .
-    66ea     66ea        0     1 end_block19 = .
-    66ea     66ea        0     1 end_block20 = .
-    66ea     66ea        0     1 end_block21 = .
-    66ea     66ea        0     1 end_block22 = .
-    66ea     66ea        0     1 end_block23 = .
+      30      300        6     1         ParseNPlayMidi.lto.o:(.zp.data)
+      30      300        1     1                 _ccolor
+      36      306        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      36      306        0     1 __zp_data_size = SIZEOF(.zp.data)
+      36       36       27     1 .zp.bss
+      36       36        0     1         __zp_bss_start = .
+      36       36       27     1         ParseNPlayMidi.lto.o:(.zp.bss)
+      36       36        7     1                 kernelEventData
+      3d       3d        1     1                 kernelError
+      3e       3e        1     1                 _col
+      3f       3f        1     1                 _row
+      40       40        4     1                 _BITMAP_BASE.0
+      44       44        2     1                 __putchar.s
+      46       46        2     1                 gFormat
+      48       48        2     1                 trackcount
+      4a       4a        4     1                 tick
+      4e       4e        2     1                 theBigList.1
+      50       50        2     1                 theBigList.2
+      52       52        2     1                 parsers
+      54       54        2     1                 theMIDIfile
+      56       56        1     1                 midiNoteTimer.1
+      57       57        1     1                 (anonymous namespace)::initialized
+      58       58        1     1                 (anonymous namespace)::last_free
+      59       59        2     1                 (anonymous namespace)::free_size
+      5b       5b        2     1                 (anonymous namespace)::free_list
+      5d       5d        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      5d       5d       59     1 .zp
+      5d       5d       59     1         ParseNPlayMidi.lto.o:(.zp.noinit)
+     306      306     5fe6     2 .text
+     306      306        0     1         _init = .
+     306      306        0     1         _start = .
+     306      306        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     306      306        0     1                 __do_init_stack
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     30e      30e        0     1                 __do_zero_bss
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     311      311        0     1                 __do_zero_zp_bss
+     314      314        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     314      314        0     1                 __do_copy_zp_data
+     317      317        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     31a      31a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     31a      31a        0     1                 __after_main
+     31d      31d        0     1         _fini = .
+     31d      31d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     31e      31e      135     2         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     31e      31e      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     454      454       d7     2         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     454      454       d7     1                 (anonymous namespace)::FreeChunk::remove()
+     52b      52b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     52b      52b       13     1                 __zero_bss
+     53e      53e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     53e      53e       13     1                 __zero_zp_bss
+     551      551       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     551      551       17     1                 __copy_zp_data
+     568      568     1dd0     1         ParseNPlayMidi.lto.o:(.text.main)
+     568      568     1dd0     1                 main
+    2338     2338     13e1     1         ParseNPlayMidi.lto.o:(.text.parse)
+    2338     2338     13e1     1                 parse
+    3719     3719        5     1         ParseNPlayMidi.lto.o:(.text.exit)
+    3719     3719        5     1                 exit
+    371e     371e       d3     1         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    371e     371e       d3     1                 (anonymous namespace)::put(char, Status*)
+    37f1     37f1      10c     1         ParseNPlayMidi.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    37f1     37f1      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    38fd     38fd      bd9     1         ParseNPlayMidi.lto.o:(.text.printf)
+    38fd     38fd      bd9     1                 printf
+    44d6     44d6      1c2     1         ParseNPlayMidi.lto.o:(.text.putchar)
+    44d6     44d6      1c2     1                 putchar
+    4698     4698       39     1         ParseNPlayMidi.lto.o:(.text.puts)
+    4698     4698       39     1                 puts
+    46d1     46d1      1cf     1         ParseNPlayMidi.lto.o:(.text.malloc)
+    46d1     46d1      1cf     1                 malloc
+    48a0     48a0       2c     1         ParseNPlayMidi.lto.o:(.text.memcpy)
+    48a0     48a0       2c     1                 memcpy
+    48cc     48cc       20     1         ParseNPlayMidi.lto.o:(.text.__memset)
+    48cc     48cc       20     1                 __memset
+    48ec     48ec       1f     1         ParseNPlayMidi.lto.o:(.text.__ashldi3)
+    48ec     48ec       1f     1                 __ashldi3
+    490b     490b       1f     1         ParseNPlayMidi.lto.o:(.text.__lshrdi3)
+    490b     490b       1f     1                 __lshrdi3
+    492a     492a       70     1         ParseNPlayMidi.lto.o:(.text.__mulsi3)
+    492a     492a       70     1                 __mulsi3
+    499a     499a       f8     1         ParseNPlayMidi.lto.o:(.text.__muldi3)
+    499a     499a       f8     1                 __muldi3
+    4a92     4a92      16f     1         ParseNPlayMidi.lto.o:(.text.__udivsi3)
+    4a92     4a92      16f     1                 __udivsi3
+    4c01     4c01     13e4     1         ParseNPlayMidi.lto.o:(.text.__muldf3)
+    4c01     4c01     13e4     1                 __muldf3
+    5fe5     5fe5       83     1         ParseNPlayMidi.lto.o:(.text.__fixunsdfsi)
+    5fe5     5fe5       83     1                 __fixunsdfsi
+    6068     6068      284     1         ParseNPlayMidi.lto.o:(.text.__floatunsidf)
+    6068     6068      284     1                 __floatunsidf
+    62ec     62ec        0     1         __init_array_start = .
+    62ec     62ec        0     1         __init_array_end = .
+    62ec     62ec        0     1         __fini_array_start = .
+    62ec     62ec        0     1         __fini_array_end = .
+    62ec     62ec      3b2     1 .rodata
+    62ec     62ec        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    62ec     62ec        0     1                 __set_v
+    62ed     62ed       22     1         ParseNPlayMidi.lto.o:(.rodata.parse)
+    630f     630f       3a     1         ParseNPlayMidi.lto.o:(.rodata.printf)
+    6349     6349       38     1         ParseNPlayMidi.lto.o:(.rodata.plugin)
+    6349     6349       38     1                 plugin
+    6381     6381       30     1         ParseNPlayMidi.lto.o:(.rodata.textColors)
+    6381     6381       30     1                 textColors
+    63b1     63b1      2d9     1         <internal>:(.rodata.str1.1)
+    668a     668a       14     1         ParseNPlayMidi.lto.o:(.rodata..L__const.playmiditype0.frame)
+    669e     669e        0     1 .data
+    669e     669e        0     1         __data_start = .
+    669e     669e        0     1         __data_end = .
+    669e     669e        0     1 __data_load_start = LOADADDR(.data)
+    669e     669e        0     1 __data_size = SIZEOF(.data)
+    669e     669e       41     1 .bss
+    669e     669e        0     1         __bss_start = .
+    669e     669e       40     1         ParseNPlayMidi.lto.o:(.bss._spriteCtl)
+    669e     669e       40     1                 _spriteCtl
+    66de     66de        1     1         ParseNPlayMidi.lto.o:(.bss.theBigList.0)
+    66de     66de        1     1                 theBigList.0
+    66df     66df        0     1         __bss_end = .
+    66df     66df        0     1 __bss_size = SIZEOF(.bss)
+    66df     66df        0     1 .noinit
+    66df     66df        0     1         __heap_start = ALIGN(., 2)
+    66df     66df        0     1 end_block8 = .
+    66df     66df        0     1 end_block9 = .
+    66df     66df        0     1 end_block10 = .
+    66df     66df        0     1 end_block11 = .
+    66df     66df        0     1 end_block12 = .
+    66df     66df        0     1 end_block13 = .
+    66df     66df        0     1 end_block14 = .
+    66df     66df        0     1 end_block15 = .
+    66df     66df        0     1 end_block16 = .
+    66df     66df        0     1 end_block17 = .
+    66df     66df        0     1 end_block18 = .
+    66df     66df        0     1 end_block19 = .
+    66df     66df        0     1 end_block20 = .
+    66df     66df        0     1 end_block21 = .
+    66df     66df        0     1 end_block22 = .
+    66df     66df        0     1 end_block23 = .
    10000    10000      400    16 .palhuman2
    10000    10000      400    16         ParseNPlayMidi.lto.o:(.palhuman2)
    10000    10000        0     1                 palhuman2_start
@@ -250,9 +244,9 @@
    2ac00    2ac00        0     1 end_gfxhuman2gfx = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      ba0     4 .symtab
-       0        0      ba0     4         <internal>:(.symtab)
+       0        0      b60     4 .symtab
+       0        0      b60     4         <internal>:(.symtab)
        0        0       96     1 .shstrtab
        0        0       96     1         <internal>:(.shstrtab)
-       0        0      8c0     1 .strtab
-       0        0      8c0     1         <internal>:(.strtab)
+       0        0      8a3     1 .strtab
+       0        0      8a3     1         <internal>:(.strtab)

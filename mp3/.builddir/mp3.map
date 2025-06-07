@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -74,7 +74,7 @@
       3f       3f        0     1 __zp_bss_size = SIZEOF(.zp.bss)
       3f       3f       58     1 .zp
       3f       3f       58     1         mp3.lto.o:(.zp.noinit)
-     300      300     2176     2 .text
+     300      300     21b4     2 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -88,92 +88,86 @@
      311      311        0     1                 __after_main
      314      314        0     1         _fini = .
      314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     316      316      139     2         mp3.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     316      316      139     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     450      450       df     2         mp3.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     450      450       df     1                 (anonymous namespace)::FreeChunk::remove()
-     52f      52f       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     52f      52f       13     1                 __zero_bss
-     542      542       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     542      542       13     1                 __zero_zp_bss
-     555      555      8c3     1         mp3.lto.o:(.text.main)
-     555      555      8c3     1                 main
-     e18      e18      14b     1         mp3.lto.o:(.text.fileRead)
-     e18      e18      14b     1                 fileRead
-     f63      f63      1b8     1         mp3.lto.o:(.text.textPrint)
-     f63      f63      1b8     1                 textPrint
-    111b     111b       bb     1         mp3.lto.o:(.text.textPrintUInt)
-    111b     111b       bb     1                 textPrintUInt
-    11d6     11d6        d     1         mp3.lto.o:(.text.__putchar)
-    11d6     11d6        d     1                 __putchar
-    11e3     11e3        5     1         mp3.lto.o:(.text.exit)
-    11e3     11e3        5     1                 exit
-    11e8     11e8       d1     1         mp3.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    11e8     11e8       d1     1                 (anonymous namespace)::put(char, Status*)
-    12b9     12b9      10d     1         mp3.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    12b9     12b9      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
-    13c6     13c6      bb0     1         mp3.lto.o:(.text.printf)
-    13c6     13c6      bb0     1                 printf
-    1f76     1f76      1d6     1         mp3.lto.o:(.text.malloc)
-    1f76     1f76      1d6     1                 malloc
-    214c     214c      192     1         mp3.lto.o:(.text.free)
-    214c     214c      192     1                 free
-    22de     22de       2c     1         mp3.lto.o:(.text.memcpy)
-    22de     22de       2c     1                 memcpy
-    230a     230a       20     1         mp3.lto.o:(.text.__memset)
-    230a     230a       20     1                 __memset
-    232a     232a        5     1         mp3.lto.o:(.text.strlen)
-    232a     232a        5     1                 strlen
-    232f     232f      147     1         mp3.lto.o:(.text.__umodsi3)
-    232f     232f      147     1                 __umodsi3
-    2476     2476        0     1         __init_array_start = .
-    2476     2476        0     1         __init_array_end = .
-    2476     2476        0     1         __fini_array_start = .
-    2476     2476        0     1         __fini_array_end = .
-    2476     2476      191     1 .rodata
-    2476     2476        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2476     2476        0     1                 __set_v
-    2477     2477       3a     1         mp3.lto.o:(.rodata.printf)
-    24b1     24b1       30     1         mp3.lto.o:(.rodata.textColors)
-    24b1     24b1       30     1                 textColors
-    24e1     24e1      126     1         <internal>:(.rodata.str1.1)
-    2607     2607        0     1 .data
-    2607     2607        0     1         __data_start = .
-    2607     2607        0     1         __data_end = .
-    2607     2607        0     1 __data_load_start = LOADADDR(.data)
-    2607     2607        0     1 __data_size = SIZEOF(.data)
-    2607     2607        a     1 .bss
-    2607     2607        0     1         __bss_start = .
-    2607     2607        4     1         mp3.lto.o:(.bss._BITMAP_BASE.0)
-    2607     2607        4     1                 _BITMAP_BASE.0
-    260b     260b        1     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    260b     260b        1     1                 (anonymous namespace)::initialized
-    260c     260c        1     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    260c     260c        1     1                 (anonymous namespace)::last_free
-    260d     260d        2     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    260d     260d        2     1                 (anonymous namespace)::free_size
-    260f     260f        2     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    260f     260f        2     1                 (anonymous namespace)::free_list
-    2611     2611        0     1         __bss_end = .
-    2611     2611        0     1 __bss_size = SIZEOF(.bss)
-    2611     2611        0     1 .noinit
-    2611     2611        0     1         __heap_start = ALIGN(., 2)
-    2611     2611        0     1 end_block8 = .
-    2611     2611        0     1 end_block9 = .
-    2611     2611        0     1 end_block10 = .
-    2611     2611        0     1 end_block11 = .
-    2611     2611        0     1 end_block12 = .
-    2611     2611        0     1 end_block13 = .
-    2611     2611        0     1 end_block14 = .
-    2611     2611        0     1 end_block15 = .
-    2611     2611        0     1 end_block16 = .
-    2611     2611        0     1 end_block17 = .
-    2611     2611        0     1 end_block18 = .
-    2611     2611        0     1 end_block19 = .
-    2611     2611        0     1 end_block20 = .
-    2611     2611        0     1 end_block21 = .
-    2611     2611        0     1 end_block22 = .
-    2611     2611        0     1 end_block23 = .
+     316      316      13d     2         mp3.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     454      454       df     2         mp3.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     454      454       df     1                 (anonymous namespace)::FreeChunk::remove()
+     533      533       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     533      533       13     1                 __zero_bss
+     546      546       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     546      546       13     1                 __zero_zp_bss
+     559      559      a1d     1         mp3.lto.o:(.text.main)
+     559      559      a1d     1                 main
+     f76      f76      14b     1         mp3.lto.o:(.text.fileRead)
+     f76      f76      14b     1                 fileRead
+    10c1     10c1      1b8     1         mp3.lto.o:(.text.textPrint)
+    10c1     10c1      1b8     1                 textPrint
+    1279     1279       bb     1         mp3.lto.o:(.text.textPrintUInt)
+    1279     1279       bb     1                 textPrintUInt
+    1334     1334        5     1         mp3.lto.o:(.text.exit)
+    1334     1334        5     1                 exit
+    1339     1339       db     1         mp3.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    1339     1339       db     1                 (anonymous namespace)::put(char, Status*)
+    1414     1414      10c     1         mp3.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1414     1414      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1520     1520      c2c     1         mp3.lto.o:(.text.printf)
+    1520     1520      c2c     1                 printf
+    214c     214c      1d5     1         mp3.lto.o:(.text.malloc)
+    214c     214c      1d5     1                 malloc
+    2321     2321       2c     1         mp3.lto.o:(.text.memcpy)
+    2321     2321       2c     1                 memcpy
+    234d     234d       20     1         mp3.lto.o:(.text.__memset)
+    234d     234d       20     1                 __memset
+    236d     236d      147     1         mp3.lto.o:(.text.__umodsi3)
+    236d     236d      147     1                 __umodsi3
+    24b4     24b4        0     1         __init_array_start = .
+    24b4     24b4        0     1         __init_array_end = .
+    24b4     24b4        0     1         __fini_array_start = .
+    24b4     24b4        0     1         __fini_array_end = .
+    24b4     24b4      191     1 .rodata
+    24b4     24b4        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    24b4     24b4        0     1                 __set_v
+    24b5     24b5       3a     1         mp3.lto.o:(.rodata.printf)
+    24ef     24ef       30     1         mp3.lto.o:(.rodata.textColors)
+    24ef     24ef       30     1                 textColors
+    251f     251f      126     1         <internal>:(.rodata.str1.1)
+    2645     2645        0     1 .data
+    2645     2645        0     1         __data_start = .
+    2645     2645        0     1         __data_end = .
+    2645     2645        0     1 __data_load_start = LOADADDR(.data)
+    2645     2645        0     1 __data_size = SIZEOF(.data)
+    2645     2645        a     1 .bss
+    2645     2645        0     1         __bss_start = .
+    2645     2645        4     1         mp3.lto.o:(.bss._BITMAP_BASE.0)
+    2645     2645        4     1                 _BITMAP_BASE.0
+    2649     2649        1     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    2649     2649        1     1                 (anonymous namespace)::initialized
+    264a     264a        1     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    264a     264a        1     1                 (anonymous namespace)::last_free
+    264b     264b        2     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    264b     264b        2     1                 (anonymous namespace)::free_size
+    264d     264d        2     1         mp3.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    264d     264d        2     1                 (anonymous namespace)::free_list
+    264f     264f        0     1         __bss_end = .
+    264f     264f        0     1 __bss_size = SIZEOF(.bss)
+    264f     264f        0     1 .noinit
+    264f     264f        0     1         __heap_start = ALIGN(., 2)
+    264f     264f        0     1 end_block8 = .
+    264f     264f        0     1 end_block9 = .
+    264f     264f        0     1 end_block10 = .
+    264f     264f        0     1 end_block11 = .
+    264f     264f        0     1 end_block12 = .
+    264f     264f        0     1 end_block13 = .
+    264f     264f        0     1 end_block14 = .
+    264f     264f        0     1 end_block15 = .
+    264f     264f        0     1 end_block16 = .
+    264f     264f        0     1 end_block17 = .
+    264f     264f        0     1 end_block18 = .
+    264f     264f        0     1 end_block19 = .
+    264f     264f        0     1 end_block20 = .
+    264f     264f        0     1 end_block21 = .
+    264f     264f        0     1 end_block22 = .
+    264f     264f        0     1 end_block23 = .
    10000    10000      400    16 .backg
    10000    10000      400    16         mp3.lto.o:(.backg)
    10000    10000        0     1                 backg_start
@@ -186,9 +180,9 @@
    23000    23000        0     1 end_palback = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      8c0     4 .symtab
-       0        0      8c0     4         <internal>:(.symtab)
+       0        0      890     4 .symtab
+       0        0      890     4         <internal>:(.symtab)
        0        0       6a     1 .shstrtab
        0        0       6a     1         <internal>:(.shstrtab)
-       0        0      69b     1 .strtab
-       0        0      69b     1         <internal>:(.strtab)
+       0        0      685     1 .strtab
+       0        0      685     1         <internal>:(.strtab)

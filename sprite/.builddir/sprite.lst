@@ -58,25 +58,25 @@ SYMBOL TABLE:
 0000002e g       *ABS*	00000000 __rc30
 0000002f g       *ABS*	00000000 __rc31
 00000300 g       *ABS*	00000000 __f256_start
-0000a000 g       *ABS*	00000000 __stack
-0000a000 g       *ABS*	00000000 __SLOT_ADDR
-0800a000 g       *ABS*	00000000 __block8_lma
+0000c000 g       *ABS*	00000000 __stack
+0000c000 g       *ABS*	00000000 __SLOT_ADDR
+0800c000 g       *ABS*	00000000 __block8_lma
 00002000 g       *ABS*	00000000 __BLOCK_SIZE
-0900a000 g       *ABS*	00000000 __block9_lma
-0a00a000 g       *ABS*	00000000 __block10_lma
-0b00a000 g       *ABS*	00000000 __block11_lma
-0c00a000 g       *ABS*	00000000 __block12_lma
-0d00a000 g       *ABS*	00000000 __block13_lma
-0e00a000 g       *ABS*	00000000 __block14_lma
-0f00a000 g       *ABS*	00000000 __block15_lma
-1000a000 g       *ABS*	00000000 __block16_lma
-1100a000 g       *ABS*	00000000 __block17_lma
-1200a000 g       *ABS*	00000000 __block18_lma
-1300a000 g       *ABS*	00000000 __block19_lma
-1400a000 g       *ABS*	00000000 __block20_lma
-1500a000 g       *ABS*	00000000 __block21_lma
-1600a000 g       *ABS*	00000000 __block22_lma
-1700a000 g       *ABS*	00000000 __block23_lma
+0900c000 g       *ABS*	00000000 __block9_lma
+0a00c000 g       *ABS*	00000000 __block10_lma
+0b00c000 g       *ABS*	00000000 __block11_lma
+0c00c000 g       *ABS*	00000000 __block12_lma
+0d00c000 g       *ABS*	00000000 __block13_lma
+0e00c000 g       *ABS*	00000000 __block14_lma
+0f00c000 g       *ABS*	00000000 __block15_lma
+1000c000 g       *ABS*	00000000 __block16_lma
+1100c000 g       *ABS*	00000000 __block17_lma
+1200c000 g       *ABS*	00000000 __block18_lma
+1300c000 g       *ABS*	00000000 __block19_lma
+1400c000 g       *ABS*	00000000 __block20_lma
+1500c000 g       *ABS*	00000000 __block21_lma
+1600c000 g       *ABS*	00000000 __block22_lma
+1700c000 g       *ABS*	00000000 __block23_lma
 00010000 g       *ABS*	00000000 __palhuman2_lma
 00000400 g       *ABS*	00000000 __palhuman2_size
 00014000 g       *ABS*	00000000 __peon1_lma
@@ -153,7 +153,7 @@ Disassembly of section .text:
 00000300 <_start>:
      300: a9 00        	lda	#$0
      302: 85 10        	sta	$10                     ; 0x2010 <end_block9+0x173e>
-     304: a9 a0        	lda	#$a0
+     304: a9 c0        	lda	#$c0
      306: 85 11        	sta	$11                     ; 0x2011 <end_block9+0x173f>
 
 00000308 <__do_zero_bss>:

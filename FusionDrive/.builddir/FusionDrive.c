@@ -1003,7 +1003,6 @@ void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t laye
 	//sprite 7 is reserved for this yellow car
 	car_yel_L.sy=1;
 	
-	
 	setCarPos(128,220);
 
 	//set NES_CTRL

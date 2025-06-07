@@ -59,28 +59,36 @@ int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howManyChans)
 	
 	
 //dispatchNote deals with all possibilities
-void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt, uint8_t whichChip, bool isBeat, uint8_t beatChan){
+void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool isBeat, uint8_t beatChan, struct glTh* gT){
 	uint16_t sidTarget, sidVoiceBase;
 	int8_t foundFreeChan=-1; //used when digging for a free channel for polyphony
 	
 	if(isOn && note ==0) return;
-	if(whichChip==0 || whichChip == 4) //MIDI
+	if(gT->chipChoice==0 || gT->chipChoice == 4) //MIDI
 	{
 		if(isOn) {
-			midiNoteOn(channel, note, speed, whichChip==4?true:wantAlt);
-			if(wantAlt) chipAct[1]++;
+			midiNoteOn(channel, note, speed, gT->chipChoice==4?true:gT->wantVS1053);
+			//if(gPtr->isTwinLinked) midiNoteOn(1, note,speed, whichChip==4?true:gT->wantVS1053);
+			if(gT->wantVS1053) chipAct[1]++;
 			else chipAct[0]++;
 		}
 		else
 		{
-			midiNoteOff(channel, note, speed, whichChip==4?true:wantAlt);
-		if(wantAlt) {if(chipAct[1])chipAct[1]--;}
+			midiNoteOff(channel, note, speed, gT->chipChoice==4?true:gT->wantVS1053);
+		if(gT->wantVS1053) {if(chipAct[1])chipAct[1]--;}
 		else {if(chipAct[0])chipAct[0]--;}
-	
+			/*
+			if(gPtr->isTwinLinked)
+			{
+			midiNoteOff(1, note,speed, gT->chipChoice==4?true:gT->wantVS1053);
+			if(gT->wantVS1053) {if(chipAct[1])chipAct[1]--;}
+			else {if(chipAct[0])chipAct[0]--;}
+			}
+			*/
 		}
 		return;
 	}
-	if(whichChip==1) //SID
+	if(gT->chipChoice==1) //SID
 	{
 		if(isOn)
 		{
@@ -95,7 +103,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
 				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
 				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn);//if isBeat false, usually gPtr->sidInstChoice
+				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):gPtr->sidValues->ctrl, isOn);//if isBeat false, usually gPtr->sidInstChoice
 				polySIDBuffer[foundFreeChan] = note;
 				}
 				chipAct[2]++;
@@ -112,13 +120,13 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			polySIDBuffer[foundFreeChan] = 0;
 			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
 			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn); //if isBeat false, usually gPtr->sidInstChoice
+			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, isBeat?fetchCtrl(beatChan):gPtr->sidValues->ctrl, isOn); //if isBeat false, usually gPtr->sidInstChoice
 			if(chipAct[2])chipAct[2]--;
 		}
 		return;
 	}
 	
-	if(whichChip==2) //PSG
+	if(gT->chipChoice==2) //PSG
 	{
 		if(isOn) {
 			if(isBeat) foundFreeChan = channel; //if it's a preset, we already know which channel to target
@@ -144,7 +152,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 	}
 	
 	
-	if(whichChip==3) //OPL3
+	if(gT->chipChoice==3) //OPL3
 	{
 		if(isOn)
 			{

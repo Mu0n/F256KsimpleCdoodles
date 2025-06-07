@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -66,9 +66,9 @@
       31       31        1     1                 _row
       32       32        2     1                 __putchar.s
       34       34        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      34       34       57     1 .zp
-      34       34       57     1         VStype0.lto.o:(.zp.noinit)
-     300      300     15aa     1 .text
+      34       34       59     1 .zp
+      34       34       59     1         VStype0.lto.o:(.zp.noinit)
+     300      300     15dc     1 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -92,64 +92,64 @@
      6bb      6bb        6     1                 main
      6c1      6c1      250     1         VStype0.lto.o:(.text.f256main)
      6c1      6c1      250     1                 f256main
-     911      911      1ba     1         VStype0.lto.o:(.text.__putchar)
-     911      911      1ba     1                 __putchar
-     acb      acb        5     1         VStype0.lto.o:(.text.exit)
-     acb      acb        5     1                 exit
-     ad0      ad0       d1     1         VStype0.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-     ad0      ad0       d1     1                 (anonymous namespace)::put(char, Status*)
-     ba1      ba1      10d     1         VStype0.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-     ba1      ba1      10d     1                 (anonymous namespace)::print_string(char const*, Status*)
-     cae      cae      bb0     1         VStype0.lto.o:(.text.printf)
-     cae      cae      bb0     1                 printf
-    185e     185e       2c     1         VStype0.lto.o:(.text.memcpy)
-    185e     185e       2c     1                 memcpy
-    188a     188a       20     1         VStype0.lto.o:(.text.__memset)
-    188a     188a       20     1                 __memset
-    18aa     18aa        0     1         __init_array_start = .
-    18aa     18aa        0     1         __init_array_end = .
-    18aa     18aa        0     1         __fini_array_start = .
-    18aa     18aa        0     1         __fini_array_end = .
-    18aa     18aa       d8     1 .rodata
-    18aa     18aa        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    18aa     18aa        0     1                 __set_v
-    18ab     18ab       3a     1         VStype0.lto.o:(.rodata.printf)
-    18e5     18e5       38     1         VStype0.lto.o:(.rodata.plugin)
-    18e5     18e5       38     1                 plugin
-    191d     191d       30     1         VStype0.lto.o:(.rodata.textColors)
-    191d     191d       30     1                 textColors
-    194d     194d       35     1         <internal>:(.rodata.str1.1)
-    1982     1982        0     1 .data
-    1982     1982        0     1         __data_start = .
-    1982     1982        0     1         __data_end = .
-    1982     1982        0     1 __data_load_start = LOADADDR(.data)
-    1982     1982        0     1 __data_size = SIZEOF(.data)
-    1982     1982        8     1 .bss
-    1982     1982        0     1         __bss_start = .
-    1982     1982        7     1         VStype0.lto.o:(.bss.kernelEventData)
-    1982     1982        7     1                 kernelEventData
-    1989     1989        1     1         VStype0.lto.o:(.bss.kernelError)
-    1989     1989        1     1                 kernelError
-    198a     198a        0     1         __bss_end = .
-    198a     198a        0     1 __bss_size = SIZEOF(.bss)
-    198a     198a        0     1 .noinit
-    198a     198a        0     1         __heap_start = ALIGN(., 2)
-    198a     198a        0     1 end_block8 = .
-    198a     198a        0     1 end_block9 = .
-    198a     198a        0     1 end_block10 = .
-    198a     198a        0     1 end_block11 = .
-    198a     198a        0     1 end_block12 = .
-    198a     198a        0     1 end_block13 = .
-    198a     198a        0     1 end_block14 = .
-    198a     198a        0     1 end_block15 = .
-    198a     198a        0     1 end_block16 = .
-    198a     198a        0     1 end_block17 = .
-    198a     198a        0     1 end_block18 = .
-    198a     198a        0     1 end_block19 = .
-    198a     198a        0     1 end_block20 = .
-    198a     198a        0     1 end_block21 = .
-    198a     198a        0     1 end_block22 = .
-    198a     198a        0     1 end_block23 = .
+     911      911        5     1         VStype0.lto.o:(.text.exit)
+     911      911        5     1                 exit
+     916      916       d3     1         VStype0.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+     916      916       d3     1                 (anonymous namespace)::put(char, Status*)
+     9e9      9e9      10c     1         VStype0.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+     9e9      9e9      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+     af5      af5      bd9     1         VStype0.lto.o:(.text.printf)
+     af5      af5      bd9     1                 printf
+    16ce     16ce      1c2     1         VStype0.lto.o:(.text.putchar)
+    16ce     16ce      1c2     1                 putchar
+    1890     1890       2c     1         VStype0.lto.o:(.text.memcpy)
+    1890     1890       2c     1                 memcpy
+    18bc     18bc       20     1         VStype0.lto.o:(.text.__memset)
+    18bc     18bc       20     1                 __memset
+    18dc     18dc        0     1         __init_array_start = .
+    18dc     18dc        0     1         __init_array_end = .
+    18dc     18dc        0     1         __fini_array_start = .
+    18dc     18dc        0     1         __fini_array_end = .
+    18dc     18dc       d8     1 .rodata
+    18dc     18dc        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    18dc     18dc        0     1                 __set_v
+    18dd     18dd       3a     1         VStype0.lto.o:(.rodata.printf)
+    1917     1917       38     1         VStype0.lto.o:(.rodata.plugin)
+    1917     1917       38     1                 plugin
+    194f     194f       30     1         VStype0.lto.o:(.rodata.textColors)
+    194f     194f       30     1                 textColors
+    197f     197f       35     1         <internal>:(.rodata.str1.1)
+    19b4     19b4        0     1 .data
+    19b4     19b4        0     1         __data_start = .
+    19b4     19b4        0     1         __data_end = .
+    19b4     19b4        0     1 __data_load_start = LOADADDR(.data)
+    19b4     19b4        0     1 __data_size = SIZEOF(.data)
+    19b4     19b4        8     1 .bss
+    19b4     19b4        0     1         __bss_start = .
+    19b4     19b4        7     1         VStype0.lto.o:(.bss.kernelEventData)
+    19b4     19b4        7     1                 kernelEventData
+    19bb     19bb        1     1         VStype0.lto.o:(.bss.kernelError)
+    19bb     19bb        1     1                 kernelError
+    19bc     19bc        0     1         __bss_end = .
+    19bc     19bc        0     1 __bss_size = SIZEOF(.bss)
+    19bc     19bc        0     1 .noinit
+    19bc     19bc        0     1         __heap_start = ALIGN(., 2)
+    19bc     19bc        0     1 end_block8 = .
+    19bc     19bc        0     1 end_block9 = .
+    19bc     19bc        0     1 end_block10 = .
+    19bc     19bc        0     1 end_block11 = .
+    19bc     19bc        0     1 end_block12 = .
+    19bc     19bc        0     1 end_block13 = .
+    19bc     19bc        0     1 end_block14 = .
+    19bc     19bc        0     1 end_block15 = .
+    19bc     19bc        0     1 end_block16 = .
+    19bc     19bc        0     1 end_block17 = .
+    19bc     19bc        0     1 end_block18 = .
+    19bc     19bc        0     1 end_block19 = .
+    19bc     19bc        0     1 end_block20 = .
+    19bc     19bc        0     1 end_block21 = .
+    19bc     19bc        0     1 end_block22 = .
+    19bc     19bc        0     1 end_block23 = .
    10000    10000     c8bb    16 .human2
    10000    10000     c8bb    16         VStype0.lto.o:(.human2)
    10000    10000        0     1                 human2_start
@@ -161,5 +161,5 @@
        0        0      7a0     4         <internal>:(.symtab)
        0        0       62     1 .shstrtab
        0        0       62     1         <internal>:(.shstrtab)
-       0        0      551     1 .strtab
-       0        0      551     1         <internal>:(.strtab)
+       0        0      54f     1 .strtab
+       0        0      54f     1         <internal>:(.strtab)

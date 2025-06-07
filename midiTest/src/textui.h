@@ -1,7 +1,7 @@
 #ifndef TEXTUI_H
 #define TEXTUI_H
 
-#include "../src/globals.h"
+#include "../src/mudispatch.h"
 
 #define textColorGreen  0x04
 #define textColorOrange 0x09

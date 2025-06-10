@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
 	fileNum = fileOpen("coucou.bin","w");
 	fileWrite(binData, sizeof(uint8_t), binLen, fileNum);
 	kernelNextEvent();
+	kernelNextEvent();
 	fileWrite(binData, sizeof(uint8_t), binLen, fileNum);
 	kernelNextEvent();
 	fileWrite(binData, sizeof(uint8_t), binLen, fileNum);

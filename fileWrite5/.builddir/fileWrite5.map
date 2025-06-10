@@ -1,0 +1,226 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+      30      300       37     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       37     1         fileWrite5.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        1     1                 _MAX_COL
+      61      331        1     1                 _MAX_ROW
+      62      332        1     1                 _ccolor
+      63      333        2     1                 stdout
+      65      335        2     1                 (anonymous namespace)::heap_limit
+      67      337        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      67      337        0     1 __zp_data_size = SIZEOF(.zp.data)
+      67       67       72     1 .zp.bss
+      67       67        0     1         __zp_bss_start = .
+      67       67       72     1         fileWrite5.lto.o:(.zp.bss)
+      67       67        2     1                 kernelArgs
+      69       69        1     1                 _col
+      6a       6a        1     1                 _row
+      6b       6b        c     1                 _BITMAP_BASE
+      77       77        1     1                 _active
+      78       78        1     1                 _color
+      79       79        1     1                 _MAX_X
+      7a       7a        1     1                 _MAX_Y
+      7b       7b        3     1                 _BITMAP_CLUT
+      7e       7e        3     1                 _tileSize
+      81       81       40     1                 _spriteCtl
+      c1       c1        8     1                 _dirStream
+      c9       c9        2     1                 __putchar.s
+      cb       cb        1     1                 kernelError
+      cc       cc        7     1                 kernelEventData
+      d3       d3        1     1                 (anonymous namespace)::initialized
+      d4       d4        1     1                 (anonymous namespace)::last_free
+      d5       d5        2     1                 (anonymous namespace)::free_size
+      d7       d7        2     1                 (anonymous namespace)::free_list
+      d9       d9        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      d9       d9       10     1 .zp
+      d9       d9       10     1         fileWrite5.lto.o:(.zp.noinit)
+     338      338     23f8     2 .text
+     338      338        0     1         _init = .
+     338      338        0     1         _start = .
+     338      338        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     338      338        0     1                 __do_init_stack
+     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     340      340        0     1                 __do_zero_zp_bss
+     343      343        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     343      343        0     1                 __do_copy_zp_data
+     346      346        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     349      349        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     349      349        0     1                 __after_main
+     34c      34c        0     1         _fini = .
+     34c      34c        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     34e      34e      135     2         fileWrite5.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     34e      34e      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     484      484       d7     2         fileWrite5.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     484      484       d7     1                 (anonymous namespace)::FreeChunk::remove()
+     55c      55c        3     2         fileWrite5.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     55c      55c        3     1                 __impl::VarInt::make(void*, char)
+     560      560        d     2         fileWrite5.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     560      560        d     1                 __impl::VarInt::high_bit() const
+     56e      56e        d     2         fileWrite5.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     56e      56e        d     1                 __impl::VarInt::negative() const
+     57c      57c       47     2         fileWrite5.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     57c      57c       47     1                 __impl::VarInt::negate()
+     5c4      5c4       3b     2         fileWrite5.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     5c4      5c4       3b     1                 __impl::VarInt::shl()
+     5ff      5ff        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     5ff      5ff        0     1                 __call_indir
+     602      602       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     602      602       13     1                 __zero_zp_bss
+     615      615       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     615      615       17     1                 __copy_zp_data
+     62c      62c      17b     1         fileWrite5.lto.o:(.text.f256Init)
+     62c      62c      17b     1                 f256Init
+     7a7      7a7      173     1         fileWrite5.lto.o:(.text.textReset)
+     7a7      7a7      173     1                 textReset
+     91a      91a      156     1         fileWrite5.lto.o:(.text.bitmapReset)
+     91a      91a      156     1                 bitmapReset
+     a70      a70       24     1         fileWrite5.lto.o:(.text.main)
+     a70      a70       24     1                 main
+     a94      a94      445     1         fileWrite5.lto.o:(.text.f256main)
+     a94      a94      445     1                 f256main
+     ed9      ed9      103     1         fileWrite5.lto.o:(.text.fileOpen)
+     ed9      ed9      103     1                 fileOpen
+     fdc      fdc      25a     1         fileWrite5.lto.o:(.text.textPrint)
+     fdc      fdc      25a     1                 textPrint
+    1236     1236        d     1         fileWrite5.lto.o:(.text.__putchar)
+    1236     1236        d     1                 __putchar
+    1243     1243       34     1         fileWrite5.lto.o:(.text.hitspace)
+    1243     1243       34     1                 hitspace
+    1277     1277        e     1         fileWrite5.lto.o:(.text.exit)
+    1277     1277        e     1                 exit
+    1285     1285        2     1         fileWrite5.lto.o:(.text._Exit)
+    1285     1285        2     1                 _Exit
+    1287     1287      218     1         fileWrite5.lto.o:(.text.vfprintf)
+    1287     1287      218     1                 vfprintf
+    149f     149f      b44     1         fileWrite5.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    149f     149f      b44     1                 (anonymous namespace)::print(char const*, Status*)
+    1fe3     1fe3       e1     1         fileWrite5.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    1fe3     1fe3       e1     1                 (anonymous namespace)::put(char, Status*)
+    20c4     20c4      174     1         fileWrite5.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    20c4     20c4      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    2238     2238       57     1         fileWrite5.lto.o:(.text.printf)
+    2238     2238       57     1                 printf
+    228f     228f        3     1         fileWrite5.lto.o:(.text.fputc)
+    228f     228f        3     1                 fputc
+    2292     2292       28     1         fileWrite5.lto.o:(.text.putchar)
+    2292     2292       28     1                 putchar
+    22ba     22ba        7     1         fileWrite5.lto.o:(.text.putchar_wrapper)
+    22ba     22ba        7     1                 putchar_wrapper
+    22c1     22c1        3     1         fileWrite5.lto.o:(.text.putc)
+    22c1     22c1        3     1                 putc
+    22c4     22c4        b     1         fileWrite5.lto.o:(.text.__from_ascii)
+    22c4     22c4        b     1                 __from_ascii
+    22cf     22cf      100     1         fileWrite5.lto.o:(.text.malloc)
+    22cf     22cf      100     1                 malloc
+    23cf     23cf       b6     1         fileWrite5.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
+    23cf     23cf       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
+    2485     2485      186     1         fileWrite5.lto.o:(.text.free)
+    2485     2485      186     1                 free
+    260b     260b       2c     1         fileWrite5.lto.o:(.text.memcpy)
+    260b     260b       2c     1                 memcpy
+    2637     2637       20     1         fileWrite5.lto.o:(.text.__memset)
+    2637     2637       20     1                 __memset
+    2657     2657       39     1         fileWrite5.lto.o:(.text.strlen)
+    2657     2657       39     1                 strlen
+    2690     2690       6e     1         fileWrite5.lto.o:(.text.__simple_strtoui)
+    2690     2690       6e     1                 __simple_strtoui
+    26fe     26fe       32     1         fileWrite5.lto.o:(.text.__mulhi3)
+    26fe     26fe       32     1                 __mulhi3
+    2730     2730        0     1         __init_array_start = .
+    2730     2730        0     1         __init_array_end = .
+    2730     2730        0     1         __fini_array_start = .
+    2730     2730        0     1         __fini_array_end = .
+    2730     2730       68     1 .rodata
+    2730     2730       3a     1         fileWrite5.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    276a     276a       10     1         <internal>:(.rodata.cst16)
+    277a     277a       1e     1         <internal>:(.rodata.str1.1)
+    2798     2798        0     1 .data
+    2798     2798        0     1         __data_start = .
+    2798     2798        0     1         __data_end = .
+    2798     2798        0     1 __data_load_start = LOADADDR(.data)
+    2798     2798        0     1 __data_size = SIZEOF(.data)
+    2798     2798        0     1 .bss
+    2798     2798        0     1         __bss_start = .
+    2798     2798        0     1         __bss_end = .
+    2798     2798        0     1 __bss_size = SIZEOF(.bss)
+    2798     2798        0     1 .noinit
+    2798     2798        0     1         __heap_start = ALIGN(., 2)
+    2798     2798        0     1 end_block8 = .
+    2798     2798        0     1 end_block9 = .
+    2798     2798        0     1 end_block10 = .
+    2798     2798        0     1 end_block11 = .
+    2798     2798        0     1 end_block12 = .
+    2798     2798        0     1 end_block13 = .
+    2798     2798        0     1 end_block14 = .
+    2798     2798        0     1 end_block15 = .
+    2798     2798        0     1 end_block16 = .
+    2798     2798        0     1 end_block17 = .
+    2798     2798        0     1 end_block18 = .
+    2798     2798        0     1 end_block19 = .
+    2798     2798        0     1 end_block20 = .
+    2798     2798        0     1 end_block21 = .
+    2798     2798        0     1 end_block22 = .
+    2798     2798        0     1 end_block23 = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      a10     4 .symtab
+       0        0      a10     4         <internal>:(.symtab)
+       0        0       5a     1 .shstrtab
+       0        0       5a     1         <internal>:(.shstrtab)
+       0        0      806     1 .strtab
+       0        0      806     1         <internal>:(.strtab)

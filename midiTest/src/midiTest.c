@@ -610,7 +610,7 @@ void dealKeyPressed(uint8_t keyRaw)
 		break;
 	}
 	//the following line can be used to get keyboard codes
-	//printf("\n %d",kernelEventData.key.raw);
+	printf("\n %03d 0x%02x    ",kernelEventData.key.raw,kernelEventData.key.raw);
 }
 
 void dealKeyReleased(uint8_t rawKey)

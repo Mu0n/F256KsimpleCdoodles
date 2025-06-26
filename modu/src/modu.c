@@ -321,9 +321,22 @@ void loadGUIPSG()
 }
 void loadGUIOPL()
 {
-	
-	for(uint8_t k=0;k<9;k++) setATile(3+k,14,63, TILEMAP_BASE); //clear polyphony
+	uint8_t litSoFar = 0;
+	for(uint8_t i=0;i<9; i++)
+	{		
+		setGeneric(0xFF,3+i,14, SPR_BASE+(uint32_t)(UI_STAT),i,SIZE16, 0,0,0,0, 0xFF, &(lights[i].gen));
+		setLighter(&(lights[i]),0, SPR_BASE);
+		litSoFar++;
+	}	
+	for(uint8_t i=0;i<9; i++)
+	{		
+		setGeneric(0xFF,3+i,15, SPR_BASE+(uint32_t)(UI_STAT),i+9,SIZE16, 0,0,0,0, 0xFF, &(lights[i+9].gen));
+		setLighter(&(lights[i+9]),0, SPR_BASE);
+		litSoFar++;
+	}
 	/*
+	for(uint8_t k=0;k<18;k++) setATile(3+k,14,63, TILEMAP_BASE); //clear polyphony
+	
 	for(uint8_t k=0;k<9;k++) setATile(3+k,14,58, TILEMAP_BASE); //polyphony
 	*/
 	#define GROUP4_OPL_POLY_X 79
@@ -680,8 +693,6 @@ void setup()
 	//GUI timer for polyphony
 	polyTimer.units = TIMER_FRAMES;
 	polyTimer.cookie = TIMER_POLY_COOKIE;
-	
-	
 	}
 
 void dispatchAction(struct generic_UI *gen, bool isClicked) //here we dispatch what the click behavior means in this specific project

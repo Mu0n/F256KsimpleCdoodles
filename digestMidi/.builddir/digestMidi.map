@@ -53,281 +53,284 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30      300       41     1 .zp.data
+      30      300       4d     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       41     1         digestMidi.lto.o:(.zp.data)
+      30      300       4d     1         digestMidi.lto.o:(.zp.data)
       30      300       30     1                 textColors
       60      330        1     1                 _MAX_COL
       61      331        1     1                 _MAX_ROW
       62      332        1     1                 _ccolor
-      6d      33d        2     1                 stdout
-      6f      33f        2     1                 (anonymous namespace)::heap_limit
-      71      341        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      71      341        0     1 __zp_data_size = SIZEOF(.zp.data)
-      71       71       3c     1 .zp.bss
-      71       71        0     1         __zp_bss_start = .
-      71       71       3c     1         digestMidi.lto.o:(.zp.bss)
-      71       71        2     1                 kernelArgs
-      73       73        1     1                 _col
-      74       74        1     1                 _row
-      75       75        c     1                 _BITMAP_BASE
-      81       81        1     1                 _active
-      82       82        1     1                 _color
-      83       83        1     1                 _MAX_X
-      84       84        1     1                 _MAX_Y
-      85       85        3     1                 _BITMAP_CLUT
-      88       88        3     1                 _tileSize
-      8b       8b        8     1                 _dirStream
-      93       93        2     1                 __putchar.s
-      95       95        1     1                 choice
-      96       96        1     1                 fileCount
-      97       97        1     1                 exitFlag
-      98       98        1     1                 shiftActive
-      99       99        1     1                 helpActive
-      9a       9a        5     1                 theBigList
-      9f       9f        1     1                 kernelError
-      a0       a0        7     1                 kernelEventData
-      a7       a7        1     1                 (anonymous namespace)::initialized
-      a8       a8        1     1                 (anonymous namespace)::last_free
-      a9       a9        2     1                 (anonymous namespace)::free_size
-      ab       ab        2     1                 (anonymous namespace)::free_list
-      ad       ad        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      ad       ad       2d     1 .zp
-      ad       ad       2d     1         digestMidi.lto.o:(.zp.noinit)
-     342      342     9378     2 .text
-     342      342        0     1         _init = .
-     342      342        0     1         _start = .
-     342      342        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     342      342        0     1                 __do_init_stack
-     34a      34a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     34a      34a        0     1                 __do_zero_bss
-     34d      34d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     34d      34d        0     1                 __do_zero_zp_bss
-     350      350        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     350      350        0     1                 __do_copy_zp_data
-     353      353        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     356      356        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     356      356        0     1                 __after_main
-     359      359        0     1         _fini = .
-     359      359        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     35a      35a      135     2         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     35a      35a      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     490      490       d7     2         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     490      490       d7     1                 (anonymous namespace)::FreeChunk::remove()
-     568      568        3     2         digestMidi.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
-     568      568        3     1                 __impl::VarInt::make(void*, char)
-     56c      56c        d     2         digestMidi.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
-     56c      56c        d     1                 __impl::VarInt::high_bit() const
-     57a      57a        d     2         digestMidi.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
-     57a      57a        d     1                 __impl::VarInt::negative() const
-     588      588       47     2         digestMidi.lto.o:(.text._ZN6__impl6VarInt6negateEv)
-     588      588       47     1                 __impl::VarInt::negate()
-     5d0      5d0       3b     2         digestMidi.lto.o:(.text._ZN6__impl6VarInt3shlEv)
-     5d0      5d0       3b     1                 __impl::VarInt::shl()
-     60b      60b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
-     60b      60b        0     1                 __call_indir
-     60e      60e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     60e      60e       13     1                 __zero_bss
-     621      621       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     621      621       13     1                 __zero_zp_bss
-     634      634       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     634      634       17     1                 __copy_zp_data
-     64b      64b      17c     1         digestMidi.lto.o:(.text.f256Init)
-     64b      64b      17c     1                 f256Init
-     7c7      7c7      173     1         digestMidi.lto.o:(.text.textReset)
-     7c7      7c7      173     1                 textReset
-     93a      93a      156     1         digestMidi.lto.o:(.text.bitmapReset)
-     93a      93a      156     1                 bitmapReset
-     a90      a90       21     1         digestMidi.lto.o:(.text.FAR_PEEK)
-     a90      a90       21     1                 FAR_PEEK
-     ab1      ab1       23     1         digestMidi.lto.o:(.text.FAR_POKE)
-     ab1      ab1       23     1                 FAR_POKE
-     ad4      ad4       24     1         digestMidi.lto.o:(.text.main)
-     ad4      ad4       24     1                 main
-     af8      af8       a4     1         digestMidi.lto.o:(.text.f256main)
-     af8      af8       a4     1                 f256main
-     b9c      b9c       d2     1         digestMidi.lto.o:(.text.textGUI)
-     b9c      b9c       d2     1                 textGUI
-     c6e      c6e      1b6     1         digestMidi.lto.o:(.text.directory)
-     c6e      c6e      1b6     1                 directory
-     e24      e24      1a9     1         digestMidi.lto.o:(.text.dealKeyPressed)
-     e24      e24      1a9     1                 dealKeyPressed
-     fcd      fcd      1de     1         digestMidi.lto.o:(.text.loadAndPlayDim)
-     fcd      fcd      1de     1                 loadAndPlayDim
-    11ab     11ab      32f     1         digestMidi.lto.o:(.text.dealWithFile)
-    11ab     11ab      32f     1                 dealWithFile
-    14da     14da       b5     1         digestMidi.lto.o:(.text.justPlayDim)
-    14da     14da       b5     1                 justPlayDim
-    158f     158f      106     1         digestMidi.lto.o:(.text.fileOpenDir)
-    158f     158f      106     1                 fileOpenDir
-    1695     1695      13d     1         digestMidi.lto.o:(.text.fileReadDir)
-    1695     1695      13d     1                 fileReadDir
-    17d2     17d2      25a     1         digestMidi.lto.o:(.text.textPrint)
-    17d2     17d2      25a     1                 textPrint
-    1a2c     1a2c       11     1         digestMidi.lto.o:(.text.textGotoXY)
-    1a2c     1a2c       11     1                 textGotoXY
-    1a3d     1a3d       4c     1         digestMidi.lto.o:(.text.fileClose)
-    1a3d     1a3d       4c     1                 fileClose
-    1a89     1a89      103     1         digestMidi.lto.o:(.text.fileOpen)
-    1a89     1a89      103     1                 fileOpen
-    1b8c     1b8c      1bf     1         digestMidi.lto.o:(.text.fileRead)
-    1b8c     1b8c      1bf     1                 fileRead
-    1d4b     1d4b      191     1         digestMidi.lto.o:(.text.fileWrite)
-    1d4b     1d4b      191     1                 fileWrite
-    1edc     1edc        d     1         digestMidi.lto.o:(.text.__putchar)
-    1edc     1edc        d     1                 __putchar
-    1ee9     1ee9       14     1         digestMidi.lto.o:(.text.midiShutUp)
-    1ee9     1ee9       14     1                 midiShutUp
-    1efd     1efd       43     1         digestMidi.lto.o:(.text.resetInstruments)
-    1efd     1efd       43     1                 resetInstruments
-    1f40     1f40      18c     1         digestMidi.lto.o:(.text.initMidiRecord)
-    1f40     1f40      18c     1                 initMidiRecord
-    20cc     20cc       3a     1         digestMidi.lto.o:(.text.initBigList)
-    20cc     20cc       3a     1                 initBigList
-    2106     2106       95     1         digestMidi.lto.o:(.text.getTotalLeft)
-    2106     2106       95     1                 getTotalLeft
-    219b     219b      1fd     1         digestMidi.lto.o:(.text.loadSMFile)
-    219b     219b      1fd     1                 loadSMFile
-    2398     2398      147     1         digestMidi.lto.o:(.text.getAndAnalyzeMIDI)
-    2398     2398      147     1                 getAndAnalyzeMIDI
-    24df     24df      60d     1         digestMidi.lto.o:(.text.detectStructure)
-    24df     24df      60d     1                 detectStructure
-    2aec     2aec      165     1         digestMidi.lto.o:(.text.adjustOffsets)
-    2aec     2aec      165     1                 adjustOffsets
-    2c51     2c51     180a     1         digestMidi.lto.o:(.text.parse)
-    2c51     2c51     180a     1                 parse
-    445b     445b      6fd     1         digestMidi.lto.o:(.text.writeDigestFile)
-    445b     445b      6fd     1                 writeDigestFile
-    4b58     4b58      839     1         digestMidi.lto.o:(.text.readDigestFile)
-    4b58     4b58      839     1                 readDigestFile
-    5391     5391      ba2     1         digestMidi.lto.o:(.text.playmidi)
-    5391     5391      ba2     1                 playmidi
-    5f33     5f33      453     1         digestMidi.lto.o:(.text.playmiditype0)
-    5f33     5f33      453     1                 playmiditype0
-    6386     6386       20     1         digestMidi.lto.o:(.text.setTimer0)
-    6386     6386       20     1                 setTimer0
-    63a6     63a6        6     1         digestMidi.lto.o:(.text.isTimer0Done)
-    63a6     63a6        6     1                 isTimer0Done
-    63ac     63ac        e     1         digestMidi.lto.o:(.text.exit)
-    63ac     63ac        e     1                 exit
-    63ba     63ba        2     1         digestMidi.lto.o:(.text._Exit)
-    63ba     63ba        2     1                 _Exit
-    63bc     63bc      218     1         digestMidi.lto.o:(.text.vfprintf)
-    63bc     63bc      218     1                 vfprintf
-    65d4     65d4      b44     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
-    65d4     65d4      b44     1                 (anonymous namespace)::print(char const*, Status*)
-    7118     7118       e1     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    7118     7118       e1     1                 (anonymous namespace)::put(char, Status*)
-    71f9     71f9      174     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    71f9     71f9      174     1                 (anonymous namespace)::print_string(char const*, Status*)
-    736d     736d       57     1         digestMidi.lto.o:(.text.printf)
-    736d     736d       57     1                 printf
-    73c4     73c4      29c     1         digestMidi.lto.o:(.text.vsnprintf)
-    73c4     73c4      29c     1                 vsnprintf
-    7660     7660       4a     1         digestMidi.lto.o:(.text.sprintf)
-    7660     7660       4a     1                 sprintf
-    76aa     76aa        3     1         digestMidi.lto.o:(.text.fputc)
-    76aa     76aa        3     1                 fputc
-    76ad     76ad       28     1         digestMidi.lto.o:(.text.putchar)
-    76ad     76ad       28     1                 putchar
-    76d5     76d5        7     1         digestMidi.lto.o:(.text.putchar_wrapper)
-    76d5     76d5        7     1                 putchar_wrapper
-    76dc     76dc        3     1         digestMidi.lto.o:(.text.putc)
-    76dc     76dc        3     1                 putc
-    76df     76df        b     1         digestMidi.lto.o:(.text.__from_ascii)
-    76df     76df        b     1                 __from_ascii
-    76ea     76ea      100     1         digestMidi.lto.o:(.text.malloc)
-    76ea     76ea      100     1                 malloc
-    77ea     77ea       b6     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
-    77ea     77ea       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
-    78a0     78a0      186     1         digestMidi.lto.o:(.text.free)
-    78a0     78a0      186     1                 free
-    7a26     7a26       2c     1         digestMidi.lto.o:(.text.memcpy)
-    7a26     7a26       2c     1                 memcpy
-    7a52     7a52       20     1         digestMidi.lto.o:(.text.__memset)
-    7a52     7a52       20     1                 __memset
-    7a72     7a72       3b     1         digestMidi.lto.o:(.text.strcpy)
-    7a72     7a72       3b     1                 strcpy
-    7aad     7aad       39     1         digestMidi.lto.o:(.text.strlen)
-    7aad     7aad       39     1                 strlen
-    7ae6     7ae6       74     1         digestMidi.lto.o:(.text.strstr)
-    7ae6     7ae6       74     1                 strstr
-    7b5a     7b5a       6e     1         digestMidi.lto.o:(.text.__simple_strtoui)
-    7b5a     7b5a       6e     1                 __simple_strtoui
-    7bc8     7bc8       1f     1         digestMidi.lto.o:(.text.__ashldi3)
-    7bc8     7bc8       1f     1                 __ashldi3
-    7be7     7be7       1f     1         digestMidi.lto.o:(.text.__lshrdi3)
-    7be7     7be7       1f     1                 __lshrdi3
-    7c06     7c06       32     1         digestMidi.lto.o:(.text.__mulhi3)
-    7c06     7c06       32     1                 __mulhi3
-    7c38     7c38       70     1         digestMidi.lto.o:(.text.__mulsi3)
-    7c38     7c38       70     1                 __mulsi3
-    7ca8     7ca8       f8     1         digestMidi.lto.o:(.text.__muldi3)
-    7ca8     7ca8       f8     1                 __muldi3
-    7da0     7da0       c0     1         digestMidi.lto.o:(.text.__udivhi3)
-    7da0     7da0       c0     1                 __udivhi3
-    7e60     7e60      16f     1         digestMidi.lto.o:(.text.__udivsi3)
-    7e60     7e60      16f     1                 __udivsi3
-    7fcf     7fcf     13e4     1         digestMidi.lto.o:(.text.__muldf3)
-    7fcf     7fcf     13e4     1                 __muldf3
-    93b3     93b3       83     1         digestMidi.lto.o:(.text.__fixunsdfsi)
-    93b3     93b3       83     1                 __fixunsdfsi
-    9436     9436      284     1         digestMidi.lto.o:(.text.__floatunsidf)
-    9436     9436      284     1                 __floatunsidf
-    96ba     96ba        0     1         __init_array_start = .
-    96ba     96ba        0     1         __init_array_end = .
-    96ba     96ba        0     1         __fini_array_start = .
-    96ba     96ba        0     1         __fini_array_end = .
-    96ba     96ba      471     1 .rodata
-    96ba     96ba       4c     1         digestMidi.lto.o:(.rodata.dealKeyPressed)
-    9706     9706       16     1         digestMidi.lto.o:(.rodata.fileReadDir)
-    971c     971c      100     1         digestMidi.lto.o:(.rodata.parse)
-    981c     981c       3a     1         digestMidi.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
-    9856     9856      2d5     1         <internal>:(.rodata.str1.1)
-    9b2b     9b2b      500     1 .data
-    9b2b     9b2b        0     1         __data_start = .
-    9b2b     9b2b      500     1         digestMidi.lto.o:(.data.helpScreen)
-    9b2b     9b2b      500     1                 helpScreen
-    a02b     a02b        0     1         __data_end = .
-    a02b     a02b        0     1 __data_load_start = LOADADDR(.data)
-    a02b     a02b        0     1 __data_size = SIZEOF(.data)
-    a02b     a02b      9b6     1 .bss
-    a02b     a02b        0     1         __bss_start = .
-    a02b     a02b       40     1         digestMidi.lto.o:(.bss._spriteCtl)
-    a02b     a02b       40     1                 _spriteCtl
-    a06b     a06b      102     1         digestMidi.lto.o:(.bss.fileReadDir.fileDirEntS)
-    a06b     a06b      102     1                 fileReadDir.fileDirEntS
-    a16d     a16d      800     1         digestMidi.lto.o:(.bss.midiFileNames)
-    a16d     a16d      800     1                 midiFileNames
-    a96d     a96d       40     1         digestMidi.lto.o:(.bss.isDimPresent)
-    a96d     a96d       40     1                 isDimPresent
-    a9ad     a9ad       34     1         digestMidi.lto.o:(.bss.myRecord)
-    a9ad     a9ad       34     1                 myRecord
-    a9e1     a9e1        0     1         __bss_end = .
-    a9e1     a9e1        0     1 __bss_size = SIZEOF(.bss)
-    a9e1     a9e1        0     1 .noinit
-    a9e1     a9e1        0     1         __heap_start = ALIGN(., 2)
-    a9e1     a9e1        0     1 end_block8 = .
-    a9e1     a9e1        0     1 end_block9 = .
-    a9e1     a9e1        0     1 end_block10 = .
-    a9e1     a9e1        0     1 end_block11 = .
-    a9e1     a9e1        0     1 end_block12 = .
-    a9e1     a9e1        0     1 end_block13 = .
-    a9e1     a9e1        0     1 end_block14 = .
-    a9e1     a9e1        0     1 end_block15 = .
-    a9e1     a9e1        0     1 end_block16 = .
-    a9e1     a9e1        0     1 end_block17 = .
-    a9e1     a9e1        0     1 end_block18 = .
-    a9e1     a9e1        0     1 end_block19 = .
-    a9e1     a9e1        0     1 end_block20 = .
-    a9e1     a9e1        0     1 end_block21 = .
-    a9e1     a9e1        0     1 end_block22 = .
-    a9e1     a9e1        0     1 end_block23 = .
+      63      333        c     1                 queryFudge
+      79      349        2     1                 stdout
+      7b      34b        2     1                 (anonymous namespace)::heap_limit
+      7d      34d        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      7d      34d        0     1 __zp_data_size = SIZEOF(.zp.data)
+      7d       7d       3c     1 .zp.bss
+      7d       7d        0     1         __zp_bss_start = .
+      7d       7d       3c     1         digestMidi.lto.o:(.zp.bss)
+      7d       7d        2     1                 kernelArgs
+      7f       7f        1     1                 _col
+      80       80        1     1                 _row
+      81       81        c     1                 _BITMAP_BASE
+      8d       8d        1     1                 _active
+      8e       8e        1     1                 _color
+      8f       8f        1     1                 _MAX_X
+      90       90        1     1                 _MAX_Y
+      91       91        3     1                 _BITMAP_CLUT
+      94       94        3     1                 _tileSize
+      97       97        8     1                 _dirStream
+      9f       9f        2     1                 __putchar.s
+      a1       a1        1     1                 choice
+      a2       a2        1     1                 fileCount
+      a3       a3        1     1                 exitFlag
+      a4       a4        1     1                 shiftActive
+      a5       a5        1     1                 helpActive
+      a6       a6        5     1                 theBigList
+      ab       ab        1     1                 kernelError
+      ac       ac        7     1                 kernelEventData
+      b3       b3        1     1                 (anonymous namespace)::initialized
+      b4       b4        1     1                 (anonymous namespace)::last_free
+      b5       b5        2     1                 (anonymous namespace)::free_size
+      b7       b7        2     1                 (anonymous namespace)::free_list
+      b9       b9        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      b9       b9       2d     1 .zp
+      b9       b9       2d     1         digestMidi.lto.o:(.zp.noinit)
+     34e      34e     94d3     2 .text
+     34e      34e        0     1         _init = .
+     34e      34e        0     1         _start = .
+     34e      34e        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     34e      34e        0     1                 __do_init_stack
+     356      356        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     356      356        0     1                 __do_zero_bss
+     359      359        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     359      359        0     1                 __do_zero_zp_bss
+     35c      35c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     35c      35c        0     1                 __do_copy_zp_data
+     35f      35f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     362      362        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     362      362        0     1                 __after_main
+     365      365        0     1         _fini = .
+     365      365        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     366      366      135     2         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     366      366      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     49c      49c       d7     2         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     49c      49c       d7     1                 (anonymous namespace)::FreeChunk::remove()
+     574      574        3     2         digestMidi.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     574      574        3     1                 __impl::VarInt::make(void*, char)
+     578      578        d     2         digestMidi.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     578      578        d     1                 __impl::VarInt::high_bit() const
+     586      586        d     2         digestMidi.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     586      586        d     1                 __impl::VarInt::negative() const
+     594      594       47     2         digestMidi.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     594      594       47     1                 __impl::VarInt::negate()
+     5dc      5dc       3b     2         digestMidi.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     5dc      5dc       3b     1                 __impl::VarInt::shl()
+     617      617        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     617      617        0     1                 __call_indir
+     61a      61a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     61a      61a       13     1                 __zero_bss
+     62d      62d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     62d      62d       13     1                 __zero_zp_bss
+     640      640       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     640      640       17     1                 __copy_zp_data
+     657      657      17c     1         digestMidi.lto.o:(.text.f256Init)
+     657      657      17c     1                 f256Init
+     7d3      7d3      173     1         digestMidi.lto.o:(.text.textReset)
+     7d3      7d3      173     1                 textReset
+     946      946      156     1         digestMidi.lto.o:(.text.bitmapReset)
+     946      946      156     1                 bitmapReset
+     a9c      a9c       21     1         digestMidi.lto.o:(.text.FAR_PEEK)
+     a9c      a9c       21     1                 FAR_PEEK
+     abd      abd       23     1         digestMidi.lto.o:(.text.FAR_POKE)
+     abd      abd       23     1                 FAR_POKE
+     ae0      ae0       24     1         digestMidi.lto.o:(.text.main)
+     ae0      ae0       24     1                 main
+     b04      b04       a4     1         digestMidi.lto.o:(.text.f256main)
+     b04      b04       a4     1                 f256main
+     ba8      ba8       b5     1         digestMidi.lto.o:(.text.textGUI)
+     ba8      ba8       b5     1                 textGUI
+     c5d      c5d      1b6     1         digestMidi.lto.o:(.text.directory)
+     c5d      c5d      1b6     1                 directory
+     e13      e13      194     1         digestMidi.lto.o:(.text.dealKeyPressed)
+     e13      e13      194     1                 dealKeyPressed
+     fa7      fa7      1de     1         digestMidi.lto.o:(.text.loadAndPlayDim)
+     fa7      fa7      1de     1                 loadAndPlayDim
+    1185     1185      39b     1         digestMidi.lto.o:(.text.dealWithFile)
+    1185     1185      39b     1                 dealWithFile
+    1520     1520       b5     1         digestMidi.lto.o:(.text.justPlayDim)
+    1520     1520       b5     1                 justPlayDim
+    15d5     15d5      121     1         digestMidi.lto.o:(.text.askFudge)
+    15d5     15d5      121     1                 askFudge
+    16f6     16f6      106     1         digestMidi.lto.o:(.text.fileOpenDir)
+    16f6     16f6      106     1                 fileOpenDir
+    17fc     17fc      13d     1         digestMidi.lto.o:(.text.fileReadDir)
+    17fc     17fc      13d     1                 fileReadDir
+    1939     1939      25a     1         digestMidi.lto.o:(.text.textPrint)
+    1939     1939      25a     1                 textPrint
+    1b93     1b93       11     1         digestMidi.lto.o:(.text.textGotoXY)
+    1b93     1b93       11     1                 textGotoXY
+    1ba4     1ba4       4c     1         digestMidi.lto.o:(.text.fileClose)
+    1ba4     1ba4       4c     1                 fileClose
+    1bf0     1bf0      103     1         digestMidi.lto.o:(.text.fileOpen)
+    1bf0     1bf0      103     1                 fileOpen
+    1cf3     1cf3      1bf     1         digestMidi.lto.o:(.text.fileRead)
+    1cf3     1cf3      1bf     1                 fileRead
+    1eb2     1eb2      191     1         digestMidi.lto.o:(.text.fileWrite)
+    1eb2     1eb2      191     1                 fileWrite
+    2043     2043        d     1         digestMidi.lto.o:(.text.__putchar)
+    2043     2043        d     1                 __putchar
+    2050     2050       14     1         digestMidi.lto.o:(.text.midiShutUp)
+    2050     2050       14     1                 midiShutUp
+    2064     2064       43     1         digestMidi.lto.o:(.text.resetInstruments)
+    2064     2064       43     1                 resetInstruments
+    20a7     20a7      18c     1         digestMidi.lto.o:(.text.initMidiRecord)
+    20a7     20a7      18c     1                 initMidiRecord
+    2233     2233       3a     1         digestMidi.lto.o:(.text.initBigList)
+    2233     2233       3a     1                 initBigList
+    226d     226d       95     1         digestMidi.lto.o:(.text.getTotalLeft)
+    226d     226d       95     1                 getTotalLeft
+    2302     2302      1fd     1         digestMidi.lto.o:(.text.loadSMFile)
+    2302     2302      1fd     1                 loadSMFile
+    24ff     24ff      147     1         digestMidi.lto.o:(.text.getAndAnalyzeMIDI)
+    24ff     24ff      147     1                 getAndAnalyzeMIDI
+    2646     2646      60d     1         digestMidi.lto.o:(.text.detectStructure)
+    2646     2646      60d     1                 detectStructure
+    2c53     2c53      165     1         digestMidi.lto.o:(.text.adjustOffsets)
+    2c53     2c53      165     1                 adjustOffsets
+    2db8     2db8     180a     1         digestMidi.lto.o:(.text.parse)
+    2db8     2db8     180a     1                 parse
+    45c2     45c2      6fd     1         digestMidi.lto.o:(.text.writeDigestFile)
+    45c2     45c2      6fd     1                 writeDigestFile
+    4cbf     4cbf      839     1         digestMidi.lto.o:(.text.readDigestFile)
+    4cbf     4cbf      839     1                 readDigestFile
+    54f8     54f8      ba2     1         digestMidi.lto.o:(.text.playmidi)
+    54f8     54f8      ba2     1                 playmidi
+    609a     609a      453     1         digestMidi.lto.o:(.text.playmiditype0)
+    609a     609a      453     1                 playmiditype0
+    64ed     64ed       20     1         digestMidi.lto.o:(.text.setTimer0)
+    64ed     64ed       20     1                 setTimer0
+    650d     650d        6     1         digestMidi.lto.o:(.text.isTimer0Done)
+    650d     650d        6     1                 isTimer0Done
+    6513     6513        e     1         digestMidi.lto.o:(.text.exit)
+    6513     6513        e     1                 exit
+    6521     6521        2     1         digestMidi.lto.o:(.text._Exit)
+    6521     6521        2     1                 _Exit
+    6523     6523      218     1         digestMidi.lto.o:(.text.vfprintf)
+    6523     6523      218     1                 vfprintf
+    673b     673b      b44     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    673b     673b      b44     1                 (anonymous namespace)::print(char const*, Status*)
+    727f     727f       e1     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    727f     727f       e1     1                 (anonymous namespace)::put(char, Status*)
+    7360     7360      174     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    7360     7360      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    74d4     74d4       57     1         digestMidi.lto.o:(.text.printf)
+    74d4     74d4       57     1                 printf
+    752b     752b      29c     1         digestMidi.lto.o:(.text.vsnprintf)
+    752b     752b      29c     1                 vsnprintf
+    77c7     77c7       4a     1         digestMidi.lto.o:(.text.sprintf)
+    77c7     77c7       4a     1                 sprintf
+    7811     7811        3     1         digestMidi.lto.o:(.text.fputc)
+    7811     7811        3     1                 fputc
+    7814     7814       28     1         digestMidi.lto.o:(.text.putchar)
+    7814     7814       28     1                 putchar
+    783c     783c        7     1         digestMidi.lto.o:(.text.putchar_wrapper)
+    783c     783c        7     1                 putchar_wrapper
+    7843     7843        3     1         digestMidi.lto.o:(.text.putc)
+    7843     7843        3     1                 putc
+    7846     7846        b     1         digestMidi.lto.o:(.text.__from_ascii)
+    7846     7846        b     1                 __from_ascii
+    7851     7851      100     1         digestMidi.lto.o:(.text.malloc)
+    7851     7851      100     1                 malloc
+    7951     7951       b6     1         digestMidi.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
+    7951     7951       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
+    7a07     7a07      186     1         digestMidi.lto.o:(.text.free)
+    7a07     7a07      186     1                 free
+    7b8d     7b8d       2c     1         digestMidi.lto.o:(.text.memcpy)
+    7b8d     7b8d       2c     1                 memcpy
+    7bb9     7bb9       20     1         digestMidi.lto.o:(.text.__memset)
+    7bb9     7bb9       20     1                 __memset
+    7bd9     7bd9       3b     1         digestMidi.lto.o:(.text.strcpy)
+    7bd9     7bd9       3b     1                 strcpy
+    7c14     7c14       39     1         digestMidi.lto.o:(.text.strlen)
+    7c14     7c14       39     1                 strlen
+    7c4d     7c4d       74     1         digestMidi.lto.o:(.text.strstr)
+    7c4d     7c4d       74     1                 strstr
+    7cc1     7cc1       6e     1         digestMidi.lto.o:(.text.__simple_strtoui)
+    7cc1     7cc1       6e     1                 __simple_strtoui
+    7d2f     7d2f       1f     1         digestMidi.lto.o:(.text.__ashldi3)
+    7d2f     7d2f       1f     1                 __ashldi3
+    7d4e     7d4e       1f     1         digestMidi.lto.o:(.text.__lshrdi3)
+    7d4e     7d4e       1f     1                 __lshrdi3
+    7d6d     7d6d       32     1         digestMidi.lto.o:(.text.__mulhi3)
+    7d6d     7d6d       32     1                 __mulhi3
+    7d9f     7d9f       70     1         digestMidi.lto.o:(.text.__mulsi3)
+    7d9f     7d9f       70     1                 __mulsi3
+    7e0f     7e0f       f8     1         digestMidi.lto.o:(.text.__muldi3)
+    7e0f     7e0f       f8     1                 __muldi3
+    7f07     7f07       c0     1         digestMidi.lto.o:(.text.__udivhi3)
+    7f07     7f07       c0     1                 __udivhi3
+    7fc7     7fc7      16f     1         digestMidi.lto.o:(.text.__udivsi3)
+    7fc7     7fc7      16f     1                 __udivsi3
+    8136     8136     13e4     1         digestMidi.lto.o:(.text.__muldf3)
+    8136     8136     13e4     1                 __muldf3
+    951a     951a       83     1         digestMidi.lto.o:(.text.__fixunsdfsi)
+    951a     951a       83     1                 __fixunsdfsi
+    959d     959d      284     1         digestMidi.lto.o:(.text.__floatunsidf)
+    959d     959d      284     1                 __floatunsidf
+    9821     9821        0     1         __init_array_start = .
+    9821     9821        0     1         __init_array_end = .
+    9821     9821        0     1         __fini_array_start = .
+    9821     9821        0     1         __fini_array_end = .
+    9821     9821      8d5     1 .rodata
+    9821     9821       4c     1         digestMidi.lto.o:(.rodata.dealKeyPressed)
+    986d     986d       16     1         digestMidi.lto.o:(.rodata.fileReadDir)
+    9883     9883      100     1         digestMidi.lto.o:(.rodata.parse)
+    9983     9983       3a     1         digestMidi.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    99bd     99bd      739     1         <internal>:(.rodata.str1.1)
+    a0f6     a0f6       20     1 .data
+    a0f6     a0f6        0     1         __data_start = .
+    a0f6     a0f6       20     1         digestMidi.lto.o:(.data.helpScreen)
+    a0f6     a0f6       20     1                 helpScreen
+    a116     a116        0     1         __data_end = .
+    a116     a116        0     1 __data_load_start = LOADADDR(.data)
+    a116     a116        0     1 __data_size = SIZEOF(.data)
+    a116     a116      9b6     1 .bss
+    a116     a116        0     1         __bss_start = .
+    a116     a116       40     1         digestMidi.lto.o:(.bss._spriteCtl)
+    a116     a116       40     1                 _spriteCtl
+    a156     a156      102     1         digestMidi.lto.o:(.bss.fileReadDir.fileDirEntS)
+    a156     a156      102     1                 fileReadDir.fileDirEntS
+    a258     a258      800     1         digestMidi.lto.o:(.bss.midiFileNames)
+    a258     a258      800     1                 midiFileNames
+    aa58     aa58       40     1         digestMidi.lto.o:(.bss.isDimPresent)
+    aa58     aa58       40     1                 isDimPresent
+    aa98     aa98       34     1         digestMidi.lto.o:(.bss.myRecord)
+    aa98     aa98       34     1                 myRecord
+    aacc     aacc        0     1         __bss_end = .
+    aacc     aacc        0     1 __bss_size = SIZEOF(.bss)
+    aacc     aacc        0     1 .noinit
+    aacc     aacc        0     1         __heap_start = ALIGN(., 2)
+    aacc     aacc        0     1 end_block8 = .
+    aacc     aacc        0     1 end_block9 = .
+    aacc     aacc        0     1 end_block10 = .
+    aacc     aacc        0     1 end_block11 = .
+    aacc     aacc        0     1 end_block12 = .
+    aacc     aacc        0     1 end_block13 = .
+    aacc     aacc        0     1 end_block14 = .
+    aacc     aacc        0     1 end_block15 = .
+    aacc     aacc        0     1 end_block16 = .
+    aacc     aacc        0     1 end_block17 = .
+    aacc     aacc        0     1 end_block18 = .
+    aacc     aacc        0     1 end_block19 = .
+    aacc     aacc        0     1 end_block20 = .
+    aacc     aacc        0     1 end_block21 = .
+    aacc     aacc        0     1 end_block22 = .
+    aacc     aacc        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      d90     4 .symtab
-       0        0      d90     4         <internal>:(.symtab)
+       0        0      db0     4 .symtab
+       0        0      db0     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      a8f     1 .strtab
-       0        0      a8f     1         <internal>:(.strtab)
+       0        0      aa3     1 .strtab
+       0        0      aa3     1         <internal>:(.strtab)

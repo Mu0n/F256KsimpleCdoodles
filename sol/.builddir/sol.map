@@ -1,0 +1,209 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+      30      300       35     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       35     1         sol.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        1     1                 _MAX_COL
+      61      331        1     1                 _MAX_ROW
+      62      332        1     1                 _ccolor
+      63      333        2     1                 stdout
+      65      335        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      65      335        0     1 __zp_data_size = SIZEOF(.zp.data)
+      65       65       62     1 .zp.bss
+      65       65        0     1         __zp_bss_start = .
+      65       65       62     1         sol.lto.o:(.zp.bss)
+      65       65        2     1                 kernelArgs
+      67       67        1     1                 _col
+      68       68        1     1                 _row
+      69       69        c     1                 _BITMAP_BASE
+      75       75        1     1                 _active
+      76       76        1     1                 _color
+      77       77        1     1                 _MAX_X
+      78       78        1     1                 _MAX_Y
+      79       79        3     1                 _BITMAP_CLUT
+      7c       7c        3     1                 _tileSize
+      7f       7f       40     1                 _spriteCtl
+      bf       bf        8     1                 _dirStream
+      c7       c7        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      c7       c7        b     1 .zp
+      c7       c7        b     1         sol.lto.o:(.zp.noinit)
+     336      336     194c     2 .text
+     336      336        0     1         _init = .
+     336      336        0     1         _start = .
+     336      336        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     336      336        0     1                 __do_init_stack
+     33e      33e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     33e      33e        0     1                 __do_zero_bss
+     341      341        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     341      341        0     1                 __do_zero_zp_bss
+     344      344        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     344      344        0     1                 __do_copy_zp_data
+     347      347        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     34a      34a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     34a      34a        0     1                 __after_main
+     34d      34d        0     1         _fini = .
+     34d      34d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     34e      34e        3     2         sol.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     34e      34e        3     1                 __impl::VarInt::make(void*, char)
+     352      352        d     2         sol.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     352      352        d     1                 __impl::VarInt::high_bit() const
+     360      360        d     2         sol.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     360      360        d     1                 __impl::VarInt::negative() const
+     36e      36e       47     2         sol.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     36e      36e       47     1                 __impl::VarInt::negate()
+     3b6      3b6       3b     2         sol.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     3b6      3b6       3b     1                 __impl::VarInt::shl()
+     3f1      3f1        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     3f1      3f1        0     1                 __call_indir
+     3f4      3f4       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     3f4      3f4       13     1                 __zero_bss
+     407      407       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     407      407       13     1                 __zero_zp_bss
+     41a      41a       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     41a      41a       17     1                 __copy_zp_data
+     431      431      17b     1         sol.lto.o:(.text.f256Init)
+     431      431      17b     1                 f256Init
+     5ac      5ac      173     1         sol.lto.o:(.text.textReset)
+     5ac      5ac      173     1                 textReset
+     71f      71f      156     1         sol.lto.o:(.text.bitmapReset)
+     71f      71f      156     1                 bitmapReset
+     875      875       61     1         sol.lto.o:(.text.main)
+     875      875       61     1                 main
+     8d6      8d6      25a     1         sol.lto.o:(.text.textPrint)
+     8d6      8d6      25a     1                 textPrint
+     b30      b30        e     1         sol.lto.o:(.text.__putchar)
+     b30      b30        e     1                 __putchar
+     b3e      b3e        e     1         sol.lto.o:(.text.exit)
+     b3e      b3e        e     1                 exit
+     b4c      b4c        2     1         sol.lto.o:(.text._Exit)
+     b4c      b4c        2     1                 _Exit
+     b4e      b4e      218     1         sol.lto.o:(.text.vfprintf)
+     b4e      b4e      218     1                 vfprintf
+     d66      d66      b44     1         sol.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+     d66      d66      b44     1                 (anonymous namespace)::print(char const*, Status*)
+    18aa     18aa       e1     1         sol.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    18aa     18aa       e1     1                 (anonymous namespace)::put(char, Status*)
+    198b     198b      174     1         sol.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    198b     198b      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1aff     1aff       57     1         sol.lto.o:(.text.printf)
+    1aff     1aff       57     1                 printf
+    1b56     1b56        3     1         sol.lto.o:(.text.fputc)
+    1b56     1b56        3     1                 fputc
+    1b59     1b59       28     1         sol.lto.o:(.text.putchar)
+    1b59     1b59       28     1                 putchar
+    1b81     1b81        7     1         sol.lto.o:(.text.putchar_wrapper)
+    1b81     1b81        7     1                 putchar_wrapper
+    1b88     1b88        3     1         sol.lto.o:(.text.putc)
+    1b88     1b88        3     1                 putc
+    1b8b     1b8b        b     1         sol.lto.o:(.text.__from_ascii)
+    1b8b     1b8b        b     1                 __from_ascii
+    1b96     1b96       2c     1         sol.lto.o:(.text.memcpy)
+    1b96     1b96       2c     1                 memcpy
+    1bc2     1bc2       20     1         sol.lto.o:(.text.__memset)
+    1bc2     1bc2       20     1                 __memset
+    1be2     1be2       6e     1         sol.lto.o:(.text.__simple_strtoui)
+    1be2     1be2       6e     1                 __simple_strtoui
+    1c50     1c50       32     1         sol.lto.o:(.text.__mulhi3)
+    1c50     1c50       32     1                 __mulhi3
+    1c82     1c82        0     1         __init_array_start = .
+    1c82     1c82        0     1         __init_array_end = .
+    1c82     1c82        0     1         __fini_array_start = .
+    1c82     1c82        0     1         __fini_array_end = .
+    1c82     1c82       3f     1 .rodata
+    1c82     1c82       3a     1         sol.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    1cbc     1cbc        5     1         <internal>:(.rodata.str1.1)
+    1cc1     1cc1        0     1 .data
+    1cc1     1cc1        0     1         __data_start = .
+    1cc1     1cc1        0     1         __data_end = .
+    1cc1     1cc1        0     1 __data_load_start = LOADADDR(.data)
+    1cc1     1cc1        0     1 __data_size = SIZEOF(.data)
+    1cc1     1cc1        a     1 .bss
+    1cc1     1cc1        0     1         __bss_start = .
+    1cc1     1cc1        7     1         sol.lto.o:(.bss.kernelEventData)
+    1cc1     1cc1        7     1                 kernelEventData
+    1cc8     1cc8        1     1         sol.lto.o:(.bss.kernelError)
+    1cc8     1cc8        1     1                 kernelError
+    1cc9     1cc9        2     1         sol.lto.o:(.bss.__putchar.s)
+    1cc9     1cc9        2     1                 __putchar.s
+    1ccb     1ccb        0     1         __bss_end = .
+    1ccb     1ccb        0     1 __bss_size = SIZEOF(.bss)
+    1ccb     1ccb        0     1 .noinit
+    1ccb     1ccb        0     1         __heap_start = ALIGN(., 2)
+    1ccb     1ccb        0     1 end_block8 = .
+    1ccb     1ccb        0     1 end_block9 = .
+    1ccb     1ccb        0     1 end_block10 = .
+    1ccb     1ccb        0     1 end_block11 = .
+    1ccb     1ccb        0     1 end_block12 = .
+    1ccb     1ccb        0     1 end_block13 = .
+    1ccb     1ccb        0     1 end_block14 = .
+    1ccb     1ccb        0     1 end_block15 = .
+    1ccb     1ccb        0     1 end_block16 = .
+    1ccb     1ccb        0     1 end_block17 = .
+    1ccb     1ccb        0     1 end_block18 = .
+    1ccb     1ccb        0     1 end_block19 = .
+    1ccb     1ccb        0     1 end_block20 = .
+    1ccb     1ccb        0     1 end_block21 = .
+    1ccb     1ccb        0     1 end_block22 = .
+    1ccb     1ccb        0     1 end_block23 = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      960     4 .symtab
+       0        0      960     4         <internal>:(.symtab)
+       0        0       5a     1 .shstrtab
+       0        0       5a     1         <internal>:(.shstrtab)
+       0        0      6e2     1 .strtab
+       0        0      6e2     1         <internal>:(.strtab)

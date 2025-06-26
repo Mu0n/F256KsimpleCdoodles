@@ -63,202 +63,351 @@
        0        0        0     1 __pianopal_size = 0x3fc
        0        0        0     1 __keys_lma = 0x30400
        0        0        0     1 __keys_size = 0x12c00
-      30      300       64     1 .zp.data
+      30      300       5b     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       64     1         modu.lto.o:(.zp.data)
-      30      300       58     1                 noteColors
-      88      358        6     1                 polyPSGChanBits
-      8e      35e        6     1                 voiceMap
-      94      364        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      94      364        0     1 __zp_data_size = SIZEOF(.zp.data)
-      94       94       38     1 .zp.bss
-      94       94        0     1         __zp_bss_start = .
-      94       94       38     1         modu.lto.o:(.zp.bss)
-      94       94        7     1                 kernelEventData
-      9b       9b        1     1                 _col
-      9c       9c        1     1                 _row
-      9d       9d        2     1                 __putchar.s
-      9f       9f        1     1                 diaAct.0
-      a0       a0        1     1                 sliAct.0
-      a1       a1        1     1                 polyTimer.1
-      a2       a2        2     1                 mX
-      a4       a4        2     1                 mY
-      a6       a6        2     1                 oldMX
-      a8       a8        2     1                 oldMY
-      aa       aa        1     1                 chipAct.0
-      ab       ab        1     1                 chipAct.1
-      ac       ac        1     1                 chipAct.2
-      ad       ad        1     1                 chipAct.3
-      ae       ae        1     1                 chipAct.4
-      af       af        6     1                 polySIDBuffer
-      b5       b5        6     1                 reservedSID
-      bb       bb        6     1                 polyPSGBuffer
-      c1       c1        9     1                 polyOPL3Buffer
-      ca       ca        2     1                 gPtr
-      cc       cc        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      cc       cc       24     1 .zp
-      cc       cc       24     1         modu.lto.o:(.zp.noinit)
-     364      364     5896     2 .text
-     364      364        0     1         _init = .
-     364      364        0     1         _start = .
-     364      364        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     364      364        0     1                 __do_init_stack
-     36c      36c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     36c      36c        0     1                 __do_zero_bss
-     36f      36f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     36f      36f        0     1                 __do_zero_zp_bss
-     372      372        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     372      372        0     1                 __do_copy_zp_data
-     375      375        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     378      378        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     378      378        0     1                 __after_main
-     37b      37b        0     1         _fini = .
-     37b      37b        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     37c      37c      13d     2         modu.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     37c      37c      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     4b9      4b9       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     4b9      4b9       13     1                 __zero_bss
-     4cc      4cc       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     4cc      4cc       13     1                 __zero_zp_bss
-     4df      4df       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     4df      4df       17     1                 __copy_zp_data
-     4f6      4f6      3e1     1         modu.lto.o:(.text.f256Init)
-     4f6      4f6      3e1     1                 f256Init
-     8d7      8d7        6     1         modu.lto.o:(.text.main)
-     8d7      8d7        6     1                 main
-     8dd      8dd     18b6     1         modu.lto.o:(.text.f256main)
-     8dd      8dd     18b6     1                 f256main
-    2193     2193      859     1         modu.lto.o:(.text.checkUIEClick)
-    2193     2193      859     1                 checkUIEClick
-    29ec     29ec       d7     1         modu.lto.o:(.text.textLayerGen)
-    29ec     29ec       d7     1                 textLayerGen
-    2ac3     2ac3      1b8     1         modu.lto.o:(.text.textPrint)
-    2ac3     2ac3      1b8     1                 textPrint
-    2c7b     2c7b      fe4     1         modu.lto.o:(.text.loadGUISID)
-    2c7b     2c7b      fe4     1                 loadGUISID
-    3c5f     3c5f       8d     1         modu.lto.o:(.text.bitmapClear)
-    3c5f     3c5f       8d     1                 bitmapClear
-    3cec     3cec       86     1         modu.lto.o:(.text.spriteDefine)
-    3cec     3cec       86     1                 spriteDefine
-    3d72     3d72       d1     1         modu.lto.o:(.text.updateRadioB)
-    3d72     3d72       d1     1                 updateRadioB
-    3e43     3e43       fa     1         modu.lto.o:(.text.setRadioB)
-    3e43     3e43       fa     1                 setRadioB
-    3f3d     3f3d      358     1         modu.lto.o:(.text.updateDial)
-    3f3d     3f3d      358     1                 updateDial
-    4295     4295      3ca     1         modu.lto.o:(.text.updateSlider)
-    4295     4295      3ca     1                 updateSlider
-    465f     465f       88     1         modu.lto.o:(.text.sid_setInstrument)
-    465f     465f       88     1                 sid_setInstrument
-    46e7     46e7        5     1         modu.lto.o:(.text.exit)
-    46e7     46e7        5     1                 exit
-    46ec     46ec       df     1         modu.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    46ec     46ec       df     1                 (anonymous namespace)::put(char, Status*)
-    47cb     47cb      142     1         modu.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    47cb     47cb      142     1                 (anonymous namespace)::print_string(char const*, Status*)
-    490d     490d      d80     1         modu.lto.o:(.text.printf)
-    490d     490d      d80     1                 printf
-    568d     568d      2be     1         modu.lto.o:(.text.malloc)
-    568d     568d      2be     1                 malloc
-    594b     594b       2c     1         modu.lto.o:(.text.memcpy)
-    594b     594b       2c     1                 memcpy
-    5977     5977       20     1         modu.lto.o:(.text.__memset)
-    5977     5977       20     1                 __memset
-    5997     5997       13     1         modu.lto.o:(.text.__ashlhi3)
-    5997     5997       13     1                 __ashlhi3
-    59aa     59aa       13     1         modu.lto.o:(.text.__lshrhi3)
-    59aa     59aa       13     1                 __lshrhi3
-    59bd     59bd       32     1         modu.lto.o:(.text.__mulhi3)
-    59bd     59bd       32     1                 __mulhi3
-    59ef     59ef       70     1         modu.lto.o:(.text.__mulsi3)
-    59ef     59ef       70     1                 __mulsi3
-    5a5f     5a5f       c0     1         modu.lto.o:(.text.__udivhi3)
-    5a5f     5a5f       c0     1                 __udivhi3
-    5b1f     5b1f       db     1         modu.lto.o:(.text.__udivmodhi4)
-    5b1f     5b1f       db     1                 __udivmodhi4
-    5bfa     5bfa        0     1         __init_array_start = .
-    5bfa     5bfa        0     1         __init_array_end = .
-    5bfa     5bfa        0     1         __fini_array_start = .
-    5bfa     5bfa        0     1         __fini_array_end = .
-    5bfa     5bfa      38e     1 .rodata
-    5bfa     5bfa        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    5bfa     5bfa        0     1                 __set_v
-    5bfb     5bfb       22     1         modu.lto.o:(.rodata.f256main)
-    5c1d     5c1d       72     1         modu.lto.o:(.rodata.checkUIEClick)
-    5c8f     5c8f       3a     1         modu.lto.o:(.rodata.printf)
-    5cc9     5cc9       30     1         modu.lto.o:(.rodata.textColors)
-    5cc9     5cc9       30     1                 textColors
-    5cf9     5cf9       40     1         modu.lto.o:(.rodata.sidSpriteAction)
-    5cf9     5cf9       40     1                 sidSpriteAction
-    5d39     5d39      114     1         <internal>:(.rodata.str1.1)
-    5e4d     5e4d       18     1         modu.lto.o:(.rodata.opl3_fnums)
-    5e4d     5e4d       18     1                 opl3_fnums
-    5e65     5e65       40     1         modu.lto.o:(.rodata.psgLow)
-    5e65     5e65       40     1                 psgLow
-    5ea5     5ea5       40     1         modu.lto.o:(.rodata.psgHigh)
-    5ea5     5ea5       40     1                 psgHigh
-    5ee5     5ee5       37     1         modu.lto.o:(.rodata.sid_instrument_defs)
-    5ee5     5ee5       37     1                 sid_instrument_defs
-    5f1c     5f1c       60     1         modu.lto.o:(.rodata.sidLow)
-    5f1c     5f1c       60     1                 sidLow
-    5f7c     5f7c        c     1         modu.lto.o:(.rodata.chipMap)
-    5f7c     5f7c        c     1                 chipMap
-    5f88     5f88        0     1 .data
-    5f88     5f88        0     1         __data_start = .
-    5f88     5f88        0     1         __data_end = .
-    5f88     5f88        0     1 __data_load_start = LOADADDR(.data)
-    5f88     5f88        0     1 __data_size = SIZEOF(.data)
-    5f88     5f88      5d5     1 .bss
-    5f88     5f88        0     1         __bss_start = .
-    5f88     5f88        1     1         modu.lto.o:(.bss.kernelError)
-    5f88     5f88        1     1                 kernelError
-    5f89     5f89        c     1         modu.lto.o:(.bss._BITMAP_BASE)
-    5f89     5f89        c     1                 _BITMAP_BASE
-    5f95     5f95        1     1         modu.lto.o:(.bss._active)
-    5f95     5f95        1     1                 _active
-    5f96     5f96        1     1         modu.lto.o:(.bss._color)
-    5f96     5f96        1     1                 _color
-    5f97     5f97        1     1         modu.lto.o:(.bss._BITMAP_CLUT.1)
-    5f97     5f97        1     1                 _BITMAP_CLUT.1
-    5f98     5f98        1     1         modu.lto.o:(.bss._tileSize.0)
-    5f98     5f98        1     1                 _tileSize.0
-    5f99     5f99       40     1         modu.lto.o:(.bss._spriteCtl)
-    5f99     5f99       40     1                 _spriteCtl
-    5fd9     5fd9      13b     1         modu.lto.o:(.bss.radios)
-    5fd9     5fd9      13b     1                 radios
-    6114     6114       f0     1         modu.lto.o:(.bss.sliders)
-    6114     6114       f0     1                 sliders
-    6204     6204      1b0     1         modu.lto.o:(.bss.dials)
-    6204     6204      1b0     1                 dials
-    63b4     63b4      1a4     1         modu.lto.o:(.bss.lights)
-    63b4     63b4      1a4     1                 lights
-    6558     6558        1     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    6558     6558        1     1                 (anonymous namespace)::initialized
-    6559     6559        2     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    6559     6559        2     1                 (anonymous namespace)::free_size
-    655b     655b        2     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    655b     655b        2     1                 (anonymous namespace)::free_list
-    655d     655d        0     1         __bss_end = .
-    655d     655d        0     1 __bss_size = SIZEOF(.bss)
-    655d     655d       2c     1 .noinit
-    655d     655d       2c     1         modu.lto.o:(.noinit..Lstatic_stack)
-    6589     6589        0     1         __heap_start = ALIGN(., 2)
-    6589     6589        0     1 end_block8 = .
-    6589     6589        0     1 end_block9 = .
-    6589     6589        0     1 end_block10 = .
-    6589     6589        0     1 end_block11 = .
-    6589     6589        0     1 end_block12 = .
-    6589     6589        0     1 end_block13 = .
-    6589     6589        0     1 end_block14 = .
-    6589     6589        0     1 end_block15 = .
-    6589     6589        0     1 end_block16 = .
-    6589     6589        0     1 end_block17 = .
-    6589     6589        0     1 end_block18 = .
-    6589     6589        0     1 end_block19 = .
-    6589     6589        0     1 end_block20 = .
-    6589     6589        0     1 end_block21 = .
-    6589     6589        0     1 end_block22 = .
-    6589     6589        0     1 end_block23 = .
+      30      300       5b     1         modu.lto.o:(.zp.data)
+      30      300        1     1                 _MAX_COL
+      31      301        1     1                 _MAX_ROW
+      32      302        1     1                 _ccolor
+      33      303       58     1                 noteColors
+      8b      35b        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      8b      35b        0     1 __zp_data_size = SIZEOF(.zp.data)
+      8b       8b       58     1 .zp.bss
+      8b       8b        0     1         __zp_bss_start = .
+      8b       8b       58     1         modu.lto.o:(.zp.bss)
+      8b       8b        7     1                 kernelEventData
+      92       92        1     1                 _col
+      93       93        1     1                 _row
+      94       94        1     1                 _color
+      95       95        3     1                 polyTimer
+      98       98        2     1                 mX
+      9a       9a        2     1                 mY
+      9c       9c        2     1                 oldMX
+      9e       9e        2     1                 oldMY
+      a0       a0        5     1                 chipAct
+      a5       a5        6     1                 polySIDBuffer
+      ab       ab        6     1                 reservedSID
+      b1       b1        6     1                 polyPSGBuffer
+      b7       b7        6     1                 reservedPSG
+      bd       bd       12     1                 polyOPL3Buffer
+      cf       cf       12     1                 reservedOPL3
+      e1       e1        2     1                 gPtr
+      e3       e3        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      e3       e3        d     1 .zp
+      e3       e3        d     1         modu.lto.o:(.zp.noinit)
+     35c      35c     65b1     2 .text
+     35c      35c        0     1         _init = .
+     35c      35c        0     1         _start = .
+     35c      35c        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     35c      35c        0     1                 __do_init_stack
+     364      364        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     364      364        0     1                 __do_zero_bss
+     367      367        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     367      367        0     1                 __do_zero_zp_bss
+     36a      36a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     36a      36a        0     1                 __do_copy_zp_data
+     36d      36d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     370      370        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     370      370        0     1                 __after_main
+     373      373        0     1         _fini = .
+     373      373        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     374      374      13d     2         modu.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     374      374      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     4b2      4b2       df     2         modu.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     4b2      4b2       df     1                 (anonymous namespace)::FreeChunk::remove()
+     592      592        3     2         modu.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     592      592        3     1                 __impl::VarInt::make(void*, char)
+     596      596        d     2         modu.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     596      596        d     1                 __impl::VarInt::high_bit() const
+     5a4      5a4        d     2         modu.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     5a4      5a4        d     1                 __impl::VarInt::negative() const
+     5b2      5b2       47     2         modu.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     5b2      5b2       47     1                 __impl::VarInt::negate()
+     5fa      5fa       3b     2         modu.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     5fa      5fa       3b     1                 __impl::VarInt::shl()
+     635      635        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     635      635        0     1                 __call_indir
+     638      638       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     638      638       13     1                 __zero_bss
+     64b      64b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     64b      64b       13     1                 __zero_zp_bss
+     65e      65e       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     65e      65e       17     1                 __copy_zp_data
+     675      675      18f     1         modu.lto.o:(.text.f256Init)
+     675      675      18f     1                 f256Init
+     804      804      176     1         modu.lto.o:(.text.textReset)
+     804      804      176     1                 textReset
+     97a      97a      170     1         modu.lto.o:(.text.bitmapReset)
+     97a      97a      170     1                 bitmapReset
+     aea      aea       29     1         modu.lto.o:(.text.FAR_POKEW)
+     aea      aea       29     1                 FAR_POKEW
+     b13      b13        6     1         modu.lto.o:(.text.main)
+     b13      b13        6     1                 main
+     b19      b19      964     1         modu.lto.o:(.text.f256main)
+     b19      b19      964     1                 f256main
+    147d     147d      1b0     1         modu.lto.o:(.text.setup)
+    147d     147d      1b0     1                 setup
+    162d     162d      11b     1         modu.lto.o:(.text.updateChip)
+    162d     162d      11b     1                 updateChip
+    1748     1748      1da     1         modu.lto.o:(.text.updateChipDial)
+    1748     1748      1da     1                 updateChipDial
+    1922     1922      33a     1         modu.lto.o:(.text.checkUIClicks)
+    1922     1922      33a     1                 checkUIClicks
+    1c5c     1c5c      754     1         modu.lto.o:(.text.dispatchAction)
+    1c5c     1c5c      754     1                 dispatchAction
+    23b0     23b0       df     1         modu.lto.o:(.text.textLayerGen)
+    23b0     23b0       df     1                 textLayerGen
+    248f     248f      25a     1         modu.lto.o:(.text.textPrint)
+    248f     248f      25a     1                 textPrint
+    26e9     26e9      c63     1         modu.lto.o:(.text.loadGUISID)
+    26e9     26e9      c63     1                 loadGUISID
+    334c     334c      11d     1         modu.lto.o:(.text.loadGUIOPL)
+    334c     334c      11d     1                 loadGUIOPL
+    3469     3469      1f0     1         modu.lto.o:(.text.textLayerSID)
+    3469     3469      1f0     1                 textLayerSID
+    3659     3659      2cb     1         modu.lto.o:(.text.backgroundSetup)
+    3659     3659      2cb     1                 backgroundSetup
+    3924     3924       91     1         modu.lto.o:(.text.spriteDefine)
+    3924     3924       91     1                 spriteDefine
+    39b5     39b5       47     1         modu.lto.o:(.text.spriteSetPosition)
+    39b5     39b5       47     1                 spriteSetPosition
+    39fc     39fc       23     1         modu.lto.o:(.text.spriteSetVisible)
+    39fc     39fc       23     1                 spriteSetVisible
+    3a1f     3a1f        e     1         modu.lto.o:(.text.__putchar)
+    3a1f     3a1f        e     1                 __putchar
+    3a2d     3a2d       9d     1         modu.lto.o:(.text.setGeneric)
+    3a2d     3a2d       9d     1                 setGeneric
+    3aca     3aca       bd     1         modu.lto.o:(.text.updateRadioB)
+    3aca     3aca       bd     1                 updateRadioB
+    3b87     3b87      10e     1         modu.lto.o:(.text.setRadioB)
+    3b87     3b87      10e     1                 setRadioB
+    3c95     3c95      348     1         modu.lto.o:(.text.updateDial)
+    3c95     3c95      348     1                 updateDial
+    3fdd     3fdd      16c     1         modu.lto.o:(.text.setDial)
+    3fdd     3fdd      16c     1                 setDial
+    4149     4149      34f     1         modu.lto.o:(.text.updateSlider)
+    4149     4149      34f     1                 updateSlider
+    4498     4498       ba     1         modu.lto.o:(.text.setSlider)
+    4498     4498       ba     1                 setSlider
+    4552     4552       a7     1         modu.lto.o:(.text.updateLighter)
+    4552     4552       a7     1                 updateLighter
+    45f9     45f9       a3     1         modu.lto.o:(.text.setLighter)
+    45f9     45f9       a3     1                 setLighter
+    469c     469c       64     1         modu.lto.o:(.text.setATile)
+    469c     469c       64     1                 setATile
+    4700     4700        f     1         modu.lto.o:(.text.resetGlobals)
+    4700     4700        f     1                 resetGlobals
+    470f     470f      4ee     1         modu.lto.o:(.text.dispatchNote)
+    470f     470f      4ee     1                 dispatchNote
+    4bfd     4bfd       20     1         modu.lto.o:(.text.midiNoteOff)
+    4bfd     4bfd       20     1                 midiNoteOff
+    4c1d     4c1d       20     1         modu.lto.o:(.text.midiNoteOn)
+    4c1d     4c1d       20     1                 midiNoteOn
+    4c3d     4c3d        4     1         modu.lto.o:(.text.hideMouse)
+    4c3d     4c3d        4     1                 hideMouse
+    4c41     4c41        6     1         modu.lto.o:(.text.showMouse)
+    4c41     4c41        6     1                 showMouse
+    4c47     4c47       12     1         modu.lto.o:(.text.prepMouse)
+    4c47     4c47       12     1                 prepMouse
+    4c59     4c59       68     1         modu.lto.o:(.text.opl3_initialize)
+    4c59     4c59       68     1                 opl3_initialize
+    4cc1     4cc1      1cb     1         modu.lto.o:(.text.opl3_setInstrument)
+    4cc1     4cc1      1cb     1                 opl3_setInstrument
+    4e8c     4e8c       d2     1         modu.lto.o:(.text.opl3_setInstrumentAllChannels)
+    4e8c     4e8c       d2     1                 opl3_setInstrumentAllChannels
+    4f5e     4f5e       8e     1         modu.lto.o:(.text.opl3_note)
+    4f5e     4f5e       8e     1                 opl3_note
+    4fec     4fec       20     1         modu.lto.o:(.text.psgNoteOn)
+    4fec     4fec       20     1                 psgNoteOn
+    500c     500c        b     1         modu.lto.o:(.text.psgNoteOff)
+    500c     500c        b     1                 psgNoteOff
+    5017     5017        9     1         modu.lto.o:(.text.setMonoPSG)
+    5017     5017        9     1                 setMonoPSG
+    5020     5020       21     1         modu.lto.o:(.text.fetchCtrl)
+    5020     5020       21     1                 fetchCtrl
+    5041     5041       2c     1         modu.lto.o:(.text.clearSIDRegisters)
+    5041     5041       2c     1                 clearSIDRegisters
+    506d     506d       14     1         modu.lto.o:(.text.sidNoteOnOrOff)
+    506d     506d       14     1                 sidNoteOnOrOff
+    5081     5081       13     1         modu.lto.o:(.text.sid_setCTRL)
+    5081     5081       13     1                 sid_setCTRL
+    5094     5094       25     1         modu.lto.o:(.text.sid_setPWM)
+    5094     5094       25     1                 sid_setPWM
+    50b9     50b9       25     1         modu.lto.o:(.text.sid_setFF)
+    50b9     50b9       25     1                 sid_setFF
+    50de     50de        7     1         modu.lto.o:(.text.sid_setModVol)
+    50de     50de        7     1                 sid_setModVol
+    50e5     50e5        7     1         modu.lto.o:(.text.sid_setFILT)
+    50e5     50e5        7     1                 sid_setFILT
+    50ec     50ec       25     1         modu.lto.o:(.text.sid_adsr)
+    50ec     50ec       25     1                 sid_adsr
+    5111     5111       d5     1         modu.lto.o:(.text.sid_set_all)
+    5111     5111       d5     1                 sid_set_all
+    51e6     51e6       3d     1         modu.lto.o:(.text.sid_setV3)
+    51e6     51e6       3d     1                 sid_setV3
+    5223     5223      1aa     1         modu.lto.o:(.text.sid_setInstrumentAllChannels)
+    5223     5223      1aa     1                 sid_setInstrumentAllChannels
+    53cd     53cd        9     1         modu.lto.o:(.text.setMonoSID)
+    53cd     53cd        9     1                 setMonoSID
+    53d6     53d6        e     1         modu.lto.o:(.text.exit)
+    53d6     53d6        e     1                 exit
+    53e4     53e4        2     1         modu.lto.o:(.text._Exit)
+    53e4     53e4        2     1                 _Exit
+    53e6     53e6      218     1         modu.lto.o:(.text.vfprintf)
+    53e6     53e6      218     1                 vfprintf
+    55fe     55fe      b44     1         modu.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    55fe     55fe      b44     1                 (anonymous namespace)::print(char const*, Status*)
+    6142     6142       e1     1         modu.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    6142     6142       e1     1                 (anonymous namespace)::put(char, Status*)
+    6223     6223      174     1         modu.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    6223     6223      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    6397     6397       59     1         modu.lto.o:(.text.printf)
+    6397     6397       59     1                 printf
+    63f0     63f0        3     1         modu.lto.o:(.text.fputc)
+    63f0     63f0        3     1                 fputc
+    63f3     63f3       28     1         modu.lto.o:(.text.putchar)
+    63f3     63f3       28     1                 putchar
+    641b     641b        7     1         modu.lto.o:(.text.putchar_wrapper)
+    641b     641b        7     1                 putchar_wrapper
+    6422     6422        3     1         modu.lto.o:(.text.putc)
+    6422     6422        3     1                 putc
+    6425     6425        b     1         modu.lto.o:(.text.__from_ascii)
+    6425     6425        b     1                 __from_ascii
+    6430     6430      107     1         modu.lto.o:(.text.malloc)
+    6430     6430      107     1                 malloc
+    6537     6537       b9     1         modu.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
+    6537     6537       b9     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
+    65f0     65f0       2c     1         modu.lto.o:(.text.memcpy)
+    65f0     65f0       2c     1                 memcpy
+    661c     661c       20     1         modu.lto.o:(.text.__memset)
+    661c     661c       20     1                 __memset
+    663c     663c       6e     1         modu.lto.o:(.text.__simple_strtoui)
+    663c     663c       6e     1                 __simple_strtoui
+    66aa     66aa       13     1         modu.lto.o:(.text.__ashlhi3)
+    66aa     66aa       13     1                 __ashlhi3
+    66bd     66bd       13     1         modu.lto.o:(.text.__lshrhi3)
+    66bd     66bd       13     1                 __lshrhi3
+    66d0     66d0       32     1         modu.lto.o:(.text.__mulhi3)
+    66d0     66d0       32     1                 __mulhi3
+    6702     6702       70     1         modu.lto.o:(.text.__mulsi3)
+    6702     6702       70     1                 __mulsi3
+    6772     6772       c0     1         modu.lto.o:(.text.__udivhi3)
+    6772     6772       c0     1                 __udivhi3
+    6832     6832       db     1         modu.lto.o:(.text.__udivmodhi4)
+    6832     6832       db     1                 __udivmodhi4
+    690d     690d        0     1         __init_array_start = .
+    690d     690d        0     1         __init_array_end = .
+    690d     690d        0     1         __fini_array_start = .
+    690d     690d        0     1         __fini_array_end = .
+    690d     690d      325     1 .rodata
+    690d     690d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    690d     690d        0     1                 __set_v
+    690e     690e       2e     1         modu.lto.o:(.rodata.updateChip)
+    693c     693c       22     1         modu.lto.o:(.rodata.updateChipDial)
+    695e     695e       72     1         modu.lto.o:(.rodata.dispatchAction)
+    69d0     69d0        a     1         modu.lto.o:(.rodata.dispatchNote)
+    69da     69da       3a     1         modu.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    6a14     6a14       b4     1         <internal>:(.rodata.str1.1)
+    6ac8     6ac8       18     1         modu.lto.o:(.rodata.opl3_fnums)
+    6ac8     6ac8       18     1                 opl3_fnums
+    6ae0     6ae0       40     1         modu.lto.o:(.rodata.psgLow)
+    6ae0     6ae0       40     1                 psgLow
+    6b20     6b20       40     1         modu.lto.o:(.rodata.psgHigh)
+    6b20     6b20       40     1                 psgHigh
+    6b60     6b60       60     1         modu.lto.o:(.rodata.sidHigh)
+    6b60     6b60       60     1                 sidHigh
+    6bc0     6bc0       60     1         modu.lto.o:(.rodata.sidLow)
+    6bc0     6bc0       60     1                 sidLow
+    6c20     6c20        6     1         modu.lto.o:(.rodata.voiceMap)
+    6c20     6c20        6     1                 voiceMap
+    6c26     6c26        c     1         modu.lto.o:(.rodata.chipMap)
+    6c26     6c26        c     1                 chipMap
+    6c32     6c32       c2     1 .data
+    6c32     6c32        0     1         __data_start = .
+    6c32     6c32       30     1         modu.lto.o:(.data.textColors)
+    6c32     6c32       30     1                 textColors
+    6c62     6c62       40     1         modu.lto.o:(.data.sidSpriteAction)
+    6c62     6c62       40     1                 sidSpriteAction
+    6ca2     6ca2        6     1         modu.lto.o:(.data.sidChoiceToVoice)
+    6ca2     6ca2        6     1                 sidChoiceToVoice
+    6ca8     6ca8        6     1         modu.lto.o:(.data.polyPSGChanBits)
+    6ca8     6ca8        6     1                 polyPSGChanBits
+    6cae     6cae        b     1         modu.lto.o:(.data.opl3_instrument_defs)
+    6cae     6cae        b     1                 opl3_instrument_defs
+    6cb9     6cb9       37     1         modu.lto.o:(.data.sid_instrument_defs)
+    6cb9     6cb9       37     1                 sid_instrument_defs
+    6cf0     6cf0        2     1         modu.lto.o:(.data.stdout)
+    6cf0     6cf0        2     1                 stdout
+    6cf2     6cf2        2     1         modu.lto.o:(.data._ZN12_GLOBAL__N_110heap_limitE)
+    6cf2     6cf2        2     1                 (anonymous namespace)::heap_limit
+    6cf4     6cf4        0     1         __data_end = .
+    6cf4     6cf4        0     1 __data_load_start = LOADADDR(.data)
+    6cf4     6cf4        0     1 __data_size = SIZEOF(.data)
+    6cf4     6cf4      5f7     1 .bss
+    6cf4     6cf4        0     1         __bss_start = .
+    6cf4     6cf4        2     1         modu.lto.o:(.bss.kernelArgs)
+    6cf4     6cf4        2     1                 kernelArgs
+    6cf6     6cf6        1     1         modu.lto.o:(.bss.kernelError)
+    6cf6     6cf6        1     1                 kernelError
+    6cf7     6cf7        c     1         modu.lto.o:(.bss._BITMAP_BASE)
+    6cf7     6cf7        c     1                 _BITMAP_BASE
+    6d03     6d03        1     1         modu.lto.o:(.bss._active)
+    6d03     6d03        1     1                 _active
+    6d04     6d04        1     1         modu.lto.o:(.bss._MAX_X)
+    6d04     6d04        1     1                 _MAX_X
+    6d05     6d05        1     1         modu.lto.o:(.bss._MAX_Y)
+    6d05     6d05        1     1                 _MAX_Y
+    6d06     6d06        3     1         modu.lto.o:(.bss._BITMAP_CLUT)
+    6d06     6d06        3     1                 _BITMAP_CLUT
+    6d09     6d09        3     1         modu.lto.o:(.bss._tileSize)
+    6d09     6d09        3     1                 _tileSize
+    6d0c     6d0c       40     1         modu.lto.o:(.bss._spriteCtl)
+    6d0c     6d0c       40     1                 _spriteCtl
+    6d4c     6d4c        8     1         modu.lto.o:(.bss._dirStream)
+    6d4c     6d4c        8     1                 _dirStream
+    6d54     6d54        2     1         modu.lto.o:(.bss.__putchar.s)
+    6d54     6d54        2     1                 __putchar.s
+    6d56     6d56      13b     1         modu.lto.o:(.bss.radios)
+    6d56     6d56      13b     1                 radios
+    6e91     6e91      1a4     1         modu.lto.o:(.bss.lights)
+    6e91     6e91      1a4     1                 lights
+    7035     7035       f0     1         modu.lto.o:(.bss.sliders)
+    7035     7035       f0     1                 sliders
+    7125     7125      1b0     1         modu.lto.o:(.bss.dials)
+    7125     7125      1b0     1                 dials
+    72d5     72d5        8     1         modu.lto.o:(.bss.diaAct)
+    72d5     72d5        8     1                 diaAct
+    72dd     72dd        8     1         modu.lto.o:(.bss.sliAct)
+    72dd     72dd        8     1                 sliAct
+    72e5     72e5        1     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    72e5     72e5        1     1                 (anonymous namespace)::initialized
+    72e6     72e6        1     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    72e6     72e6        1     1                 (anonymous namespace)::last_free
+    72e7     72e7        2     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    72e7     72e7        2     1                 (anonymous namespace)::free_size
+    72e9     72e9        2     1         modu.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    72e9     72e9        2     1                 (anonymous namespace)::free_list
+    72eb     72eb        0     1         __bss_end = .
+    72eb     72eb        0     1 __bss_size = SIZEOF(.bss)
+    72eb     72eb        b     1 .noinit
+    72eb     72eb        b     1         modu.lto.o:(.noinit..Lstatic_stack)
+    72f6     72f6        0     1         __heap_start = ALIGN(., 2)
+    72f6     72f6        0     1 end_block8 = .
+    72f6     72f6        0     1 end_block9 = .
+    72f6     72f6        0     1 end_block10 = .
+    72f6     72f6        0     1 end_block11 = .
+    72f6     72f6        0     1 end_block12 = .
+    72f6     72f6        0     1 end_block13 = .
+    72f6     72f6        0     1 end_block14 = .
+    72f6     72f6        0     1 end_block15 = .
+    72f6     72f6        0     1 end_block16 = .
+    72f6     72f6        0     1 end_block17 = .
+    72f6     72f6        0     1 end_block18 = .
+    72f6     72f6        0     1 end_block19 = .
+    72f6     72f6        0     1 end_block20 = .
+    72f6     72f6        0     1 end_block21 = .
+    72f6     72f6        0     1 end_block22 = .
+    72f6     72f6        0     1 end_block23 = .
    10000    10000     4000    16 .gui16
    10000    10000     4000    16         modu.lto.o:(.gui16)
    10000    10000        0     1                 gui16_start
@@ -286,9 +435,9 @@
    43000    43000        0     1 end_keys = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      cb0     4 .symtab
-       0        0      cb0     4         <internal>:(.symtab)
+       0        0     1120     4 .symtab
+       0        0     1120     4         <internal>:(.symtab)
        0        0       7c     1 .shstrtab
        0        0       7c     1         <internal>:(.shstrtab)
-       0        0      90e     1 .strtab
-       0        0      90e     1         <internal>:(.strtab)
+       0        0      d2e     1 .strtab
+       0        0      d2e     1         <internal>:(.strtab)

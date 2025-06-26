@@ -17,9 +17,9 @@ uint8_t polyPSGBuffer[6] = {0,0,0,0,0,0};
 uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
 uint8_t reservedPSG[6]={0,0,0,0,0,0};
 
-uint8_t polyOPL3Buffer[9] = {0,0,0,0,0,0,0,0,0};
-uint8_t polyOPL3ChanBits[9]={0,0,0,0,0,0,0,0,0};
-uint8_t reservedOPL3[9]={0,0,0,0,0,0,0,0,0};
+uint8_t polyOPL3Buffer[18] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+uint8_t polyOPL3ChanBits[18]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+uint8_t reservedOPL3[18]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 
 struct glTh *gPtr; 
@@ -162,7 +162,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 		if(isOn) 
 			{
 			if(isBeat) foundFreeChan = channel; //if it's a preset, we already know which channel to target
-			else foundFreeChan = findFreeChannel(polyOPL3Buffer, 9, reservedOPL3);
+			else foundFreeChan = findFreeChannel(polyOPL3Buffer, 18, reservedOPL3);
 			if(foundFreeChan != -1)
 				{
 				opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, true);	
@@ -172,7 +172,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			}
 		else 
 			{
-			foundFreeChan = liberateChannel(note, polyOPL3Buffer, 9);
+			foundFreeChan = liberateChannel(note, polyOPL3Buffer, 18);
 			opl3_note(foundFreeChan, opl3_fnums[(note+5)%12], (note+5)/12-2, false);	
 			polyOPL3Buffer[foundFreeChan] = 0;
 			if(chipAct[4])chipAct[4]--;

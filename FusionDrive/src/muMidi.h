@@ -51,8 +51,9 @@
 #define VS_FIFO_STAT 0xD704   //2 bytes
 #define VS_FIFO_DATA 0xD707
 
-
 #include "f256lib.h"
+
+extern const char *midi_instruments[128];
 
 //keeps track of tempo changes and pre-calculations of usPerTick and usPerTimer0 to make it lighter during parsing
 typedef struct tempoChange{
@@ -77,6 +78,9 @@ typedef struct midiRecord {
 	uint16_t totalSec;
 	uint16_t currentSec;
 	uint8_t  nbTempoChanges; //count of tempo changes to perform during playback
+	uint8_t bpm;
+	uint32_t baseAddr;
+	uint32_t parsedAddr;
 } midiRec, *midiRecPtr;
 
 //the following three structs are for midi event playback. keep every aMIDIEvent's content in far memory
@@ -110,11 +114,8 @@ void midiNoteOff(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
 void midiNoteOn(uint8_t chan, uint8_t note, uint8_t speed, bool wantAlt);
 
 void initVS1053MIDI(void);
-void boostVSClock(void);
-void initMidiRecord(struct midiRecord *);
+void initMidiRecord(struct midiRecord *, uint32_t, uint32_t);
 void initBigList(struct bigParsedEventList *);
 uint32_t getTotalLeft(struct bigParsedEventList *);
-
-extern const char *midi_instruments[128];
 
 #endif // MUMIDI_H

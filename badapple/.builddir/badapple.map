@@ -1,0 +1,238 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+      30      300       37     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       37     1         badapple.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        1     1                 _MAX_COL
+      61      331        1     1                 _MAX_ROW
+      62      332        1     1                 _ccolor
+      63      333        2     1                 stdout
+      65      335        2     1                 (anonymous namespace)::heap_limit
+      67      337        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      67      337        0     1 __zp_data_size = SIZEOF(.zp.data)
+      67       67       70     1 .zp.bss
+      67       67        0     1         __zp_bss_start = .
+      67       67       70     1         badapple.lto.o:(.zp.bss)
+      67       67        2     1                 kernelArgs
+      69       69        1     1                 _col
+      6a       6a        1     1                 _row
+      6b       6b        c     1                 _BITMAP_BASE
+      77       77        1     1                 _active
+      78       78        1     1                 _color
+      79       79        1     1                 _MAX_X
+      7a       7a        1     1                 _MAX_Y
+      7b       7b        3     1                 _BITMAP_CLUT
+      7e       7e        3     1                 _tileSize
+      81       81       40     1                 _spriteCtl
+      c1       c1        8     1                 _dirStream
+      c9       c9        1     1                 kernelError
+      ca       ca        7     1                 kernelEventData
+      d1       d1        1     1                 (anonymous namespace)::initialized
+      d2       d2        1     1                 (anonymous namespace)::last_free
+      d3       d3        2     1                 (anonymous namespace)::free_size
+      d5       d5        2     1                 (anonymous namespace)::free_list
+      d7       d7        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      d7       d7       14     1 .zp
+      d7       d7       14     1         badapple.lto.o:(.zp.noinit)
+     338      338     28bb     2 .text
+     338      338        0     1         _init = .
+     338      338        0     1         _start = .
+     338      338        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     338      338        0     1                 __do_init_stack
+     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     340      340        0     1                 __do_zero_bss
+     343      343        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     343      343        0     1                 __do_zero_zp_bss
+     346      346        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     346      346        0     1                 __do_copy_zp_data
+     349      349        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     34c      34c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     34c      34c        0     1                 __after_main
+     34f      34f        0     1         _fini = .
+     34f      34f        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     350      350      135     2         badapple.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     350      350      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     486      486       d7     2         badapple.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     486      486       d7     1                 (anonymous namespace)::FreeChunk::remove()
+     55e      55e        3     2         badapple.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     55e      55e        3     1                 __impl::VarInt::make(void*, char)
+     562      562        d     2         badapple.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     562      562        d     1                 __impl::VarInt::high_bit() const
+     570      570        d     2         badapple.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     570      570        d     1                 __impl::VarInt::negative() const
+     57e      57e       47     2         badapple.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     57e      57e       47     1                 __impl::VarInt::negate()
+     5c6      5c6       3b     2         badapple.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     5c6      5c6       3b     1                 __impl::VarInt::shl()
+     601      601        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     601      601        0     1                 __call_indir
+     604      604       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     604      604       13     1                 __zero_bss
+     617      617       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     617      617       13     1                 __zero_zp_bss
+     62a      62a       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     62a      62a       17     1                 __copy_zp_data
+     641      641      17b     1         badapple.lto.o:(.text.f256Init)
+     641      641      17b     1                 f256Init
+     7bc      7bc      173     1         badapple.lto.o:(.text.textReset)
+     7bc      7bc      173     1                 textReset
+     92f      92f      156     1         badapple.lto.o:(.text.bitmapReset)
+     92f      92f      156     1                 bitmapReset
+     a85      a85       24     1         badapple.lto.o:(.text.main)
+     a85      a85       24     1                 main
+     aa9      aa9      63e     1         badapple.lto.o:(.text.f256main)
+     aa9      aa9      63e     1                 f256main
+    10e7     10e7      103     1         badapple.lto.o:(.text.fileOpen)
+    10e7     10e7      103     1                 fileOpen
+    11ea     11ea      1bf     1         badapple.lto.o:(.text.fileRead)
+    11ea     11ea      1bf     1                 fileRead
+    13a9     13a9      25a     1         badapple.lto.o:(.text.textPrint)
+    13a9     13a9      25a     1                 textPrint
+    1603     1603        e     1         badapple.lto.o:(.text.__putchar)
+    1603     1603        e     1                 __putchar
+    1611     1611       17     1         badapple.lto.o:(.text.openAllCODEC)
+    1611     1611       17     1                 openAllCODEC
+    1628     1628       34     1         badapple.lto.o:(.text.hitspace)
+    1628     1628       34     1                 hitspace
+    165c     165c       1e     1         badapple.lto.o:(.text.boostVSClock)
+    165c     165c       1e     1                 boostVSClock
+    167a     167a        e     1         badapple.lto.o:(.text.exit)
+    167a     167a        e     1                 exit
+    1688     1688        2     1         badapple.lto.o:(.text._Exit)
+    1688     1688        2     1                 _Exit
+    168a     168a      218     1         badapple.lto.o:(.text.vfprintf)
+    168a     168a      218     1                 vfprintf
+    18a2     18a2      b44     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    18a2     18a2      b44     1                 (anonymous namespace)::print(char const*, Status*)
+    23e6     23e6       e1     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    23e6     23e6       e1     1                 (anonymous namespace)::put(char, Status*)
+    24c7     24c7      174     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    24c7     24c7      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    263b     263b       57     1         badapple.lto.o:(.text.printf)
+    263b     263b       57     1                 printf
+    2692     2692        3     1         badapple.lto.o:(.text.fputc)
+    2692     2692        3     1                 fputc
+    2695     2695       28     1         badapple.lto.o:(.text.putchar)
+    2695     2695       28     1                 putchar
+    26bd     26bd        7     1         badapple.lto.o:(.text.putchar_wrapper)
+    26bd     26bd        7     1                 putchar_wrapper
+    26c4     26c4        3     1         badapple.lto.o:(.text.putc)
+    26c4     26c4        3     1                 putc
+    26c7     26c7        b     1         badapple.lto.o:(.text.__from_ascii)
+    26c7     26c7        b     1                 __from_ascii
+    26d2     26d2      100     1         badapple.lto.o:(.text.malloc)
+    26d2     26d2      100     1                 malloc
+    27d2     27d2       b6     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
+    27d2     27d2       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
+    2888     2888      186     1         badapple.lto.o:(.text.free)
+    2888     2888      186     1                 free
+    2a0e     2a0e       2c     1         badapple.lto.o:(.text.memcpy)
+    2a0e     2a0e       2c     1                 memcpy
+    2a3a     2a3a       20     1         badapple.lto.o:(.text.__memset)
+    2a3a     2a3a       20     1                 __memset
+    2a5a     2a5a       39     1         badapple.lto.o:(.text.strlen)
+    2a5a     2a5a       39     1                 strlen
+    2a93     2a93       6e     1         badapple.lto.o:(.text.__simple_strtoui)
+    2a93     2a93       6e     1                 __simple_strtoui
+    2b01     2b01       32     1         badapple.lto.o:(.text.__mulhi3)
+    2b01     2b01       32     1                 __mulhi3
+    2b33     2b33       c0     1         badapple.lto.o:(.text.__udivhi3)
+    2b33     2b33       c0     1                 __udivhi3
+    2bf3     2bf3        0     1         __init_array_start = .
+    2bf3     2bf3        0     1         __init_array_end = .
+    2bf3     2bf3        0     1         __fini_array_start = .
+    2bf3     2bf3        0     1         __fini_array_end = .
+    2bf3     2bf3       9c     1 .rodata
+    2bf3     2bf3       3a     1         badapple.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    2c2d     2c2d       62     1         <internal>:(.rodata.str1.1)
+    2c8f     2c8f        0     1 .data
+    2c8f     2c8f        0     1         __data_start = .
+    2c8f     2c8f        0     1         __data_end = .
+    2c8f     2c8f        0     1 __data_load_start = LOADADDR(.data)
+    2c8f     2c8f        0     1 __data_size = SIZEOF(.data)
+    2c8f     2c8f        2     1 .bss
+    2c8f     2c8f        0     1         __bss_start = .
+    2c8f     2c8f        2     1         badapple.lto.o:(.bss.__putchar.s)
+    2c8f     2c8f        2     1                 __putchar.s
+    2c91     2c91        0     1         __bss_end = .
+    2c91     2c91        0     1 __bss_size = SIZEOF(.bss)
+    2c91     2c91        0     1 .noinit
+    2c91     2c91        0     1         __heap_start = ALIGN(., 2)
+    2c91     2c91        0     1 end_block8 = .
+    2c91     2c91        0     1 end_block9 = .
+    2c91     2c91        0     1 end_block10 = .
+    2c91     2c91        0     1 end_block11 = .
+    2c91     2c91        0     1 end_block12 = .
+    2c91     2c91        0     1 end_block13 = .
+    2c91     2c91        0     1 end_block14 = .
+    2c91     2c91        0     1 end_block15 = .
+    2c91     2c91        0     1 end_block16 = .
+    2c91     2c91        0     1 end_block17 = .
+    2c91     2c91        0     1 end_block18 = .
+    2c91     2c91        0     1 end_block19 = .
+    2c91     2c91        0     1 end_block20 = .
+    2c91     2c91        0     1 end_block21 = .
+    2c91     2c91        0     1 end_block22 = .
+    2c91     2c91        0     1 end_block23 = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      a80     4 .symtab
+       0        0      a80     4         <internal>:(.symtab)
+       0        0       5a     1 .shstrtab
+       0        0       5a     1         <internal>:(.shstrtab)
+       0        0      857     1 .strtab
+       0        0      857     1         <internal>:(.strtab)

@@ -77,44 +77,52 @@ void opl3_initialize() {
 	opl3_write(OPL_OPL3, 0x01); //enable opl3
 	opl3_write(OPL_CSW, 0x00); //composite sine wave mode off
 	//channel wide settings
-	for(i=0;i<9;i++)
-		{
-		opl3_write(OPL_CH_FEED + i,   0x30);
-		}
-	
+	for(i=0;i<9;i++) {
+		opl3_write((uint16_t)OPL_CH_FEED |  (uint16_t)i,   0x30); //channels 0 to 8
+	}
+	for(i=0;i<9;i++) {
+		opl3_write(0x0100 | (uint16_t)OPL_CH_FEED |  (uint16_t)i,   0x30); //channels 0 to 8
+	}
 	opl3_quietAll();
-
-	
 }
 void opl3_quietAll()
 {
 	uint8_t channel;
-	for(channel=0;channel<9;channel++)
-		{
-		opl3_write(OPL_CH_KBF_HI | channel, 0x00);
-		}
+	for(channel=0;channel<9;channel++) opl3_write(OPL_CH_KBF_HI | channel, 0x00); //channels 0 to 8
+	for(channel=0;channel<9;channel++) opl3_write(0x0100 | (uint16_t)OPL_CH_KBF_HI | (uint16_t)channel, 0x00); //channels 9 to 17
 }
 
 void opl3_setInstrument(struct opl3Instrument inst, uint8_t chan)
 {
-	uint8_t offset= chan + 0x00;
+	uint16_t highb=0x0000;
+	
+	uint8_t offset= 0x00;
+	
+	offset += chan;
 	if(chan>2) offset += 0x05;
 	if(chan>5) offset += 0x05;
+	if(chan>8)
+	{
+		offset -= 19;
+		highb=0x0100;
+	}
+	if(chan>11) offset += 0x05;
+	if(chan>14) offset += 0x05;
 	
-	opl3_write(OPL_OP_TVSKF   |  offset, inst.OP1_TVSKF);
-	opl3_write(OPL_OP_TVSKF   | (offset+ 0x03), inst.OP2_TVSKF);
+	opl3_write(highb | (uint16_t)OPL_OP_TVSKF   | (uint16_t)offset, inst.OP1_TVSKF);
+	opl3_write(highb | (uint16_t)OPL_OP_TVSKF   | (uint16_t)(offset+ 0x03), inst.OP2_TVSKF);
 	
-	opl3_write(OPL_OP_KSLVOL  |  offset, inst.OP1_KSLVOL);
-	opl3_write(OPL_OP_KSLVOL  | (offset+ 0x03), inst.OP2_KSLVOL);
+	opl3_write(highb | (uint16_t)OPL_OP_KSLVOL  |  (uint16_t)offset, inst.OP1_KSLVOL);
+	opl3_write(highb | (uint16_t)OPL_OP_KSLVOL  | (uint16_t)(offset+ 0x03), inst.OP2_KSLVOL);
 	
-	opl3_write(OPL_OP_AD      |  offset, inst.OP1_AD);
-	opl3_write(OPL_OP_AD      | (offset+ 0x03), inst.OP2_AD);
+	opl3_write(highb | (uint16_t)OPL_OP_AD      |  (uint16_t)offset, inst.OP1_AD);
+	opl3_write(highb | (uint16_t)OPL_OP_AD      | (uint16_t)(offset+ 0x03), inst.OP2_AD);
 	
-	opl3_write(OPL_OP_SR      |  offset, inst.OP1_SR);
-	opl3_write(OPL_OP_SR      | (offset+ 0x03), inst.OP2_SR);
+	opl3_write(highb | (uint16_t)OPL_OP_SR      |  (uint16_t)offset, inst.OP1_SR);
+	opl3_write(highb | (uint16_t)OPL_OP_SR      | (uint16_t)(offset+ 0x03), inst.OP2_SR);
 	
-	opl3_write(OPL_OP_WAV     |  offset, inst.OP1_WAV);
-	opl3_write(OPL_OP_WAV     | (offset+ 0x03), inst.OP2_WAV);
+	opl3_write(highb | (uint16_t)OPL_OP_WAV     |  (uint16_t)offset, inst.OP1_WAV);
+	opl3_write(highb | (uint16_t)OPL_OP_WAV     | (uint16_t)(offset+ 0x03), inst.OP2_WAV);
 }
 
 void opl3_setInstrumentAllChannels(uint8_t which)
@@ -124,7 +132,12 @@ void opl3_setInstrumentAllChannels(uint8_t which)
 	for(c=0;c<9;c++)
 	{
 	opl3_setInstrument(opl3_instrument_defs[which],c);
-	opl3_write(OPL_CH_FEED + c,   opl3_instrument_defs[which].CHAN_FEED);
+	opl3_write((uint16_t)OPL_CH_FEED | (uint16_t)c,   opl3_instrument_defs[which].CHAN_FEED);
+	}
+	for(c=0;c<9;c++)
+	{
+	opl3_setInstrument(opl3_instrument_defs[which],c+9);
+	opl3_write(0x0100 | (uint16_t)OPL_CH_FEED | (uint16_t)c,   opl3_instrument_defs[which].CHAN_FEED);
 	}
 }
 
@@ -144,10 +157,17 @@ void opl3_write(uint16_t address, uint8_t value) {
 
 // Function to play a note. Pick one of 12 tones from opl3_fnums, pick your 0-7 octave 'block' and duration in frames
 void opl3_note(uint8_t channel, uint16_t fnum, uint8_t block, bool onOrOff) {
+	uint16_t hb = 0x0000;
+	uint8_t reduce = 0;
+	if(channel>8)
+	{
+	hb = 0x0100;
+	reduce = 9;
+	}
 	// Set frequency (low byte)
-    opl3_write(OPL_CH_F_LO | channel, fnum & 0xFF);
+    opl3_write(hb | (uint16_t)OPL_CH_F_LO | (uint16_t)(channel-reduce), fnum & 0xFF);
     // Set block/frequency (high byte) and enable sound (Key-On) or off depending on onOrOff value
-    opl3_write(OPL_CH_KBF_HI | channel, ((fnum >> 8) & 0x03) | ((uint16_t)block << 2) | (onOrOff?0x20:0x00));
+    opl3_write(hb | (uint16_t)OPL_CH_KBF_HI | (uint16_t)(channel-reduce), ((fnum >> 8) & 0x03) | ((uint16_t)block << 2) | (onOrOff?0x20:0x00));
 
 }
 

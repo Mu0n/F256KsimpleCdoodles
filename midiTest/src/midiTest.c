@@ -82,7 +82,7 @@ void escReset(void);
 void emptyOPL3Buffer()
 {
 	uint8_t i;
-	for(i=0;i<9;i++) polyOPL3Buffer[i]=0;
+	for(i=0;i<18;i++) polyOPL3Buffer[i]=0;
 }
 void emptySIDBuffer()
 {
@@ -254,7 +254,7 @@ void launchBeat()
 					for(uint8_t i=0;i < 6;i++) if(reservedPSG[i]==1) reservedPSG[i]=0;
 				}
 				if(theT->chip == 3) {
-					for(uint8_t i=0;i < 9;i++) if(reservedOPL3[i]==1) reservedOPL3[i]=0;
+					for(uint8_t i=0;i < 18;i++) if(reservedOPL3[i]==1) reservedOPL3[i]=0;
 				}
 			}
 		free(theT);

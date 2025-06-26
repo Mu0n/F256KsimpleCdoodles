@@ -9,6 +9,8 @@
 #define MIDI_BASE   0x40000 //gives a nice 07ffkb until the parsed version happens
 #define MIDI_PARSED 0x50000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
 
+#define HELP_TEXT   0x30000
+
 #define textColorOrange 0x09
 #define textColorWhite  0x0F
 #define textColorBlack  0x00
@@ -28,10 +30,11 @@ bool helpActive = false;
 bigParsed theBigList; //master structure to keep note of all tracks, nb of midi events, for playback
 midiRec myRecord; //keeps parsed info about the midi file, tempo, etc, for info display
 
-unsigned char helpScreen[][80] = {
+char *helpScreen[] = {
 "                         F1: Help Screen                                        ", 
 "                                                                                ",
 "This is a utility that can convert a standard midi file in .mid format and      ", 
+
 "create a corresponding .dim file with the same file name prefix, in the same    ",
 "directory as the original file. The .dim files are simplified for quick loading.", 
 "This program\'s working directory is in your root\'s /midi/ folder.               ", 
@@ -47,12 +50,31 @@ unsigned char helpScreen[][80] = {
 "                                                                                ",
 "                                                                                "
 //"Filenames in white are only present in .mid format                              ",
-//"Filenames in yellow have a corresponding .dim format and can be played          "		
+//"Filenames in yellow have a corresponding .dim format and can be played          "	
+	
 };
+
+char *queryFudge[] = {
+"                     Digesting a MIDI File                                      ", 
+" The default fudge factor is 25.1658 acting as a speed factor between MIDI event",
+" delays and the Foenix\' timer. Lower means faster, higher means slower          ",
+"                                                                                ",
+" Use UP and DOWN arrow to tweak the value, then press enter. 0 means default.   ",
+" Round value between 0 and 100:                                                 "
+
+};
+
+
+void directory(void);
+void textGUI(void);
 void setup(void);
-void dealKeyPressed(uint8_t);
 void loadAndPlayDim(void);
 void justPlayDim(void);
+void modalHelp(char *[], uint16_t);
+void eraseModalHelp(uint16_t);
+void dealKeyReleased(uint8_t);
+void dealKeyPressed(uint8_t);
+
 
 void directory()
 {
@@ -87,12 +109,11 @@ void directory()
 }
 void textGUI()
 {
-	textGotoXY(0,0);textSetColor(textColorLGreen,textColorGray);textPrint("DigestMIDI v0.1");
+	textGotoXY(0,0);textSetColor(textColorLGreen,textColorGray);textPrint("DigestMIDI v0.2");
 	textSetColor(textColorWhite,0);printf(" - converts a standard MIDI file");
 	textGotoXY(0,1);textPrint("to a simplified a proper format made for playback,");
 	textGotoXY(0,2);textPrint("using timers from the kernel and from type0.");
-	
-	textGotoXY(60,0);textPrint("Fudge: 25.1658");
+
 	
 	textGotoXY(0,4);textPrint("Contents of /midi/ directory");
 	
@@ -160,15 +181,15 @@ void justPlayDim()
 	
 	textGotoXY(statusTextX,statusTextY);printf("Done playing.                   "); 
 }
-void modalHelp()
+void modalHelp(char *textBuffer[], uint16_t size)
 {
-	size_t n = sizeof(helpScreen)/sizeof(helpScreen[0]);
 	textSetColor(textColorLGreen,textColorGray);
-	for(uint8_t i = 0; i< n;i++)
+	for(uint8_t i = 0; i< size;i++)
 		{		
 		textGotoXY(0,i+10);
-		printf("%s",helpScreen[i]);
+		printf("%s",textBuffer[i]);
 		}
+		
 		/*
 	textSetColor(textColorWhite,textColorGray);
 	textGotoXY(13,14+12);printf("white");
@@ -177,19 +198,39 @@ void modalHelp()
 */
 	textSetColor(textColorWhite,0);
 }
-void eraseModalHelp()
+void eraseModalHelp(uint16_t size)
 {
-	size_t n = sizeof(helpScreen)/sizeof(helpScreen[0]);
 	textSetColor(textColorBlack,0);
-	for(uint8_t i = 0; i< n;i++)
+	
+	for(uint8_t i = 0; i< size;i++)
 		{		
 		textGotoXY(0,i+10);
 		printf("                                                                                ");
 		}
+		
 	textSetColor(textColorWhite,0);
+}
+uint8_t askFudge()
+{
+	int input=0;
+
+	modalHelp(queryFudge,sizeof(queryFudge)/sizeof(queryFudge[0]));
+	while (true)
+		{
+		kernelNextEvent();
+		if(kernelEventData.type == kernelEvent(key.PRESSED))
+			{
+			if(kernelEventData.key.raw == 0xB6 && input < 100) input++; //raise value
+			if(kernelEventData.key.raw == 0xB7 && input > 0  ) input--; //lower value
+			if(kernelEventData.key.raw == 0x94) return (uint8_t)input; //quit
+			}
+		textGotoXY(40,15);printf("%03d",input);
+		}	
+	return 0;
 }
 void dealWithFile()
 {	
+	uint8_t queryAnswer = 0;
 	int16_t indexStart = 0; //keeps note of the byte where the MIDI string 'MThd' is, sometimes they're not at the very start of the file!	
 	char midFileName[32];
 	char prefix[] = "midi/";
@@ -216,14 +257,19 @@ void dealWithFile()
 		textGotoXY(statusTextX,statusTextY);printf("Analyzing the MIDI...         ");
 		parse(indexStart,false, &myRecord, &theBigList); //count the events and prep the mem allocation for the big list of parsed midi events
 		adjustOffsets(&theBigList);
-		//myRecord.fudge = 20.0f; //tweak this to change the tempo of the tune
+		
+		
+		queryAnswer = askFudge();
+		eraseModalHelp(sizeof(queryFudge)/sizeof(queryFudge[0]));
+		
+		if(queryAnswer!=0) myRecord.fudge = (float)queryAnswer; //tweak this to change the tempo of the tune
 		parse(indexStart, true, &myRecord, &theBigList); //load up the actual event data in the big list of parsed midi events
 		textGotoXY(statusTextX,statusTextY);printf("%s %d tracks            ",midFileName,theBigList.trackcount);
 
 		strncpy(midFileName + strlen(midFileName) - 3, "dim", 3);
-		textGotoXY(statusTextX,statusTextY);printf("Writing %s...                 ",midFileName);
+		textSetColor(textColorLGreen,0x00);textGotoXY(statusTextX,statusTextY);printf("Writing %s...                 ",midFileName);
 		writeDigestFile(midFileName,&myRecord, &theBigList);
-		textGotoXY(statusTextX,statusTextY);printf("Wrote %s.                     ",midFileName);
+		textSetColor(textColorLGreen,0x00);textGotoXY(statusTextX,statusTextY);printf("Wrote %s.                     ",midFileName);
 		textSetColor(textColorWhite,0x00);
 		}
 }
@@ -245,7 +291,9 @@ void dealKeyPressed(uint8_t keyRaw){
 			break;
 		case 148: //enter
 			if(shiftActive) loadAndPlayDim();
-			else dealWithFile();			
+			else dealWithFile();
+			textGUI();
+			directory();			
 			break;	
 		case 0xb6: //up arrow
 			if(choice!=0) 
@@ -269,12 +317,12 @@ void dealKeyPressed(uint8_t keyRaw){
 		case 0x81: //F1
 			if(helpActive == false)
 				{
-					modalHelp();
+					modalHelp(helpScreen,sizeof(helpScreen)/sizeof(helpScreen[0]));
 					helpActive = true;
 				}
 			else 
 				{
-					eraseModalHelp();
+					eraseModalHelp(sizeof(helpScreen)/sizeof(helpScreen[0]));
 					helpActive = false;
 					textGUI();
 					directory();

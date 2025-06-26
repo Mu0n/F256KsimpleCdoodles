@@ -6,4 +6,4 @@
   .carB : { *(.carB .carB*) } >carB end_carB = .;
   .yellow : { *(.yellow .yellow*) } >yellow end_yellow = .;
   .backbmp : { *(.backbmp .backbmp*) } >backbmp end_backbmp = .;
-  .midifile : { *(.midifile .midifile*) } >midifile end_midifile = .;
+  .music : { *(.music .music*) } >music end_music = .;

@@ -85,8 +85,6 @@ void opl3_initialize() {
 		opl3_write(0x0100 | (uint16_t)OPL_CH_FEED |  (uint16_t)i,   0x30); //channels 0 to 8
 	}
 	opl3_quietAll();
-
-	
 }
 void opl3_quietAll()
 {
@@ -100,7 +98,6 @@ void opl3_setInstrument(struct opl3Instrument inst, uint8_t chan)
 	uint16_t highb=0x0000;
 	
 	uint8_t offset= 0x00;
-	printf("\nchan %02d", chan);
 	
 	offset += chan;
 	if(chan>2) offset += 0x05;
@@ -112,8 +109,6 @@ void opl3_setInstrument(struct opl3Instrument inst, uint8_t chan)
 	}
 	if(chan>11) offset += 0x05;
 	if(chan>14) offset += 0x05;
-	
-	printf(" off %04x", highb | (uint16_t)OPL_OP_TVSKF   | (uint16_t)offset);
 	
 	opl3_write(highb | (uint16_t)OPL_OP_TVSKF   | (uint16_t)offset, inst.OP1_TVSKF);
 	opl3_write(highb | (uint16_t)OPL_OP_TVSKF   | (uint16_t)(offset+ 0x03), inst.OP2_TVSKF);

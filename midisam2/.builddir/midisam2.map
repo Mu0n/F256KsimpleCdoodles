@@ -1,0 +1,240 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __music_lma = 0x50000
+       0        0        0     1 __music_size = 0x223dc
+      30      300       35     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       35     1         midisam2.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        1     1                 _MAX_COL
+      61      331        1     1                 _MAX_ROW
+      62      332        1     1                 _ccolor
+      63      333        2     1                 (anonymous namespace)::heap_limit
+      65      335        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      65      335        0     1 __zp_data_size = SIZEOF(.zp.data)
+      65       65       36     1 .zp.bss
+      65       65        0     1         __zp_bss_start = .
+      65       65       36     1         midisam2.lto.o:(.zp.bss)
+      65       65        2     1                 kernelArgs
+      67       67        1     1                 _col
+      68       68        1     1                 _row
+      69       69        c     1                 _BITMAP_BASE
+      75       75        1     1                 _active
+      76       76        1     1                 _color
+      77       77        1     1                 _MAX_X
+      78       78        1     1                 _MAX_Y
+      79       79        3     1                 _BITMAP_CLUT
+      7c       7c        3     1                 _tileSize
+      7f       7f        8     1                 _dirStream
+      87       87        1     1                 repeatFlag
+      88       88        3     1                 shimmerTimer
+      8b       8b        3     1                 playbackTimer
+      8e       8e        7     1                 kernelEventData
+      95       95        1     1                 (anonymous namespace)::initialized
+      96       96        1     1                 (anonymous namespace)::last_free
+      97       97        2     1                 (anonymous namespace)::free_size
+      99       99        2     1                 (anonymous namespace)::free_list
+      9b       9b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      9b       9b       16     1 .zp
+      9b       9b       16     1         midisam2.lto.o:(.zp.noinit)
+     336      336     28be     2 .text
+     336      336        0     1         _init = .
+     336      336        0     1         _start = .
+     336      336        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     336      336        0     1                 __do_init_stack
+     33e      33e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     33e      33e        0     1                 __do_zero_bss
+     341      341        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     341      341        0     1                 __do_zero_zp_bss
+     344      344        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     344      344        0     1                 __do_copy_zp_data
+     347      347        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     34a      34a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     34a      34a        0     1                 __after_main
+     34d      34d        0     1         _fini = .
+     34d      34d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     34e      34e      135     2         midisam2.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     34e      34e      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     484      484       d7     2         midisam2.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     484      484       d7     1                 (anonymous namespace)::FreeChunk::remove()
+     55b      55b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     55b      55b       13     1                 __zero_bss
+     56e      56e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     56e      56e       13     1                 __zero_zp_bss
+     581      581       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     581      581       17     1                 __copy_zp_data
+     598      598      17c     1         midisam2.lto.o:(.text.f256Init)
+     598      598      17c     1                 f256Init
+     714      714      173     1         midisam2.lto.o:(.text.textReset)
+     714      714      173     1                 textReset
+     887      887      156     1         midisam2.lto.o:(.text.bitmapReset)
+     887      887      156     1                 bitmapReset
+     9dd      9dd       21     1         midisam2.lto.o:(.text.FAR_PEEK)
+     9dd      9dd       21     1                 FAR_PEEK
+     9fe      9fe       24     1         midisam2.lto.o:(.text.main)
+     9fe      9fe       24     1                 main
+     a22      a22      10a     1         midisam2.lto.o:(.text.f256main)
+     a22      a22      10a     1                 f256main
+     b2c      b2c       11     1         midisam2.lto.o:(.text.textGotoXY)
+     b2c      b2c       11     1                 textGotoXY
+     b3d      b3d      25a     1         midisam2.lto.o:(.text.textPrint)
+     b3d      b3d      25a     1                 textPrint
+     d97      d97        c     1         midisam2.lto.o:(.text.textSetColor)
+     d97      d97        c     1                 textSetColor
+     da3      da3       23     1         midisam2.lto.o:(.text.midiShutAllChannels)
+     da3      da3       23     1                 midiShutAllChannels
+     dc6      dc6       14     1         midisam2.lto.o:(.text.midiShutUp)
+     dc6      dc6       14     1                 midiShutUp
+     dda      dda       43     1         midisam2.lto.o:(.text.resetInstruments)
+     dda      dda       43     1                 resetInstruments
+     e1d      e1d      18c     1         midisam2.lto.o:(.text.initMidiRecord)
+     e1d      e1d      18c     1                 initMidiRecord
+     fa9      fa9       3a     1         midisam2.lto.o:(.text.initBigList)
+     fa9      fa9       3a     1                 initBigList
+     fe3      fe3       95     1         midisam2.lto.o:(.text.getTotalLeft)
+     fe3      fe3       95     1                 getTotalLeft
+    1078     1078      522     1         midisam2.lto.o:(.text.playEmbeddedDim)
+    1078     1078      522     1                 playEmbeddedDim
+    159a     159a      453     1         midisam2.lto.o:(.text.playmiditype0)
+    159a     159a      453     1                 playmiditype0
+    19ed     19ed      c06     1         midisam2.lto.o:(.text.playmidi)
+    19ed     19ed      c06     1                 playmidi
+    25f3     25f3       17     1         midisam2.lto.o:(.text.openAllCODEC)
+    25f3     25f3       17     1                 openAllCODEC
+    260a     260a       1e     1         midisam2.lto.o:(.text.boostVSClock)
+    260a     260a       1e     1                 boostVSClock
+    2628     2628      192     1         midisam2.lto.o:(.text.initRTMIDI)
+    2628     2628      192     1                 initRTMIDI
+    27ba     27ba       38     1         midisam2.lto.o:(.text.initProgress)
+    27ba     27ba       38     1                 initProgress
+    27f2     27f2       12     1         midisam2.lto.o:(.text.wipeStatus)
+    27f2     27f2       12     1                 wipeStatus
+    2804     2804       20     1         midisam2.lto.o:(.text.setTimer0)
+    2804     2804       20     1                 setTimer0
+    2824     2824        6     1         midisam2.lto.o:(.text.isTimer0Done)
+    2824     2824        6     1                 isTimer0Done
+    282a     282a        e     1         midisam2.lto.o:(.text.exit)
+    282a     282a        e     1                 exit
+    2838     2838        2     1         midisam2.lto.o:(.text._Exit)
+    2838     2838        2     1                 _Exit
+    283a     283a      100     1         midisam2.lto.o:(.text.malloc)
+    283a     283a      100     1                 malloc
+    293a     293a       b6     1         midisam2.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
+    293a     293a       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
+    29f0     29f0      186     1         midisam2.lto.o:(.text.free)
+    29f0     29f0      186     1                 free
+    2b76     2b76       2c     1         midisam2.lto.o:(.text.memcpy)
+    2b76     2b76       2c     1                 memcpy
+    2ba2     2ba2       20     1         midisam2.lto.o:(.text.__memset)
+    2ba2     2ba2       20     1                 __memset
+    2bc2     2bc2       32     1         midisam2.lto.o:(.text.__mulhi3)
+    2bc2     2bc2       32     1                 __mulhi3
+    2bf4     2bf4        0     1         __init_array_start = .
+    2bf4     2bf4        0     1         __init_array_end = .
+    2bf4     2bf4        0     1         __fini_array_start = .
+    2bf4     2bf4        0     1         __fini_array_end = .
+    2bf4     2bf4       67     1 .rodata
+    2bf4     2bf4       38     1         midisam2.lto.o:(.rodata.rtmplugin)
+    2bf4     2bf4       38     1                 rtmplugin
+    2c2c     2c2c       2f     1         <internal>:(.rodata.str1.1)
+    2c5b     2c5b        0     1 .data
+    2c5b     2c5b        0     1         __data_start = .
+    2c5b     2c5b        0     1         __data_end = .
+    2c5b     2c5b        0     1 __data_load_start = LOADADDR(.data)
+    2c5b     2c5b        0     1 __data_size = SIZEOF(.data)
+    2c5b     2c5b      141     1 .bss
+    2c5b     2c5b        0     1         __bss_start = .
+    2c5b     2c5b       40     1         midisam2.lto.o:(.bss._spriteCtl)
+    2c5b     2c5b       40     1                 _spriteCtl
+    2c9b     2c9b       80     1         midisam2.lto.o:(.bss.shimmerChanged)
+    2c9b     2c9b       80     1                 shimmerChanged
+    2d1b     2d1b       80     1         midisam2.lto.o:(.bss.shimmerBuffer)
+    2d1b     2d1b       80     1                 shimmerBuffer
+    2d9b     2d9b        1     1         midisam2.lto.o:(.bss.kernelError)
+    2d9b     2d9b        1     1                 kernelError
+    2d9c     2d9c        0     1         __bss_end = .
+    2d9c     2d9c        0     1 __bss_size = SIZEOF(.bss)
+    2d9c     2d9c        0     1 .noinit
+    2d9c     2d9c        0     1         __heap_start = ALIGN(., 2)
+    2d9c     2d9c        0     1 end_block8 = .
+    2d9c     2d9c        0     1 end_block9 = .
+    2d9c     2d9c        0     1 end_block10 = .
+    2d9c     2d9c        0     1 end_block11 = .
+    2d9c     2d9c        0     1 end_block12 = .
+    2d9c     2d9c        0     1 end_block13 = .
+    2d9c     2d9c        0     1 end_block14 = .
+    2d9c     2d9c        0     1 end_block15 = .
+    2d9c     2d9c        0     1 end_block16 = .
+    2d9c     2d9c        0     1 end_block17 = .
+    2d9c     2d9c        0     1 end_block18 = .
+    2d9c     2d9c        0     1 end_block19 = .
+    2d9c     2d9c        0     1 end_block20 = .
+    2d9c     2d9c        0     1 end_block21 = .
+    2d9c     2d9c        0     1 end_block22 = .
+    2d9c     2d9c        0     1 end_block23 = .
+   50000    50000    223dc    16 .music
+   50000    50000    223dc    16         midisam2.lto.o:(.music)
+   50000    50000        0     1                 music_start
+   723dc    723dc        0     1                 music_end
+   723dc    723dc        0     1 end_music = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      ab0     4 .symtab
+       0        0      ab0     4         <internal>:(.symtab)
+       0        0       61     1 .shstrtab
+       0        0       61     1         <internal>:(.shstrtab)
+       0        0      816     1 .strtab
+       0        0      816     1         <internal>:(.strtab)

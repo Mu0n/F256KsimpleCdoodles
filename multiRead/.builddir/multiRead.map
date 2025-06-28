@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -66,103 +66,109 @@
       34       34        1     1                 kernelError
       35       35        7     1                 kernelEventData
       3c       3c        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3c       3c       7a     1 .zp
-      3c       3c       7a     1         multiRead.lto.o:(.zp.noinit)
-     300      300     1f40     2 .text
+      3c       3c       77     1 .zp
+      3c       3c       77     1         multiRead.lto.o:(.zp.noinit)
+     300      300     243d     2 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
-     300      300        8     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
      300      300        0     1                 __do_init_stack
-     308      308        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
      308      308        0     1                 __do_zero_bss
-     30b      30b        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
      30b      30b        0     1                 __do_zero_zp_bss
-     30e      30e        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     311      311        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
      311      311        0     1                 __after_main
      314      314        0     1         _fini = .
-     314      314        1     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
      316      316      13d     2         multiRead.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
      316      316      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     453      453       13     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     453      453       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
      453      453       13     1                 __zero_bss
-     466      466       13     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     466      466       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
      466      466       13     1                 __zero_zp_bss
-     479      479      380     1         multiRead.lto.o:(.text.f256Init)
-     479      479      380     1                 f256Init
-     7f9      7f9        6     1         multiRead.lto.o:(.text.main)
-     7f9      7f9        6     1                 main
-     7ff      7ff      5e2     1         multiRead.lto.o:(.text.f256main)
-     7ff      7ff      5e2     1                 f256main
-     de1      de1       93     1         multiRead.lto.o:(.text.fileOpen)
-     de1      de1       93     1                 fileOpen
-     e74      e74      14b     1         multiRead.lto.o:(.text.fileRead)
-     e74      e74      14b     1                 fileRead
-     fbf      fbf        5     1         multiRead.lto.o:(.text.exit)
-     fbf      fbf        5     1                 exit
-     fc4      fc4       d3     1         multiRead.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-     fc4      fc4       d3     1                 (anonymous namespace)::put(char, Status*)
-    1097     1097      10c     1         multiRead.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1097     1097      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    11a3     11a3      bd9     1         multiRead.lto.o:(.text.printf)
-    11a3     11a3      bd9     1                 printf
-    1d7c     1d7c      1c2     1         multiRead.lto.o:(.text.putchar)
-    1d7c     1d7c      1c2     1                 putchar
-    1f3e     1f3e      2b6     1         multiRead.lto.o:(.text.malloc)
-    1f3e     1f3e      2b6     1                 malloc
-    21f4     21f4       2c     1         multiRead.lto.o:(.text.memcpy)
-    21f4     21f4       2c     1                 memcpy
-    2220     2220       20     1         multiRead.lto.o:(.text.__memset)
-    2220     2220       20     1                 __memset
-    2240     2240        0     1         __init_array_start = .
-    2240     2240        0     1         __init_array_end = .
-    2240     2240        0     1         __fini_array_start = .
-    2240     2240        0     1         __fini_array_end = .
-    2240     2240       b5     1 .rodata
-    2240     2240        1     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2240     2240        0     1                 __set_v
-    2241     2241       3a     1         multiRead.lto.o:(.rodata.printf)
-    227b     227b       30     1         multiRead.lto.o:(.rodata.textColors)
-    227b     227b       30     1                 textColors
-    22ab     22ab       4a     1         <internal>:(.rodata.str1.1)
-    22f5     22f5        0     1 .data
-    22f5     22f5        0     1         __data_start = .
-    22f5     22f5        0     1         __data_end = .
-    22f5     22f5        0     1 __data_load_start = LOADADDR(.data)
-    22f5     22f5        0     1 __data_size = SIZEOF(.data)
-    22f5     22f5        5     1 .bss
-    22f5     22f5        0     1         __bss_start = .
-    22f5     22f5        1     1         multiRead.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    22f5     22f5        1     1                 (anonymous namespace)::initialized
-    22f6     22f6        2     1         multiRead.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    22f6     22f6        2     1                 (anonymous namespace)::free_size
-    22f8     22f8        2     1         multiRead.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    22f8     22f8        2     1                 (anonymous namespace)::free_list
-    22fa     22fa        0     1         __bss_end = .
-    22fa     22fa        0     1 __bss_size = SIZEOF(.bss)
-    22fa     22fa        0     1 .noinit
-    22fa     22fa        0     1         __heap_start = ALIGN(., 2)
-    22fa     22fa        0     1 end_block8 = .
-    22fa     22fa        0     1 end_block9 = .
-    22fa     22fa        0     1 end_block10 = .
-    22fa     22fa        0     1 end_block11 = .
-    22fa     22fa        0     1 end_block12 = .
-    22fa     22fa        0     1 end_block13 = .
-    22fa     22fa        0     1 end_block14 = .
-    22fa     22fa        0     1 end_block15 = .
-    22fa     22fa        0     1 end_block16 = .
-    22fa     22fa        0     1 end_block17 = .
-    22fa     22fa        0     1 end_block18 = .
-    22fa     22fa        0     1 end_block19 = .
-    22fa     22fa        0     1 end_block20 = .
-    22fa     22fa        0     1 end_block21 = .
-    22fa     22fa        0     1 end_block22 = .
-    22fa     22fa        0     1 end_block23 = .
+     479      479      42c     1         multiRead.lto.o:(.text.f256Init)
+     479      479      42c     1                 f256Init
+     8a5      8a5        6     1         multiRead.lto.o:(.text.main)
+     8a5      8a5        6     1                 main
+     8ab      8ab      a6a     1         multiRead.lto.o:(.text.f256main)
+     8ab      8ab      a6a     1                 f256main
+    1315     1315      150     1         multiRead.lto.o:(.text.fileRead)
+    1315     1315      150     1                 fileRead
+    1465     1465        5     1         multiRead.lto.o:(.text.exit)
+    1465     1465        5     1                 exit
+    146a     146a       d3     1         multiRead.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    146a     146a       d3     1                 (anonymous namespace)::put(char, Status*)
+    153d     153d      10c     1         multiRead.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    153d     153d      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1649     1649      bd9     1         multiRead.lto.o:(.text.printf)
+    1649     1649      bd9     1                 printf
+    2222     2222      1e7     1         multiRead.lto.o:(.text.putchar)
+    2222     2222      1e7     1                 putchar
+    2409     2409      2b6     1         multiRead.lto.o:(.text.malloc)
+    2409     2409      2b6     1                 malloc
+    26bf     26bf       2c     1         multiRead.lto.o:(.text.memcpy)
+    26bf     26bf       2c     1                 memcpy
+    26eb     26eb       20     1         multiRead.lto.o:(.text.__memset)
+    26eb     26eb       20     1                 __memset
+    270b     270b       32     1         multiRead.lto.o:(.text.__mulhi3)
+    270b     270b       32     1                 __mulhi3
+    273d     273d        0     1         __init_array_start = .
+    273d     273d        0     1         __init_array_end = .
+    273d     273d        0     1         __fini_array_start = .
+    273d     273d        0     1         __fini_array_end = .
+    273d     273d       b5     1 .rodata
+    273d     273d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    273d     273d        0     1                 __set_v
+    273e     273e       3a     1         multiRead.lto.o:(.rodata.printf)
+    2778     2778       30     1         multiRead.lto.o:(.rodata.textColors)
+    2778     2778       30     1                 textColors
+    27a8     27a8       4a     1         <internal>:(.rodata.str1.1)
+    27f2     27f2        0     1 .data
+    27f2     27f2        0     1         __data_start = .
+    27f2     27f2        0     1         __data_end = .
+    27f2     27f2        0     1 __data_load_start = LOADADDR(.data)
+    27f2     27f2        0     1 __data_size = SIZEOF(.data)
+    27f2     27f2       11     1 .bss
+    27f2     27f2        0     1         __bss_start = .
+    27f2     27f2        4     1         multiRead.lto.o:(.bss._BITMAP_BASE.0)
+    27f2     27f2        4     1                 _BITMAP_BASE.0
+    27f6     27f6        4     1         multiRead.lto.o:(.bss._BITMAP_BASE.1)
+    27f6     27f6        4     1                 _BITMAP_BASE.1
+    27fa     27fa        4     1         multiRead.lto.o:(.bss._BITMAP_BASE.2)
+    27fa     27fa        4     1                 _BITMAP_BASE.2
+    27fe     27fe        1     1         multiRead.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    27fe     27fe        1     1                 (anonymous namespace)::initialized
+    27ff     27ff        2     1         multiRead.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    27ff     27ff        2     1                 (anonymous namespace)::free_size
+    2801     2801        2     1         multiRead.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    2801     2801        2     1                 (anonymous namespace)::free_list
+    2803     2803        0     1         __bss_end = .
+    2803     2803        0     1 __bss_size = SIZEOF(.bss)
+    2803     2803        0     1 .noinit
+    2803     2803        0     1         __heap_start = ALIGN(., 2)
+    2803     2803        0     1 end_block8 = .
+    2803     2803        0     1 end_block9 = .
+    2803     2803        0     1 end_block10 = .
+    2803     2803        0     1 end_block11 = .
+    2803     2803        0     1 end_block12 = .
+    2803     2803        0     1 end_block13 = .
+    2803     2803        0     1 end_block14 = .
+    2803     2803        0     1 end_block15 = .
+    2803     2803        0     1 end_block16 = .
+    2803     2803        0     1 end_block17 = .
+    2803     2803        0     1 end_block18 = .
+    2803     2803        0     1 end_block19 = .
+    2803     2803        0     1 end_block20 = .
+    2803     2803        0     1 end_block21 = .
+    2803     2803        0     1 end_block22 = .
+    2803     2803        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      7b0     4 .symtab
-       0        0      7b0     4         <internal>:(.symtab)
+       0        0      7e0     4 .symtab
+       0        0      7e0     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      5a4     1 .strtab
-       0        0      5a4     1         <internal>:(.strtab)
+       0        0      5d1     1 .strtab
+       0        0      5d1     1         <internal>:(.strtab)

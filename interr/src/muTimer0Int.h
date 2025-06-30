@@ -49,8 +49,11 @@
 typedef void (*funcPtr)();
 
 byte setMMU(byte, byte);
+void enableTimer(funcPtr, funcPtr);
 void loadTimer(uint32_t);
 void setTimer0(uint32_t);
 void resetTimer0(void);
+
+extern funcPtr original_irq_handler;
 
 #endif // MUTIMER0INT_H

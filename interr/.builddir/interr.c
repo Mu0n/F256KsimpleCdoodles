@@ -1,4 +1,4 @@
-#include "C:\F256\f256llvm-mos\F256KsimpleCdoodles\interr\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\interr\.builddir\trampoline.h"
 
 /*
 Code by Michael Juneau - January 2025 for the F256Jr, F256K, F256Jr2 and F256K2
@@ -17,7 +17,19 @@ by having edited the irq vector to handle them.
 #define F256LIB_IMPLEMENTATION
 
 #include "f256lib.h"
+#include "../src/muUtils.h"
 
+#define RATE 0x00AFDEAD
+#define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
+#define T0_STAT     0xD650 //master control register for timer0, read bit0 set = reached target val
+#define T0_VAL_L    0xD651 //current 24 bit value of the timer
+#define T0_VAL_M    0xD652
+#define T0_VAL_H    0xD653
+
+#define T0_CMP_CTR  0xD654 //b0: t0 returns 0 on reaching target. b1: CMP = last value written to T0_VAL
+#define T0_CMP_L    0xD655 //24 bit target value for comparison
+#define T0_CMP_M    0xD656
+#define T0_CMP_H    0xD657
 
 #define INT_PENDING_0  0xD660
 #define INT_POLARITY_0 0xD664
@@ -43,34 +55,21 @@ by having edited the irq vector to handle them.
 #define INT_CART       0x80
 
 
-#define T0_PEND     0xD660
-#define T0_MASK     0xD66C
-
-#define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
-#define T0_STAT     0xD650 //master control register for timer0, read bit0 set = reached target val
-
 #define CTR_INTEN   0x80  //present only for timer1? or timer0 as well?
 #define CTR_ENABLE  0x01
 #define CTR_CLEAR   0x02
 #define CTR_LOAD    0x04
 #define CTR_UPDOWN  0x08
 
-#define T0_VAL_L    0xD651 //current 24 bit value of the timer
-#define T0_VAL_M    0xD652
-#define T0_VAL_H    0xD653
-
-#define T0_CMP_CTR  0xD654 //b0: t0 returns 0 on reaching target. b1: CMP = last value written to T0_VAL
-#define T0_CMP_L    0xD655 //24 bit target value for comparison
-#define T0_CMP_M    0xD656
-#define T0_CMP_H    0xD657
-
 #define T0_CMP_CTR_RECLEAR 0x01
 #define T0_CMP_CTR_RELOAD  0x02
+
 
 
 #define MIDI 0xDDA1 //sam2695 to hear that timer0 is working
 
 uint8_t color = 1; //used for text color for when we write ** on screen
+
 
 void noteOnMIDI(void);
 void writeStars(void);
@@ -90,6 +89,7 @@ uint8_t val = 0;
  * Set the MMU slot to a given bank.
  * Return the content of the previous bank.
  */
+ //byte old_slot = setMMU(5, 0x3F);
 byte setMMU(byte mmu_slot, byte bank) {
     // switch to edit mode
     byte mmu = PEEK(0);
@@ -108,30 +108,22 @@ __attribute__((noinline)) __attribute__((interrupt_norecurse))
 void irq_handler() {
     byte irq0 = PEEK(INT_PENDING_0);
     if ((irq0 & INT_TIMER_0) > 0) {
+		byte LUT = PEEK(0);
+		POKE(INT_PENDING_0, irq0 & 0xFE);
+		POKE(0,0xB3);
 		writeStars();
-		loadTimer(0x00005555);
+		loadTimer(RATE);
+		POKE(0, LUT);
     }
     // Handle other interrupts as normal
-    original_irq_handler();
+    //original_irq_handler();
     //asm volatile("jmp (%[mem])" : : [mem] "r" (original_irq_handler));
-}
-
-
-void noteOnMIDI()
-{
-	POKE(MIDI,0x90);POKE(MIDI,0x39);POKE(MIDI,0x4F); //alternates between note on and note off
 }
 
 void writeStars()
 {
 	color= color?0:1; //flip the color between 2 values
-	
-	POKE(MMU_IO_CTRL, 2); //character
-	POKE(0xC000 + 80, 0x60);
-	
-	POKE(MMU_IO_CTRL, 3); //color switch
-	POKE(0xC000 + 80, color);
-	POKE(MMU_IO_CTRL, 0);
+	textSetColor(color, 0); textGotoXY(0,1); textPrint("*");
 }
 
 /**
@@ -141,14 +133,20 @@ void enableTimer() {
     original_irq_handler = (funcPtr)PEEKW(0xFFFE);
     //original_irq_handler = PEEKW(0xFFFE);
     // copy the $7F bank into another area of RAM - I guess DMA is not usable??
+	
+	//printf("before MMU");
+	//hitspace();
     byte old_slot = setMMU(5, 0x3F);
-    for (int i = 0; i < 0x1FFE; i++) {
+    //printf("after MMU");
+	//hitspace();
+	
+	for (int i = 0; i < 0x1FFE; i++) {
         byte flash = PEEK(0xE000 + i);
         POKE(0xA000 + i, flash);
     }
     // copy the irq_handler function to F300
     uint16_t handler_addr = (uint16_t)&irq_handler;
-    uint16_t playvgm_addr = (uint16_t)&dummy;
+    uint16_t playvgm_addr = (uint16_t)&writeStars;
     uint16_t relocate = 0xB300;
     for (int i=handler_addr;i < playvgm_addr ;i++) {
         byte hdlr = PEEK(i);
@@ -185,7 +183,7 @@ void loadTimer(uint32_t value) {
 void setTimer0()
 {
 	resetTimer0();
-	loadTimer(0x00005555);//inject the compare value as max value
+	loadTimer(RATE);//inject the compare value as max value
 }
 
 void resetTimer0()
@@ -193,7 +191,6 @@ void resetTimer0()
 	POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR); //when the target is reached, bring it back to value 0x000000
 	POKE(T0_CTR, CTR_CLEAR);
 	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
-	POKE(T0_PEND,0x10); //clear pending timer0
 }
 
 void dummy()
@@ -202,14 +199,16 @@ void dummy()
 
 int main(int argc, char *argv[]) {
 
-setTimer0();
 original_irq_handler = (funcPtr)PEEKW(0xFFFE);
 
 printf("this is supposed to trigger every 2/3rds of a second\n");
 
+setTimer0();
 asm("SEI");
+loadTimer(RATE);
+
 enableTimer();
-loadTimer(0xFFFFFFFF);
+
 asm("CLI");
 
 while(true)

@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -53,101 +53,111 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30       30        0     1 .zp.data
-      30       30        0     1         __zp_data_start = .
-      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30        4     1 .zp.bss
-      30       30        0     1         __zp_bss_start = .
-      30       30        4     1         interr.lto.o:(.zp.bss)
-      30       30        1     1                 _col
-      31       31        1     1                 _row
-      32       32        2     1                 __putchar.s
-      34       34        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-     300      300      87b     1 .text
-     300      300        0     1         _init = .
-     300      300        0     1         _start = .
-     300      300        8     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     300      300        0     1                 __do_init_stack
-     308      308        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     308      308        0     1                 __do_zero_bss
-     30b      30b        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30b      30b        0     1                 __do_zero_zp_bss
-     30e      30e        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     311      311        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     311      311        0     1                 __after_main
-     314      314        0     1         _fini = .
-     314      314        1     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     315      315        3     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
-     315      315        0     1                 __call_indir
-     318      318       13     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     318      318       13     1                 __zero_bss
-     32b      32b       13     1         C:\F256\f256llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     32b      32b       13     1                 __zero_zp_bss
-     33e      33e      3ad     1         interr.lto.o:(.text.f256Init)
-     33e      33e      3ad     1                 f256Init
-     6eb      6eb        6     1         interr.lto.o:(.text.main)
-     6eb      6eb        6     1                 main
-     6f1      6f1      17c     1         interr.lto.o:(.text.f256main)
-     6f1      6f1      17c     1                 f256main
-     86d      86d      11a     1         interr.lto.o:(.text.irq_handler)
-     86d      86d      11a     1                 irq_handler
-     987      987        1     1         interr.lto.o:(.text.dummy)
-     987      987        1     1                 dummy
-     988      988        5     1         interr.lto.o:(.text.exit)
-     988      988        5     1                 exit
-     98d      98d      1ce     1         interr.lto.o:(.text.putchar)
-     98d      98d      1ce     1                 putchar
-     b5b      b5b       20     1         interr.lto.o:(.text.__memset)
-     b5b      b5b       20     1                 __memset
-     b7b      b7b        0     1         __init_array_start = .
-     b7b      b7b        0     1         __init_array_end = .
-     b7b      b7b        0     1         __fini_array_start = .
-     b7b      b7b        0     1         __fini_array_end = .
-     b7b      b7b       65     1 .rodata
-     b7b      b7b       30     1         interr.lto.o:(.rodata.textColors)
-     b7b      b7b       30     1                 textColors
-     bab      bab       35     1         <internal>:(.rodata.str1.1)
-     be0      be0        1     1 .data
-     be0      be0        0     1         __data_start = .
-     be0      be0        1     1         interr.lto.o:(.data.color)
-     be0      be0        1     1                 color
-     be1      be1        0     1         __data_end = .
-     be1      be1        0     1 __data_load_start = LOADADDR(.data)
-     be1      be1        0     1 __data_size = SIZEOF(.data)
-     be1      be1        a     1 .bss
-     be1      be1        0     1         __bss_start = .
-     be1      be1        7     1         interr.lto.o:(.bss.kernelEventData)
-     be1      be1        7     1                 kernelEventData
-     be8      be8        1     1         interr.lto.o:(.bss.kernelError)
-     be8      be8        1     1                 kernelError
-     be9      be9        2     1         interr.lto.o:(.bss.original_irq_handler)
-     be9      be9        2     1                 original_irq_handler
-     beb      beb        0     1         __bss_end = .
-     beb      beb        0     1 __bss_size = SIZEOF(.bss)
-     beb      beb        0     1 .noinit
-     beb      beb        0     1         __heap_start = ALIGN(., 2)
-     beb      beb        0     1 end_block8 = .
-     beb      beb        0     1 end_block9 = .
-     beb      beb        0     1 end_block10 = .
-     beb      beb        0     1 end_block11 = .
-     beb      beb        0     1 end_block12 = .
-     beb      beb        0     1 end_block13 = .
-     beb      beb        0     1 end_block14 = .
-     beb      beb        0     1 end_block15 = .
-     beb      beb        0     1 end_block16 = .
-     beb      beb        0     1 end_block17 = .
-     beb      beb        0     1 end_block18 = .
-     beb      beb        0     1 end_block19 = .
-     beb      beb        0     1 end_block20 = .
-     beb      beb        0     1 end_block21 = .
-     beb      beb        0     1 end_block22 = .
-     beb      beb        0     1 end_block23 = .
+      30      300        1     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300        1     1         interr.lto.o:(.zp.data)
+      30      300        1     1                 _ccolor
+      31      301        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      31      301        0     1 __zp_data_size = SIZEOF(.zp.data)
+      31       31        4     1 .zp.bss
+      31       31        0     1         __zp_bss_start = .
+      31       31        4     1         interr.lto.o:(.zp.bss)
+      31       31        1     1                 _col
+      32       32        1     1                 _row
+      33       33        2     1                 __putchar.s
+      35       35        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+     301      301      b69     1 .text
+     301      301        0     1         _init = .
+     301      301        0     1         _start = .
+     301      301        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     301      301        0     1                 __do_init_stack
+     309      309        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     309      309        0     1                 __do_zero_bss
+     30c      30c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30c      30c        0     1                 __do_zero_zp_bss
+     30f      30f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     30f      30f        0     1                 __do_copy_zp_data
+     312      312        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     315      315        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     315      315        0     1                 __after_main
+     318      318        0     1         _fini = .
+     318      318        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     319      319       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     319      319       13     1                 __zero_bss
+     32c      32c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     32c      32c       13     1                 __zero_zp_bss
+     33f      33f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     33f      33f       17     1                 __copy_zp_data
+     356      356      5bf     1         interr.lto.o:(.text.main)
+     356      356      5bf     1                 main
+     915      915      14f     1         interr.lto.o:(.text.irq_handler)
+     915      915      14f     1                 irq_handler
+     a64      a64       46     1         interr.lto.o:(.text.writeStars)
+     a64      a64       46     1                 writeStars
+     aaa      aaa      36f     1         interr.lto.o:(.text.textPrint)
+     aaa      aaa      36f     1                 textPrint
+     e19      e19        5     1         interr.lto.o:(.text.exit)
+     e19      e19        5     1                 exit
+     e1e      e1e       2c     1         interr.lto.o:(.text.memcpy)
+     e1e      e1e       2c     1                 memcpy
+     e4a      e4a       20     1         interr.lto.o:(.text.__memset)
+     e4a      e4a       20     1                 __memset
+     e6a      e6a        0     1         __init_array_start = .
+     e6a      e6a        0     1         __init_array_end = .
+     e6a      e6a        0     1         __fini_array_start = .
+     e6a      e6a        0     1         __fini_array_end = .
+     e6a      e6a       68     1 .rodata
+     e6a      e6a        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+     e6a      e6a        0     1                 __set_v
+     e6b      e6b       30     1         interr.lto.o:(.rodata.textColors)
+     e6b      e6b       30     1                 textColors
+     e9b      e9b       37     1         <internal>:(.rodata.str1.1)
+     ed2      ed2        1     1 .data
+     ed2      ed2        0     1         __data_start = .
+     ed2      ed2        1     1         interr.lto.o:(.data.color)
+     ed2      ed2        1     1                 color
+     ed3      ed3        0     1         __data_end = .
+     ed3      ed3        0     1 __data_load_start = LOADADDR(.data)
+     ed3      ed3        0     1 __data_size = SIZEOF(.data)
+     ed3      ed3       16     1 .bss
+     ed3      ed3        0     1         __bss_start = .
+     ed3      ed3        4     1         interr.lto.o:(.bss._BITMAP_BASE.0)
+     ed3      ed3        4     1                 _BITMAP_BASE.0
+     ed7      ed7        4     1         interr.lto.o:(.bss._BITMAP_BASE.1)
+     ed7      ed7        4     1                 _BITMAP_BASE.1
+     edb      edb        4     1         interr.lto.o:(.bss._BITMAP_BASE.2)
+     edb      edb        4     1                 _BITMAP_BASE.2
+     edf      edf        2     1         interr.lto.o:(.bss.original_irq_handler)
+     edf      edf        2     1                 original_irq_handler
+     ee1      ee1        1     1         interr.lto.o:(.bss.kernelError)
+     ee1      ee1        1     1                 kernelError
+     ee2      ee2        7     1         interr.lto.o:(.bss.kernelEventData)
+     ee2      ee2        7     1                 kernelEventData
+     ee9      ee9        0     1         __bss_end = .
+     ee9      ee9        0     1 __bss_size = SIZEOF(.bss)
+     ee9      ee9        0     1 .noinit
+     ee9      ee9        0     1         __heap_start = ALIGN(., 2)
+     ee9      ee9        0     1 end_block8 = .
+     ee9      ee9        0     1 end_block9 = .
+     ee9      ee9        0     1 end_block10 = .
+     ee9      ee9        0     1 end_block11 = .
+     ee9      ee9        0     1 end_block12 = .
+     ee9      ee9        0     1 end_block13 = .
+     ee9      ee9        0     1 end_block14 = .
+     ee9      ee9        0     1 end_block15 = .
+     ee9      ee9        0     1 end_block16 = .
+     ee9      ee9        0     1 end_block17 = .
+     ee9      ee9        0     1 end_block18 = .
+     ee9      ee9        0     1 end_block19 = .
+     ee9      ee9        0     1 end_block20 = .
+     ee9      ee9        0     1 end_block21 = .
+     ee9      ee9        0     1 end_block22 = .
+     ee9      ee9        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      740     4 .symtab
-       0        0      740     4         <internal>:(.symtab)
+       0        0      7a0     4 .symtab
+       0        0      7a0     4         <internal>:(.symtab)
        0        0       56     1 .shstrtab
        0        0       56     1         <internal>:(.shstrtab)
-       0        0      4e2     1 .strtab
-       0        0      4e2     1         <internal>:(.strtab)
+       0        0      53e     1 .strtab
+       0        0      53e     1         <internal>:(.strtab)

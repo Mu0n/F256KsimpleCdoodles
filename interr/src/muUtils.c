@@ -1,5 +1,3 @@
-#include "D:\F256\llvm-mos\code\multiRead\.builddir\trampoline.h"
-
 #include "f256lib.h"
 #include "../src/muUtils.h"
 
@@ -42,7 +40,7 @@ void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
 	POKE(0xD00E,green);
 	POKE(0xD00F,red);
 	POKE(MMU_IO_CTRL,backup);
-}
+}	
 //codec enable all lines
 void openAllCODEC()
 {
@@ -89,7 +87,7 @@ uint8_t getTimerAbsolute(uint8_t units)
 //injectChar: injects a specific character in a specific location on screen.
 //position x,y is where it'll be injected in text layer coordinates
 //theChar is the byte from 0-255 that will be placed there
-//col(umn) should be either 40 (in double character width mode) or 80 (in regular width mode)
+//col(umn) should be either 40 (in double character width mode) or 80 (in regular width mode) 
 void injectChar40col(uint8_t x, uint8_t y, uint8_t theChar, uint8_t col)
 {
 		POKE(MMU_IO_CTRL,0x02); //set io_ctrl to 2 to access text screen
@@ -140,4 +138,5 @@ void lilpause(uint8_t timedelay)
 			}
 		}
 	}
+}
 }

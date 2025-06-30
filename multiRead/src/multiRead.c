@@ -8,14 +8,12 @@
 
 EMBED(music, "../Asayake.mid", 0x10000); //1kb
 
-<<<<<<< Updated upstream
 uint16_t readBigEndian16(FILE *fp) {
     uint8_t bytes[2];
     if (fread(bytes, 1, 2, fp) != 2) {
         // Handle error — possibly end of file
         return 0;
     }
-=======
 typedef struct MIDITrackParser
 {
 	uint32_t length, offset, start;
@@ -50,7 +48,6 @@ uint16_t peekBigEndian16(uint32_t where) {
 	bytes[0] = FAR_PEEK(where);
 	bytes[1] = FAR_PEEK(where+1);
 	
->>>>>>> Stashed changes
     return ((uint16_t)bytes[0] << 8) |
            (uint16_t)bytes[1];
 }
@@ -58,29 +55,22 @@ uint16_t peekBigEndian16(uint32_t where) {
 
 uint32_t peekBigEndian32(uint32_t where) {
     uint8_t bytes[4];
-<<<<<<< Updated upstream
     if (fread(bytes, 1, 4, fp) != 4) {
         // Handle error — possibly end of file
         return 0;
-    }
-	printf("%02x %02x %02x %02x\n", bytes[0], bytes[1], bytes[2], bytes[3]);
-=======
-    
+    } 
 	bytes[0] = FAR_PEEK(where);
 	bytes[1] = FAR_PEEK(where+1);
 	bytes[2] = FAR_PEEK(where+2);
 	bytes[3] = FAR_PEEK(where+3);
 	
->>>>>>> Stashed changes
     return ((uint32_t)bytes[0] << 24) |
            ((uint32_t)bytes[1] << 16) |
            ((uint32_t)bytes[2] << 8)  |
            (uint32_t)bytes[3];
 }
 
-<<<<<<< Updated upstream
 
-=======
 //reads the time delta
 uint32_t readDelta(MIDP *theOne, uint8_t track)
 {
@@ -272,24 +262,20 @@ uint8_t readMIDIEvent(MIDP *theOne, uint8_t track)
 	theOne->tracks[track].delta = readDelta(theOne, track);
 	return readMIDICmd(theOne, track);
 }
->>>>>>> Stashed changes
 int main(int argc, char *argv[]) {
 	uint8_t *fileNum =0, *fileNum2 = 0;
 	uint8_t cmdBuf[8], cmdBuf2[8];
 	uint16_t nbTracks = 0;
 	uint32_t pos;
 	
-<<<<<<< Updated upstream
 	uint32_t *lengths, *offsets, *starts;
 	bool *isDone;
 	//size_t binLen = sizeof(binData);
-	
-=======
->>>>>>> Stashed changes
+
 	//setup and open file
 	
 	for(uint8_t i=0; i<8; i++) cmdBuf[i] = 0; // clear out
-<<<<<<< Updated upstream
+
 	
 	fileNum  = fileOpen("Asayake.mid","r");
 	fileNum2 = fileOpen("Asayake.mid","r");
@@ -303,15 +289,14 @@ int main(int argc, char *argv[]) {
 	offsets = (uint32_t *) malloc(sizeof(uint32_t) * nbTracks);
 	starts = (uint32_t *) malloc(sizeof(uint32_t) * nbTracks);
 	isDone = (bool *) malloc(sizeof(bool) * nbTracks);
-=======
+
 
 	
 	//read number of tracks
 	theOne.nbTracks = peekBigEndian16(MIDISTART+(uint32_t)10);
 
 	theOne.tracks = (MIDTrackP *)malloc(sizeof(MIDTrackP) * theOne.nbTracks);
->>>>>>> Stashed changes
-	
+
 	for(uint16_t i = 0; i< nbTracks; i++)
 	{
 		isDone[i] = false;
@@ -323,16 +308,13 @@ int main(int argc, char *argv[]) {
 	
 	hitspace();
 	//go to every track
-<<<<<<< Updated upstream
 	pos=14;
 	fseek(fileNum, pos, SEEK_SET);  // Skip header chunk
 	
 	for (uint16_t i = 0; i < nbTracks; i++) {
 		
 		fread(cmdBuf, 1, 4, fileNum);//read track signature
-=======
-	
-    pos=14;
+
 	
 	//find the start positions of every track
 	for (uint16_t i = 0; i < theOne.nbTracks; i++) {
@@ -341,13 +323,11 @@ int main(int argc, char *argv[]) {
 		cmdBuf[2] = FAR_PEEK(MIDISTART + pos + (uint32_t)2);
 		cmdBuf[3] = FAR_PEEK(MIDISTART + pos + (uint32_t)3);
 		pos+=4;
->>>>>>> Stashed changes
 		
 		if (strcmp(cmdBuf, "MTrk") != 0) {
 			// Handle error: unexpected chunk
 		}
 		
-<<<<<<< Updated upstream
 		uint32_t length = readBigEndian32(fileNum); // read track byte length
 		lengths[i] = length;
 		pos+=(uint32_t)8;
@@ -356,18 +336,15 @@ int main(int argc, char *argv[]) {
 		
 		pos+=length;
 		fseek(fileNum, pos, SEEK_SET);  // Skip to next chunk
-=======
+
 		uint32_t length  = peekBigEndian32(MIDISTART + pos); // read track byte length
 		theOne.tracks[i].length = length;
 		pos+=4;
 		printf("Track %d starts at offset %08lx\n", i, pos);
 		theOne.tracks[i].start = MIDISTART + pos; //know where to begin
 		
-		pos+=length;
->>>>>>> Stashed changes
 	}
 
-<<<<<<< Updated upstream
 	while(true) {
 	for(uint16_t i = 0; i < nbTracks; i++)
 		{
@@ -376,7 +353,6 @@ int main(int argc, char *argv[]) {
 		fileRead(cmdBuf, 1,1, fileNum); 
 		textGotoXY(0 + offsets[i]*3,15 + i*2); printf("%02x ", cmdBuf[0]);
 		offsets[i]++;
-=======
 //first pass, just get one event per track, renew if it's non important event
 for(uint16_t i = 0; i < theOne.nbTracks; i++)
 	{
@@ -462,11 +438,9 @@ if(theOne.tracks[lowestIndex].isDone == false && theOne.tracks[lowestIndex].offs
 					break;
 			}
 			if(quitRefresh) break;
->>>>>>> Stashed changes
 		}
 	}
 	
-<<<<<<< Updated upstream
 
 	printf("file Num is: %d\n", *fileNum);
 	
@@ -474,15 +448,9 @@ if(theOne.tracks[lowestIndex].isDone == false && theOne.tracks[lowestIndex].offs
 	
 	fileClose(fileNum);
 	fileClose(fileNum2);
-=======
 }
 
 
-
-
-
->>>>>>> Stashed changes
-	
 	printf("hit space to quit");
 	hitspace();
 	

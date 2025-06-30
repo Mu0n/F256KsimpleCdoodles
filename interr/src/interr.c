@@ -20,7 +20,6 @@ this relocation.
 uint8_t color = 1; //used for text color for when we write ** on screen
 
 void writeStars(void);
-void enableTimer(funcPtr, funcPtr);
 
 
 /**
@@ -47,7 +46,6 @@ void writeStars()
 	color= color?0:1; //flip the color between 2 values
 	textSetColor(color, 0); textGotoXY(0,1); textPrint("*");
 }
-
 
 
 int main(int argc, char *argv[]) {

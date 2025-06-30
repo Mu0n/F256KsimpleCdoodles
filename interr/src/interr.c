@@ -16,6 +16,7 @@ by having edited the irq vector to handle them.
 
 #include "f256lib.h"
 #include "../src/muUtils.h"
+#include "../src/muTimer0Int.h"
 
 #define RATE 0x00AFDEAD
 #define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
@@ -69,35 +70,11 @@ by having edited the irq vector to handle them.
 uint8_t color = 1; //used for text color for when we write ** on screen
 
 
-void noteOnMIDI(void);
 void writeStars(void);
-void setTimer0(void);
-void resetTimer0(void);
-uint32_t readTimer0(void);
-uint8_t isTimerDone(void);
-void dummy(void);
-void loadTimer(uint32_t) ;
+void enableTimer(void);
 
-typedef void (*funcPtr)();
 funcPtr original_irq_handler;
 
-uint8_t val = 0;
-
-/**
- * Set the MMU slot to a given bank.
- * Return the content of the previous bank.
- */
- //byte old_slot = setMMU(5, 0x3F);
-byte setMMU(byte mmu_slot, byte bank) {
-    // switch to edit mode
-    byte mmu = PEEK(0);
-    POKE(0,mmu | 0x80);
-    byte old = PEEK(8+mmu_slot);
-    POKE(8+mmu_slot, bank);
-    // restore the mmu
-    POKE(0, mmu);
-    return old;
-}
 
 /**
  * Handle interrupts
@@ -175,25 +152,7 @@ void enableTimer() {
 
     resetTimer0();
 }
-void loadTimer(uint32_t value) {
-    POKEA(T0_CMP_L, value);
-}
-void setTimer0()
-{
-	resetTimer0();
-	loadTimer(RATE);//inject the compare value as max value
-}
 
-void resetTimer0()
-{
-	POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR); //when the target is reached, bring it back to value 0x000000
-	POKE(T0_CTR, CTR_CLEAR);
-	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
-}
-
-void dummy()
-{
-}
 
 int main(int argc, char *argv[]) {
 
@@ -201,7 +160,7 @@ original_irq_handler = (funcPtr)PEEKW(0xFFFE);
 
 printf("this is supposed to trigger every 2/3rds of a second\n");
 
-setTimer0();
+setTimer0(RATE);
 asm("SEI");
 loadTimer(RATE);
 

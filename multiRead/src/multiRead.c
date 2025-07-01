@@ -27,8 +27,8 @@ typedef struct MIDIParser {
 	struct MIDITrackParser *tracks;
 } MIDP;
 
-
 struct MIDIParser theOne;
+bool intGreenLight = false;
 
 void initTrack(void);
 void playMidi(void);
@@ -36,9 +36,6 @@ uint8_t readMIDIEvent(uint8_t);
 uint16_t readBigEndian16(uint32_t);
 uint32_t readBigEndian32(uint32_t);
 uint32_t timer0PerTick;
-
-
-
 
 void initTrack(){
 	for(uint16_t i=0; i<theOne.nbTracks; i++)
@@ -78,6 +75,23 @@ uint32_t readBigEndian32(uint32_t where) {
            (uint32_t)bytes[3];
 }
 
+/**
+ * Handle interrupts
+ */
+__attribute__((noinline)) __attribute__((interrupt_norecurse))
+void irq_handler() {
+    byte irq0 = PEEK(INT_PENDING_0);
+    if ((irq0 & INT_TIMER_0) > 0) {
+		byte LUT = PEEK(0);
+		POKE(INT_PENDING_0, irq0 & 0xFE);
+		POKE(0,0xB3);
+		intGreenLight = true;
+		POKE(0, LUT);
+    }
+    // Handle other interrupts as normal
+    //original_irq_handler();
+    //asm volatile("jmp (%[mem])" : : [mem] "r" (original_irq_handler));
+}
 
 //reads the time delta
 uint32_t readDelta(uint8_t track) {
@@ -317,25 +331,6 @@ void exhaustZeroes(uint8_t track)
 	}
 }
 
-/**
- * Handle interrupts
- */
-__attribute__((noinline)) __attribute__((interrupt_norecurse))
-void irq_handler() {
-    byte irq0 = PEEK(INT_PENDING_0);
-    if ((irq0 & INT_TIMER_0) > 0) {
-		byte LUT = PEEK(0);
-		POKE(INT_PENDING_0, irq0 & 0xFE);
-		POKE(0,0xB3);
-		
-	printf("...");
-		playMidi();
-		POKE(0, LUT);
-    }
-    // Handle other interrupts as normal
-    //original_irq_handler();
-    //asm volatile("jmp (%[mem])" : : [mem] "r" (original_irq_handler));
-}
 
 void playMidi()
 {
@@ -453,6 +448,11 @@ int main(int argc, char *argv[]) {
 	//insert game loop here		
 	while(true)
 		{
+		if(intGreenLight) 
+			{
+			intGreenLight = true;
+			playMidi();
+			}
 //find what to do and cue up the lowest non-zero	
 		if(theOne.isWaiting == false)
 			{

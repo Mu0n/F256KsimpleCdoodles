@@ -5,13 +5,13 @@
 #include "f256lib.h"
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h" //contains helper functions I often use
+#include "../src/muTimer0Int.h" //contains helper functions I often use
 
 #define MIDISTART 0x10000
 
 EMBED(music, "../Asayake.mid", 0x10000); //1kb
 
-typedef struct MIDITrackParser
-{
+typedef struct MIDITrackParser {
 	uint32_t length, offset, start;
 	uint32_t delta;
 	uint8_t cmd[3];
@@ -20,33 +20,37 @@ typedef struct MIDITrackParser
 	bool isDone;
 } MIDTrackP;
 
-typedef struct MIDIParser
-{
+typedef struct MIDIParser {
 	uint16_t nbTracks;
+	uint16_t ticks;
 	struct MIDITrackParser *tracks;
 } MIDP;
 
 
-uint16_t readBigEndian16(FILE *fp) {
-    uint8_t bytes[2];
-    if (fread(bytes, 1, 2, fp) != 2) {
-        // Handle error — possibly end of file
-        return 0;
-    }
+struct MIDIParser theOne;
+
+uint8_t readMIDIEvent(MIDP *, uint8_t);
+uint16_t readBigEndian16(uint32_t);
+uint32_t readBigEndian32(uint32_t);
+uint32_t timer0PerTick;
+
+
+
+void initTrack(struct MIDIParser  *theOne){
+	for(uint16_t i=0; i<theOne->nbTracks; i++)
+	{
+	theOne->tracks[i].length = 0;
+	theOne->tracks[i].offset = 0;
+	theOne->tracks[i].start = 0;
+	theOne->tracks[i].delta = 0;
+	theOne->tracks[i].cmd[0] = theOne->tracks[i].cmd[1] = theOne->tracks[i].cmd[2] = 0;
+	theOne->tracks[i].lastCmd = 0;
+	theOne->tracks[i].is2B = true;
+	theOne->tracks[i].isDone = false;
 	}
-void initTrack(MIDTrackP *mtp)
-{
-	mtp->length = 0;
-	mtp->offset = 0;
-	mtp->start = 0;
-	mtp->delta = 0;
-	mtp->cmd[0] = mtp->cmd[1] = mtp->cmd[2] = 0;
-	mtp->lastCmd = 0;
-	mtp->is2B = true;
-	mtp->isDone = false;
 }
 
-uint16_t peekBigEndian16(uint32_t where) {
+uint16_t readBigEndian16(uint32_t where) {
     uint8_t bytes[2];
 	bytes[0] = FAR_PEEK(where);
 	bytes[1] = FAR_PEEK(where+1);
@@ -56,27 +60,23 @@ uint16_t peekBigEndian16(uint32_t where) {
 }
 
 
-uint32_t peekBigEndian32(uint32_t where) {
+uint32_t readBigEndian32(uint32_t where) {
     uint8_t bytes[4];
-    if (fread(bytes, 1, 4, fp) != 4) {
-        // Handle error — possibly end of file
-        return 0;
-    }
+
 	bytes[0] = FAR_PEEK(where);
 	bytes[1] = FAR_PEEK(where+1);
 	bytes[2] = FAR_PEEK(where+2);
 	bytes[3] = FAR_PEEK(where+3);
 	
-    return ((uint32_t)bytes[0] << 24) |
-           ((uint32_t)bytes[1] << 16) |
-           ((uint32_t)bytes[2] << 8)  |
+    return (((uint32_t)bytes[0]) << 24) |
+           (((uint32_t)bytes[1]) << 16) |
+           (((uint32_t)bytes[2]) << 8)  |
            (uint32_t)bytes[3];
 }
 
 
 //reads the time delta
-uint32_t readDelta(MIDP *theOne, uint8_t track)
-{
+uint32_t readDelta(MIDP *theOne, uint8_t track) {
 	uint32_t nValue, nValue2, nValue3, nValue4;
 	uint8_t temp;
 	
@@ -121,9 +121,7 @@ uint32_t readDelta(MIDP *theOne, uint8_t track)
 	return nValue | nValue2 | nValue3 | nValue4;
 }
 
-uint8_t skipWhenFFCmd(MIDP *theOne, uint8_t track, uint8_t meta_byte, uint8_t data_byte)
-{
-
+uint8_t skipWhenFFCmd(MIDP *theOne, uint8_t track, uint8_t meta_byte, uint8_t data_byte) {
 	if(meta_byte == MetaSequence || meta_byte == MetaChannelPrefix || meta_byte == MetaChangePort)
 		{
 		theOne->tracks[track].offset+=(uint32_t)3;
@@ -140,19 +138,16 @@ uint8_t skipWhenFFCmd(MIDP *theOne, uint8_t track, uint8_t meta_byte, uint8_t da
 		}
 	else if(meta_byte == MetaSetTempo)
 		{
-		theOne->tracks[track].offset+=(uint32_t)5;
+		theOne->tracks[track].offset+=(uint32_t)1;
 	
-			/*
-		data_byte =  FAR_PEEK(rec->baseAddr+(uint32_t)i);
-		i++;
-		data_byte2 = FAR_PEEK(rec->baseAddr+(uint32_t)i);
-		i++;
-		data_byte3 = FAR_PEEK(rec->baseAddr+(uint32_t)i);
-		i++;
-		data_byte4 = FAR_PEEK(rec->baseAddr+(uint32_t)i);
-		i++;
+		uint8_t data_byte =  FAR_PEEK(theOne->tracks[track].start+theOne->tracks[track].offset);
+		uint8_t data_byte2 = FAR_PEEK(theOne->tracks[track].start+theOne->tracks[track].offset+(uint32_t)1);
+		uint8_t data_byte3 = FAR_PEEK(theOne->tracks[track].start+theOne->tracks[track].offset+(uint32_t)2);
+		uint8_t data_byte4 = FAR_PEEK(theOne->tracks[track].start+theOne->tracks[track].offset+(uint32_t)3);
 	
-		usPerBeat = ( ((uint32_t)data_byte2)<<16 ) |
+		theOne->tracks[track].offset+=(uint32_t)4;
+	
+		uint32_t usPerBeat = ( ((uint32_t)data_byte2)<<16 ) |
 					   ( ((uint32_t)data_byte3)<<8  ) |
 						 ((uint32_t)data_byte4);
 	
@@ -160,11 +155,12 @@ uint8_t skipWhenFFCmd(MIDP *theOne, uint8_t track, uint8_t meta_byte, uint8_t da
 		//if you divide usPerBeat by tick per beat,
 		//you get the duration in microseconds per tick, ready to be multiplied	by the events' deltaTimes to get delays in us
 
-		usPerTick = (uint32_t)usPerBeat/((uint32_t)rec->tick);
-		timer0PerTick = (uint32_t)((double)usPerTick * (double)rec->fudge); //convert to the units of timer0
-		rec->bpm = (uint16_t) ((uint32_t)6E7/((uint32_t)usPerBeat));
+		uint32_t usPerTick = (uint32_t)usPerBeat/((uint32_t)theOne->ticks);
 	
-*/
+		timer0PerTick = (uint32_t)((double)usPerTick * (double)25.0f); //convert to the units of timer0
+		textGotoXY(20,11);printf("%08lx deltaTransfor",timer0PerTick);
+		theOne->tracks[track].delta = timer0PerTick;
+
 		}
 	else if(meta_byte == MetaSMPTEOffset)
 		{
@@ -185,8 +181,7 @@ uint8_t skipWhenFFCmd(MIDP *theOne, uint8_t track, uint8_t meta_byte, uint8_t da
 	return 1;
 }
 
-uint8_t readMIDICmd(MIDP *theOne, uint8_t track)
-{
+uint8_t readMIDICmd(MIDP *theOne, uint8_t track) {
 	uint8_t status_byte, extra_byte, extra_byte2; //temporary bytes that fetch data from the file
 	
 //status byte or MIDI message reading
@@ -201,12 +196,6 @@ uint8_t readMIDICmd(MIDP *theOne, uint8_t track)
 	theOne->tracks[track].cmd[1] = extra_byte;
 	theOne->tracks[track].cmd[2] = extra_byte2;
 	
-	
-	printf("\n%08lx %02x %02x %02x <check command", theOne->tracks[track].delta,
-												theOne->tracks[track].cmd[0],
-												theOne->tracks[track].cmd[1],
-												theOne->tracks[track].cmd[2]);
-	
 	theOne->tracks[track].offset++; //advance the offset by the first it needs
 //first, check for run-on commands that don't repeat the status_byte
 	if(status_byte < 0x80) //run-on detected!
@@ -215,6 +204,12 @@ uint8_t readMIDICmd(MIDP *theOne, uint8_t track)
 		extra_byte = status_byte; //the first parameter of the command was here
 		status_byte = theOne->tracks[track].lastCmd; //fetch this from the recorded last command
 
+
+		theOne->tracks[track].cmd[0] = status_byte;
+		theOne->tracks[track].cmd[0] = status_byte;
+		theOne->tracks[track].cmd[1] = extra_byte;
+		theOne->tracks[track].cmd[2] = extra_byte2;
+	
 		//printf(" ! %02x", status_byte);
 		theOne->tracks[track].offset--; //since there was no command byte, back track by one
 		}
@@ -224,6 +219,7 @@ uint8_t readMIDICmd(MIDP *theOne, uint8_t track)
 		return skipWhenFFCmd(theOne, track, extra_byte, extra_byte2);
 		}
 //Third, deal with regular MIDI commands
+//MIDI commands with only 1 data byte
 //MIDI commands with only 1 data byte
 //Program change   0xC_
 //Channel Pressure 0xD_
@@ -245,8 +241,17 @@ uint8_t readMIDICmd(MIDP *theOne, uint8_t track)
 // Pitch Bend 0xE_
 	else if((status_byte >= 0x80 && status_byte <= 0xBF) || (status_byte >= 0xE0 && status_byte <= 0xEF))
 		{
-		theOne->tracks[track].offset+=2; //complete the 3 byte advance in the offset (or 2 if run-on)
+	
 		theOne->tracks[track].lastCmd = status_byte; //preserve this in case a run-on command happens next
+	
+		if((status_byte & 0xF0) == 0x90 && extra_byte2==0x00)
+			{
+			status_byte = status_byte & 0x8F;	//sometimes note offs are note ons with 0 velocity, quirk of some midi sequencers
+			extra_byte2 = 0x7F;
+			}
+	
+	
+		theOne->tracks[track].offset+=2; //complete the 3 byte advance in the offset (or 2 if run-on)
 		theOne->tracks[track].is2B = false;
 		return 0;
 		}
@@ -257,67 +262,67 @@ uint8_t readMIDICmd(MIDP *theOne, uint8_t track)
 		return 0;
 }
 
+//get the next event in this track. do check out if it is "isDone" first, then get into this if it is!
+void readNextEvent(MIDP *theOne, uint8_t track)
+{
+	bool quitRefresh = false; //keep looking until we get a case 0, important MIDI event we shouldn't skip, or a case 2 =end of track
+	for(;;)
+		{
+		switch(readMIDIEvent(theOne, track))
+			{
+			case 1: //a skippable 0xFF event was detected, go to the next
+				continue;
+			case 0: //a regular event was detected, was not skipped
+				quitRefresh = true;
+				break;
+			case 2: //a 0xFF 0x2F event was detected, end of track
+				theOne->tracks[track].isDone = true;
+				quitRefresh = true;
+				break;
+			}
+		if(quitRefresh) break;
+		}
+}
+
+void performMIDICmd(MIDP *theOne, uint8_t track)
+{
+	POKE(MIDI_FIFO, theOne->tracks[track].cmd[0]);
+	POKE(MIDI_FIFO, theOne->tracks[track].cmd[1]);
+
+	if(theOne->tracks[track].is2B==false)
+		{
+		POKE(MIDI_FIFO, theOne->tracks[track].cmd[2]);
+		}
+}
 
 //reads one midi command, returns how many bytes are needed for the command inside the buffer.
 //uint8_t readMIDIEvent(MIDP *theOne, uint8_t track, FILE *fp)
-uint8_t readMIDIEvent(MIDP *theOne, uint8_t track)
-{
-	theOne->tracks[track].delta = readDelta(theOne, track);
+uint8_t readMIDIEvent(MIDP *theOne, uint8_t track) {
+	theOne->tracks[track].delta = readDelta(theOne, track) * timer0PerTick;
 	return readMIDICmd(theOne, track);
 }
 int main(int argc, char *argv[]) {
-	uint8_t *fileNum =0, *fileNum2 = 0;
-	uint8_t cmdBuf[8], cmdBuf2[8];
-	uint16_t nbTracks = 0;
+	uint8_t cmdBuf[8];
 	uint32_t pos;
 	
-	uint32_t *lengths, *offsets, *starts;
-	bool *isDone;
-	//size_t binLen = sizeof(binData);
-
-	//setup and open file
 	
 	for(uint8_t i=0; i<8; i++) cmdBuf[i] = 0; // clear out
 
-	
-	fileNum  = fileOpen("Asayake.mid","r");
-	fileNum2 = fileOpen("Asayake.mid","r");
-	
-	
+
 	//read number of tracks
-	fseek(fileNum, 10, SEEK_SET);
-	nbTracks = readBigEndian16(fileNum);  // Read number of tracks
-	
-	lengths = (uint32_t *) malloc(sizeof(uint32_t) * nbTracks);
-	offsets = (uint32_t *) malloc(sizeof(uint32_t) * nbTracks);
-	starts = (uint32_t *) malloc(sizeof(uint32_t) * nbTracks);
-	isDone = (bool *) malloc(sizeof(bool) * nbTracks);
-
-
-	
-	//read number of tracks
-	theOne.nbTracks = peekBigEndian16(MIDISTART+(uint32_t)10);
-
+	theOne.nbTracks = readBigEndian16(MIDISTART+(uint32_t)10);
 	theOne.tracks = (MIDTrackP *)malloc(sizeof(MIDTrackP) * theOne.nbTracks);
 
-	for(uint16_t i = 0; i< nbTracks; i++)
-	{
-		isDone[i] = false;
-		lengths[i] = 0;
-		starts[i] = 0;
-		offsets[i] = 0;
-	}
+	printf("nbTracks %d \n", theOne.nbTracks);
+	for(uint16_t j = 0; j< theOne.nbTracks; j++) //finish preparing the main structure
+		{
+		initTrack(&theOne);
+		}
 	
-	
-	hitspace();
+	//read tick
+	theOne.ticks = readBigEndian16(MIDISTART+(uint32_t)12);
 	//go to every track
 	pos=14;
-	fseek(fileNum, pos, SEEK_SET);  // Skip header chunk
-	
-	for (uint16_t i = 0; i < nbTracks; i++) {
-	
-		fread(cmdBuf, 1, 4, fileNum);//read track signature
-
 	
 	//find the start positions of every track
 	for (uint16_t i = 0; i < theOne.nbTracks; i++) {
@@ -329,131 +334,101 @@ int main(int argc, char *argv[]) {
 	
 		if (strcmp(cmdBuf, "MTrk") != 0) {
 			// Handle error: unexpected chunk
-		}
-	
-		uint32_t length = readBigEndian32(fileNum); // read track byte length
-		lengths[i] = length;
-		pos+=(uint32_t)8;
-		printf("Track %d starts at offset %08lx\n", i, pos);
-		starts[i] = pos; //know where to begin
-	
-		pos+=length;
-		fseek(fileNum, pos, SEEK_SET);  // Skip to next chunk
+			}
 
-		uint32_t length  = peekBigEndian32(MIDISTART + pos); // read track byte length
+		uint32_t length  = readBigEndian32(MIDISTART + pos); // read track byte length
 		theOne.tracks[i].length = length;
 		pos+=4;
-		printf("Track %d starts at offset %08lx\n", i, pos);
+		printf("Track %d starts at offset %08lx and is length %08lx\n", i, pos, length);
 		theOne.tracks[i].start = MIDISTART + pos; //know where to begin
-	
-	}
-
+		pos +=length;
+		}
 	while(true) {
-	for(uint16_t i = 0; i < nbTracks; i++)
-		{
-		if(lengths[i]==0) continue;
-		fseek(fileNum, starts[i] + offsets[i], SEEK_SET);
-		fileRead(cmdBuf, 1,1, fileNum);
-		textGotoXY(0 + offsets[i]*3,15 + i*2); printf("%02x ", cmdBuf[0]);
-		offsets[i]++;
 //first pass, just get one event per track, renew if it's non important event
-for(uint16_t i = 0; i < theOne.nbTracks; i++)
-	{
-		bool quitRefresh = false;
-		printf("\nT%d ", i);
-		if(theOne.tracks[i].isDone) continue; //skip finished tracks
-		if(theOne.tracks[i].offset >= theOne.tracks[i].length)
-		{
-			theOne.tracks[i].isDone = true; //mark it as finished if we reach the end
-			continue;
-		}
-		for(;;)
-		{
-			switch(readMIDIEvent(&theOne, i))
+
+		for(uint16_t i = 0; i < theOne.nbTracks; i++)
 			{
-				case 1:
-					continue;
-				case 0:
-					quitRefresh = true;
-					break;
-				case 2:
-					theOne.tracks[i].isDone = true;
-					quitRefresh = true;
-					break;
-			}
-			if(quitRefresh) break;
-		}
-	}
+			if(theOne.tracks[i].isDone) continue; //skip finished track, go to next
+			if(theOne.tracks[i].offset >= theOne.tracks[i].length) //it's already done, go to next
+				{
+				theOne.tracks[i].isDone = true; //mark it as finished if we reach the end
+				continue;
+				}
+			textGotoXY(0, 15 + i);
 	
+			readNextEvent(&theOne, i);
+			}
 
-while(true)
-{
-bool quitRefresh = false;
-uint32_t lowest = 0xFFFFFFFF;
-uint8_t lowestIndex = 0xFF;
 
-for(uint16_t i = 0; i < theOne.nbTracks; i++)
-	{
-		if(theOne.tracks[i].delta == 0)
-		{
-			lowest = 0;
-			lowestIndex = i;
-			break;
-		}
-		if(theOne.tracks[i].delta < lowest)
-		{
-			lowest = theOne.tracks[i].delta;
-			lowestIndex = i;
-		}
-	}
+//play stuff
 
-POKE(MIDI_FIFO, theOne.tracks[lowestIndex].cmd[0]);
-POKE(MIDI_FIFO, theOne.tracks[lowestIndex].cmd[1]);
-
-if(!theOne.tracks[lowestIndex].is2B)
-{
-POKE(MIDI_FIFO, theOne.tracks[lowestIndex].cmd[2]);
-}
-
-//correct others
-for(uint16_t i = 0; i < theOne.nbTracks; i++)
-	{
-		if(theOne.tracks[lowestIndex].delta == 0) break;
-		if(i==lowestIndex) continue;
-		theOne.tracks[i].delta -= theOne.tracks[lowestIndex].delta;
-	}
-
-//renew the one spent
-if(theOne.tracks[lowestIndex].isDone == false && theOne.tracks[lowestIndex].offset < theOne.tracks[lowestIndex].length)
-	{
-	for(;;)
-		{
-			switch(readMIDIEvent(&theOne, lowestIndex))
+			uint32_t lowest;
+			uint16_t lowestIndex;
+			uint16_t doneCumulative = 0;
+		while(true)
 			{
-				case 1:
-					continue;
-				case 0:
-					quitRefresh = true;
-					break;
-				case 2:
-					theOne.tracks[lowestIndex].isDone = true;
-					quitRefresh = true;
-					break;
+			lowest = 0xFFFFFFFF;
+			lowestIndex = 0xFFFF;
+			if(doneCumulative == theOne.nbTracks) break;
+	
+			for(uint16_t i = 0; i < theOne.nbTracks; i++)
+				{
+				if(theOne.tracks[i].isDone) continue;
+				if(theOne.tracks[i].delta == 0x00000000)
+					{
+					lowest = 0;
+					lowestIndex = i;
+	
+					performMIDICmd(&theOne, i);
+					readNextEvent(&theOne, i);
+					i--; //come back to the same track!
+					//printf("Tr%d %08lx event: %02x %02x\n",lowestIndex, theOne.tracks[lowestIndex].delta, theOne.tracks[lowestIndex].cmd[0],theOne.tracks[lowestIndex].cmd[1]);
+	
+					}
+				else if(theOne.tracks[i].delta < lowest)
+					{
+					lowest = theOne.tracks[i].delta;
+					lowestIndex = i;
+					}
+				}
+	
+	
+				uint32_t overFlow = lowest;
+	
+				while(overFlow > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
+						{
+							lilpause(5);
+								//delay up to maximum of 0x00FFFFFF = 2/3rds of a second
+							overFlow = overFlow - 0x00FFFFFF; //reduce the max value one by one until there is a remainder smaller than the max amount
+						}
+						//do the last delay that's under 2/3rds of a second
+	
+	
+						lilpause(5);
+						performMIDICmd(&theOne, lowestIndex);
+	
+
+
+		//correct others
+			for(uint16_t i = 0; i < theOne.nbTracks; i++)
+				{
+				if(theOne.tracks[lowestIndex].delta == 0) break; //nothing to correct in others
+				if(theOne.tracks[i].isDone) continue; //this track is done
+				if(i==lowestIndex) continue; //don't modify itself
+				theOne.tracks[i].delta -= theOne.tracks[lowestIndex].delta;
+				}
+
+			//renew the one spent
+			if(theOne.tracks[lowestIndex].isDone == false && theOne.tracks[lowestIndex].offset < theOne.tracks[lowestIndex].length)
+				{
+				readNextEvent(&theOne, lowestIndex);
+				}
+	
 			}
-			if(quitRefresh) break;
+		printf("hit space to quit");
+		hitspace();
+	
+		return 0;
 		}
+
 	}
-	
-
-	printf("file Num is: %d\n", *fileNum);
-	
-	
-	
-	fileClose(fileNum);
-	fileClose(fileNum2);
-}
-
-
-	printf("hit space to quit");
-	hitspace();
-	

@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\multiRead\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\midisam2\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muTimer0Int.h"

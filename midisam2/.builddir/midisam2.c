@@ -6,8 +6,8 @@
 #include "../src/setup.h" //contains helper functions I often use
 #include "../src/muVS1053b.h" //VS1053b stuff
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
-#include "../src/muMidiPlay.h"  //contains basic MIDI functions I often use
-#include "../src/timer0.h"  //contains basic cpu based timer0 functions I often use
+#include "../src/muMidiPlay2.h"  //contains basic MIDI functions I often use
+#include "../src/muTimer0Int.h"  //contains basic cpu based timer0 functions I often use
 
 #define MIDI_BASE   0x20000 //gives a nice 07ffkb until the parsed version happens
 #define MIDI_PARSED 0x50000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
@@ -27,8 +27,6 @@
 struct timer_t playbackTimer, shimmerTimer;
 struct time_t time_data;
 bool isPaused = false;
-
-EMBED(music, "../assets/continen.dim", 0x50000);
 
 bool repeatFlag = false;
 bool shimmerChanged[16][8];
@@ -94,7 +92,7 @@ void superExtraInfo(struct midiRecord *rec) {
 	textGotoXY(1,24);textPrint("[ESC]: quit    [SPACE]:  pause    [F1] Toggle MIDI Output:  ");
 	textSetColor(1,0);textPrint("SAM2695");
     textSetColor(0,0);textPrint("   VS1053b");
-	textGotoXY(1,25);textPrint("midiplayer v1.2E by Mu0n, April 2025");
+	textGotoXY(1,25);textPrint("midiplayer v2.0 by Mu0n, July 2025");
 	
 	textGotoXY(1,26);textPrint("  [r] toggle repeat when done");
 }
@@ -212,16 +210,15 @@ int main(int argc, char *argv[]) {
 	uint8_t machineCheck=0;
 	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions
 	//initVS1053MIDI();  //if the VS1053b is used
-
+    struct midiRecord myRecord;
+	
+	
 	//wipeBitmapBackground(0x2F,0x2F,0x2F);
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
 	POKE(VKY_MSTR_CTRL_0, 0b00000001); //sprite,graph,overlay,text
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
-	
-	
-
 	
 	for(i=0;i<16;i++)
 	{
@@ -253,9 +250,11 @@ int main(int argc, char *argv[]) {
 		POKE(0xD631,0);
 	}
 
-	/*
+	
+	initMidiRecord(&myRecord, MUSIC_BASE, MUSIC_BASE);
 	if(argc > 1)
 	{
+	
 		i=0;
 		while(argv[1][i] != '\0')
 		{
@@ -264,6 +263,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		myRecord.fileName[i] = '\0';
+	
 	}
 	else
 	{
@@ -273,8 +273,11 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	setColors();
-	textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
-	*/
+	textGotoXY(0,25);printf("->Currently Loading file %s...",argv[1]);
+	
+	
+	detectStructure(0, &myRecord);
+	displayInfo(&myRecord);
 	resetInstruments(false); //resets all channels to piano, for sam2695
 	midiShutUp(false); //ends trailing previous notes if any, for sam2695
 	
@@ -284,52 +287,51 @@ int main(int argc, char *argv[]) {
 	shimmerTimer.units = TIMER_FRAMES;
 	shimmerTimer.cookie = TIMER_SHIMMER_COOKIE;
 
-/*
-	if(loadSMFile(myRecord.fileName, MIDI_BASE))
+	
+	if(loadSMFile(argv[1], MUSIC_BASE))
 	{
-		printf("\nCouldn't open %s\n",myRecord.fileName);
+		printf("\nCouldn't open %s\n",argv[1]);
 		printf("Press space to exit.");
 		hitspace();
 		return 0;
 	}
-*/
-playEmbeddedDim(MUSIC_BASE);
 
-	//displayInfo(&myRecord);
+    initTrack(MUSIC_BASE);
+//find what to do and exhaust all zero delay events at the start
+	exhaustZeroes();
 	
-		//assume control of system LED
 	POKE(0xD6A0,0xE3);
 	for(uint8_t i=0;i<3;i++)
 	{
-	
 		POKE(0xD6A7+i,0);
 		POKE(0xD6AA+i,0);
 		POKE(0xD6AD+i,0);
 		POKE(0xD6B3+i,0);
 	}
 	
-	setTimer0(0,0,0);
+	setTimer0(0);
 	if(indexStart!=-1) //found a place to start in the loaded file, proceed to play
 		{
 		//extraInfo(&myRecord,&theBigList);
 		wipeStatus();
-		//superExtraInfo(&myRecord);
+		superExtraInfo(&myRecord);
 	
 		while(!isDone)
 			{
 			initProgress();
 	
-			playEmbeddedDim(MUSIC_BASE);
-	
+			for(;;)
+			{
+			optimizedMIDIShimmering();
+			if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
+				{
+				POKE(INT_PENDING_0,0x10); //clear the timer0 delay
+				playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+				}
+			sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
+			}
 			if(exitCode == 1) isDone = true; //really quit no matter what
 			if(repeatFlag == false) isDone=true;
-			//reset the parsers
-			/*
-			for(i=0;i < theBigList.trackcount;i++)
-				{
-				myRecord.parsers[i] = 0;
-				}
-			*/
 			}
 		}
 	midiShutAllChannels(true);

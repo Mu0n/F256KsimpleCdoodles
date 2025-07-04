@@ -116,7 +116,7 @@ void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
 }
 
 short optimizedMIDIShimmering() {
-	short i,j;
+	//short i,j;
 	
 	kernelNextEvent();
 	/*
@@ -327,7 +327,7 @@ int main(int argc, char *argv[]) {
 				optimizedMIDIShimmering();
 				if(!isPaused)
 					{
-					/*
+							/*
 					if(kernelEventData.type == kernelEvent(irq.IRQ))
 						{
 						if(kernelEventData.irq.group == 0 && kernelEventData.irq.bitval == 0x10)
@@ -335,8 +335,8 @@ int main(int argc, char *argv[]) {
 							playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
 							}
 						}
-						*/
 	
+					*/
 					if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
 						{
 						POKE(INT_PENDING_0,0x10); //clear the timer0 delay
@@ -357,6 +357,6 @@ int main(int argc, char *argv[]) {
 			}
 	midiShutAllChannels(true);
 	midiShutAllChannels(false);
-	return 0;
 	}
+	return 0;
 }

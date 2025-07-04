@@ -51,7 +51,7 @@ void enableTimer(funcPtr funcA, funcPtr funcB) {
     POKEW(0xA000 + 0x1FFE, 0xF300);
     // replace the RTI for RTS
     POKE(0xA131,0x60);
-    //setMMU(5, old_slot);
+    setMMU(5, old_slot);
  
     byte IRQ0 = PEEK(INT_MASK_0);
     // enable timer0 - bit 4

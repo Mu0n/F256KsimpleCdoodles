@@ -12,7 +12,7 @@ bool midiChip;
 void detectStructure(uint16_t startIndex, struct midiRecord *rec) {	
     uint32_t trackLength = 0; //size in bytes of the current track
     uint32_t i = startIndex; // #main array parsing index
-    uint32_t j=0;
+    //uint32_t j=0;
     uint16_t currentTrack=0; //index for the current track
 	  
     i+=4; //skip header tag  

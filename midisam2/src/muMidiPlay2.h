@@ -1,7 +1,6 @@
 #ifndef MUMIDIPLAY2_H
 #define MUMIDIPLAY2_H
 
-
 typedef struct MIDITrackParser {
 	uint32_t length, offset, start;
 	uint32_t delta;
@@ -34,7 +33,7 @@ uint8_t readMIDICmd(uint8_t);
 uint8_t skipWhenFFCmd(uint8_t, uint8_t, uint8_t);
 void chainEvent(uint8_t);
 void performMIDICmd(uint8_t);
-void exhaustZeroes(void);
+void exhaustZeroes(uint8_t);
 void playMidi(void);
 
 void initTrack(uint32_t);
@@ -45,4 +44,5 @@ void sniffNextMIDI(void);
 uint32_t shift_add_mul(uint32_t, uint32_t);
 
 extern struct MIDIParser theOne;
+extern bool midiChip;
 #endif // MUMIDIPLAY2_H

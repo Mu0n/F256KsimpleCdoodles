@@ -8,7 +8,7 @@
 
 
 struct MIDIParser theOne;
-
+bool midiChip;
 
 //checks the tempo, number of tracks, etc
 void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
@@ -360,7 +360,7 @@ void performMIDICmd(uint8_t track)
 			theOne.timer0PerTick = (uint32_t)(usPerTick * FUDGE); //convert to the units of timer0
 			*/
 	
-			uint32_t usPerTick = divide32by16(usPerBeat, theOne.ticks);
+			uint32_t usPerTick = (uint32_t)usPerBeat/(uint32_t)theOne.ticks;
 			theOne.timer0PerTick = (usPerTick<<3)+(usPerTick<<2); //convert to the units of timer0
 			//25.1658
 	
@@ -368,36 +368,39 @@ void performMIDICmd(uint8_t track)
 		return;
 		}
 
-	POKE(MIDI_FIFO, theOne.tracks[track].cmd[0]);
-	POKE(MIDI_FIFO, theOne.tracks[track].cmd[1]);
+	POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, theOne.tracks[track].cmd[0]);
+	POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, theOne.tracks[track].cmd[1]);
 
 	if(theOne.tracks[track].is2B==false)
 		{
-		POKE(MIDI_FIFO, theOne.tracks[track].cmd[2]);
+		POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, theOne.tracks[track].cmd[2]);
 		}
 }
 
-void exhaustZeroes()
+void exhaustZeroes(uint8_t track)
 {
+	/*
 	for(uint16_t i=0;i < theOne.nbTracks; i++)
 		{
-			if(theOne.tracks[i].isDone) continue;
-			if(theOne.tracks[i].delta > 0) continue;
+			*/
+			if(theOne.tracks[track].isDone) return;
+			if(theOne.tracks[track].delta > 0) return;
 			for(;;)
 				{
-				performMIDICmd(i);
+				performMIDICmd(track);
 	
-				chainEvent(i);
-				if(theOne.tracks[i].isDone) break;
-				if(theOne.tracks[i].delta > (uint32_t)0) break;
+				chainEvent(track);
+				if(theOne.tracks[track].isDone) break;
+				if(theOne.tracks[track].delta > (uint32_t)0) break;
 				}
-	
+			/*
 		}
+		*/
 }
 
 void playMidi()
 {
-	POKE(INT_PENDING_0,0x10);
+	//POKE(INT_PENDING_0,0x10);
 //play stuff
 	if(theOne.cuedDelta > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
 		{
@@ -424,13 +427,14 @@ void playMidi()
 		if(theOne.tracks[i].isDone) continue; //this track is done
 		if(i==theOne.cuedIndex) continue; //don't modify itself
 		theOne.tracks[i].delta -= theOne.tracks[theOne.cuedIndex].delta;
+		if(theOne.tracks[i].delta == 0)	exhaustZeroes(i);
 		//textGotoXY(0,15+i);
 		//printf("%d %02x %02x %02x %08lx", i, theOne.tracks[i].cmd[0], theOne.tracks[i].cmd[1],theOne.tracks[i].cmd[2], theOne.tracks[i].delta);
 		}
 	
 	//renew the one spent
 	chainEvent(theOne.cuedIndex);
-	exhaustZeroes();
+	exhaustZeroes(theOne.cuedIndex);
 
 	theOne.isWaiting = false;
 }
@@ -513,8 +517,6 @@ uint32_t shift_add_mul(uint32_t x, uint32_t multiplier) {
 
 //find what to do and cue up the lowest non-zero
 void sniffNextMIDI(){
-		if(theOne.isWaiting == false)
-			{
 			uint32_t lowest = 0xFFFFFFFF;
 			uint16_t lowestIndex = 0xFFFF;
 			for(uint16_t i = 0; i < theOne.nbTracks; i++)
@@ -530,9 +532,7 @@ void sniffNextMIDI(){
 					theOne.cuedIndex = lowestIndex;
 					}
 				}
-			POKE(INT_PENDING_0,0x10);
 
-			if(theOne.cuedDelta > 0) theOne.cuedDelta = shift_add_mul(theOne.cuedDelta,theOne.timer0PerTick);
+			if(theOne.cuedDelta > 0) theOne.cuedDelta = theOne.cuedDelta * theOne.timer0PerTick;
 			setTimer0(theOne.cuedDelta);
-			}
 }

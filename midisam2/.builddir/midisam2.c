@@ -31,7 +31,6 @@ bool isPaused = false;
 bool repeatFlag = false;
 bool shimmerChanged[16][8];
 uint8_t shimmerBuffer[16][8];
-bool midiChip = false; //true = vs1053b, false=sam2695
 //PROTOTYPES
 void displayInfo(struct midiRecord *);
 void extraInfo(struct midiRecord *,struct bigParsedEventList *);
@@ -120,6 +119,7 @@ short optimizedMIDIShimmering() {
 	short i,j;
 	
 	kernelNextEvent();
+	/*
 	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
 	{
 		switch(kernelEventData.timer.cookie)
@@ -148,6 +148,7 @@ short optimizedMIDIShimmering() {
 				break;
 		}
 	}
+	*/
 	if(kernelEventData.type == kernelEvent(key.PRESSED))
 		{
 			if(kernelEventData.key.raw == 146) //esc
@@ -212,7 +213,7 @@ int main(int argc, char *argv[]) {
 	//initVS1053MIDI();  //if the VS1053b is used
     struct midiRecord myRecord;
 	
-	
+	midiChip = false;
 	//wipeBitmapBackground(0x2F,0x2F,0x2F);
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
@@ -298,8 +299,8 @@ int main(int argc, char *argv[]) {
 
     initTrack(MUSIC_BASE);
 //find what to do and exhaust all zero delay events at the start
-	exhaustZeroes();
-	
+	for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
+	/*
 	POKE(0xD6A0,0xE3);
 	for(uint8_t i=0;i<3;i++)
 	{
@@ -308,8 +309,9 @@ int main(int argc, char *argv[]) {
 		POKE(0xD6AD+i,0);
 		POKE(0xD6B3+i,0);
 	}
-	
-	setTimer0(0);
+	*/
+	setTimer0(0x00FFFFFF);
+    //POKE(INT_MASK_0, 0xEF);
 	if(indexStart!=-1) //found a place to start in the loaded file, proceed to play
 		{
 		//extraInfo(&myRecord,&theBigList);
@@ -321,20 +323,40 @@ int main(int argc, char *argv[]) {
 			initProgress();
 	
 			for(;;)
-			{
-			optimizedMIDIShimmering();
-			if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
 				{
-				POKE(INT_PENDING_0,0x10); //clear the timer0 delay
-				playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+				optimizedMIDIShimmering();
+				if(!isPaused)
+					{
+					/*
+					if(kernelEventData.type == kernelEvent(irq.IRQ))
+						{
+						if(kernelEventData.irq.group == 0 && kernelEventData.irq.bitval == 0x10)
+							{
+							playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+							}
+						}
+						*/
+	
+					if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
+						{
+						POKE(INT_PENDING_0,0x10); //clear the timer0 delay
+						playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+						}
+	
+					if(theOne.isWaiting == false)
+						{
+						sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
+						}
+	
+					}
+				if(exitCode == 1) isDone = true; //really quit no matter what
+				if(repeatFlag == false) isDone=true;
+	
+
 				}
-			sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
 			}
-			if(exitCode == 1) isDone = true; //really quit no matter what
-			if(repeatFlag == false) isDone=true;
-			}
-		}
 	midiShutAllChannels(true);
 	midiShutAllChannels(false);
 	return 0;
 	}
+}

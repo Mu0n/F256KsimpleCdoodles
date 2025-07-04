@@ -72,6 +72,7 @@ void enableTimer(funcPtr funcA, funcPtr funcB) {
 }
 
 void loadTimer(uint32_t value) {
+	POKE(T0_CTR, CTR_CLEAR);
     POKEA(T0_CMP_L, value);
 }
 

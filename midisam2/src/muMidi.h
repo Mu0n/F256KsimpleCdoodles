@@ -118,4 +118,5 @@ void initMidiRecord(struct midiRecord *, uint32_t, uint32_t);
 void initBigList(struct bigParsedEventList *);
 uint32_t getTotalLeft(struct bigParsedEventList *);
 
+extern const char *midi_instruments[];
 #endif // MUMIDI_H

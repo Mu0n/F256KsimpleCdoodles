@@ -5,18 +5,19 @@
 
 
 void initProgress()
-{
+{/*
 	uint8_t i=0;
 	textSetColor(15,0);textGotoXY(15,5);textPrint("[");
 	for(i=0;i<51;i++) textPrint("_");
-	textPrint("]");
+	textPrint("]");*/
 }
 
 void updateProgress(uint8_t prog)
-{
+{/*
 	uint8_t i=0;
 	textSetColor(5,0);textGotoXY(16,5);
 	for(i=0;i<prog;i++) __putchar(18);
+*/
 }
 void wipeStatus()
 {

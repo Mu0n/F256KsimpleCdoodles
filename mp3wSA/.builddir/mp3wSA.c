@@ -1,6 +1,12 @@
 #include "D:\F256\llvm-mos\code\mp3wSA\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
+#include "f256lib.h"
+#include "../src/muUtils.h"
+#include "../src/muVS1053b.h"
+#include "../src/mulcd.h"
+#include "../src/muFilePicker.h"
+#include "../src/muTextUI.h" //text dialogs and file directory and file picking
 
 #define CHUNK8K 0x2000
 #define CHUNK4K 0x1000
@@ -9,6 +15,9 @@
 #define CHUNK128B 0x80
 #define CHUNK64B 0x40
 #define CHUNK32B 0x20
+
+#define DIRECTORY_X 1
+#define DIRECTORY_Y 7
 
 #define LCD_BAND_WIDTH    2
 #define LCD_BAND_INTERV   8
@@ -19,24 +28,41 @@
 
 #define NB_BANDS 15 //use 15 for new patch, 14 for no patch
 
-#include "f256lib.h"
-#include "../src/muUtils.h"
-#include "../src/muVS1053b.h"
-#include "../src/mulcd.h"
+#define LCDBIN 0x20000
+#define LOGOPAL 0x53000
+#define LOGOBIN 0x53400
 
-void read8KChunk(void *, FILE *);
+
+
+EMBED(mac, "../assets/f256amp.bin", 0x20000);
+EMBED(pally, "../assets/mainlogo.raw.pal", 0x52000);
+EMBED(logoy, "../assets/mainlogo.raw", 0x52400);
+EMBED(patch, "../assets/bigpatch.bin", 0x65000);
+EMBED(saplug, "../assets/saplugin2.bin", 0x67476);
+
+void read8KChunk(uint8_t *, FILE *);
 uint8_t openMP3File(char *);
+void setTextLUT1(void);
+void setTextLUT2(void);
+void backgroundSetup(void);
+bool K2LCD(void);
+bool wrongMachineTest(void);
+
 
 FILE *theMP3file;
+filePickRecord fpr;
+char finalName[64];
+char *queryFudge[] = {
+"                                                       ",
+"       Choose an audio file for playback               ",
+" mp3, wav, ogg, wma formats are supported              ",
+"         The default directory is 0:mp3/               ",
+"                                                       "
+};
 
 
-EMBED(mac, "../assets/f256amp.bin", 0x10000);
-EMBED(mlogopal, "../assets/mainlogo.raw.pal", 0x31000);
-EMBED(mlogo, "../assets/mainlogo.raw", 0x31400);
-
-uint8_t openMP3File(char *name)
-{
-	theMP3file = fopen(name,"rb"); // open file in read mode
+uint8_t openMP3File(char *name) {
+	theMP3file = fileOpen(name,"rb"); // open file in read mode
 	if(theMP3file == NULL)
 	{
 		return 1;
@@ -44,18 +70,16 @@ uint8_t openMP3File(char *name)
 	return 0;
 }
 
-void read8KChunk(void *buf, FILE *f)
-{
+void read8KChunk(uint8_t *buf, FILE *f) {
 	uint16_t i;
 	for(i=0;i<64;i++)
 		{
-		fread((void *)(buf+i*0x80), sizeof(uint8_t), 128, f); //read 128 bytes at a time, since there's a hard limit of 255 reads at a time. 64x128 = 8k = 8192 bytes
+		fileRead((buf+i*0x80), sizeof(uint8_t), 128, f); //read 128 bytes at a time, since there's a hard limit of 255 reads at a time. 64x128 = 8k = 8192 bytes
 		}
 }
 
 //main color text LUT setup
-void setTextLUT1()
-{
+void setTextLUT1() {
 	uint16_t c=0;
 	for(c=0;c<8;c++)
 	{
@@ -72,8 +96,7 @@ void setTextLUT1()
 }
 
 //secondary color text LUT setup
-void setTextLUT2()
-{
+void setTextLUT2() {
 	uint16_t c=0;
 	for(c=0;c<8;c++)
 		{
@@ -88,8 +111,8 @@ void setTextLUT2()
 		POKE(0xD802+c*4,0);
 		}
 }
-void backgroundSetup()
-{
+	
+void backgroundSetup() {
 	uint16_t c=0;
 	uint16_t h=0;
 	
@@ -109,13 +132,13 @@ void backgroundSetup()
 	// Set up CLUT0.
 	for(c=0;c<1023;c++)
 	{
-		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(0x31000+c));
+		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(LOGOPAL+c));
 	}
 	POKE(MMU_IO_CTRL, 0);
 	
 	bitmapSetActive(0);
 	
-	bitmapSetAddress(0,0x31400);
+	bitmapSetAddress(0,LOGOBIN);
 	bitmapSetCLUT(0);
 	
 	bitmapSetVisible(0,true);
@@ -136,18 +159,16 @@ void backgroundSetup()
 	POKE(MMU_IO_CTRL, 0x00);
 }
 
-bool K2LCD()
-{
+bool K2LCD() {
 	if(isK2())
 	{
-	displayImage(0x10000);
+	displayImage(LCDBIN);
 	return true;
 	}
 	else return false;
 }
 
-bool wrongMachineTest()
-{
+bool wrongMachineTest() {
 	if(isWave2() == false)
 		{
 		printf("In order to work, a VS1053b chip needs to be present.\nOnly for the K2 and Jr.2");
@@ -157,8 +178,10 @@ bool wrongMachineTest()
 		}
 	return true;
 }
+
 int main(int argc, char *argv[]) {
-	
+	(void)argc;
+	(void)argv;
 	uint16_t i=0,j=0;
 	uint16_t bufferIndex=0; //index for the local 8k buffer register
     uint16_t readEntryBufferIndex = 0;
@@ -173,7 +196,6 @@ int main(int argc, char *argv[]) {
 	uint8_t deliveredBytes=0;
 	bool finished = false;
 	uint16_t endZone = 2048;
-	char *fileName;
 	bool startHear = false;
 	bool colorToggler = false;
 	bool greenLCD = true; //send SA to LCD
@@ -181,10 +203,9 @@ int main(int argc, char *argv[]) {
 	uint16_t lcdStartY=0;
 	uint8_t storedRawKey=0;
 	bool dealWithStoredKey = false;
-	
-	char buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
+
+	uint8_t buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
 	char zeroes[64]; //0's at the end
-	fileName = malloc(sizeof(char) * 64);
 	
 	for(i=0;i<NB_BANDS;i++)
 		{
@@ -195,51 +216,53 @@ int main(int argc, char *argv[]) {
 	
     backgroundSetup();
 	if(wrongMachineTest() == false) return 0; //immediately quit
+	/*
 	greenLCD = K2LCD(); //if false, never try to write to LCD, on a Jr2, if true will display the initial image
 	if(greenLCD == true) setLCDReverseY();
+	*/
 	
+    filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mp3", "mp3", "wav", "ogg", "wma");
+
+	sprintf(finalName, "%s%s%s%s", "0:", fpr.currentPath, "/",fpr.selectedFile);
+	printf("final name %s", finalName);
+	
+	if(openMP3File(finalName)) printf("error loading file");
+/*
 	if(argc > 1)
 	{
 		i=0;
-	
-		while(argv[1][i] != '\0')
-		{
-			fileName[i] = argv[1][i];
-			i++;
-		}
-		fileName[i] = '\0';
-	}
-	else
-	{
-		printf("Invalid file name. Launch as /- F256amp.pgz audiofile\n");
-		printf(".mp3, .ogg, .wav, .wma formats supported\n");
-		printf("Press space to exit.");
-		hitspace();
-		return 0;
-	}
-	
-	if(openMP3File(fileName)==1)
-	{
-		printf("\nCouldn't open the file: %s\n",fileName);
-		printf("\nPress space to quit");
-		hitspace();
-		return 0;
-	}
+		if(argv[1][0] == '-')
+			{
+			filePickModal(&fpr);
+			}
+		else
+			{
+			while(argv[1][i] != '\0')
+				{
+					fileName[i] = argv[1][i];
+					i++;
+				}
 
-	
+			fileName[i] = '\0';
+			}
+	}
+	else filePickModal(&fpr);
+*/
+
 	openAllCODEC();
 	boostVSClock();
     initBigPatch();
 	initSpectrum();
-	
-	read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file
+	printf("before reading 8K chunk");
+	read8KChunk(buffer, theMP3file); //read the first 8k chunk from the .mp3 file
 
-	textSetColor(6,0);
-	textGotoXY(66,1);textPrint("F256Amp v0.9");
-	textGotoXY(68,2);textPrint("2025-03-25");
+	printf("after reading 8K chunk");
+	textSetColor(5,0);
+	textGotoXY(66,1);textPrint("F256Amp v1.0");
+	textGotoXY(68,2);textPrint("July 2025");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	
-	textGotoXY(0,0);printf("Loading %s ...",fileName);
+//	textGotoXY(0,0);printf("Loading %s ...",currentFilePicked);
 
 	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
 		{
@@ -254,14 +277,15 @@ int main(int argc, char *argv[]) {
 	
 	while(true)
 		{
-		getCenterSAValues(NB_BANDS, saVals);
+	
+		//getCenterSAValues(NB_BANDS, saVals);
 		//when a non-zero value is detected for the first time, mark that it's now playing.
 		if(startHear==false)
 			{
 			if((saVals[2]&31)!=0)
 				{
 				textGotoXY(0,0);
-				printf("Currently playing %s       ",fileName);
+//				printf("Currently playing %s       ",currentFilePicked);
 				textGotoXY(62,8);textPrint("[F1]Color Change");
 				startHear = true;
 				}
@@ -274,7 +298,7 @@ int main(int argc, char *argv[]) {
 				switch(kernelEventData.key.raw)
 				{
 				case 146: //esc
-					fclose(theMP3file);
+					fileClose(theMP3file);
 					return 0;
 				case 129: //F1
 					if(colorToggler)
@@ -295,7 +319,7 @@ int main(int argc, char *argv[]) {
 			switch(storedRawKey)
 				{
 				case 146: //esc
-					fclose(theMP3file);
+					fileClose(theMP3file);
 					return 0;
 				case 129: //F1
 					if(colorToggler)
@@ -312,6 +336,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 			}
+	
 		//Visuals
 		for(j=1;j<NB_BANDS;j++)
 			{
@@ -428,5 +453,6 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-	fclose(theMP3file);
-	return 0;}
+	fileClose(theMP3file);
+	return 0;
+}

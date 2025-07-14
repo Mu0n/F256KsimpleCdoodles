@@ -84,7 +84,7 @@ void setTimer0(uint32_t value)
 }
 
 void resetTimer0(){
-	POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR); //when the target is reached, bring it back to value 0x000000
+	POKE(T0_CMP_CTR, 0); //when the target is reached, bring it back to value 0x000000
 	POKE(T0_CTR, CTR_CLEAR);
 	POKE(T0_CTR, CTR_INTEN | CTR_UPDOWN | CTR_ENABLE);
 }

@@ -5,9 +5,11 @@
 #include "../src/muVS1053b.h" //VS1053b stuff
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 #include "../src/muMidiPlay2.h"  //contains basic MIDI functions I often use
+#include "../src/muFilePicker.h"  //contains basic MIDI functions I often use
 #include "../src/muTimer0Int.h"  //contains basic cpu based timer0 functions I often use
+#include "../src/muTextUI.h" //text dialogs and file directory and file picking
+#include "../src/mulcd.h"
 
-#define MIDI_BASE   0x20000 //gives a nice 07ffkb until the parsed version happens
 #define MIDI_PARSED 0x50000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
 
 #define MUSIC_BASE 0x50000
@@ -17,107 +19,68 @@
 #define TIMER_PLAYBACK_COOKIE 0
 #define TIMER_DELAY_COOKIE 1
 #define TIMER_SHIMMER_COOKIE 2
-#define TIMER_SHIMMER_DELAY 3
+#define TIMER_SHIMMER_DELAY 4
+
+#define DIRECTORY_X 1
+#define DIRECTORY_Y 6
 
 #define CLONE_TO_UART_EMWHITE 0
+
+EMBED(cozyLCD, "../assets/cozyLCD", 0x30000);
 
 //STRUCTS
 struct timer_t playbackTimer, shimmerTimer;
 struct time_t time_data;
 bool isPaused = false;
+bool isTrulyDone = false;
 
+struct midiRecord myRecord;
+
+FILE *theMIDIfile;
+filePickRecord fpr;
+	
 bool repeatFlag = false;
-bool shimmerChanged[16][8];
-uint8_t shimmerBuffer[16][8];
 //PROTOTYPES
-void displayInfo(struct midiRecord *);
-void extraInfo(struct midiRecord *,struct bigParsedEventList *);
-void superExtraInfo(struct midiRecord *);
-void midiPlaybackShimmering(uint8_t, uint8_t, bool);
-void updateInstrumentDisplay(uint8_t, uint8_t);
 short optimizedMIDIShimmering(void);
+uint8_t filePickModal(void);
+void pickMIDIFile(void);
+void zeroOutStuff(void);
+void wipeShimmer(void);
 
-uint16_t disp[10] = {0xD6B3, 0xD6B4, 0xD6AD, 
-				     0xD6AE, 0xD6AF, 0xD6AA, 
-					 0xD6AB, 0xD6AC, 0xD6A7, 0xD6A9};
+char currentFilePicked[32];
+char *queryFudge[] = {
+"                                                       ",
+"        Choose a MIDI File for playback                ", 
+"         The default directory is 0:midi/              ",
+"                                                       "
+};
+
 //FUNCTIONS
-
-void displayInfo(struct midiRecord *rec) {
-	uint8_t i=0;
-	wipeStatus();
-	
-	textGotoXY(1,1);
-	textSetColor(1,0);textPrint("Filename: ");
-	textSetColor(0,0);printf("%s",rec->fileName);
-	textGotoXY(1,2);
-	textSetColor(1,0);textPrint("Type ");textSetColor(0,0);printf(" %d ", rec->format);
-	textSetColor(1,0);textPrint("MIDI file with ");
-	textSetColor(0,0);printf("%d ",rec->trackcount);
-	textSetColor(1,0);(rec->trackcount)>1?textPrint("tracks"):textPrint("track");
-	textSetColor(0,0);textGotoXY(1,7);textPrint("CH Instrument");
-	for(i=0;i<16;i++)
+bool isK2(void)
+{
+	uint8_t value = PEEK(0xD6A7) & 0x1F;
+	return (value == 0x11);
+}
+bool K2LCD()
+{
+	if(isK2()) 
 	{
-		textGotoXY(1,8+i);printf("%02d ",i);
+	displayImage(0x30000);
+	return true;
 	}
-	textGotoXY(4,8+9);textSetColor(10,0);textPrint("Percussion");
-	
-	textGotoXY(0,25);printf(" ->Currently parsing file %s...",rec->fileName);
+	else return false;
 }
 
-void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list) {
-	
-	wipeStatus();
-	textGotoXY(1,3); 
-	textSetColor(0,0);printf("%lu ", getTotalLeft(list));
-	textSetColor(1,0);textPrint("total event count");
-	textGotoXY(40,2); 
-	textSetColor(1,0);textPrint("Tempo: ");
-	textSetColor(0,0);printf("%d ",rec->bpm);
-	textSetColor(1,0);textPrint("bpm");
-	textGotoXY(40,3);
-	textSetColor(1,0);textPrint("Time Signature ");
-	textSetColor(0,0);printf("%d:%d",rec->nn,1<<(rec->dd));
-	textGotoXY(0,25);printf("  ->Preparing for playback...                   ");
-}
-void superExtraInfo(struct midiRecord *rec) {
-	uint16_t temp;
-	
-	temp=(uint32_t)((rec->totalDuration)/125000);
-	temp=(uint32_t)((((double)temp))/((double)(rec->fudge)));
-	rec->totalSec = temp;
-	textGotoXY(68,5); printf("%d:%02d",temp/60,temp % 60);
-	textGotoXY(1,24);textPrint("[ESC]: quit    [SPACE]:  pause    [F1] Toggle MIDI Output:  ");
-	textSetColor(1,0);textPrint("SAM2695");
-    textSetColor(0,0);textPrint("   VS1053b");
-	textGotoXY(1,25);textPrint("midiplayer v2.0 by Mu0n, July 2025");
-	
-	textGotoXY(1,26);textPrint("  [r] toggle repeat when done");
-}
-void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
-	uint8_t i=0,j=0;
-	textGotoXY(4,8+chan);textSetColor(chan+1,0);
-	if(chan==9)
+void wipeShimmer()
+{
+	for(uint8_t i=0;i<16;i++) //channels
 		{
-			textPrint("Percussion");
-			return;
+		textGotoXY(16,8+i);
+		textPrint("                                                           ");
 		}
-	for(i=0;i<12;i++)
-	{
-
-		if(midi_instruments[pgr][i]=='\0') 
-		{
-			for(j=i;j<12;j++) textPrint(" ");
-			break;
-		}
-		printf("%c",midi_instruments[pgr][i]);
-	}
 }
-
 short optimizedMIDIShimmering() {
-	//short i,j;
-	
-	kernelNextEvent();
-	/*
+
 	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
 	{
 		switch(kernelEventData.timer.cookie)
@@ -125,33 +88,62 @@ short optimizedMIDIShimmering() {
 			case TIMER_SHIMMER_COOKIE:
 				shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
 				setTimer(&shimmerTimer);
-				for(i=0;i<16;i++) //channels
+				for(uint8_t i=0;i<16;i++) //channels
 					{
 					textSetColor(i+1,0);
-					for(j=0;j<8;j++) //number of bytes to represent on screen
+					for(uint8_t j=0;j<8;j++) //number of bytes to represent on screen
 						{	
 						textGotoXY(11+(j<<3),8+i);
 						if(shimmerChanged[i][j]==false) continue; //no change, so let's continue
 						shimmerChanged[i][j]=false; //will be dealt with so mark it as changed and done for next evaluation
-						__putchar(shimmerBuffer[i][j]&0x80?42:32);
-						__putchar(shimmerBuffer[i][j]&0x40?42:32);
-						__putchar(shimmerBuffer[i][j]&0x20?42:32);
-						__putchar(shimmerBuffer[i][j]&0x10?42:32);
-						__putchar(shimmerBuffer[i][j]&0x08?42:32);
-						__putchar(shimmerBuffer[i][j]&0x04?42:32);
-						__putchar(shimmerBuffer[i][j]&0x02?42:32);
 						__putchar(shimmerBuffer[i][j]&0x01?42:32);
+						__putchar(shimmerBuffer[i][j]&0x02?42:32);
+						__putchar(shimmerBuffer[i][j]&0x04?42:32);
+						__putchar(shimmerBuffer[i][j]&0x08?42:32);
+						__putchar(shimmerBuffer[i][j]&0x10?42:32);
+						__putchar(shimmerBuffer[i][j]&0x20?42:32);
+						__putchar(shimmerBuffer[i][j]&0x40?42:32);
+						__putchar(shimmerBuffer[i][j]&0x80?42:32);
 						}
 					}
 				break;
 		}
 	}
-	*/
+	
 	if(kernelEventData.type == kernelEvent(key.PRESSED))
-		{
+		{	
+			if(kernelEventData.key.raw == 0x83) //F3
+				{
+					if(isPaused==false)
+					{
+						midiShutAllChannels(true);
+						midiShutAllChannels(false);
+						isPaused = true;
+						textSetColor(1,0);textGotoXY(26,MENU_Y);textPrint("pause");
+					}
+					destroyTrack();
+					zeroOutStuff();
+					wipeText();
+					filePickModal();		
+					setColors();
+					textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
+					
+					detectStructure(0, &myRecord);
+					initTrack(MUSIC_BASE);
+					wipeText();
+					initProgress();
+					displayInfo(&myRecord);
+					superExtraInfo(&myRecord);		
+					isPaused = false;
+					textSetColor(0,0);textGotoXY(26,MENU_Y);textPrint("pause");
+					shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+					wipeShimmer();
+					setTimer(&shimmerTimer);
+				}
 			if(kernelEventData.key.raw == 146) //esc
 				{
 				midiShutAllChannels(midiChip);
+				isTrulyDone = true;
 				return 1;
 				}
 			if(kernelEventData.key.raw == 32) //space
@@ -160,12 +152,12 @@ short optimizedMIDIShimmering() {
 				{
 					midiShutAllChannels(midiChip);
 					isPaused = true;
-					textSetColor(1,0);textGotoXY(26,24);textPrint("pause");
+					textSetColor(1,0);textGotoXY(26,MENU_Y);textPrint("pause");
 				}	
 				else
 				{
 					isPaused = false;
-					textSetColor(0,0);textGotoXY(26,24);textPrint("pause");				
+					textSetColor(0,0);textGotoXY(26,MENU_Y);textPrint("pause");				
 				}
 			}
 			if(kernelEventData.key.raw == 129) //F1
@@ -173,14 +165,14 @@ short optimizedMIDIShimmering() {
 				midiShutAllChannels(midiChip);
 				if(midiChip==true)
 					{
-					textSetColor(1,0);textGotoXY(61,24);textPrint("SAM2695");
-					textSetColor(0,0);textGotoXY(71,24);textPrint("VS1053b");
+					textSetColor(1,0);textGotoXY(42,MENU_Y);textPrint("SAM2695");
+					textSetColor(0,0);textGotoXY(52,MENU_Y);textPrint("VS1053b");
 					midiChip = false;
 					}
 				else
 					{
-					textSetColor(0,0);textGotoXY(61,24);textPrint("SAM2695");
-					textSetColor(1,0);textGotoXY(71,24);textPrint("VS1053b");
+					textSetColor(0,0);textGotoXY(42,MENU_Y);textPrint("SAM2695");
+					textSetColor(1,0);textGotoXY(52,MENU_Y);textPrint("VS1053b");
 					midiChip = true;
 					}
 			}
@@ -199,43 +191,8 @@ short optimizedMIDIShimmering() {
 		} // end if key pressed
 return 0;
 }
-
-int main(int argc, char *argv[]) {
-
-	uint8_t exitCode = 0;
-	bool isDone = false; //to know when to exit the main loop; done playing
-	int16_t indexStart = 0; //keeps note of the byte where the MIDI string 'MThd' is, sometimes they're not at the very start of the file!
-	uint8_t i=0,j=0;
-	uint8_t machineCheck=0;
-	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
-	//initVS1053MIDI();  //if the VS1053b is used
-    struct midiRecord myRecord;
-	
-	midiChip = false;
-	//wipeBitmapBackground(0x2F,0x2F,0x2F);
-	POKE(MMU_IO_CTRL, 0x00);
-	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b00000001); //sprite,graph,overlay,text
-	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
-	
-	for(i=0;i<16;i++)
-	{
-		for(j=0;j<8;j++)
-		{
-			shimmerChanged[i][j]=false;
-			shimmerBuffer[i][j]=0;
-		}
-	}
-	
-	//VS1053b
-	machineCheck=PEEK(0xD6A7)&0x3F;
-	if(machineCheck == 0x22 || machineCheck == 0x11) //22 is Jr2 and 11 is K2
-	{
-	boostVSClock();
-	initRTMIDI();
-	}
-
+void setupSerial()
+{
 	if(CLONE_TO_UART_EMWHITE==1)
 	{
 		//init speed of UART for EMWhite
@@ -248,93 +205,212 @@ int main(int argc, char *argv[]) {
 		POKE(0xD632,0b11100111);
 		POKE(0xD631,0);
 	}
+}
 
+void machineDependent()
+{
 	
-	initMidiRecord(&myRecord, MUSIC_BASE, MUSIC_BASE);
-	if(argc > 1)
+	uint8_t machineCheck=0;
+	//VS1053b
+	machineCheck=PEEK(0xD6A7)&0x3F;
+	if(machineCheck == 0x22 || machineCheck == 0x11) //22 is Jr2 and 11 is K2
 	{
-		
-		i=0;
-		while(argv[1][i] != '\0')
-		{
-			myRecord.fileName[i] = argv[1][i];
-		i++;
-		}		
-
-		myRecord.fileName[i] = '\0';
-		
+	boostVSClock();
+	initRTMIDI();
 	}
-	else
+	setupSerial();
+}
+
+void pickMIDIFile()
+{
+	char *dirOpenResult;
+	struct fileDirEntS *myDirEntry;	
+	uint8_t parser=0;
+	struct filePick myFilePicked;
+	myFilePicked.fileCount = 0;
+	myFilePicked.choice = 0;
+			
+	textGotoXY(DIRECTORY_X,DIRECTORY_Y);textSetColor(textColorLightBlue,0);
+	directory(DIRECTORY_X,DIRECTORY_Y,&myFilePicked);
+	modalHelp(queryFudge,sizeof(queryFudge)/sizeof(queryFudge[0]));
+	
+	for(;;)
 	{
-		printf("Invalid file name. Launch as /- midisam.pgz midifile.mid\n");
+	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(key.PRESSED))
+		{
+		switch(kernelEventData.key.raw)
+			{
+			case 148: //enter
+				dirOpenResult = fileOpenDir("midi");
+		
+				myDirEntry = fileReadDir(dirOpenResult);
+				while((myDirEntry = fileReadDir(dirOpenResult))!= NULL)
+				{
+					if(_DE_ISREG(myDirEntry->d_type)) 
+					{
+						if(parser++ != myFilePicked.choice) continue;
+						strcpy(currentFilePicked,myDirEntry->d_name);
+						break;
+					}
+				}
+				fileCloseDir(dirOpenResult);
+				eraseModalHelp(sizeof(queryFudge)/sizeof(queryFudge[0]));
+				return;	
+			case 0xb6: //up arrow
+			if(myFilePicked.choice!=0) 
+				{
+				textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorWhite,0x00);printf("%c",32);
+				myFilePicked.choice--;
+				textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorOrange,0x00);printf("%c",0xFA);textSetColor(textColorWhite,0x00);
+				}
+			break;
+			case 0xb7: //down arrow
+				if(myFilePicked.choice<myFilePicked.fileCount-1) 
+					{
+					textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorWhite,0x00);printf("%c",32);
+					myFilePicked.choice++;
+					textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorOrange,0x00);printf("%c",0xFA);textSetColor(textColorWhite,0x00);
+					}
+			break;
+			}
+		}
+	}
+}
+
+uint8_t filePickModal()
+{
+	
+	char prefix[] = "midi/";
+	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
+	POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, double height text, 320x240 at 60 Hz;
+	pickMIDIFile();	
+	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
+	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
+	sprintf(myRecord.fileName, "%s%s", prefix, currentFilePicked);
+	
+	if(loadSMFile(myRecord.fileName, MUSIC_BASE))
+	{
+		printf("\nCouldn't open %s\n",myRecord.fileName);
 		printf("Press space to exit.");
 		hitspace();
-		return 0;
+		return 1;
+	}	
+	return 0;
+}
+
+void zeroOutStuff()
+{
+	for(uint8_t k=0;k<32;k++) currentFilePicked[k]=0;
+	
+	for(uint8_t i=0;i<16;i++)
+	{
+		for(uint8_t j=0;j<8;j++)
+		{
+			shimmerChanged[i][j]=false;
+			shimmerBuffer[i][j]=0;
+		}
 	}
-	setColors();
-	textGotoXY(0,25);printf("->Currently Loading file %s...",argv[1]);
+	if(myRecord.fileName != NULL) free(myRecord.fileName);
+	myRecord.fileName = NULL;
+	initMidiRecord(&myRecord, MUSIC_BASE, MUSIC_BASE);
+}
+
+int main(int argc, char *argv[]) {
+	uint8_t i=0,j=0;
+	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
+	//initVS1053MIDI();  //if the VS1053b is used
 	
+	K2LCD();
 	
-	detectStructure(0, &myRecord);
-	displayInfo(&myRecord);
-	resetInstruments(false); //resets all channels to piano, for sam2695
-	midiShutUp(false); //ends trailing previous notes if any, for sam2695
-	
+	midiChip = false;
 	playbackTimer.units = TIMER_SECONDS;
 	playbackTimer.cookie = TIMER_PLAYBACK_COOKIE;
 		
 	shimmerTimer.units = TIMER_FRAMES;
 	shimmerTimer.cookie = TIMER_SHIMMER_COOKIE;
-
 	
-	if(loadSMFile(argv[1], MUSIC_BASE))
-	{
-		printf("\nCouldn't open %s\n",argv[1]);
-		printf("Press space to exit.");
-		hitspace();
-		return 0;
-	}
-
-    initTrack(MUSIC_BASE);
-//find what to do and exhaust all zero delay events at the start
-	for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
+	//wipeBitmapBackground(0x2F,0x2F,0x2F);
+	POKE(MMU_IO_CTRL, 0x00);
+	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
+	POKE(VKY_MSTR_CTRL_0, 0b00000001); //sprite,graph,overlay,text
+	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
+	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
+	
+	machineDependent();
+	zeroOutStuff();
+	setColors();
 	/*
-	POKE(0xD6A0,0xE3);
-	for(uint8_t i=0;i<3;i++)
+	uint8_t v =0;
+	for(;;) 
 	{
-		POKE(0xD6A7+i,0);
-		POKE(0xD6AA+i,0);
-		POKE(0xD6AD+i,0);
-		POKE(0xD6B3+i,0);
+		printf("%c %02x\n", argv[1][v],argv[1][v]);
+		v++;
+		hitspace();
 	}
 	*/
-	setTimer0(0x00FFFFFF);
-    //POKE(INT_MASK_0, 0xEF);
-	if(indexStart!=-1) //found a place to start in the loaded file, proceed to play
-		{
-		//extraInfo(&myRecord,&theBigList);
-		wipeStatus();
-		superExtraInfo(&myRecord);		
-		
-		while(!isDone)
+	if(argc > 1)
+	{
+		i=0;
+		if(argv[1][0] == '-')
 			{
+			filePickModal();
+			textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
+			}
+		else
+			{
+			while(argv[1][i] != '\0')
+				{
+					myRecord.fileName[i] = argv[1][i];
+					i++;
+				}		
+
+			myRecord.fileName[i] = '\0';
+			if(loadSMFile(argv[1], MUSIC_BASE))
+				{
+				printf("\nCouldn't open %s\n",argv[1]);
+				printf("Press space to exit.");
+				hitspace();
+				return 0;
+				}
+			}
+	}
+	else filePickModal();
+	
+	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
+
+	wipeText();
+	detectStructure(0, &myRecord);
+	displayInfo(&myRecord);
+	resetInstruments(false); //resets all channels to piano, for sam2695
+	midiShutUp(false); //ends trailing previous notes if any, for sam2695
+	midiShutUp(true); //ends trailing previous notes if any, for sam2695
+
+	midiShutAllChannels(true);
+	midiShutAllChannels(false);
+	
+    initTrack(MUSIC_BASE);
+	
+//find what to do and exhaust all zero delay events at the start
+	for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
+
+	resetTimer0();			
+	shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+	setTimer(&shimmerTimer);
+	while(!isTrulyDone)
+	{
+			wipeStatus();
+			superExtraInfo(&myRecord);		
+		
 			initProgress();
-			
+			setColors();
 			for(;;)
 				{
-				optimizedMIDIShimmering();
+				kernelNextEvent();
+				if(optimizedMIDIShimmering()) break;
 				if(!isPaused)
 					{
-							/*
-					if(kernelEventData.type == kernelEvent(irq.IRQ))
-						{	
-						if(kernelEventData.irq.group == 0 && kernelEventData.irq.bitval == 0x10)
-							{
-							playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
-							}	
-						}
-						
-					*/	
+
 					if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
 						{
 						POKE(INT_PENDING_0,0x10); //clear the timer0 delay
@@ -347,12 +423,34 @@ int main(int argc, char *argv[]) {
 						}
 					
 					}	
-				if(exitCode == 1) isDone = true; //really quit no matter what
-				if(repeatFlag == false) isDone=true;
+				if(theOne.isMasterDone >= theOne.nbTracks) 
+				{
+					if(repeatFlag) 
+					{
 				
+					midiShutAllChannels(true);
+					midiShutAllChannels(false);
+					
+					destroyTrack();
+					zeroOutStuff();	
+					
+					detectStructure(0, &myRecord);
+					initTrack(MUSIC_BASE);
+					textSetColor(1,0);textGotoXY(3,26);textPrint("[r]");
 
+					
+					shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+					setTimer(&shimmerTimer);
+					}
+					else 
+					{
+						isPaused = true;
+						break; //really quit no matter what
+					}
 				}
-			}	
+				
+				}
+			
 	midiShutAllChannels(true);
 	midiShutAllChannels(false);
 	}

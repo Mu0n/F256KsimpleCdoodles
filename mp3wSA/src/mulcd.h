@@ -1,7 +1,6 @@
 #ifndef MULCD_H
 #define MULCD_H
 
-
 #define LCD_CMD_CMD 0xDD40  //Write Command Here
 #define LCD_RST 0x10        //0 to Reset (RSTn)
 #define LCD_BL  0x20        //1 = ON, 0 = OFF 
@@ -23,8 +22,6 @@
 #define LCD_PURE_BLU  0x001F
 #define LCD_PURE_WHI  0xFFFF
 #define LCD_PURE_BLK  0x0000
-
-#include "f256lib.h"
 
 
 void clearVisible(uint16_t);

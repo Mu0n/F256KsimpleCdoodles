@@ -11,7 +11,7 @@
 
 
 void wipeBitmapBackground(uint8_t, uint8_t, uint8_t);
-void realTextClear(void);
+void wipeText(void);
 bool setTimer(const struct timer_t *);
 uint8_t getTimerAbsolute(uint8_t);
 void injectChar40col(uint8_t, uint8_t, uint8_t, uint8_t);

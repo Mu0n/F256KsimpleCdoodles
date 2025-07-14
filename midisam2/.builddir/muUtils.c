@@ -4,6 +4,16 @@
 #include "../src/muUtils.h"
 
 
+void wipeText()
+{
+	uint8_t keep = PEEK(MMU_IO_CTRL);
+	POKE(MMU_IO_CTRL,2);
+	for(uint8_t i=0;i<80;i++)
+	{
+		for(uint8_t j=0; j<60; j++) POKE(0xC000 + i + j*80, 32);
+	}
+	POKE(MMU_IO_CTRL,keep);
+}
 //graphics background cleardevice
 void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
 {

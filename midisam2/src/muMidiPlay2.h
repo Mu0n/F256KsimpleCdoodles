@@ -14,9 +14,11 @@ typedef struct MIDIParser {
 	uint16_t nbTracks;
 	uint16_t ticks;
 	uint32_t timer0PerTick;
+	uint32_t progTime;
 	bool isWaiting;
 	uint32_t cuedDelta;
 	uint16_t cuedIndex;
+	uint16_t isMasterDone;
 	struct MIDITrackParser *tracks;
 } MIDP;
 
@@ -42,7 +44,10 @@ void playMidi(void);
 uint8_t readMIDIEvent(uint8_t);
 void sniffNextMIDI(void);
 uint32_t shift_add_mul(uint32_t, uint32_t);
+void sendAME(uint8_t, uint8_t, uint8_t, uint8_t, bool);
 
 extern struct MIDIParser theOne;
 extern bool midiChip;
+extern bool shimmerChanged[16][8];
+extern uint8_t shimmerBuffer[16][8];
 #endif // MUMIDIPLAY2_H

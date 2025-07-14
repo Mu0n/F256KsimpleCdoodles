@@ -3,10 +3,8 @@
 #include "f256lib.h"
 #include "../src/mulcd.h"
 
-
 //clears the screen with a R5G6B6 word containing the color data
-void clearVisible(uint16_t colorWord)
-{
+void clearVisible(uint16_t colorWord){
 	uint8_t i;
 	uint16_t j;
 	POKE(LCD_CMD_CMD, LCD_WIN_X);
@@ -37,8 +35,7 @@ void clearVisible(uint16_t colorWord)
 //converted to a 2 byte per pixel raw binary file, that will be sent to LCD_PIX_LO and LCD_PIX_HI
 //in that order, pixel by pixel
 //look for my instructions in https://wiki.f256foenix.com/index.php?title=Use_the_K2_LCD
-void displayImage(uint32_t addr)
-{
+void displayImage(uint32_t addr){
 	uint32_t i;
 	uint32_t j;
 	uint32_t index = 0;
@@ -67,8 +64,7 @@ void displayImage(uint32_t addr)
 	}
 }
 
-void setLCDReverseY()
-{
+void setLCDReverseY(){
 	POKE(LCD_CMD_CMD, LCD_MAD);
 	POKE(LCD_CMD_DTA, 0x80);
 	
@@ -76,8 +72,7 @@ void setLCDReverseY()
 }
 
 //sets the next rectangle region to be written at coordinates x,y on the LCD
-void prepareRect(uint8_t x, uint16_t y, uint8_t width, uint16_t height)
-{
+void prepareRect(uint8_t x, uint16_t y, uint8_t width, uint16_t height){
 	POKE(LCD_CMD_CMD, LCD_WIN_X);
 	POKE(LCD_CMD_DTA, 0); //xstart high
 	POKE(LCD_CMD_DTA, x); //xstart low

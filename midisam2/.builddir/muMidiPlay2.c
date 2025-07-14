@@ -5,10 +5,57 @@
 #include "../src/muMidi.h"
 #include "../src/muMidiPlay2.h"
 #include "../src/muTimer0Int.h" //contains helper functions I often use
+#include "../src/muTextUI.h"
 
-
+uint16_t disp[10] = {0xD6B3, 0xD6B4, 0xD6AD,
+				     0xD6AE, 0xD6AF, 0xD6AA,
+					 0xD6AB, 0xD6AC, 0xD6A7, 0xD6A9};
+bool shimmerChanged[16][8];
+uint8_t shimmerBuffer[16][8];
 struct MIDIParser theOne;
 bool midiChip;
+//sends a MIDI event message, either a 2-byte or 3-byte one
+void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool wantAlt) {
+		uint8_t chan = (msg0)&0x0F;
+		uint8_t bufferLocation = (msg1)>>4;
+		uint8_t bitLocation = (msg1)%8;
+	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg0);
+	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg1);
+	
+	if(byteCount == 3) {
+		POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg2);
+	
+	}
+	if((msg0 & 0xF0) == 0x90 && msg2 != 0x00)
+		{
+			shimmerChanged[chan][bufferLocation]=true; //mark this channel as changed
+			SET_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
+			//POKE(disp[chan],msg1<<2);
+		}
+	
+	else if((msg0 & 0xF0) == 0x80 || ((msg0 & 0xF0) == 0x90 && msg2 == 0x00))
+		{
+			shimmerChanged[chan][bufferLocation]=true; //mark this channel as changed
+			CLEAR_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
+			//POKE(disp[chan],0);
+		}
+	else if((msg0 & 0xF0) == 0xC0)
+	{
+		 updateInstrumentDisplay(msg0 & 0x0F, msg1);
+		 //send instrument change to the other MIDI device as well! Note the reverse lambda writing
+		 POKE(wantAlt?MIDI_FIFO:MIDI_FIFO_ALT, msg0);
+		 POKE(wantAlt?MIDI_FIFO:MIDI_FIFO_ALT, msg1);
+	}
+	//for EMWhite, double up the MIDI message towards the UART port
+	/*
+	if(CLONE_TO_UART_EMWHITE) {
+	POKE(1,0);
+	POKE(0xD630, msg0);
+	POKE(0xD630, msg1);
+	if(byteCount == 3) POKE(0xD630, msg2);
+	}
+	*/
+}
 
 //checks the tempo, number of tracks, etc
 void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
@@ -140,6 +187,10 @@ uint32_t mul32x32_low32(uint32_t a, uint32_t b) {
 //reads one midi command, returns how many bytes are needed for the command inside the buffer.
 //uint8_t readMIDIEvent(MIDP *theOne, uint8_t track, FILE *fp)
 uint8_t readMIDIEvent(uint8_t track) {
+	if(theOne.tracks[track].offset >=  theOne.tracks[track].length)
+		{
+		return 2;
+		}
 	theOne.tracks[track].delta = readDelta(track);
 	return readMIDICmd(track);
 }
@@ -261,8 +312,8 @@ uint8_t readMIDICmd(uint8_t track) {
 // Pitch Bend 0xE_
 	else if((status_byte >= 0x80 && status_byte <= 0xBF) || (status_byte >= 0xE0 && status_byte <= 0xEF))
 		{
-	
 		theOne.tracks[track].lastCmd = status_byte; //preserve this in case a run-on command happens next
+	
 	
 		if((status_byte & 0xF0) == 0x90 && extra_byte2==0x00)
 			{
@@ -334,6 +385,7 @@ void chainEvent(uint8_t track)
 				break;
 			case 2: //a 0xFF 0x2F event was detected, end of track
 				theOne.tracks[track].isDone = true;
+				theOne.isMasterDone++;
 				quitRefresh = true;
 				break;
 			}
@@ -362,12 +414,10 @@ void performMIDICmd(uint8_t track)
 	
 			uint32_t usPerTick = (uint32_t)usPerBeat/(uint32_t)theOne.ticks;
 			theOne.timer0PerTick = (usPerTick<<3)+(usPerTick<<2); //convert to the units of timer0
-			//25.1658
-	
 			}
 		return;
 		}
-
+/*
 	POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, theOne.tracks[track].cmd[0]);
 	POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, theOne.tracks[track].cmd[1]);
 
@@ -375,6 +425,8 @@ void performMIDICmd(uint8_t track)
 		{
 		POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, theOne.tracks[track].cmd[2]);
 		}
+		*/
+	sendAME(theOne.tracks[track].cmd[0], theOne.tracks[track].cmd[1], theOne.tracks[track].cmd[2], theOne.tracks[track].is2B?2:3, midiChip);
 }
 
 void exhaustZeroes(uint8_t track)
@@ -450,6 +502,8 @@ void initTrack(uint32_t BASE_ADDR){
 	theOne.cuedDelta = 0xFFFFFFFF;
 	theOne.cuedIndex = 0;
 	theOne.ticks = 48;
+	theOne.isMasterDone=0;
+	theOne.progTime = 0;
 	
 	//read tick
 	theOne.ticks = readBigEndian16(BASE_ADDR+(uint32_t)12);
@@ -499,10 +553,9 @@ void initTrack(uint32_t BASE_ADDR){
 }
 
 void destroyTrack(){
-	for(uint16_t i = 0; i< theOne.nbTracks; i++)
-		{
-		free((void *)&theOne.tracks[i]);
-		}
+	free(theOne.tracks);
+	theOne.tracks = NULL;
+
 }
 // Multiply x by a constant multiplier using shifts and adds
 uint32_t shift_add_mul(uint32_t x, uint32_t multiplier) {
@@ -535,4 +588,5 @@ void sniffNextMIDI(){
 
 			if(theOne.cuedDelta > 0) theOne.cuedDelta = theOne.cuedDelta * theOne.timer0PerTick;
 			setTimer0(theOne.cuedDelta);
+	
 }

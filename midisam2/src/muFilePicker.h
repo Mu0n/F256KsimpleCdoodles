@@ -10,7 +10,7 @@
 #define MAX_PATH_LEN 32
 #define MAX_FILE_EXTS 4
 #define EXT_LEN 3
-#define MAX_VISIBLE_FILES 12
+#define MAX_VISIBLE_FILES 16
 #define RESERVED_ENTRY_INDEX 0
 
 // Main picker record

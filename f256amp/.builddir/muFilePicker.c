@@ -275,6 +275,8 @@ void displayFileList(filePickRecord *picker, int scrollOffset) {
     int visibleStart = RESERVED_ENTRY_INDEX + scrollOffset + 1;  // skip '..'
     int visibleEnd = visibleStart + (MAX_VISIBLE_FILES - 1);     // 1 reserved + 19 scrollable
 
+
+
     if (visibleEnd >= picker->fileCount) {
         visibleEnd = picker->fileCount;
     }
@@ -303,7 +305,13 @@ void displayFileList(filePickRecord *picker, int scrollOffset) {
 uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, char *ext1, char *ext2, char *ext3, bool firstTime){
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	//POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, double height text, 320x240 at 60 Hz;
-	
+char *queryFudge[] = {
+"                                                       ",
+"       Choose an audio file for playback               ",
+" mp3, wav, ogg, wma formats are supported              ",
+"         The default directory is 0:mp3/               ",
+"                                                       "
+};
 	initFilePickRecord(fpr, x, y, firstTime);// Set starting path
     // Set 3 out of 4 allowed file extensions
     memcpy(fpr->fileExts[0], ext0, EXT_LEN);
@@ -314,6 +322,9 @@ uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, cha
 	readDirectory(fpr);
 	sortFileList(fpr);
 // Display up to 20 entries (1 fixed + 19 scrollable)
+modalHelp(queryFudge, sizeof(queryFudge)/sizeof(queryFudge[0]));
+
+	textSetColor(textColorLightBlue,0);
     displayFileList(fpr, fpr->scrollOffset);
 	
 	for(;;)
@@ -353,5 +364,6 @@ uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, cha
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	//POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
 	textGotoXY(fpr->tlX, fpr->tlY);
+	eraseModalHelp(sizeof(queryFudge)/sizeof(queryFudge[0]));
 	wipeArea(fpr);
 	return 0;}

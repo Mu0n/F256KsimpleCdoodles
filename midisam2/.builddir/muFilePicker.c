@@ -296,11 +296,17 @@ void displayFileList(filePickRecord *picker, int scrollOffset) {
 	textGotoXY(picker->tlX + 2, picker->tlY + visibleEnd - visibleStart + 1);
 	printf("%c %c",
 	picker->cursorIndex >= (MAX_VISIBLE_FILES-1)?0xFB:' ',
-	picker->fileCount > (picker->cursorIndex - picker->visualIndex + MAX_VISIBLE_FILES) ?0xF8:' ');
+	picker->fileCount > (picker->cursorIndex - picker->visualIndex + MAX_VISIBLE_FILES) ?0xF8:' ');\
 }
 
 
 uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, char *ext1, char *ext2, char *ext3, bool firstTime){
+char *queryFudge[] = {
+"                                                       ",
+"        Choose a MIDI File for playback                ",
+"         The default directory is 0:midi/              ",
+"                                                       "
+};
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	//POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, double height text, 320x240 at 60 Hz;
 	
@@ -314,6 +320,11 @@ uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, cha
 	readDirectory(fpr);
 	sortFileList(fpr);
 // Display up to 20 entries (1 fixed + 19 scrollable)
+
+
+modalHelp(queryFudge, sizeof(queryFudge)/sizeof(queryFudge[0]));
+
+	textSetColor(textColorLightBlue,0);
     displayFileList(fpr, fpr->scrollOffset);
 	
 	for(;;)
@@ -353,5 +364,6 @@ uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, cha
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	//POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
 	textGotoXY(fpr->tlX, fpr->tlY);
+	eraseModalHelp(sizeof(queryFudge)/sizeof(queryFudge[0]));
 	wipeArea(fpr);
 	return 0;}

@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\miditest\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
 

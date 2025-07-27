@@ -19,7 +19,7 @@
 #define TIMER_PLAYBACK_COOKIE 0
 #define TIMER_DELAY_COOKIE 1
 #define TIMER_SHIMMER_COOKIE 2
-#define TIMER_SHIMMER_DELAY 4
+#define TIMER_SHIMMER_DELAY 10
 
 #define DIRECTORY_X 1
 #define DIRECTORY_Y 6
@@ -42,18 +42,11 @@ filePickRecord fpr;
 bool repeatFlag = false;
 //PROTOTYPES
 short optimizedMIDIShimmering(void);
-uint8_t filePickModal(void);
-void pickMIDIFile(void);
 void zeroOutStuff(void);
 void wipeShimmer(void);
 
 char currentFilePicked[32];
-char *queryFudge[] = {
-"                                                       ",
-"        Choose a MIDI File for playback                ", 
-"         The default directory is 0:midi/              ",
-"                                                       "
-};
+
 
 //FUNCTIONS
 bool isK2(void)
@@ -124,7 +117,10 @@ short optimizedMIDIShimmering() {
 					destroyTrack();
 					zeroOutStuff();
 					wipeText();
-					filePickModal();		
+					uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", false);
+					if(wantsQuit==1) return 0;
+					sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+					loadSMFile(myRecord.fileName, MUSIC_BASE);		
 					setColors();
 					textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
 					
@@ -221,83 +217,8 @@ void machineDependent()
 	setupSerial();
 }
 
-void pickMIDIFile()
-{
-	char *dirOpenResult;
-	struct fileDirEntS *myDirEntry;	
-	uint8_t parser=0;
-	struct filePick myFilePicked;
-	myFilePicked.fileCount = 0;
-	myFilePicked.choice = 0;
-			
-	textGotoXY(DIRECTORY_X,DIRECTORY_Y);textSetColor(textColorLightBlue,0);
-	directory(DIRECTORY_X,DIRECTORY_Y,&myFilePicked);
-	modalHelp(queryFudge,sizeof(queryFudge)/sizeof(queryFudge[0]));
-	
-	for(;;)
-	{
-	kernelNextEvent();
-	if(kernelEventData.type == kernelEvent(key.PRESSED))
-		{
-		switch(kernelEventData.key.raw)
-			{
-			case 148: //enter
-				dirOpenResult = fileOpenDir("midi");
-		
-				myDirEntry = fileReadDir(dirOpenResult);
-				while((myDirEntry = fileReadDir(dirOpenResult))!= NULL)
-				{
-					if(_DE_ISREG(myDirEntry->d_type)) 
-					{
-						if(parser++ != myFilePicked.choice) continue;
-						strcpy(currentFilePicked,myDirEntry->d_name);
-						break;
-					}
-				}
-				fileCloseDir(dirOpenResult);
-				eraseModalHelp(sizeof(queryFudge)/sizeof(queryFudge[0]));
-				return;	
-			case 0xb6: //up arrow
-			if(myFilePicked.choice!=0) 
-				{
-				textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorWhite,0x00);printf("%c",32);
-				myFilePicked.choice--;
-				textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorOrange,0x00);printf("%c",0xFA);textSetColor(textColorWhite,0x00);
-				}
-			break;
-			case 0xb7: //down arrow
-				if(myFilePicked.choice<myFilePicked.fileCount-1) 
-					{
-					textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorWhite,0x00);printf("%c",32);
-					myFilePicked.choice++;
-					textGotoXY(DIRECTORY_X-1,DIRECTORY_Y+myFilePicked.choice);textSetColor(textColorOrange,0x00);printf("%c",0xFA);textSetColor(textColorWhite,0x00);
-					}
-			break;
-			}
-		}
-	}
-}
 
-uint8_t filePickModal()
-{
-	
-	char prefix[] = "midi/";
-	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-	POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, double height text, 320x240 at 60 Hz;
-	pickMIDIFile();	
-	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
-	sprintf(myRecord.fileName, "%s%s", prefix, currentFilePicked);
-	
-	if(loadSMFile(myRecord.fileName, MUSIC_BASE))
-	{
-		printf("\nCouldn't open %s\n",myRecord.fileName);
-		printf("Press space to exit.");
-		hitspace();
-		return 1;
-	}	
-	return 0;
-}
+
 
 void zeroOutStuff()
 {
@@ -317,7 +238,7 @@ void zeroOutStuff()
 }
 
 int main(int argc, char *argv[]) {
-	uint8_t i=0,j=0;
+	uint16_t i;
 	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
 	//initVS1053MIDI();  //if the VS1053b is used
 	
@@ -337,9 +258,11 @@ int main(int argc, char *argv[]) {
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
 	
+
 	machineDependent();
 	zeroOutStuff();
-	setColors();
+	setColors();		
+	
 	/*
 	uint8_t v =0;
 	for(;;) 
@@ -349,13 +272,31 @@ int main(int argc, char *argv[]) {
 		hitspace();
 	}
 	*/
+	
+	//check if the midi directory is here, if not, target the root
+	char *dirOpenResult = fileOpenDir("midi");
+	if(dirOpenResult != NULL) 
+	{
+		strncpy(fpr.currentPath, "midi", MAX_PATH_LEN);
+		fileCloseDir(dirOpenResult);
+	}
+	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
+	
+
+	
+
+		
+
+
 	if(argc > 1)
 	{
 		i=0;
 		if(argv[1][0] == '-')
 			{
-			filePickModal();
-			textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
+			uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", true);
+			if(wantsQuit==1) return 0;
+			sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+			loadSMFile(myRecord.fileName, MUSIC_BASE);
 			}
 		else
 			{
@@ -366,6 +307,9 @@ int main(int argc, char *argv[]) {
 				}		
 
 			myRecord.fileName[i] = '\0';
+			
+			sprintf(fpr.selectedFile, "%s", myRecord.fileName);
+			
 			if(loadSMFile(argv[1], MUSIC_BASE))
 				{
 				printf("\nCouldn't open %s\n",argv[1]);
@@ -375,8 +319,14 @@ int main(int argc, char *argv[]) {
 				}
 			}
 	}
-	else filePickModal();
-	
+	else 
+	{
+	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", true);
+	if(wantsQuit==1) return 0;
+	sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+	loadSMFile(myRecord.fileName, MUSIC_BASE);
+
+	}
 	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
 
 	wipeText();

@@ -18,7 +18,7 @@
 #define CHUNK32B 0x20
 
 #define DIRECTORY_X 1
-#define DIRECTORY_Y 2
+#define DIRECTORY_Y 5
 
 #define LCD_BAND_WIDTH    2
 #define LCD_BAND_INTERV   8
@@ -64,13 +64,7 @@
 FILE *theMP3file;
 filePickRecord fpr;
 char finalName[64];
-char *queryFudge[] = {
-"                                                       ",
-"       Choose an audio file for playback               ",
-" mp3, wav, ogg, wma formats are supported              ",
-"         The default directory is 0:mp3/               ",
-"                                                       "
-};
+
 
 void read8KChunk(uint8_t *, FILE *);
 uint8_t openMP3File(char *);
@@ -304,7 +298,7 @@ void setLCDReverseY() {
 void writeTopRight(bool wantCmds)
 {
 	textSetColor(5,0);
-	textGotoXY(66,1);textPrint("F256Amp v1.0");
+	textGotoXY(66,1);textPrint("F256Amp v2.1");
 	textGotoXY(68,2);textPrint("July 2025");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	textGotoXY(62,8);textPrint("[ESC]Quit");

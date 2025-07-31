@@ -26,7 +26,7 @@ typedef struct aB
 	struct timer_t *timers; //timers to deal with these tracks' delays
 } aBeat;
 
-//this structure is used to inject data into far memory during a preset beat initinal load, and also 
+//this structure is used to inject data into far memory during a preset beat initial load, and also 
 //when the beat's playback is started, so that the instrument data can be set up
 typedef struct aT
 {

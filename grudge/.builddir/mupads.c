@@ -6,12 +6,16 @@
 void pollNES()
 {
 POKE(PAD_CTRL, CTRL_TRIG | CTRL_MODE_NES);
+asm("nop");
+asm("nop");
 POKE(PAD_CTRL, CTRL_MODE_NES);
 }
 
 void pollSNES()
 {
 POKE(PAD_CTRL, CTRL_TRIG | CTRL_MODE_SNES);
+asm("nop");
+asm("nop");
 POKE(PAD_CTRL, CTRL_MODE_SNES);
 }
 

@@ -183,6 +183,30 @@ short optimizedMIDIShimmering() {
 				textSetColor(0,0);textGotoXY(3,26);textPrint("[r]");
 					}
 				}
+			if(kernelEventData.key.raw == 0x2E) //.
+			{
+			for(uint8_t i=0;i<16;i++)
+					{
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0xB0 | i); // control change message
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0x5B); // reverb
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0x00); 
+						
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0xB0 | i); // control change message
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0x5D); // chorus
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0x00); 
+						
+					}
+			}
+			if(kernelEventData.key.raw == 0x2C) //,
+			{
+			for(uint8_t i=0;i<16;i++)
+					{
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0xB0 | i); // control change message
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0x07); // reverb
+						POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, 0x7F); 
+						
+					}
+			}
 		//printf("%02x",kernelEventData.key.raw);
 		} // end if key pressed
 return 0;
@@ -209,12 +233,17 @@ void machineDependent()
 	uint8_t machineCheck=0;
 	//VS1053b
 	machineCheck=PEEK(0xD6A7)&0x3F;
+	/*
 	if(machineCheck == 0x22 || machineCheck == 0x11) //22 is Jr2 and 11 is K2
 	{
+		*/
 	boostVSClock();
 	initRTMIDI();
+/*
 	}
+	
 	setupSerial();
+*/
 }
 
 

@@ -91,6 +91,8 @@ void opl3_quietAll()
 	for(channel=0;channel<9;channel++) opl3_write(0x0100 | (uint16_t)OPL_CH_KBF_HI | (uint16_t)channel, 0x00); //channels 9 to 17
 }
 
+
+
 void opl3_setInstrument(struct opl3Instrument inst, uint8_t chan)
 { 
 	uint16_t highb=0x0000;

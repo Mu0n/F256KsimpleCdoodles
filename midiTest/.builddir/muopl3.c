@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\miditest\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muopl3.h"
@@ -92,6 +92,8 @@ void opl3_quietAll()
 	for(channel=0;channel<9;channel++) opl3_write(OPL_CH_KBF_HI | channel, 0x00); //channels 0 to 8
 	for(channel=0;channel<9;channel++) opl3_write(0x0100 | (uint16_t)OPL_CH_KBF_HI | (uint16_t)channel, 0x00); //channels 9 to 17
 }
+
+
 
 void opl3_setInstrument(struct opl3Instrument inst, uint8_t chan)
 {

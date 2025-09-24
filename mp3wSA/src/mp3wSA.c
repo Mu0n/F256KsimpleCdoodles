@@ -36,7 +36,7 @@ EMBED(mac, "../assets/f256amp.bin", 0x20000);
 EMBED(pally, "../assets/mainlogo.raw.pal", 0x52000);
 EMBED(logoy, "../assets/mainlogo.raw", 0x52400);
 EMBED(patch, "../assets/bigpatch.bin", 0x66000);
-EMBED(saplug, "../assets/saplugin2.bin", 0x68476);
+EMBED(saplug, "../assets/saplugin2.bin", 0x69000);
 
 void read8KChunk(uint8_t *, FILE *);
 uint8_t openMP3File(char *);
@@ -169,8 +169,11 @@ bool K2LCD() {
 bool wrongMachineTest() {
 	if(isWave2() == false)
 		{
-		printf("In order to work, a VS1053b chip needs to be present.\nOnly for the K2 and Jr.2");
-		printf("\nHit space to quit.");
+		uint8_t mid = PEEK(0xD6A7)&0x3F;
+		printf("Your machine ID is %d.",mid);
+		printf("\nIn order to work, a VS1053b chip needs to be present.");
+		printf("\nThis chip is present in the Jr2 and K2.");
+		printf("\nHit space to proceed");
 		hitspace();
 		return false;
 		}

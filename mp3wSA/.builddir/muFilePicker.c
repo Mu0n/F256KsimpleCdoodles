@@ -276,7 +276,10 @@ uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *initFolde
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, double height text, 320x240 at 60 Hz;
 	
+	
+printf("fpr init start");
 	initFilePickRecord(fpr, x, y);// Set starting path
+printf("fpr init end");
     strncpy(fpr->currentPath, initFolder, MAX_PATH_LEN);
     // Set 3 out of 4 allowed file extensions
     memcpy(fpr->fileExts[0], ext0, EXT_LEN);

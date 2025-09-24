@@ -69,6 +69,11 @@ void resetInstruments(bool wantAlt)
 		{
 			POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, 0xC0 | i);
 			POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, 0x00);
+	
+			POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, 0xB0 | i); // control change message
+			POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, 0x79); // all notes off command
+			POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, 0x00);
+	
 		}
 		midiShutUp(wantAlt);
 	}

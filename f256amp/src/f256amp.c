@@ -197,13 +197,20 @@ bool K2LCD() {
 }
 
 bool wrongMachineTest() {
+/*
 	if(isWave2() == false)
 		{
-		printf("In order to work, a VS1053b chip needs to be present.\nOnly for the K2 and Jr.2");
-		printf("\nHit space to quit.");
+*/
+		uint8_t mid = PEEK(0xD6A7)&0x3F;
+		printf("Your machine ID is %d.",mid);
+		printf("\nIn order to work, a VS1053b chip needs to be present.");
+		printf("\nThis chip is present in the Jr2 and K2.");
+		printf("\nHit space to proceed");
 		hitspace();
+/*
 		return false;
 		}
+*/
 	return true;
 }
 

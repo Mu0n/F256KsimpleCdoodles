@@ -9,9 +9,9 @@
   __logoy_lma  = 0x52400;
   __logoy_size = 0x12c00;
 
-  __patch_lma  = 0x65000;
+  __patch_lma  = 0x66000;
   __patch_size = 0x2476;
 
-  __saplug_lma  = 0x67476;
+  __saplug_lma  = 0x69000;
   __saplug_size = 0x7d0;
 

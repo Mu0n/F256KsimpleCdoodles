@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__stack = 0xC000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -59,9 +59,9 @@
        0        0        0     1 __pally_size = 0x400
        0        0        0     1 __logoy_lma = 0x52400
        0        0        0     1 __logoy_size = 0x12c00
-       0        0        0     1 __patch_lma = 0x65000
+       0        0        0     1 __patch_lma = 0x66000
        0        0        0     1 __patch_size = 0x2476
-       0        0        0     1 __saplug_lma = 0x67476
+       0        0        0     1 __saplug_lma = 0x69000
        0        0        0     1 __saplug_size = 0x7d0
       30      300        2     1 .zp.data
       30      300        0     1         __zp_data_start = .
@@ -81,7 +81,7 @@
       41       41        0     1 __zp_bss_size = SIZEOF(.zp.bss)
       41       41       6c     1 .zp
       41       41       6c     1         mp3wSA.lto.o:(.zp.noinit)
-     302      302     4323     2 .text
+     302      302     435f     2 .text
      302      302        0     1         _init = .
      302      302        0     1         _start = .
      302      302        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -107,102 +107,102 @@
      54a      54a       13     1                 __zero_zp_bss
      55d      55d       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
      55d      55d       17     1                 __copy_zp_data
-     574      574     25cc     1         mp3wSA.lto.o:(.text.main)
-     574      574     25cc     1                 main
-    2b40     2b40      149     1         mp3wSA.lto.o:(.text.fileRead)
-    2b40     2b40      149     1                 fileRead
-    2c89     2c89      1f8     1         mp3wSA.lto.o:(.text.textPrint)
-    2c89     2c89      1f8     1                 textPrint
-    2e81     2e81       11     1         mp3wSA.lto.o:(.text.textGotoXY)
-    2e81     2e81       11     1                 textGotoXY
-    2e92     2e92        3     1         mp3wSA.lto.o:(.text.textSetColor)
-    2e92     2e92        3     1                 textSetColor
-    2e95     2e95       df     1         mp3wSA.lto.o:(.text.fileReadDir)
-    2e95     2e95       df     1                 fileReadDir
-    2f74     2f74      484     1         mp3wSA.lto.o:(.text.pickFile)
-    2f74     2f74      484     1                 pickFile
-    33f8     33f8        5     1         mp3wSA.lto.o:(.text.exit)
-    33f8     33f8        5     1                 exit
-    33fd     33fd      b34     1         mp3wSA.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
-    33fd     33fd      b34     1                 (anonymous namespace)::print(char const*, Status*)
-    3f31     3f31       db     1         mp3wSA.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    3f31     3f31       db     1                 (anonymous namespace)::put(char, Status*)
-    400c     400c      10c     1         mp3wSA.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    400c     400c      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    4118     4118       88     1         mp3wSA.lto.o:(.text.printf)
-    4118     4118       88     1                 printf
-    41a0     41a0       d2     1         mp3wSA.lto.o:(.text.sprintf)
-    41a0     41a0       d2     1                 sprintf
-    4272     4272      1d5     1         mp3wSA.lto.o:(.text.malloc)
-    4272     4272      1d5     1                 malloc
-    4447     4447      192     1         mp3wSA.lto.o:(.text.free)
-    4447     4447      192     1                 free
-    45d9     45d9       2c     1         mp3wSA.lto.o:(.text.memcpy)
-    45d9     45d9       2c     1                 memcpy
-    4605     4605       20     1         mp3wSA.lto.o:(.text.__memset)
-    4605     4605       20     1                 __memset
-    4625     4625        0     1         __init_array_start = .
-    4625     4625        0     1         __init_array_end = .
-    4625     4625        0     1         __fini_array_start = .
-    4625     4625        0     1         __fini_array_end = .
-    4625     4625     2e36     1 .rodata
-    4625     4625        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    4625     4625        0     1                 __set_v
-    4626     4626       16     1         mp3wSA.lto.o:(.rodata.fileReadDir)
-    463c     463c       3a     1         mp3wSA.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
-    4676     4676       30     1         mp3wSA.lto.o:(.rodata.textColors)
-    4676     4676       30     1                 textColors
-    46a6     46a6      14f     1         <internal>:(.rodata.str1.1)
-    47f5     47f5       20     1         <internal>:(.rodata.cst32)
-    4815     4815     2476     1         mp3wSA.lto.o:(.rodata.bigpatch)
-    4815     4815     2476     1                 bigpatch
-    6c8b     6c8b      7d0     1         mp3wSA.lto.o:(.rodata.saplugin2)
-    6c8b     6c8b      7d0     1                 saplugin2
-    745b     745b        0     1 .data
-    745b     745b        0     1         __data_start = .
-    745b     745b        0     1         __data_end = .
-    745b     745b        0     1 __data_load_start = LOADADDR(.data)
-    745b     745b        0     1 __data_size = SIZEOF(.data)
-    745b     745b      e8c     1 .bss
-    745b     745b        0     1         __bss_start = .
-    745b     745b        4     1         mp3wSA.lto.o:(.bss._BITMAP_BASE.0)
-    745b     745b        4     1                 _BITMAP_BASE.0
-    745f     745f        8     1         mp3wSA.lto.o:(.bss._dirStream)
-    745f     745f        8     1                 _dirStream
-    7467     7467      102     1         mp3wSA.lto.o:(.bss.fileReadDir.fileDirEntS)
-    7467     7467      102     1                 fileReadDir.fileDirEntS
-    7569     7569      d38     1         mp3wSA.lto.o:(.bss.fpr)
-    7569     7569      d38     1                 fpr
-    82a1     82a1       40     1         mp3wSA.lto.o:(.bss.finalName)
-    82a1     82a1       40     1                 finalName
-    82e1     82e1        1     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    82e1     82e1        1     1                 (anonymous namespace)::initialized
-    82e2     82e2        1     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    82e2     82e2        1     1                 (anonymous namespace)::last_free
-    82e3     82e3        2     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    82e3     82e3        2     1                 (anonymous namespace)::free_size
-    82e5     82e5        2     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    82e5     82e5        2     1                 (anonymous namespace)::free_list
-    82e7     82e7        0     1         __bss_end = .
-    82e7     82e7        0     1 __bss_size = SIZEOF(.bss)
-    82e7     82e7        0     1 .noinit
-    82e7     82e7        0     1         __heap_start = ALIGN(., 2)
-    82e7     82e7        0     1 end_block8 = .
-    82e7     82e7        0     1 end_block9 = .
-    82e7     82e7        0     1 end_block10 = .
-    82e7     82e7        0     1 end_block11 = .
-    82e7     82e7        0     1 end_block12 = .
-    82e7     82e7        0     1 end_block13 = .
-    82e7     82e7        0     1 end_block14 = .
-    82e7     82e7        0     1 end_block15 = .
-    82e7     82e7        0     1 end_block16 = .
-    82e7     82e7        0     1 end_block17 = .
-    82e7     82e7        0     1 end_block18 = .
-    82e7     82e7        0     1 end_block19 = .
-    82e7     82e7        0     1 end_block20 = .
-    82e7     82e7        0     1 end_block21 = .
-    82e7     82e7        0     1 end_block22 = .
-    82e7     82e7        0     1 end_block23 = .
+     574      574     2608     1         mp3wSA.lto.o:(.text.main)
+     574      574     2608     1                 main
+    2b7c     2b7c      149     1         mp3wSA.lto.o:(.text.fileRead)
+    2b7c     2b7c      149     1                 fileRead
+    2cc5     2cc5      1f8     1         mp3wSA.lto.o:(.text.textPrint)
+    2cc5     2cc5      1f8     1                 textPrint
+    2ebd     2ebd       11     1         mp3wSA.lto.o:(.text.textGotoXY)
+    2ebd     2ebd       11     1                 textGotoXY
+    2ece     2ece        3     1         mp3wSA.lto.o:(.text.textSetColor)
+    2ece     2ece        3     1                 textSetColor
+    2ed1     2ed1       df     1         mp3wSA.lto.o:(.text.fileReadDir)
+    2ed1     2ed1       df     1                 fileReadDir
+    2fb0     2fb0      484     1         mp3wSA.lto.o:(.text.pickFile)
+    2fb0     2fb0      484     1                 pickFile
+    3434     3434        5     1         mp3wSA.lto.o:(.text.exit)
+    3434     3434        5     1                 exit
+    3439     3439      b34     1         mp3wSA.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    3439     3439      b34     1                 (anonymous namespace)::print(char const*, Status*)
+    3f6d     3f6d       db     1         mp3wSA.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    3f6d     3f6d       db     1                 (anonymous namespace)::put(char, Status*)
+    4048     4048      10c     1         mp3wSA.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    4048     4048      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    4154     4154       88     1         mp3wSA.lto.o:(.text.printf)
+    4154     4154       88     1                 printf
+    41dc     41dc       d2     1         mp3wSA.lto.o:(.text.sprintf)
+    41dc     41dc       d2     1                 sprintf
+    42ae     42ae      1d5     1         mp3wSA.lto.o:(.text.malloc)
+    42ae     42ae      1d5     1                 malloc
+    4483     4483      192     1         mp3wSA.lto.o:(.text.free)
+    4483     4483      192     1                 free
+    4615     4615       2c     1         mp3wSA.lto.o:(.text.memcpy)
+    4615     4615       2c     1                 memcpy
+    4641     4641       20     1         mp3wSA.lto.o:(.text.__memset)
+    4641     4641       20     1                 __memset
+    4661     4661        0     1         __init_array_start = .
+    4661     4661        0     1         __init_array_end = .
+    4661     4661        0     1         __fini_array_start = .
+    4661     4661        0     1         __fini_array_end = .
+    4661     4661     2e7c     1 .rodata
+    4661     4661        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    4661     4661        0     1                 __set_v
+    4662     4662       16     1         mp3wSA.lto.o:(.rodata.fileReadDir)
+    4678     4678       3a     1         mp3wSA.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    46b2     46b2       30     1         mp3wSA.lto.o:(.rodata.textColors)
+    46b2     46b2       30     1                 textColors
+    46e2     46e2      195     1         <internal>:(.rodata.str1.1)
+    4877     4877       20     1         <internal>:(.rodata.cst32)
+    4897     4897     2476     1         mp3wSA.lto.o:(.rodata.bigpatch)
+    4897     4897     2476     1                 bigpatch
+    6d0d     6d0d      7d0     1         mp3wSA.lto.o:(.rodata.saplugin2)
+    6d0d     6d0d      7d0     1                 saplugin2
+    74dd     74dd        0     1 .data
+    74dd     74dd        0     1         __data_start = .
+    74dd     74dd        0     1         __data_end = .
+    74dd     74dd        0     1 __data_load_start = LOADADDR(.data)
+    74dd     74dd        0     1 __data_size = SIZEOF(.data)
+    74dd     74dd      e8c     1 .bss
+    74dd     74dd        0     1         __bss_start = .
+    74dd     74dd        4     1         mp3wSA.lto.o:(.bss._BITMAP_BASE.0)
+    74dd     74dd        4     1                 _BITMAP_BASE.0
+    74e1     74e1        8     1         mp3wSA.lto.o:(.bss._dirStream)
+    74e1     74e1        8     1                 _dirStream
+    74e9     74e9      102     1         mp3wSA.lto.o:(.bss.fileReadDir.fileDirEntS)
+    74e9     74e9      102     1                 fileReadDir.fileDirEntS
+    75eb     75eb      d38     1         mp3wSA.lto.o:(.bss.fpr)
+    75eb     75eb      d38     1                 fpr
+    8323     8323       40     1         mp3wSA.lto.o:(.bss.finalName)
+    8323     8323       40     1                 finalName
+    8363     8363        1     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    8363     8363        1     1                 (anonymous namespace)::initialized
+    8364     8364        1     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    8364     8364        1     1                 (anonymous namespace)::last_free
+    8365     8365        2     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    8365     8365        2     1                 (anonymous namespace)::free_size
+    8367     8367        2     1         mp3wSA.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    8367     8367        2     1                 (anonymous namespace)::free_list
+    8369     8369        0     1         __bss_end = .
+    8369     8369        0     1 __bss_size = SIZEOF(.bss)
+    8369     8369        0     1 .noinit
+    8369     8369        0     1         __heap_start = ALIGN(., 2)
+    8369     8369        0     1 end_block8 = .
+    8369     8369        0     1 end_block9 = .
+    8369     8369        0     1 end_block10 = .
+    8369     8369        0     1 end_block11 = .
+    8369     8369        0     1 end_block12 = .
+    8369     8369        0     1 end_block13 = .
+    8369     8369        0     1 end_block14 = .
+    8369     8369        0     1 end_block15 = .
+    8369     8369        0     1 end_block16 = .
+    8369     8369        0     1 end_block17 = .
+    8369     8369        0     1 end_block18 = .
+    8369     8369        0     1 end_block19 = .
+    8369     8369        0     1 end_block20 = .
+    8369     8369        0     1 end_block21 = .
+    8369     8369        0     1 end_block22 = .
+    8369     8369        0     1 end_block23 = .
    20000    20000    20d00    16 .mac
    20000    20000    20d00    16         mp3wSA.lto.o:(.mac)
    20000    20000        0     1                 mac_start
@@ -218,16 +218,16 @@
    52400    52400        0     1                 logoy_start
    65000    65000        0     1                 logoy_end
    65000    65000        0     1 end_logoy = .
-   65000    65000     2476    16 .patch
-   65000    65000     2476    16         mp3wSA.lto.o:(.patch)
-   65000    65000        0     1                 patch_start
-   67476    67476        0     1                 patch_end
-   67476    67476        0     1 end_patch = .
-   67480    67480      7d0    16 .saplug
-   67480    67480      7d0    16         mp3wSA.lto.o:(.saplug)
-   67480    67480        0     1                 saplug_start
-   67c50    67c50        0     1                 saplug_end
-   67c50    67c50        0     1 end_saplug = .
+   66000    66000     2476    16 .patch
+   66000    66000     2476    16         mp3wSA.lto.o:(.patch)
+   66000    66000        0     1                 patch_start
+   68476    68476        0     1                 patch_end
+   68476    68476        0     1 end_patch = .
+   69000    69000      7d0    16 .saplug
+   69000    69000      7d0    16         mp3wSA.lto.o:(.saplug)
+   69000    69000        0     1                 saplug_start
+   697d0    697d0        0     1                 saplug_end
+   697d0    697d0        0     1 end_saplug = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
        0        0      a60     4 .symtab

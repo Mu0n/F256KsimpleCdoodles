@@ -77,142 +77,198 @@
        0        0        0     1 __tileset1_size = 0x8000
        0        0        0     1 __tileset2_lma = 0x48000
        0        0        0     1 __tileset2_size = 0x7f00
-      30      300        2     1 .zp.data
+      30      300       5a     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300        2     1         BachHero.lto.o:(.zp.data)
-      30      300        2     1                 reticY
-      32      302        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      32      302        0     1 __zp_data_size = SIZEOF(.zp.data)
-      32       32       65     1 .zp.bss
-      32       32        0     1         __zp_bss_start = .
-      32       32       65     1         BachHero.lto.o:(.zp.bss)
-      32       32        1     1                 _col
-      33       33        1     1                 _row
-      34       34        c     1                 _BITMAP_BASE
-      40       40        1     1                 _active
-      41       41        1     1                 _color
-      42       42        1     1                 _MAX_X
-      43       43        1     1                 _tileSize.0
-      44       44        1     1                 _tileSize.1
-      45       45       40     1                 _spriteCtl
-      85       85        2     1                 __putchar.s
-      87       87        1     1                 score
-      88       88        1     1                 reticX
-      89       89        1     1                 midiPSG
-      8a       8a        1     1                 GUITimer.1
-      8b       8b        1     1                 midiTimer.1
-      8c       8c        1     1                 glassesTimer.1
-      8d       8d        1     1                 scrollTimer.1
-      8e       8e        2     1                 songrefnote
-      90       90        7     1                 kernelEventData
-      97       97        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      97       97       59     1 .zp
-      97       97       59     1         BachHero.lto.o:(.zp.noinit)
-     302      302     2ccb     1 .text
-     302      302        0     1         _init = .
-     302      302        0     1         _start = .
-     302      302        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     302      302        0     1                 __do_init_stack
-     30a      30a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     30a      30a        0     1                 __do_zero_bss
-     30d      30d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30d      30d        0     1                 __do_zero_zp_bss
-     310      310        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     310      310        0     1                 __do_copy_zp_data
-     313      313        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     316      316        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     316      316        0     1                 __after_main
-     319      319        0     1         _fini = .
-     319      319        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     31a      31a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     31a      31a       13     1                 __zero_bss
-     32d      32d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     32d      32d       13     1                 __zero_zp_bss
-     340      340       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     340      340       17     1                 __copy_zp_data
-     357      357      34e     1         BachHero.lto.o:(.text.f256Init)
-     357      357      34e     1                 f256Init
-     6a5      6a5       9a     1         BachHero.lto.o:(.text.textClear)
-     6a5      6a5       9a     1                 textClear
-     73f      73f        6     1         BachHero.lto.o:(.text.main)
-     73f      73f        6     1                 main
-     745      745     1485     1         BachHero.lto.o:(.text.f256main)
-     745      745     1485     1                 f256main
-    1bca     1bca      438     1         BachHero.lto.o:(.text.bitmapLine)
-    1bca     1bca      438     1                 bitmapLine
-    2002     2002        5     1         BachHero.lto.o:(.text.exit)
-    2002     2002        5     1                 exit
-    2007     2007       d3     1         BachHero.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    2007     2007       d3     1                 (anonymous namespace)::put(char, Status*)
-    20da     20da      10c     1         BachHero.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    20da     20da      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    21e6     21e6      bd9     1         BachHero.lto.o:(.text.printf)
-    21e6     21e6      bd9     1                 printf
-    2dbf     2dbf      1c2     1         BachHero.lto.o:(.text.putchar)
-    2dbf     2dbf      1c2     1                 putchar
-    2f81     2f81       2c     1         BachHero.lto.o:(.text.memcpy)
-    2f81     2f81       2c     1                 memcpy
-    2fad     2fad       20     1         BachHero.lto.o:(.text.__memset)
-    2fad     2fad       20     1                 __memset
-    2fcd     2fcd        0     1         __init_array_start = .
-    2fcd     2fcd        0     1         __init_array_end = .
-    2fcd     2fcd        0     1         __fini_array_start = .
-    2fcd     2fcd        0     1         __fini_array_end = .
-    2fcd     2fcd      778     1 .rodata
-    2fcd     2fcd        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2fcd     2fcd        0     1                 __set_v
-    2fce     2fce       10     1         BachHero.lto.o:(.rodata.f256main)
-    2fde     2fde       3a     1         BachHero.lto.o:(.rodata.printf)
-    3018     3018       30     1         BachHero.lto.o:(.rodata.textColors)
-    3018     3018       30     1                 textColors
-    3048     3048       80     1         BachHero.lto.o:(.rodata.MIDINotesToKeyCodes)
-    3048     3048       80     1                 MIDINotesToKeyCodes
-    30c8     30c8       7b     1         BachHero.lto.o:(.rodata.KeyCodesToMIDINotes)
-    30c8     30c8       7b     1                 KeyCodesToMIDINotes
-    3143     3143       7b     1         BachHero.lto.o:(.rodata.KeyCodesToLoPSG)
-    3143     3143       7b     1                 KeyCodesToLoPSG
-    31be     31be       7b     1         BachHero.lto.o:(.rodata.KeyCodesToHiPSG)
-    31be     31be       7b     1                 KeyCodesToHiPSG
-    3239     3239       a0     1         BachHero.lto.o:(.rodata.NoteXPosition)
-    3239     3239       a0     1                 NoteXPosition
-    32d9     32d9       52     1         BachHero.lto.o:(.rodata.songNotes)
-    32d9     32d9       52     1                 songNotes
-    332b     332b      200     1         BachHero.lto.o:(.rodata.SIN)
-    332b     332b      200     1                 SIN
-    352b     352b      21a     1         <internal>:(.rodata.str1.1)
-    3745     3745        0     1 .data
-    3745     3745        0     1         __data_start = .
-    3745     3745        0     1         __data_end = .
-    3745     3745        0     1 __data_load_start = LOADADDR(.data)
-    3745     3745        0     1 __data_size = SIZEOF(.data)
-    3745     3745        5     1 .bss
-    3745     3745        0     1         __bss_start = .
-    3745     3745        3     1         BachHero.lto.o:(.bss._BITMAP_CLUT)
-    3745     3745        3     1                 _BITMAP_CLUT
-    3748     3748        1     1         BachHero.lto.o:(.bss._tileSize.2)
-    3748     3748        1     1                 _tileSize.2
-    3749     3749        1     1         BachHero.lto.o:(.bss.kernelError)
-    3749     3749        1     1                 kernelError
-    374a     374a        0     1         __bss_end = .
-    374a     374a        0     1 __bss_size = SIZEOF(.bss)
-    374a     374a        0     1 .noinit
-    374a     374a        0     1         __heap_start = ALIGN(., 2)
-    374a     374a        0     1 end_block8 = .
-    374a     374a        0     1 end_block9 = .
-    374a     374a        0     1 end_block10 = .
-    374a     374a        0     1 end_block11 = .
-    374a     374a        0     1 end_block12 = .
-    374a     374a        0     1 end_block13 = .
-    374a     374a        0     1 end_block14 = .
-    374a     374a        0     1 end_block15 = .
-    374a     374a        0     1 end_block16 = .
-    374a     374a        0     1 end_block17 = .
-    374a     374a        0     1 end_block18 = .
-    374a     374a        0     1 end_block19 = .
-    374a     374a        0     1 end_block20 = .
-    374a     374a        0     1 end_block21 = .
-    374a     374a        0     1 end_block22 = .
-    374a     374a        0     1 end_block23 = .
+      30      300       5a     1         BachHero.lto.o:(.zp.data)
+      30      300        1     1                 _MAX_COL
+      31      301        1     1                 _MAX_ROW
+      32      302        1     1                 _ccolor
+      33      303        2     1                 reticX
+      35      305        2     1                 reticY
+      37      307        1     1                 midiPSG
+      38      308       52     1                 songNotes
+      8a      35a        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      8a      35a        0     1 __zp_data_size = SIZEOF(.zp.data)
+      8a       8a       5b     1 .zp.bss
+      8a       8a        0     1         __zp_bss_start = .
+      8a       8a       5b     1         BachHero.lto.o:(.zp.bss)
+      8a       8a        1     1                 _col
+      8b       8b        1     1                 _row
+      8c       8c        1     1                 _active
+      8d       8d        1     1                 _MAX_X
+      8e       8e       40     1                 _spriteCtl
+      ce       ce        1     1                 score
+      cf       cf        3     1                 GUITimer
+      d2       d2        3     1                 midiTimer
+      d5       d5        3     1                 glassesTimer
+      d8       d8        3     1                 scrollTimer
+      db       db        2     1                 songrefnote
+      dd       dd        1     1                 kernelError
+      de       de        7     1                 kernelEventData
+      e5       e5        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      e5       e5        b     1 .zp
+      e5       e5        b     1         BachHero.lto.o:(.zp.noinit)
+     35a      35a     2f21     2 .text
+     35a      35a        0     1         _init = .
+     35a      35a        0     1         _start = .
+     35a      35a        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     35a      35a        0     1                 __do_init_stack
+     362      362        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     362      362        0     1                 __do_zero_bss
+     365      365        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     365      365        0     1                 __do_zero_zp_bss
+     368      368        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     368      368        0     1                 __do_copy_zp_data
+     36b      36b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     36e      36e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     36e      36e        0     1                 __after_main
+     371      371        0     1         _fini = .
+     371      371        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     372      372        3     2         BachHero.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     372      372        3     1                 __impl::VarInt::make(void*, char)
+     376      376        d     2         BachHero.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     376      376        d     1                 __impl::VarInt::high_bit() const
+     384      384        d     2         BachHero.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     384      384        d     1                 __impl::VarInt::negative() const
+     392      392       47     2         BachHero.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     392      392       47     1                 __impl::VarInt::negate()
+     3da      3da       3b     2         BachHero.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     3da      3da       3b     1                 __impl::VarInt::shl()
+     415      415        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     415      415        0     1                 __call_indir
+     418      418       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     418      418       13     1                 __zero_bss
+     42b      42b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     42b      42b       13     1                 __zero_zp_bss
+     43e      43e       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     43e      43e       17     1                 __copy_zp_data
+     455      455      18c     1         BachHero.lto.o:(.text.f256Init)
+     455      455      18c     1                 f256Init
+     5e1      5e1      176     1         BachHero.lto.o:(.text.textReset)
+     5e1      5e1      176     1                 textReset
+     757      757      16f     1         BachHero.lto.o:(.text.bitmapReset)
+     757      757      16f     1                 bitmapReset
+     8c6      8c6        6     1         BachHero.lto.o:(.text.main)
+     8c6      8c6        6     1                 main
+     8cc      8cc      d3c     1         BachHero.lto.o:(.text.f256main)
+     8cc      8cc      d3c     1                 f256main
+    1608     1608      2ef     1         BachHero.lto.o:(.text.setup)
+    1608     1608      2ef     1                 setup
+    18f7     18f7       f6     1         BachHero.lto.o:(.text.writePianoKeyHelp)
+    18f7     18f7       f6     1                 writePianoKeyHelp
+    19ed     19ed      44c     1         BachHero.lto.o:(.text.bitmapLine)
+    19ed     19ed      44c     1                 bitmapLine
+    1e39     1e39      25a     1         BachHero.lto.o:(.text.textPrint)
+    1e39     1e39      25a     1                 textPrint
+    2093     2093        e     1         BachHero.lto.o:(.text.__putchar)
+    2093     2093        e     1                 __putchar
+    20a1     20a1       20     1         BachHero.lto.o:(.text.midiNoteOff)
+    20a1     20a1       20     1                 midiNoteOff
+    20c1     20c1       20     1         BachHero.lto.o:(.text.midiNoteOn)
+    20c1     20c1       20     1                 midiNoteOn
+    20e1     20e1       33     1         BachHero.lto.o:(.text.setTimer)
+    20e1     20e1       33     1                 setTimer
+    2114     2114       21     1         BachHero.lto.o:(.text.getTimerAbsolute)
+    2114     2114       21     1                 getTimerAbsolute
+    2135     2135        e     1         BachHero.lto.o:(.text.exit)
+    2135     2135        e     1                 exit
+    2143     2143        2     1         BachHero.lto.o:(.text._Exit)
+    2143     2143        2     1                 _Exit
+    2145     2145      218     1         BachHero.lto.o:(.text.vfprintf)
+    2145     2145      218     1                 vfprintf
+    235d     235d      b44     1         BachHero.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    235d     235d      b44     1                 (anonymous namespace)::print(char const*, Status*)
+    2ea1     2ea1       e1     1         BachHero.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    2ea1     2ea1       e1     1                 (anonymous namespace)::put(char, Status*)
+    2f82     2f82      174     1         BachHero.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    2f82     2f82      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    30f6     30f6       59     1         BachHero.lto.o:(.text.printf)
+    30f6     30f6       59     1                 printf
+    314f     314f        3     1         BachHero.lto.o:(.text.fputc)
+    314f     314f        3     1                 fputc
+    3152     3152       28     1         BachHero.lto.o:(.text.putchar)
+    3152     3152       28     1                 putchar
+    317a     317a        7     1         BachHero.lto.o:(.text.putchar_wrapper)
+    317a     317a        7     1                 putchar_wrapper
+    3181     3181        3     1         BachHero.lto.o:(.text.putc)
+    3181     3181        3     1                 putc
+    3184     3184        b     1         BachHero.lto.o:(.text.__from_ascii)
+    3184     3184        b     1                 __from_ascii
+    318f     318f       2c     1         BachHero.lto.o:(.text.memcpy)
+    318f     318f       2c     1                 memcpy
+    31bb     31bb       20     1         BachHero.lto.o:(.text.__memset)
+    31bb     31bb       20     1                 __memset
+    31db     31db       6e     1         BachHero.lto.o:(.text.__simple_strtoui)
+    31db     31db       6e     1                 __simple_strtoui
+    3249     3249       32     1         BachHero.lto.o:(.text.__mulhi3)
+    3249     3249       32     1                 __mulhi3
+    327b     327b        0     1         __init_array_start = .
+    327b     327b        0     1         __init_array_end = .
+    327b     327b        0     1         __fini_array_start = .
+    327b     327b        0     1         __fini_array_end = .
+    327b     327b      2ce     1 .rodata
+    327b     327b       7a     1         BachHero.lto.o:(.rodata.f256main)
+    32f5     32f5       3a     1         BachHero.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    332f     332f      21a     1         <internal>:(.rodata.str1.1)
+    3549     3549      4c3     1 .data
+    3549     3549        0     1         __data_start = .
+    3549     3549       30     1         BachHero.lto.o:(.data.textColors)
+    3549     3549       30     1                 textColors
+    3579     3579       80     1         BachHero.lto.o:(.data.MIDINotesToKeyCodes)
+    3579     3579       80     1                 MIDINotesToKeyCodes
+    35f9     35f9       7b     1         BachHero.lto.o:(.data.KeyCodesToMIDINotes)
+    35f9     35f9       7b     1                 KeyCodesToMIDINotes
+    3674     3674       7b     1         BachHero.lto.o:(.data.KeyCodesToLoPSG)
+    3674     3674       7b     1                 KeyCodesToLoPSG
+    36ef     36ef       7b     1         BachHero.lto.o:(.data.KeyCodesToHiPSG)
+    36ef     36ef       7b     1                 KeyCodesToHiPSG
+    376a     376a       a0     1         BachHero.lto.o:(.data.NoteXPosition)
+    376a     376a       a0     1                 NoteXPosition
+    380a     380a      200     1         BachHero.lto.o:(.data.SIN)
+    380a     380a      200     1                 SIN
+    3a0a     3a0a        2     1         BachHero.lto.o:(.data.stdout)
+    3a0a     3a0a        2     1                 stdout
+    3a0c     3a0c        0     1         __data_end = .
+    3a0c     3a0c        0     1 __data_load_start = LOADADDR(.data)
+    3a0c     3a0c        0     1 __data_size = SIZEOF(.data)
+    3a0c     3a0c       20     1 .bss
+    3a0c     3a0c        0     1         __bss_start = .
+    3a0c     3a0c        2     1         BachHero.lto.o:(.bss.kernelArgs)
+    3a0c     3a0c        2     1                 kernelArgs
+    3a0e     3a0e        c     1         BachHero.lto.o:(.bss._BITMAP_BASE)
+    3a0e     3a0e        c     1                 _BITMAP_BASE
+    3a1a     3a1a        1     1         BachHero.lto.o:(.bss._color)
+    3a1a     3a1a        1     1                 _color
+    3a1b     3a1b        1     1         BachHero.lto.o:(.bss._MAX_Y)
+    3a1b     3a1b        1     1                 _MAX_Y
+    3a1c     3a1c        3     1         BachHero.lto.o:(.bss._BITMAP_CLUT)
+    3a1c     3a1c        3     1                 _BITMAP_CLUT
+    3a1f     3a1f        3     1         BachHero.lto.o:(.bss._tileSize)
+    3a1f     3a1f        3     1                 _tileSize
+    3a22     3a22        8     1         BachHero.lto.o:(.bss._dirStream)
+    3a22     3a22        8     1                 _dirStream
+    3a2a     3a2a        2     1         BachHero.lto.o:(.bss.__putchar.s)
+    3a2a     3a2a        2     1                 __putchar.s
+    3a2c     3a2c        0     1         __bss_end = .
+    3a2c     3a2c        0     1 __bss_size = SIZEOF(.bss)
+    3a2c     3a2c        0     1 .noinit
+    3a2c     3a2c        0     1         __heap_start = ALIGN(., 2)
+    3a2c     3a2c        0     1 end_block8 = .
+    3a2c     3a2c        0     1 end_block9 = .
+    3a2c     3a2c        0     1 end_block10 = .
+    3a2c     3a2c        0     1 end_block11 = .
+    3a2c     3a2c        0     1 end_block12 = .
+    3a2c     3a2c        0     1 end_block13 = .
+    3a2c     3a2c        0     1 end_block14 = .
+    3a2c     3a2c        0     1 end_block15 = .
+    3a2c     3a2c        0     1 end_block16 = .
+    3a2c     3a2c        0     1 end_block17 = .
+    3a2c     3a2c        0     1 end_block18 = .
+    3a2c     3a2c        0     1 end_block19 = .
+    3a2c     3a2c        0     1 end_block20 = .
+    3a2c     3a2c        0     1 end_block21 = .
+    3a2c     3a2c        0     1 end_block22 = .
+    3a2c     3a2c        0     1 end_block23 = .
    10000    10000     8000    16 .xaa
    10000    10000     8000    16         BachHero.lto.o:(.xaa)
    10000    10000        0     1                 xaa_start
@@ -275,9 +331,9 @@
    4ff00    4ff00        0     1 end_tileset2 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      ce0     4 .symtab
-       0        0      ce0     4         <internal>:(.symtab)
+       0        0      ea0     4 .symtab
+       0        0      ea0     4         <internal>:(.symtab)
        0        0       bc     1 .shstrtab
        0        0       bc     1         <internal>:(.shstrtab)
-       0        0      960     1 .strtab
-       0        0      960     1         <internal>:(.strtab)
+       0        0      ae9     1 .strtab
+       0        0      ae9     1         <internal>:(.strtab)

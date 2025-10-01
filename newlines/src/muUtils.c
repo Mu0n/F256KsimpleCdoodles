@@ -1,5 +1,3 @@
-#include "D:\F256\llvm-mos\code\bachhero\.builddir\trampoline.h"
-
 #include "f256lib.h"
 #include "../src/muUtils.h"
 
@@ -10,12 +8,26 @@ bool isAnyK(void)
 	return (value >= 0x10 && value <= 0x16);
 }
 
+bool isK2(void)
+{
+	uint8_t value = PEEK(0xD6A7) & 0x1F;
+	return (value == 0x11);
+}
+
 //will return true if the optical keyboard is detected, enabling the case embedded LCD present as well
 bool hasCaseLCD(void)
 {
 	//if the 2nd to last least significant bit is set, it's a mechanical keyboard, LCD not available, don't use it!
 	//if it's cleared, then it's an optical keyboard, you can use it!
 	return ((PEEK(0xDDC1) & 0x02)==0); //here the bit is cleared, so it's true it's an optical keyboard, it "hasCaseLCD"
+}
+
+//returns yes if it's a Jr2 or a K2 in classic mmu mode (ie if it supports a VS1053b or SAM2695)
+bool isWave2(void)
+{
+	uint8_t mid;
+	mid = PEEK(0xD6A7)&0x3F;
+	return (mid == 0x22 || mid == 0x11); //22 is Jr2 and 11 is K2
 }
 
 //graphics background cleardevice
@@ -28,7 +40,7 @@ void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
 	POKE(0xD00E,green);
 	POKE(0xD00F,red);
 	POKE(MMU_IO_CTRL,backup);
-}
+}	
 //codec enable all lines
 void openAllCODEC()
 {
@@ -75,7 +87,7 @@ uint8_t getTimerAbsolute(uint8_t units)
 //injectChar: injects a specific character in a specific location on screen.
 //position x,y is where it'll be injected in text layer coordinates
 //theChar is the byte from 0-255 that will be placed there
-//col(umn) should be either 40 (in double character width mode) or 80 (in regular width mode)
+//col(umn) should be either 40 (in double character width mode) or 80 (in regular width mode) 
 void injectChar40col(uint8_t x, uint8_t y, uint8_t theChar, uint8_t col)
 {
 		POKE(MMU_IO_CTRL,0x02); //set io_ctrl to 2 to access text screen
@@ -126,4 +138,5 @@ void lilpause(uint8_t timedelay)
 			}
 		}
 	}
+}
 }

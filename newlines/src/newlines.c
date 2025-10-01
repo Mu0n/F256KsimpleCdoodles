@@ -1,5 +1,3 @@
-#include "D:\F256\llvm-mos\code\bigslidesho\.builddir\trampoline.h"
-
 #define F256LIB_IMPLEMENTATION
 #include "f256lib.h"
 
@@ -13,11 +11,8 @@
 // Global playback variables
 
 
-EMBED(earthgfx, "../assets/earth.bin", 0x10000); //64000 bytes, end at 0x1FA00
-EMBED(earthpal, "../assets/earth.pal", 0x1FA00);
-
 void eraseLine(uint8_t line)
-{
+{	
 textGotoXY(0,line);printf("                                                                                ");
 }
 
@@ -53,26 +48,15 @@ while((PEEK(0xD180)&0x80) != 0x80)
 //VICKY MASTER CONTROL REG 2
 POKE(0xD00A,0x00); //drawline disable
 }
-void loadPAL(uint32_t addr, uint8_t clut)
-{
-	POKE(MMU_IO_CTRL,1);  //MMU I/O to page 1
-	for(int16_t c=0;c<1023;c++)
-	{
-		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(addr+c));
-	}
-	POKE(MMU_IO_CTRL,0);
-}
 
 void loadGFX()
 {
 	graphicsSetLayerBitmap(0,0);
-	//loadPAL(0x1FA00, 0);
-	//bitmapSetAddress(0, 0x10000);
 	bitmapSetActive(0);
 	bitmapSetCLUT(0);
 	bitmapSetColor(0);
 	textGotoXY(0,24);
-	textPrint("old Lines    ");
+	textPrint("[F1 toggle] old Lines    ");
 	bitmapClear();
 	bitmapSetVisible(0, true);
 }
@@ -107,22 +91,22 @@ while(exitFlag == 0)
 			{
 			oldNewToggle = (oldNewToggle==0?1:0);
 			textGotoXY(0,24);
-			if(oldNewToggle==1)
+			if(oldNewToggle==1) 
 			{
 				bitmapSetColor(0);
-				textPrint("new 2x Lines");
+				textPrint("[F1 toggle] new 2x Lines");
 				bitmapSetCLUT(1);
 			}
-			else
+			else 
 				{
 				bitmapSetColor(0);
-				textPrint("old Lines    ");
+				textPrint("[F1 toggle] old Lines    ");
 				bitmapSetCLUT(0);
 				}
 			}
 		}
 
-	
+		
 	
 	//line drawing part
 	r1 = randomRead()%320; //for x1
@@ -143,3 +127,4 @@ while(exitFlag == 0)
 
 return 0;}
 
+}

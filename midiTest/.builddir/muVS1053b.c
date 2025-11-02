@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\miditest\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muVS1053b.h"
@@ -47,7 +47,7 @@ void boostVSClock()
 //target the clock register
 POKEW(VS_SCI_ADDR, VS_SCI_ADDR_CLOCKF);
 //aim for 2.0X clock multiplier, no frills
-POKEW(VS_SCI_DATA,0x4000);
+POKEW(VS_SCI_DATA,0xE000);
 //trigger the command
 POKE(VS_SCI_CTRL,CTRL_Start);
 POKE(VS_SCI_CTRL,0);

@@ -198,14 +198,21 @@ void setup()
 
 	for(c=0;c<255;c++) diagBuffer[c] = 0;
 	
-	//codec enable all lines	
+	boostVSClock();
+	initRTMIDI();
+	openAllCODEC();
+	//codec enable all lines
+/*	
 	if(isWave2()) 
 	{
 	//boost the VS1053b clock speed
 	boostVSClock();
 	//initialize the VS1053b real time midi plugin
 	initRTMIDI();
+	openAllCODEC();
 	}
+	*/
+	
 }
 void escReset()
 {
@@ -610,7 +617,7 @@ void dealKeyPressed(uint8_t keyRaw)
 		break;
 	}
 	//the following line can be used to get keyboard codes
-	printf("\n %03d 0x%02x    ",kernelEventData.key.raw,kernelEventData.key.raw);
+	//printf("\n %03d 0x%02x    ",kernelEventData.key.raw,kernelEventData.key.raw);
 }
 
 void dealKeyReleased(uint8_t rawKey)

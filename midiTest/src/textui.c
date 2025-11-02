@@ -90,7 +90,6 @@ void refreshInstrumentText(struct glTh *gT)
 //This is part of the text instructions and interface during regular play mode
 void channelTextMenu(struct glTh *gT)
 {
-	realTextClear();
 	textSetColor(textColorOrange,0x00);
 	textGotoXY(0,25); //chip selection
 	switch(gT->chipChoice)

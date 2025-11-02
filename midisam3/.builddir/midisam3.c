@@ -219,6 +219,9 @@ int main(int argc, char *argv[]) {
 	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", true);
 	if(wantsQuit==1) return 0;
 	sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+	
+	printf("**** %s *****",myRecord.fileName);
+	hitspace();
 	loadSMFile(myRecord.fileName, MUSIC_BASE);
 
 	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);

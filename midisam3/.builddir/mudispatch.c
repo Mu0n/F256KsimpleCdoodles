@@ -12,6 +12,7 @@ uint8_t chipAct[5] ={0,0,0,0,0};
 // The following is for polyphony for these 3 chips
 uint8_t sidChoiceToVoice[6] = {SID_VOICE1, SID_VOICE2, SID_VOICE3, SID_VOICE1, SID_VOICE2, SID_VOICE3};
 
+uint8_t polyPSGChanBits[6]= {0x00,0x20,0x40,0x00,0x20,0x40};
 uint8_t muteArray[16]={0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0}; //0: not muted, 1: muted. has to be used by muTextUI and mudispatch
 uint8_t presentArray[16]={0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0}; //0: not present, 1: present. has to be used by muTextUI
 uint8_t presentIndex = 0; //for keeping up where we're at in the presentArray
@@ -37,7 +38,7 @@ int8_t liberateChannel(uint8_t note, uint8_t *ptr, uint8_t howManyChans)
 	}
 	
 //dispatchNote deals with all possibilities
-void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt, uint8_t whichChip, bool isBeat, uint8_t beatChan){
+void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool wantAlt, uint8_t whichChip, bool isBeat){
 	uint16_t sidTarget, sidVoiceBase;
 	//uint16_t psgTarget;
 	uint8_t bareChip = (whichChip&0x0F); //just get the low nibble, which indicates which sound chip we want to target
@@ -73,7 +74,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 		return;
 	}
 
-/*
+
 	if(bareChip==2) //PSG
 	{
 			uint8_t subChan=(whichChip)>>4; //get the destination voice/channel of the target chip, use hi nibble only
@@ -93,6 +94,6 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 	{
 		return;
 	}
-	*/
+	
 	
 }

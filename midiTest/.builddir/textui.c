@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\miditest\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/presetBeats.h"
@@ -92,7 +92,6 @@ void refreshInstrumentText(struct glTh *gT)
 //This is part of the text instructions and interface during regular play mode
 void channelTextMenu(struct glTh *gT)
 {
-	realTextClear();
 	textSetColor(textColorOrange,0x00);
 	textGotoXY(0,25); //chip selection
 	switch(gT->chipChoice)

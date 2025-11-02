@@ -68,6 +68,9 @@ typedef struct midiRecord {
 	uint16_t totalSec;
 	uint16_t currentSec;
 	uint8_t  nbTempoChanges; //count of tempo changes to perform during playback
+	uint8_t bpm;
+	uint32_t baseAddr;
+	uint32_t parsedAddr;
 } midiRec, *midiRecPtr;
 
 //the following three structs are for midi event playback. keep every aMIDIEvent's content in far memory
@@ -94,14 +97,13 @@ void emptyMIDIINBuffer(void);
 void midiShutAChannel(uint8_t, bool);
 void midiShutAllChannels(bool);
 void midiShutUp(bool);
-void prgChange(uint8_t, uint8_t, bool);
+//void prgChange(uint8_t, uint8_t, bool);
 void midiNoteOff(uint8_t, uint8_t, uint8_t, bool);
 void midiNoteOn(uint8_t, uint8_t, uint8_t, bool);
 
-void initMidiRecord(struct midiRecord *);
-void initBigList(struct bigParsedEventList *);
-uint32_t getTotalLeft(struct bigParsedEventList *);
+void initMidiRecord(struct midiRecord *, uint32_t, uint32_t);
+//void initBigList(struct bigParsedEventList *);
+//uint32_t getTotalLeft(struct bigParsedEventList *);
 
-extern const char *midi_instruments[128];
 
 #endif // MUMIDI_H

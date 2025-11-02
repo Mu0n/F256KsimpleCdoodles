@@ -49,11 +49,14 @@ void prepSIDinstruments(void);
 void setMonoSID(void);
 void setStereoSID(void);
 uint8_t fetchCtrl(uint8_t);
+void copySidInstrument(struct sidInstrument, struct sidInstrument *);
 
 
 extern const char *sid_instruments_names[];
 extern const uint8_t sid_instrumentsSize;
 extern sidI sid_instrument_defs[];
+extern sidI sidInstruments[];
+extern uint8_t sidMIDIMatrix[];
 extern const uint8_t sidLow[];
 extern const uint8_t sidHigh[];
 

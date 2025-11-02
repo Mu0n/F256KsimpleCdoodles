@@ -1,8 +1,11 @@
 #ifndef TIMER0_H
 #define TIMER0_H
 
-#define T0_PEND     0xD660
-#define T0_MASK     0xD66C
+#define INT_PENDING_0  0xD660
+#define INT_POLARITY_0 0xD664
+#define INT_EDGE_0     0xD668
+#define INT_MASK_0     0xD66C
+
 
 #define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
 #define T0_STAT     0xD650 //master control register for timer0, read bit0 set = reached target val
@@ -25,9 +28,8 @@
 #define T0_CMP_CTR_RECLEAR 0x01
 #define T0_CMP_CTR_RELOAD  0x02
 
-void setTimer0(uint8_t, uint8_t, uint8_t);
+void loadTimer(uint32_t);
+void setTimer0(uint32_t);
 void resetTimer0(void);
-uint32_t readTimer0(void);
-uint8_t isTimer0Done(void);
 
 #endif // TIMER0_H

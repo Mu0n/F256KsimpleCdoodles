@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\miditest\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\midiTest\.builddir\trampoline.h"
 
 #include "f256lib.h"
 #include "../src/muUtils.h"
@@ -48,10 +48,30 @@ void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
 //codec enable all lines
 void openAllCODEC()
 {
-	POKE(0xD620, 0x1F);
+
+//gadget's kernel code
+// .address._data.....
+// #%0001101_000000000     ; 1101 R13 - Turn On Headphones
+// #%0010101_000000011     ;10101 R21 - Enable All the Analog In
+// #%0010001_100000001     ;10001 R17 - Enable All the Analog In
+// #%0010110_000000111     ;10110 R22 - Enable all Analog Out
+// #%0001010_000000010     ; 1010 R10 - DAC Interface Control
+// #%0001011_000000010     ; 1011 R11 - ADC Interface Control
+// #%0001100_111010101     ; 1100 R12 - Master Mode Control
+
+//My codec init code:
+// #%0010101_000011111    ; 1010 R21 Enable All the Analog In
+
+	POKE(0xD620, 0x1F); //R21 enable all analog in
 	POKE(0xD621, 0x2A);
 	POKE(0xD622, 0x01);
 	while(PEEK(0xD622) & 0x01);
+	
+	POKE(0xD620, 0x19); //R12 master mode control
+	POKE(0xD621, 0xD5);
+	POKE(0xD622, 0x01);
+	while(PEEK(0xD622) & 0x01);
+	
 }
 //realTextClear: manually changes to MMU page 2 and covers the whole 80x60 text layer
 //blank characters. the f256lib.h's textClear seems to only erase part of the screen only.

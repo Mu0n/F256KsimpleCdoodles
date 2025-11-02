@@ -123,6 +123,8 @@ while(exitFlag == 0)
 		bitmapLine(r1,y1,r2,y2);
 	}
 	else drawNewLine(r1,r2,y1,y2,LOW_BYTE(r4));
+
+	
 	}
 
 return 0;}

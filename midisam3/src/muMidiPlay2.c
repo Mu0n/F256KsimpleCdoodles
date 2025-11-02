@@ -19,6 +19,7 @@ bool midiChip;
 void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool wantAlt) {
 		uint8_t chan = (msg0)&0x0F;
 		uint8_t bareChip = (chipXChannel[chan]&0x0F);
+		bool onOrOff = true;
 	
 //deal with instrument changes no matter what is selected	
 	if((msg0 & 0xF0) == 0xC0)
@@ -45,7 +46,8 @@ void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool w
 	if(byteCount == 3) {
 		
 		uint8_t hinib = (msg0)&0xF0;
-		dispatchNote(hinib == 0x90?true:false, chan, msg1, msg2, false, chipXChannel[chan],false, 0);
+		if(hinib == 0x80 || (hinib == 0x90 && msg2 == 0)) onOrOff = false;
+		dispatchNote(onOrOff, chan, msg1, msg2, false, chipXChannel[chan],false, 0);
 		
 	}
 

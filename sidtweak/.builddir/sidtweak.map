@@ -1,0 +1,181 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __pianopal_lma = 0x30000
+       0        0        0     1 __pianopal_size = 0x3fc
+       0        0        0     1 __keys_lma = 0x30400
+       0        0        0     1 __keys_size = 0x12c00
+      30      300       67     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       67     1         sidtweak.lto.o:(.zp.data)
+      30      300        6     1                 sidChoiceToVoice
+      36      306       60     1                 sidLow
+      96      366        1     1                 _ccolor
+      97      367        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      97      367        0     1 __zp_data_size = SIZEOF(.zp.data)
+      97       97        b     1 .zp.bss
+      97       97        0     1         __zp_bss_start = .
+      97       97        b     1         sidtweak.lto.o:(.zp.bss)
+      97       97        1     1                 chipAct.0
+      98       98        6     1                 polySIDBuffer
+      9e       9e        1     1                 _col
+      9f       9f        1     1                 _row
+      a0       a0        2     1                 __putchar.s
+      a2       a2        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      a2       a2       4e     1 .zp
+      a2       a2       4e     1         sidtweak.lto.o:(.zp.noinit)
+     367      367     1fc6     1 .text
+     367      367        0     1         _init = .
+     367      367        0     1         _start = .
+     367      367        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     367      367        0     1                 __do_init_stack
+     36f      36f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     36f      36f        0     1                 __do_zero_bss
+     372      372        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     372      372        0     1                 __do_zero_zp_bss
+     375      375        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     375      375        0     1                 __do_copy_zp_data
+     378      378        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     37b      37b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     37b      37b        0     1                 __after_main
+     37e      37e        0     1         _fini = .
+     37e      37e        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     37f      37f       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     37f      37f       13     1                 __zero_bss
+     392      392       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     392      392       13     1                 __zero_zp_bss
+     3a5      3a5       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     3a5      3a5       17     1                 __copy_zp_data
+     3bc      3bc      f0c     1         sidtweak.lto.o:(.text.main)
+     3bc      3bc      f0c     1                 main
+    12c8     12c8      1e7     1         sidtweak.lto.o:(.text.textPrint)
+    12c8     12c8      1e7     1                 textPrint
+    14af     14af        5     1         sidtweak.lto.o:(.text.exit)
+    14af     14af        5     1                 exit
+    14b4     14b4       db     1         sidtweak.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    14b4     14b4       db     1                 (anonymous namespace)::put(char, Status*)
+    158f     158f      10c     1         sidtweak.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    158f     158f      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    169b     169b      c46     1         sidtweak.lto.o:(.text.printf)
+    169b     169b      c46     1                 printf
+    22e1     22e1       2c     1         sidtweak.lto.o:(.text.memcpy)
+    22e1     22e1       2c     1                 memcpy
+    230d     230d       20     1         sidtweak.lto.o:(.text.__memset)
+    230d     230d       20     1                 __memset
+    232d     232d        0     1         __init_array_start = .
+    232d     232d        0     1         __init_array_end = .
+    232d     232d        0     1         __fini_array_start = .
+    232d     232d        0     1         __fini_array_end = .
+    232d     232d      32f     1 .rodata
+    232d     232d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    232d     232d        0     1                 __set_v
+    232e     232e       3a     1         sidtweak.lto.o:(.rodata.printf)
+    2368     2368       58     1         sidtweak.lto.o:(.rodata.noteColors)
+    2368     2368       58     1                 noteColors
+    23c0     23c0      26c     1         <internal>:(.rodata.str1.1)
+    262c     262c       30     1         sidtweak.lto.o:(.rodata.textColors)
+    262c     262c       30     1                 textColors
+    265c     265c        0     1 .data
+    265c     265c        0     1         __data_start = .
+    265c     265c        0     1         __data_end = .
+    265c     265c        0     1 __data_load_start = LOADADDR(.data)
+    265c     265c        0     1 __data_size = SIZEOF(.data)
+    265c     265c        c     1 .bss
+    265c     265c        0     1         __bss_start = .
+    265c     265c        7     1         sidtweak.lto.o:(.bss.kernelEventData)
+    265c     265c        7     1                 kernelEventData
+    2663     2663        1     1         sidtweak.lto.o:(.bss.kernelError)
+    2663     2663        1     1                 kernelError
+    2664     2664        4     1         sidtweak.lto.o:(.bss._BITMAP_BASE.0)
+    2664     2664        4     1                 _BITMAP_BASE.0
+    2668     2668        0     1         __bss_end = .
+    2668     2668        0     1 __bss_size = SIZEOF(.bss)
+    2668     2668        8     1 .noinit
+    2668     2668        8     1         sidtweak.lto.o:(.noinit..Lstatic_stack)
+    2670     2670        0     1         __heap_start = ALIGN(., 2)
+    2670     2670        0     1 end_block8 = .
+    2670     2670        0     1 end_block9 = .
+    2670     2670        0     1 end_block10 = .
+    2670     2670        0     1 end_block11 = .
+    2670     2670        0     1 end_block12 = .
+    2670     2670        0     1 end_block13 = .
+    2670     2670        0     1 end_block14 = .
+    2670     2670        0     1 end_block15 = .
+    2670     2670        0     1 end_block16 = .
+    2670     2670        0     1 end_block17 = .
+    2670     2670        0     1 end_block18 = .
+    2670     2670        0     1 end_block19 = .
+    2670     2670        0     1 end_block20 = .
+    2670     2670        0     1 end_block21 = .
+    2670     2670        0     1 end_block22 = .
+    2670     2670        0     1 end_block23 = .
+   30000    30000      3fc    16 .pianopal
+   30000    30000      3fc    16         sidtweak.lto.o:(.pianopal)
+   30000    30000        0     1                 pianopal_start
+   303fc    303fc        0     1                 pianopal_end
+   303fc    303fc        0     1 end_pianopal = .
+   30400    30400    12c00    16 .keys
+   30400    30400    12c00    16         sidtweak.lto.o:(.keys)
+   30400    30400        0     1                 keys_start
+   43000    43000        0     1                 keys_end
+   43000    43000        0     1 end_keys = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      870     4 .symtab
+       0        0      870     4         <internal>:(.symtab)
+       0        0       6a     1 .shstrtab
+       0        0       6a     1         <internal>:(.shstrtab)
+       0        0      600     1 .strtab
+       0        0      600     1         <internal>:(.strtab)

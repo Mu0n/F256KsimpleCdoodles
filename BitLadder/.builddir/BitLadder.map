@@ -63,193 +63,180 @@
        0        0        0     1 __shipSP_size = 0x800
        0        0        0     1 __shotBM_lma = 0x24800
        0        0        0     1 __shotBM_size = 0x40
-      30       30        0     1 .zp.data
-      30       30        0     1         __zp_data_start = .
-      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30       67     1 .zp.bss
-      30       30        0     1         __zp_bss_start = .
-      30       30       67     1         BitLadder.lto.o:(.zp.bss)
-      30       30        1     1                 _col
-      31       31        1     1                 _row
-      32       32        4     1                 _BITMAP_BASE.2
-      36       36        1     1                 _active
-      37       37        3     1                 _BITMAP_CLUT
-      3a       3a        2     1                 __putchar.s
-      3c       3c        1     1                 chipAct.0
-      3d       3d        1     1                 chipAct.1
-      3e       3e        1     1                 chipAct.2
-      3f       3f        1     1                 chipAct.3
-      40       40        6     1                 polyPSGBuffer
-      46       46        6     1                 reservedPSG
-      4c       4c        6     1                 reservedSID
-      52       52        9     1                 polyOPL3Buffer
-      5b       5b        9     1                 reservedOPL3
-      64       64        1     1                 needsToWaitExpiration
-      65       65        1     1                 currentPal
-      66       66        2     1                 theBeats
-      68       68       1e     1                 mainTempoLUT
-      86       86        1     1                 planetScroll.1
-      87       87        1     1                 shipExhaust.1
-      88       88        1     1                 shotT.1
-      89       89        1     1                 shipMT.1
-      8a       8a        7     1                 kernelEventData
-      91       91        1     1                 (anonymous namespace)::initialized
-      92       92        1     1                 (anonymous namespace)::last_free
-      93       93        2     1                 (anonymous namespace)::free_size
-      95       95        2     1                 (anonymous namespace)::free_list
-      97       97        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      97       97       59     1 .zp
-      97       97       59     1         BitLadder.lto.o:(.zp.noinit)
-     300      300     3f34     2 .text
-     300      300        0     1         _init = .
-     300      300        0     1         _start = .
-     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     300      300        0     1                 __do_init_stack
-     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     308      308        0     1                 __do_zero_bss
-     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30b      30b        0     1                 __do_zero_zp_bss
-     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     311      311        0     1                 __after_main
-     314      314        0     1         _fini = .
-     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     316      316      135     2         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     316      316      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     44c      44c       d7     2         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     44c      44c       d7     1                 (anonymous namespace)::FreeChunk::remove()
-     523      523       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     523      523       13     1                 __zero_bss
-     536      536       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     536      536       13     1                 __zero_zp_bss
-     549      549      3b3     1         BitLadder.lto.o:(.text.f256Init)
-     549      549      3b3     1                 f256Init
-     8fc      8fc        6     1         BitLadder.lto.o:(.text.main)
-     8fc      8fc        6     1                 main
-     902      902     12cd     1         BitLadder.lto.o:(.text.f256main)
-     902      902     12cd     1                 f256main
-    1bcf     1bcf      3b6     1         BitLadder.lto.o:(.text.dispatchNote)
-    1bcf     1bcf      3b6     1                 dispatchNote
-    1f85     1f85      666     1         BitLadder.lto.o:(.text.launchBeat)
-    1f85     1f85      666     1                 launchBeat
-    25eb     25eb       8a     1         BitLadder.lto.o:(.text.prepTempoLUT)
-    25eb     25eb       8a     1                 prepTempoLUT
-    2675     2675       d4     1         BitLadder.lto.o:(.text.opl3_setInstrument)
-    2675     2675       d4     1                 opl3_setInstrument
-    2749     2749       88     1         BitLadder.lto.o:(.text.sid_setInstrument)
-    2749     2749       88     1                 sid_setInstrument
-    27d1     27d1      1c8     1         BitLadder.lto.o:(.text.setupMem4ABeat)
-    27d1     27d1      1c8     1                 setupMem4ABeat
-    2999     2999      292     1         BitLadder.lto.o:(.text.getBeatTrackNoteInfo)
-    2999     2999      292     1                 getBeatTrackNoteInfo
-    2c2b     2c2b      246     1         BitLadder.lto.o:(.text.setupMem4Track)
-    2c2b     2c2b      246     1                 setupMem4Track
-    2e71     2e71        5     1         BitLadder.lto.o:(.text.exit)
-    2e71     2e71        5     1                 exit
-    2e76     2e76       d3     1         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    2e76     2e76       d3     1                 (anonymous namespace)::put(char, Status*)
-    2f49     2f49      10c     1         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    2f49     2f49      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    3055     3055      bd9     1         BitLadder.lto.o:(.text.printf)
-    3055     3055      bd9     1                 printf
-    3c2e     3c2e      1c2     1         BitLadder.lto.o:(.text.putchar)
-    3c2e     3c2e      1c2     1                 putchar
-    3df0     3df0      1cf     1         BitLadder.lto.o:(.text.malloc)
-    3df0     3df0      1cf     1                 malloc
-    3fbf     3fbf       2c     1         BitLadder.lto.o:(.text.memcpy)
-    3fbf     3fbf       2c     1                 memcpy
-    3feb     3feb       20     1         BitLadder.lto.o:(.text.__memset)
-    3feb     3feb       20     1                 __memset
-    400b     400b       32     1         BitLadder.lto.o:(.text.__mulhi3)
-    400b     400b       32     1                 __mulhi3
-    403d     403d       5c     1         BitLadder.lto.o:(.text.__udivqi3)
-    403d     403d       5c     1                 __udivqi3
-    4099     4099       c0     1         BitLadder.lto.o:(.text.__udivhi3)
-    4099     4099       c0     1                 __udivhi3
-    4159     4159       db     1         BitLadder.lto.o:(.text.__udivmodhi4)
-    4159     4159       db     1                 __udivmodhi4
-    4234     4234        0     1         __init_array_start = .
-    4234     4234        0     1         __init_array_end = .
-    4234     4234        0     1         __fini_array_start = .
-    4234     4234        0     1         __fini_array_end = .
-    4234     4234      46f     1 .rodata
-    4234     4234        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    4234     4234        0     1                 __set_v
-    4235     4235        a     1         BitLadder.lto.o:(.rodata.dispatchNote)
-    423f     423f       3a     1         BitLadder.lto.o:(.rodata.printf)
-    4279     4279       30     1         BitLadder.lto.o:(.rodata.textColors)
-    4279     4279       30     1                 textColors
-    42a9     42a9        6     1         BitLadder.lto.o:(.rodata.polyPSGChanBits)
-    42a9     42a9        6     1                 polyPSGChanBits
-    42af     42af        6     1         BitLadder.lto.o:(.rodata.sidChoiceToVoice)
-    42af     42af        6     1                 sidChoiceToVoice
-    42b5     42b5       d8     1         <internal>:(.rodata.str1.1)
-    438d     438d        8     1         BitLadder.lto.o:(.rodata.eraLabels)
-    438d     438d        8     1                 eraLabels
-    4395     4395       18     1         BitLadder.lto.o:(.rodata.opl3_fnums)
-    4395     4395       18     1                 opl3_fnums
-    43ad     43ad       40     1         BitLadder.lto.o:(.rodata.psgLow)
-    43ad     43ad       40     1                 psgLow
-    43ed     43ed       40     1         BitLadder.lto.o:(.rodata.psgHigh)
-    43ed     43ed       40     1                 psgHigh
-    442d     442d       60     1         BitLadder.lto.o:(.rodata.sidLow)
-    442d     442d       60     1                 sidLow
-    448d     448d        2     1         BitLadder.lto.o:(.rodata.beat00_notes)
-    448d     448d        2     1                 beat00_notes
-    448f     448f        2     1         BitLadder.lto.o:(.rodata.beat00_delays)
-    448f     448f        2     1                 beat00_delays
-    4491     4491       20     1         BitLadder.lto.o:(.rodata.beat60_notes)
-    4491     4491       20     1                 beat60_notes
-    44b1     44b1       20     1         BitLadder.lto.o:(.rodata.beat60_delays)
-    44b1     44b1       20     1                 beat60_delays
-    44d1     44d1        8     1         BitLadder.lto.o:(.rodata.beat71_notes)
-    44d1     44d1        8     1                 beat71_notes
-    44d9     44d9        8     1         BitLadder.lto.o:(.rodata.beat71_delays)
-    44d9     44d9        8     1                 beat71_delays
-    44e1     44e1       40     1         BitLadder.lto.o:(.rodata.beat72_notes)
-    44e1     44e1       40     1                 beat72_notes
-    4521     4521       40     1         BitLadder.lto.o:(.rodata.beat72_delays)
-    4521     4521       40     1                 beat72_delays
-    4561     4561        d     1         BitLadder.lto.o:(.rodata.beat83_notes)
-    4561     4561        d     1                 beat83_notes
-    456e     456e        d     1         BitLadder.lto.o:(.rodata.beat83_delays)
-    456e     456e        d     1                 beat83_delays
-    457b     457b       36     1         BitLadder.lto.o:(.rodata.sid_instrument_defs)
-    457b     457b       36     1                 sid_instrument_defs
-    45b1     45b1       f2     1         BitLadder.lto.o:(.rodata.opl3_instrument_defs)
-    45b1     45b1       f2     1                 opl3_instrument_defs
-    46a3     46a3        0     1 .data
-    46a3     46a3        0     1         __data_start = .
-    46a3     46a3        0     1         __data_end = .
-    46a3     46a3        0     1 __data_load_start = LOADADDR(.data)
-    46a3     46a3        0     1 __data_size = SIZEOF(.data)
-    46a3     46a3       41     1 .bss
-    46a3     46a3        0     1         __bss_start = .
-    46a3     46a3       40     1         BitLadder.lto.o:(.bss._spriteCtl)
-    46a3     46a3       40     1                 _spriteCtl
-    46e3     46e3        1     1         BitLadder.lto.o:(.bss.kernelError)
-    46e3     46e3        1     1                 kernelError
-    46e4     46e4        0     1         __bss_end = .
-    46e4     46e4        0     1 __bss_size = SIZEOF(.bss)
-    46e4     46e4        0     1 .noinit
-    46e4     46e4        0     1         __heap_start = ALIGN(., 2)
-    46e4     46e4        0     1 end_block8 = .
-    46e4     46e4        0     1 end_block9 = .
-    46e4     46e4        0     1 end_block10 = .
-    46e4     46e4        0     1 end_block11 = .
-    46e4     46e4        0     1 end_block12 = .
-    46e4     46e4        0     1 end_block13 = .
-    46e4     46e4        0     1 end_block14 = .
-    46e4     46e4        0     1 end_block15 = .
-    46e4     46e4        0     1 end_block16 = .
-    46e4     46e4        0     1 end_block17 = .
-    46e4     46e4        0     1 end_block18 = .
-    46e4     46e4        0     1 end_block19 = .
-    46e4     46e4        0     1 end_block20 = .
-    46e4     46e4        0     1 end_block21 = .
-    46e4     46e4        0     1 end_block22 = .
-    46e4     46e4        0     1 end_block23 = .
+      30      300       2c     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       2c     1         BitLadder.lto.o:(.zp.data)
+      30      300        2     1                 ship_X
+      32      302        2     1                 ship_Y
+      34      304        6     1                 sidChoiceToVoice
+      3a      30a        c     1                 psgChoiceToVoice
+      46      316        6     1                 polyPSGChanBits
+      4c      31c       10     1                 chipXChannel
+      5c      32c        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      5c      32c        0     1 __zp_data_size = SIZEOF(.zp.data)
+      5c       5c       33     1 .zp.bss
+      5c       5c        0     1         __zp_bss_start = .
+      5c       5c       33     1         BitLadder.lto.o:(.zp.bss)
+      5c       5c        1     1                 _col
+      5d       5d        1     1                 _row
+      5e       5e        1     1                 _active
+      5f       5f        3     1                 _BITMAP_CLUT
+      62       62        2     1                 __putchar.s
+      64       64        1     1                 currentPal
+      65       65        1     1                 ship_SX
+      66       66        1     1                 ship_SY
+      67       67        1     1                 controllerMode
+      68       68        2     1                 myRecord.0
+      6a       6a        2     1                 myRecord.2
+      6c       6c        1     1                 planetScroll.1
+      6d       6d        1     1                 shipExhaust.1
+      6e       6e        1     1                 shotT.1
+      6f       6f        1     1                 shipMT.1
+      70       70        1     1                 padTimer.1
+      71       71        2     1                 theOne.0
+      73       73        2     1                 theOne.1
+      75       75        4     1                 theOne.2
+      79       79        1     1                 theOne.4
+      7a       7a        4     1                 theOne.5
+      7e       7e        2     1                 theOne.6
+      80       80        2     1                 theOne.7
+      82       82        2     1                 theOne.8
+      84       84        1     1                 kernelError
+      85       85        7     1                 kernelEventData
+      8c       8c        1     1                 (anonymous namespace)::initialized
+      8d       8d        2     1                 (anonymous namespace)::free_size
+      8f       8f        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      8f       8f       61     1 .zp
+      8f       8f       61     1         BitLadder.lto.o:(.zp.noinit)
+     32c      32c     4d55     2 .text
+     32c      32c        0     1         _init = .
+     32c      32c        0     1         _start = .
+     32c      32c        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     32c      32c        0     1                 __do_init_stack
+     334      334        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     334      334        0     1                 __do_zero_bss
+     337      337        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     337      337        0     1                 __do_zero_zp_bss
+     33a      33a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     33a      33a        0     1                 __do_copy_zp_data
+     33d      33d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     340      340        0     1                 __after_main
+     343      343        0     1         _fini = .
+     343      343        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     344      344      139     2         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     344      344      139     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     47e      47e       db     2         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     47e      47e       db     1                 (anonymous namespace)::FreeChunk::remove()
+     559      559       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     559      559       13     1                 __zero_bss
+     56c      56c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     56c      56c       13     1                 __zero_zp_bss
+     57f      57f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     57f      57f       17     1                 __copy_zp_data
+     596      596      40f     1         BitLadder.lto.o:(.text.f256Init)
+     596      596      40f     1                 f256Init
+     9a5      9a5        6     1         BitLadder.lto.o:(.text.main)
+     9a5      9a5        6     1                 main
+     9ab      9ab     198e     1         BitLadder.lto.o:(.text.f256main)
+     9ab      9ab     198e     1                 f256main
+    2339     2339      1e9     1         BitLadder.lto.o:(.text.textPrint)
+    2339     2339      1e9     1                 textPrint
+    2522     2522      153     1         BitLadder.lto.o:(.text.resetInstruments)
+    2522     2522      153     1                 resetInstruments
+    2675     2675      1b7     1         BitLadder.lto.o:(.text.sendAME)
+    2675     2675      1b7     1                 sendAME
+    282c     282c      470     1         BitLadder.lto.o:(.text.readDelta)
+    282c     282c      470     1                 readDelta
+    2c9c     2c9c      62f     1         BitLadder.lto.o:(.text.readMIDICmd)
+    2c9c     2c9c      62f     1                 readMIDICmd
+    32cb     32cb      205     1         BitLadder.lto.o:(.text.skipWhenFFCmd)
+    32cb     32cb      205     1                 skipWhenFFCmd
+    34d0     34d0      30c     1         BitLadder.lto.o:(.text.exhaustZeroes)
+    34d0     34d0      30c     1                 exhaustZeroes
+    37dc     37dc      4cb     1         BitLadder.lto.o:(.text.resetTrack)
+    37dc     37dc      4cb     1                 resetTrack
+    3ca7     3ca7        5     1         BitLadder.lto.o:(.text.exit)
+    3ca7     3ca7        5     1                 exit
+    3cac     3cac       db     1         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    3cac     3cac       db     1                 (anonymous namespace)::put(char, Status*)
+    3d87     3d87      10c     1         BitLadder.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    3d87     3d87      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    3e93     3e93      c2c     1         BitLadder.lto.o:(.text.printf)
+    3e93     3e93      c2c     1                 printf
+    4abf     4abf      1d3     1         BitLadder.lto.o:(.text.malloc)
+    4abf     4abf      1d3     1                 malloc
+    4c92     4c92      192     1         BitLadder.lto.o:(.text.free)
+    4c92     4c92      192     1                 free
+    4e24     4e24       2c     1         BitLadder.lto.o:(.text.memcpy)
+    4e24     4e24       2c     1                 memcpy
+    4e50     4e50       20     1         BitLadder.lto.o:(.text.__memset)
+    4e50     4e50       20     1                 __memset
+    4e70     4e70       32     1         BitLadder.lto.o:(.text.__mulhi3)
+    4e70     4e70       32     1                 __mulhi3
+    4ea2     4ea2       70     1         BitLadder.lto.o:(.text.__mulsi3)
+    4ea2     4ea2       70     1                 __mulsi3
+    4f12     4f12      16f     1         BitLadder.lto.o:(.text.__udivsi3)
+    4f12     4f12      16f     1                 __udivsi3
+    5081     5081        0     1         __init_array_start = .
+    5081     5081        0     1         __init_array_end = .
+    5081     5081        0     1         __fini_array_start = .
+    5081     5081        0     1         __fini_array_end = .
+    5081     5081      386     1 .rodata
+    5081     5081        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    5081     5081        0     1                 __set_v
+    5082     5082       58     1         BitLadder.lto.o:(.rodata.f256main)
+    50da     50da        a     1         BitLadder.lto.o:(.rodata.sendAME)
+    50e4     50e4       b4     1         BitLadder.lto.o:(.rodata.skipWhenFFCmd)
+    5198     5198       3a     1         BitLadder.lto.o:(.rodata.printf)
+    51d2     51d2       30     1         BitLadder.lto.o:(.rodata.textColors)
+    51d2     51d2       30     1                 textColors
+    5202     5202      11d     1         <internal>:(.rodata.str1.1)
+    531f     531f        8     1         BitLadder.lto.o:(.rodata.eraLabels)
+    531f     531f        8     1                 eraLabels
+    5327     5327       40     1         BitLadder.lto.o:(.rodata.psgLow)
+    5327     5327       40     1                 psgLow
+    5367     5367       40     1         BitLadder.lto.o:(.rodata.psgHigh)
+    5367     5367       40     1                 psgHigh
+    53a7     53a7       60     1         BitLadder.lto.o:(.rodata.sidLow)
+    53a7     53a7       60     1                 sidLow
+    5407     5407        0     1 .data
+    5407     5407        0     1         __data_start = .
+    5407     5407        0     1         __data_end = .
+    5407     5407        0     1 __data_load_start = LOADADDR(.data)
+    5407     5407        0     1 __data_size = SIZEOF(.data)
+    5407     5407       7d     1 .bss
+    5407     5407        0     1         __bss_start = .
+    5407     5407        4     1         BitLadder.lto.o:(.bss._BITMAP_BASE.2)
+    5407     5407        4     1                 _BITMAP_BASE.2
+    540b     540b       40     1         BitLadder.lto.o:(.bss._spriteCtl)
+    540b     540b       40     1                 _spriteCtl
+    544b     544b       36     1         BitLadder.lto.o:(.bss.sidInstruments)
+    544b     544b       36     1                 sidInstruments
+    5481     5481        1     1         BitLadder.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    5481     5481        1     1                 (anonymous namespace)::last_free
+    5482     5482        2     1         BitLadder.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    5482     5482        2     1                 (anonymous namespace)::free_list
+    5484     5484        0     1         __bss_end = .
+    5484     5484        0     1 __bss_size = SIZEOF(.bss)
+    5484     5484        0     1 .noinit
+    5484     5484        0     1         __heap_start = ALIGN(., 2)
+    5484     5484        0     1 end_block8 = .
+    5484     5484        0     1 end_block9 = .
+    5484     5484        0     1 end_block10 = .
+    5484     5484        0     1 end_block11 = .
+    5484     5484        0     1 end_block12 = .
+    5484     5484        0     1 end_block13 = .
+    5484     5484        0     1 end_block14 = .
+    5484     5484        0     1 end_block15 = .
+    5484     5484        0     1 end_block16 = .
+    5484     5484        0     1 end_block17 = .
+    5484     5484        0     1 end_block18 = .
+    5484     5484        0     1 end_block19 = .
+    5484     5484        0     1 end_block20 = .
+    5484     5484        0     1 end_block21 = .
+    5484     5484        0     1 end_block22 = .
+    5484     5484        0     1 end_block23 = .
    10000    10000      400    16 .starspal
    10000    10000      400    16         BitLadder.lto.o:(.starspal)
    10000    10000        0     1                 starspal_start
@@ -277,9 +264,9 @@
    24840    24840        0     1 end_shotBM = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      c90     4 .symtab
-       0        0      c90     4         <internal>:(.symtab)
+       0        0      c50     4 .symtab
+       0        0      c50     4         <internal>:(.symtab)
        0        0       87     1 .shstrtab
        0        0       87     1         <internal>:(.shstrtab)
-       0        0      9cc     1 .strtab
-       0        0      9cc     1         <internal>:(.strtab)
+       0        0      940     1 .strtab
+       0        0      940     1         <internal>:(.strtab)

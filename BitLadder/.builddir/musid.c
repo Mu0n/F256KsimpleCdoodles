@@ -12,9 +12,11 @@ const char *sid_instruments_names[] = {
 	"Snare"
 };
 
+uint8_t sidMIDIMatrix[16] = {0,1,2,3,4,5,0,1,2,3,4,5,2,3,4,5};
+sidI sidInstruments[6];
 sidI sid_instrument_defs[] = {
 	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x27,.sr=0x5B,.ctrl=0x10,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
-	{.maxVolume=0x0F,.pwdLo=0x88,.pwdHi=0x00,.ad=0x09,.sr=0x00,.ctrl=0x20,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
+	{.maxVolume=0x0A,.pwdLo=0x88,.pwdHi=0x00,.ad=0x09,.sr=0x82,.ctrl=0x20,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
 	{.maxVolume=0x0F,.pwdLo=0x00,.pwdHi=0x08,.ad=0x00,.sr=0x40,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
 	{.maxVolume=0x0F,.pwdLo=0x44,.pwdHi=0x00,.ad=0x70,.sr=0x00,.ctrl=0x80,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
 	{.maxVolume=0x0A,.pwdLo=0x90,.pwdHi=0x04,.ad=0xD6,.sr=0xBA,.ctrl=0x40,.fcfLo=0x00,.fcfHi=0x00,.frr=0x00},
@@ -78,7 +80,18 @@ void sidNoteOnOrOff(uint16_t voice, uint8_t ctrl, bool isOn)
 {
 	POKE(voice, isOn?(ctrl|0x01):(ctrl&0xFE));
 }
-
+void copySidInstrument(struct sidInstrument source, struct sidInstrument *target)
+{
+	target->maxVolume = source.maxVolume;
+	target->pwdLo = source.pwdLo;
+	target->pwdHi = source.pwdHi;
+	target->ad = source.ad;
+	target->sr = source.sr;
+	target->ctrl =  source.ctrl;
+	target->fcfLo = source.fcfLo;
+	target->fcfHi =  source.fcfHi;
+	target->frr =  source.frr;
+}
 void sid_setInstrument(uint8_t sidChip, uint8_t voice, struct sidInstrument inst)
 {
 	uint16_t addrVoice = (sidChip==0?(uint16_t)SID1:(uint16_t)SID2);

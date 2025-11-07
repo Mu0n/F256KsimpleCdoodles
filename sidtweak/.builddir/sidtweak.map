@@ -57,110 +57,126 @@
        0        0        0     1 __pianopal_size = 0x3fc
        0        0        0     1 __keys_lma = 0x30400
        0        0        0     1 __keys_size = 0x12c00
-      30      300       67     1 .zp.data
+      30      300        1     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       67     1         sidtweak.lto.o:(.zp.data)
-      30      300        6     1                 sidChoiceToVoice
-      36      306       60     1                 sidLow
-      96      366        1     1                 _ccolor
-      97      367        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      97      367        0     1 __zp_data_size = SIZEOF(.zp.data)
-      97       97        b     1 .zp.bss
-      97       97        0     1         __zp_bss_start = .
-      97       97        b     1         sidtweak.lto.o:(.zp.bss)
-      97       97        1     1                 chipAct.0
-      98       98        6     1                 polySIDBuffer
-      9e       9e        1     1                 _col
-      9f       9f        1     1                 _row
-      a0       a0        2     1                 __putchar.s
-      a2       a2        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      a2       a2       4e     1 .zp
-      a2       a2       4e     1         sidtweak.lto.o:(.zp.noinit)
-     367      367     1fc6     1 .text
-     367      367        0     1         _init = .
-     367      367        0     1         _start = .
-     367      367        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     367      367        0     1                 __do_init_stack
-     36f      36f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     36f      36f        0     1                 __do_zero_bss
-     372      372        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     372      372        0     1                 __do_zero_zp_bss
-     375      375        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     375      375        0     1                 __do_copy_zp_data
-     378      378        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     37b      37b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     37b      37b        0     1                 __after_main
-     37e      37e        0     1         _fini = .
-     37e      37e        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     37f      37f       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     37f      37f       13     1                 __zero_bss
-     392      392       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     392      392       13     1                 __zero_zp_bss
-     3a5      3a5       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     3a5      3a5       17     1                 __copy_zp_data
-     3bc      3bc      f0c     1         sidtweak.lto.o:(.text.main)
-     3bc      3bc      f0c     1                 main
-    12c8     12c8      1e7     1         sidtweak.lto.o:(.text.textPrint)
-    12c8     12c8      1e7     1                 textPrint
-    14af     14af        5     1         sidtweak.lto.o:(.text.exit)
-    14af     14af        5     1                 exit
-    14b4     14b4       db     1         sidtweak.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    14b4     14b4       db     1                 (anonymous namespace)::put(char, Status*)
-    158f     158f      10c     1         sidtweak.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    158f     158f      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    169b     169b      c46     1         sidtweak.lto.o:(.text.printf)
-    169b     169b      c46     1                 printf
-    22e1     22e1       2c     1         sidtweak.lto.o:(.text.memcpy)
-    22e1     22e1       2c     1                 memcpy
-    230d     230d       20     1         sidtweak.lto.o:(.text.__memset)
-    230d     230d       20     1                 __memset
-    232d     232d        0     1         __init_array_start = .
-    232d     232d        0     1         __init_array_end = .
-    232d     232d        0     1         __fini_array_start = .
-    232d     232d        0     1         __fini_array_end = .
-    232d     232d      32f     1 .rodata
-    232d     232d        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    232d     232d        0     1                 __set_v
-    232e     232e       3a     1         sidtweak.lto.o:(.rodata.printf)
-    2368     2368       58     1         sidtweak.lto.o:(.rodata.noteColors)
-    2368     2368       58     1                 noteColors
-    23c0     23c0      26c     1         <internal>:(.rodata.str1.1)
-    262c     262c       30     1         sidtweak.lto.o:(.rodata.textColors)
-    262c     262c       30     1                 textColors
-    265c     265c        0     1 .data
-    265c     265c        0     1         __data_start = .
-    265c     265c        0     1         __data_end = .
-    265c     265c        0     1 __data_load_start = LOADADDR(.data)
-    265c     265c        0     1 __data_size = SIZEOF(.data)
-    265c     265c        c     1 .bss
-    265c     265c        0     1         __bss_start = .
-    265c     265c        7     1         sidtweak.lto.o:(.bss.kernelEventData)
-    265c     265c        7     1                 kernelEventData
-    2663     2663        1     1         sidtweak.lto.o:(.bss.kernelError)
-    2663     2663        1     1                 kernelError
-    2664     2664        4     1         sidtweak.lto.o:(.bss._BITMAP_BASE.0)
-    2664     2664        4     1                 _BITMAP_BASE.0
-    2668     2668        0     1         __bss_end = .
-    2668     2668        0     1 __bss_size = SIZEOF(.bss)
-    2668     2668        8     1 .noinit
-    2668     2668        8     1         sidtweak.lto.o:(.noinit..Lstatic_stack)
-    2670     2670        0     1         __heap_start = ALIGN(., 2)
-    2670     2670        0     1 end_block8 = .
-    2670     2670        0     1 end_block9 = .
-    2670     2670        0     1 end_block10 = .
-    2670     2670        0     1 end_block11 = .
-    2670     2670        0     1 end_block12 = .
-    2670     2670        0     1 end_block13 = .
-    2670     2670        0     1 end_block14 = .
-    2670     2670        0     1 end_block15 = .
-    2670     2670        0     1 end_block16 = .
-    2670     2670        0     1 end_block17 = .
-    2670     2670        0     1 end_block18 = .
-    2670     2670        0     1 end_block19 = .
-    2670     2670        0     1 end_block20 = .
-    2670     2670        0     1 end_block21 = .
-    2670     2670        0     1 end_block22 = .
-    2670     2670        0     1 end_block23 = .
+      30      300        1     1         sidtweak.lto.o:(.zp.data)
+      30      300        1     1                 _ccolor
+      31      301        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      31      301        0     1 __zp_data_size = SIZEOF(.zp.data)
+      31       31       14     1 .zp.bss
+      31       31        0     1         __zp_bss_start = .
+      31       31       14     1         sidtweak.lto.o:(.zp.bss)
+      31       31        1     1                 chipAct.0
+      32       32        6     1                 polySIDBuffer
+      38       38        7     1                 kernelEventData
+      3f       3f        1     1                 _col
+      40       40        1     1                 _row
+      41       41        2     1                 __putchar.s
+      43       43        1     1                 exitCode
+      44       44        1     1                 indexUI
+      45       45        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      45       45       5a     1 .zp
+      45       45       5a     1         sidtweak.lto.o:(.zp.noinit)
+     301      301     3187     1 .text
+     301      301        0     1         _init = .
+     301      301        0     1         _start = .
+     301      301        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     301      301        0     1                 __do_init_stack
+     309      309        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     309      309        0     1                 __do_zero_bss
+     30c      30c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30c      30c        0     1                 __do_zero_zp_bss
+     30f      30f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     30f      30f        0     1                 __do_copy_zp_data
+     312      312        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     315      315        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     315      315        0     1                 __after_main
+     318      318        0     1         _fini = .
+     318      318        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     319      319       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     319      319       13     1                 __zero_bss
+     32c      32c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     32c      32c       13     1                 __zero_zp_bss
+     33f      33f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     33f      33f       17     1                 __copy_zp_data
+     356      356     1c8c     1         sidtweak.lto.o:(.text.main)
+     356      356     1c8c     1                 main
+    1fe2     1fe2      36f     1         sidtweak.lto.o:(.text.textPrint)
+    1fe2     1fe2      36f     1                 textPrint
+    2351     2351      2c8     1         sidtweak.lto.o:(.text.updateValues)
+    2351     2351      2c8     1                 updateValues
+    2619     2619        5     1         sidtweak.lto.o:(.text.exit)
+    2619     2619        5     1                 exit
+    261e     261e       db     1         sidtweak.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    261e     261e       db     1                 (anonymous namespace)::put(char, Status*)
+    26f9     26f9      10c     1         sidtweak.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    26f9     26f9      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    2805     2805      c2c     1         sidtweak.lto.o:(.text.printf)
+    2805     2805      c2c     1                 printf
+    3431     3431       2c     1         sidtweak.lto.o:(.text.memcpy)
+    3431     3431       2c     1                 memcpy
+    345d     345d       20     1         sidtweak.lto.o:(.text.__memset)
+    345d     345d       20     1                 __memset
+    347d     347d        b     1         sidtweak.lto.o:(.text.__ashlqi3)
+    347d     347d        b     1                 __ashlqi3
+    3488     3488        0     1         __init_array_start = .
+    3488     3488        0     1         __init_array_end = .
+    3488     3488        0     1         __fini_array_start = .
+    3488     3488        0     1         __fini_array_end = .
+    3488     3488      59f     1 .rodata
+    3488     3488        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    3488     3488        0     1                 __set_v
+    3489     3489      1cc     1         sidtweak.lto.o:(.rodata.main)
+    3655     3655       3a     1         sidtweak.lto.o:(.rodata.printf)
+    368f     368f        6     1         sidtweak.lto.o:(.rodata.sidChoiceToVoice)
+    368f     368f        6     1                 sidChoiceToVoice
+    3695     3695       58     1         sidtweak.lto.o:(.rodata.noteColors)
+    3695     3695       58     1                 noteColors
+    36ed     36ed      29a     1         <internal>:(.rodata.str1.1)
+    3987     3987       60     1         sidtweak.lto.o:(.rodata.sidLow)
+    3987     3987       60     1                 sidLow
+    39e7     39e7       30     1         sidtweak.lto.o:(.rodata.textColors)
+    39e7     39e7       30     1                 textColors
+    3a17     3a17       10     1         <internal>:(.rodata.cst16)
+    3a27     3a27        0     1 .data
+    3a27     3a27        0     1         __data_start = .
+    3a27     3a27        0     1         __data_end = .
+    3a27     3a27        0     1 __data_load_start = LOADADDR(.data)
+    3a27     3a27        0     1 __data_size = SIZEOF(.data)
+    3a27     3a27       7e     1 .bss
+    3a27     3a27        0     1         __bss_start = .
+    3a27     3a27        1     1         sidtweak.lto.o:(.bss.kernelError)
+    3a27     3a27        1     1                 kernelError
+    3a28     3a28        4     1         sidtweak.lto.o:(.bss._BITMAP_BASE.0)
+    3a28     3a28        4     1                 _BITMAP_BASE.0
+    3a2c     3a2c        4     1         sidtweak.lto.o:(.bss._BITMAP_BASE.1)
+    3a2c     3a2c        4     1                 _BITMAP_BASE.1
+    3a30     3a30        4     1         sidtweak.lto.o:(.bss._BITMAP_BASE.2)
+    3a30     3a30        4     1                 _BITMAP_BASE.2
+    3a34     3a34        1     1         sidtweak.lto.o:(.bss.shiftTog)
+    3a34     3a34        1     1                 shiftTog
+    3a35     3a35       70     1         sidtweak.lto.o:(.bss.sid_fields)
+    3a35     3a35       70     1                 sid_fields
+    3aa5     3aa5        0     1         __bss_end = .
+    3aa5     3aa5        0     1 __bss_size = SIZEOF(.bss)
+    3aa5     3aa5        0     1 .noinit
+    3aa5     3aa5        0     1         __heap_start = ALIGN(., 2)
+    3aa5     3aa5        0     1 end_block8 = .
+    3aa5     3aa5        0     1 end_block9 = .
+    3aa5     3aa5        0     1 end_block10 = .
+    3aa5     3aa5        0     1 end_block11 = .
+    3aa5     3aa5        0     1 end_block12 = .
+    3aa5     3aa5        0     1 end_block13 = .
+    3aa5     3aa5        0     1 end_block14 = .
+    3aa5     3aa5        0     1 end_block15 = .
+    3aa5     3aa5        0     1 end_block16 = .
+    3aa5     3aa5        0     1 end_block17 = .
+    3aa5     3aa5        0     1 end_block18 = .
+    3aa5     3aa5        0     1 end_block19 = .
+    3aa5     3aa5        0     1 end_block20 = .
+    3aa5     3aa5        0     1 end_block21 = .
+    3aa5     3aa5        0     1 end_block22 = .
+    3aa5     3aa5        0     1 end_block23 = .
    30000    30000      3fc    16 .pianopal
    30000    30000      3fc    16         sidtweak.lto.o:(.pianopal)
    30000    30000        0     1                 pianopal_start
@@ -173,9 +189,9 @@
    43000    43000        0     1 end_keys = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      870     4 .symtab
-       0        0      870     4         <internal>:(.symtab)
+       0        0      900     4 .symtab
+       0        0      900     4         <internal>:(.symtab)
        0        0       6a     1 .shstrtab
        0        0       6a     1         <internal>:(.shstrtab)
-       0        0      600     1 .strtab
-       0        0      600     1         <internal>:(.strtab)
+       0        0      665     1 .strtab
+       0        0      665     1         <internal>:(.strtab)

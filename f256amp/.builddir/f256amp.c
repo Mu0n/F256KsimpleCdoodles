@@ -440,6 +440,15 @@ for(;;) {
 	cliFile = false; //never skip this for next playbacks
 	read8KChunk(buffer, theMP3file); //read the first 8k chunk from the .mp3 file
 
+POKEW(VS_SCI_ADDR, VS_SCI_ADDR_CLOCKF);
+//trigger the command
+POKE(VS_SCI_CTRL, CTRL_Start | CTRL_RWn);
+POKE(VS_SCI_CTRL,0);
+//check to see if it's done
+    while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
+        ;
+PEEKW(VS_SCI_DATA);
+
 	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
 		{
 		POKE(VS_FIFO_DATA, buffer[i]);

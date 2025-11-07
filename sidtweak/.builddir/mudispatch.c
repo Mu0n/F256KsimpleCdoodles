@@ -4,6 +4,7 @@
 #include "../src/mudispatch.h"
 #include "../src/muMidi.h"
 #include "../src/musid.h"
+#include "../src/textUI.h"
 
 //used for text UI to show chip activity in real time
 uint8_t chipAct[5] ={0,0,0,0,0};
@@ -68,7 +69,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 				sidVoiceBase = sidChoiceToVoice[foundFreeChan];
 				POKE(sidTarget + sidVoiceBase + SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
 				POKE(sidTarget + sidVoiceBase + SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn);//if isBeat false, usually gPtr->sidInstChoice
+				sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, sid_fields[8].value | (sid_fields[7].value<<4) |0x01, isOn);//if isBeat false, usually gPtr->sidInstChoice
 				polySIDBuffer[foundFreeChan] = note;
 				}
 				chipAct[2]++;
@@ -81,7 +82,7 @@ void dispatchNote(bool isOn, uint8_t channel, uint8_t note, uint8_t speed, bool 
 			polySIDBuffer[foundFreeChan] = 0;
 			POKE(sidTarget + sidVoiceBase+SID_LO_B, sidLow[note-11]); // SET FREQUENCY FOR NOTE 1
 			POKE(sidTarget + sidVoiceBase+SID_HI_B, sidHigh[note-11]); // SET FREQUENCY FOR NOTE 1
-			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, gPtr->sidValues->ctrl, isOn); //if isBeat false, usually gPtr->sidInstChoice
+			sidNoteOnOrOff(sidTarget + sidVoiceBase+SID_CTRL, (sid_fields[8].value | (sid_fields[7].value<<4)) &0xFE, isOn); //if isBeat false, usually gPtr->sidInstChoice
 			if(chipAct[2])chipAct[2]--;
 	
 		}

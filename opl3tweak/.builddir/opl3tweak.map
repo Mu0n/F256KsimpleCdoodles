@@ -1,0 +1,200 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __pianopal_lma = 0x30000
+       0        0        0     1 __pianopal_size = 0x3fc
+       0        0        0     1 __keys_lma = 0x30400
+       0        0        0     1 __keys_size = 0x12c00
+      30      300        1     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300        1     1         opl3tweak.lto.o:(.zp.data)
+      30      300        1     1                 _ccolor
+      31      301        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      31      301        0     1 __zp_data_size = SIZEOF(.zp.data)
+      31       31       20     1 .zp.bss
+      31       31        0     1         __zp_bss_start = .
+      31       31       20     1         opl3tweak.lto.o:(.zp.bss)
+      31       31        1     1                 chipAct.0
+      32       32       12     1                 polyOPL3Buffer
+      44       44        7     1                 kernelEventData
+      4b       4b        1     1                 _col
+      4c       4c        1     1                 _row
+      4d       4d        2     1                 __putchar.s
+      4f       4f        1     1                 exitCode
+      50       50        1     1                 indexUI
+      51       51        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      51       51       5a     1 .zp
+      51       51       5a     1         opl3tweak.lto.o:(.zp.noinit)
+     301      301     489d     1 .text
+     301      301        0     1         _init = .
+     301      301        0     1         _start = .
+     301      301        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     301      301        0     1                 __do_init_stack
+     309      309        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     309      309        0     1                 __do_zero_bss
+     30c      30c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30c      30c        0     1                 __do_zero_zp_bss
+     30f      30f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     30f      30f        0     1                 __do_copy_zp_data
+     312      312        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     315      315        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     315      315        0     1                 __after_main
+     318      318        0     1         _fini = .
+     318      318        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     319      319       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     319      319       13     1                 __zero_bss
+     32c      32c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     32c      32c       13     1                 __zero_zp_bss
+     33f      33f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     33f      33f       17     1                 __copy_zp_data
+     356      356      13a     1         opl3tweak.lto.o:(.text.opl3_initialize)
+     356      356      13a     1                 opl3_initialize
+     490      490      70f     1         opl3tweak.lto.o:(.text.opl3_setInstrumentAllChannels)
+     490      490      70f     1                 opl3_setInstrumentAllChannels
+     b9f      b9f     1d71     1         opl3tweak.lto.o:(.text.main)
+     b9f      b9f     1d71     1                 main
+    2910     2910      36f     1         opl3tweak.lto.o:(.text.textPrint)
+    2910     2910      36f     1                 textPrint
+    2c7f     2c7f      fe0     1         opl3tweak.lto.o:(.text.updateValues)
+    2c7f     2c7f      fe0     1                 updateValues
+    3c5f     3c5f        5     1         opl3tweak.lto.o:(.text.exit)
+    3c5f     3c5f        5     1                 exit
+    3c64     3c64       db     1         opl3tweak.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    3c64     3c64       db     1                 (anonymous namespace)::put(char, Status*)
+    3d3f     3d3f      10c     1         opl3tweak.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    3d3f     3d3f      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    3e4b     3e4b      c2c     1         opl3tweak.lto.o:(.text.printf)
+    3e4b     3e4b      c2c     1                 printf
+    4a77     4a77       2c     1         opl3tweak.lto.o:(.text.memcpy)
+    4a77     4a77       2c     1                 memcpy
+    4aa3     4aa3       20     1         opl3tweak.lto.o:(.text.__memset)
+    4aa3     4aa3       20     1                 __memset
+    4ac3     4ac3       db     1         opl3tweak.lto.o:(.text.__udivmodhi4)
+    4ac3     4ac3       db     1                 __udivmodhi4
+    4b9e     4b9e        0     1         __init_array_start = .
+    4b9e     4b9e        0     1         __init_array_end = .
+    4b9e     4b9e        0     1         __fini_array_start = .
+    4b9e     4b9e        0     1         __fini_array_end = .
+    4b9e     4b9e      4f9     1 .rodata
+    4b9e     4b9e        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    4b9e     4b9e        0     1                 __set_v
+    4b9f     4b9f      1cc     1         opl3tweak.lto.o:(.rodata.main)
+    4d6b     4d6b       3a     1         opl3tweak.lto.o:(.rodata.printf)
+    4da5     4da5       58     1         opl3tweak.lto.o:(.rodata.noteColors)
+    4da5     4da5       58     1                 noteColors
+    4dfd     4dfd       18     1         opl3tweak.lto.o:(.rodata.opl3_fnums)
+    4dfd     4dfd       18     1                 opl3_fnums
+    4e15     4e15       30     1         opl3tweak.lto.o:(.rodata.textColors)
+    4e15     4e15       30     1                 textColors
+    4e45     4e45       16     1         opl3tweak.lto.o:(.rodata.navWSJumps)
+    4e45     4e45       16     1                 navWSJumps
+    4e5b     4e5b      23c     1         <internal>:(.rodata.str1.1)
+    5097     5097        0     1 .data
+    5097     5097        0     1         __data_start = .
+    5097     5097        0     1         __data_end = .
+    5097     5097        0     1 __data_load_start = LOADADDR(.data)
+    5097     5097        0     1 __data_size = SIZEOF(.data)
+    5097     5097       a8     1 .bss
+    5097     5097        0     1         __bss_start = .
+    5097     5097        1     1         opl3tweak.lto.o:(.bss.kernelError)
+    5097     5097        1     1                 kernelError
+    5098     5098        4     1         opl3tweak.lto.o:(.bss._BITMAP_BASE.0)
+    5098     5098        4     1                 _BITMAP_BASE.0
+    509c     509c        4     1         opl3tweak.lto.o:(.bss._BITMAP_BASE.1)
+    509c     509c        4     1                 _BITMAP_BASE.1
+    50a0     50a0        4     1         opl3tweak.lto.o:(.bss._BITMAP_BASE.2)
+    50a0     50a0        4     1                 _BITMAP_BASE.2
+    50a4     50a4        1     1         opl3tweak.lto.o:(.bss.shiftTog)
+    50a4     50a4        1     1                 shiftTog
+    50a5     50a5       9a     1         opl3tweak.lto.o:(.bss.opl3_fields)
+    50a5     50a5       9a     1                 opl3_fields
+    513f     513f        0     1         __bss_end = .
+    513f     513f        0     1 __bss_size = SIZEOF(.bss)
+    513f     513f        0     1 .noinit
+    513f     513f        0     1         __heap_start = ALIGN(., 2)
+    513f     513f        0     1 end_block8 = .
+    513f     513f        0     1 end_block9 = .
+    513f     513f        0     1 end_block10 = .
+    513f     513f        0     1 end_block11 = .
+    513f     513f        0     1 end_block12 = .
+    513f     513f        0     1 end_block13 = .
+    513f     513f        0     1 end_block14 = .
+    513f     513f        0     1 end_block15 = .
+    513f     513f        0     1 end_block16 = .
+    513f     513f        0     1 end_block17 = .
+    513f     513f        0     1 end_block18 = .
+    513f     513f        0     1 end_block19 = .
+    513f     513f        0     1 end_block20 = .
+    513f     513f        0     1 end_block21 = .
+    513f     513f        0     1 end_block22 = .
+    513f     513f        0     1 end_block23 = .
+   30000    30000      3fc    16 .pianopal
+   30000    30000      3fc    16         opl3tweak.lto.o:(.pianopal)
+   30000    30000        0     1                 pianopal_start
+   303fc    303fc        0     1                 pianopal_end
+   303fc    303fc        0     1 end_pianopal = .
+   30400    30400    12c00    16 .keys
+   30400    30400    12c00    16         opl3tweak.lto.o:(.keys)
+   30400    30400        0     1                 keys_start
+   43000    43000        0     1                 keys_end
+   43000    43000        0     1 end_keys = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      900     4 .symtab
+       0        0      900     4         <internal>:(.symtab)
+       0        0       6a     1 .shstrtab
+       0        0       6a     1         <internal>:(.shstrtab)
+       0        0      683     1 .strtab
+       0        0      683     1         <internal>:(.strtab)

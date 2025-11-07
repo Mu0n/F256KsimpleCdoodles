@@ -1,5 +1,6 @@
 #include "f256lib.h"
 #include "../src/musid.h"
+#include "../src/textUI.h"
 
 const char *sid_instruments_names[] = {
 	"Triangle",
@@ -86,7 +87,40 @@ void sid_setInstrument(uint8_t sidChip, uint8_t voice, struct sidInstrument inst
 	POKE(addrVoice+(uint16_t)SID_ATK_DEC, inst.ad); // SET ATTACK;DECAY
 	POKE(addrVoice+(uint16_t)SID_SUS_REL, inst.sr); // SET SUSTAIN;RELEASE
 	POKE(addrVoice+(uint16_t)SID_CTRL, inst.ctrl); 	 // SET CTRL as triangle
-}			
+}	
+
+void sid_StageOne()
+{ 
+	sid_StageTwo(0,0);
+	sid_StageTwo(0,1);
+	sid_StageTwo(0,2);
+	sid_StageTwo(1,0);
+	sid_StageTwo(1,1);
+	sid_StageTwo(1,2);
+	
+	POKE(SID1+SID_LO_FCF, sid_fields[2].value & 0x07);
+	POKE(SID1+SID_HI_FCF, sid_fields[1].value | (sid_fields[0].value << 4));
+	POKE(SID1+SID_FRR,    sid_fields[4].value | (sid_fields[3].value << 4));
+	POKE(SID1+SID_FM_VC,  sid_fields[6].value | (sid_fields[5].value << 4));
+	
+	POKE(SID2+SID_LO_FCF, sid_fields[2].value & 0x07);
+	POKE(SID2+SID_HI_FCF, sid_fields[1].value | (sid_fields[0].value << 4));
+	POKE(SID2+SID_FRR,    sid_fields[4].value | (sid_fields[3].value << 4));
+	POKE(SID2+SID_FM_VC,  sid_fields[6].value | (sid_fields[5].value << 4));
+}	
+	
+void sid_StageTwo(uint8_t sidChip, uint8_t voice)
+{
+	uint16_t addrVoice = (sidChip==0?(uint16_t)SID1:(uint16_t)SID2);
+	if(voice==1) addrVoice += (uint16_t)SID_VOICE2;
+	if(voice==2) addrVoice += (uint16_t)SID_VOICE3;
+	
+	POKE(addrVoice+(uint16_t)SID_LO_PWDC, sid_fields[15].value | (sid_fields[14].value <<4)); // SET PULSE WAVE DUTY LOW BYTE
+	POKE(addrVoice+(uint16_t)SID_HI_PWDC, sid_fields[13].value); // SET PULSE WAVE DUTY HIGH BYTE
+	POKE(addrVoice+(uint16_t)SID_ATK_DEC, sid_fields[10].value | (sid_fields[9].value << 4)); // SET ATTACK;DECAY
+	POKE(addrVoice+(uint16_t)SID_SUS_REL, sid_fields[12].value | (sid_fields[11].value << 4)); // SET SUSTAIN;RELEASE
+	POKE(addrVoice+(uint16_t)SID_CTRL, (sid_fields[8].value & 0x0E) | (sid_fields[7].value << 4)); 	 // SET CTRL as triangle
+}
 void sid_setSIDWide(uint8_t which)
 {
 	POKE(SID1+SID_LO_FCF,sid_instrument_defs[which].fcfLo);

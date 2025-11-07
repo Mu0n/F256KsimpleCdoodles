@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 	boostVSClock();
 	backgroundSetup();
 	
-	openMP3File("ronald.mp3");
+	openMP3File("mp3/ronald.mp3");
 	//openMP3File("terranone.mp3");
 	read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file
 	fileIndex+=CHUNK8K; //advance the file index by 8kb

@@ -30,7 +30,7 @@
 #include "f256lib.h"
 
 typedef struct sidInstrument {
-    uint8_t maxVolume;      // hi nibble = mode, lo nibble = volume
+	uint8_t maxVolume;      // hi nibble = mode, lo nibble = volume
 	uint8_t pwdLo, pwdHi; // PULSE WAVE DUTY LOW BYTE and HIGH BYTE
 	uint8_t ad, sr;         // ATTACK;DECAY ,  SUSTAIN;RELEASE
 	uint8_t ctrl;           // CTRL 
@@ -49,7 +49,8 @@ void prepSIDinstruments(void);
 void setMonoSID(void);
 void setStereoSID(void);
 uint8_t fetchCtrl(uint8_t);
-
+void sid_StageOne(void);
+void sid_StageTwo(uint8_t, uint8_t);
 
 extern const char *sid_instruments_names[];
 extern const uint8_t sid_instrumentsSize;

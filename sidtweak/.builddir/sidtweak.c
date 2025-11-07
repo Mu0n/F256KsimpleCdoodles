@@ -13,12 +13,15 @@
 EMBED(pianopal, "../assets/piano.pal", 0x30000); //1kb
 EMBED(keys, "../assets/piano.raw", 0x30400); //
 
+int8_t exitCode=1; //when = to 0, exit program
+bool shiftTog = false;
 
-
-void title(void);
 void setup(void);
 void resetSID(void);
-
+void dealKeyPressed(uint8_t);
+void dealKeyb(void);
+void goBack(uint8_t);
+void goForth(uint8_t);
 
 void setup()
 {
@@ -51,7 +54,7 @@ void setup()
 	bitmapSetVisible(0,true);
 	resetGlobals(gPtr);
 	
-	title();
+	textEnableBackgroundColors(true);
 }
 
 void resetSID()
@@ -61,10 +64,6 @@ void resetSID()
 	prepSIDinstruments();
 }
 
-void title()
-{
-	textGotoXY(0,0);textSetColor(0x0F,0x03);textPrint("SID Tweak v0.1");
-}
 
 void resetMID(midiInData *themidi)
 {
@@ -76,8 +75,156 @@ themidi->lastCmd = 0x90;
 themidi->lastNote = 0x00;
 themidi->storedNote = 0x00;
 }
+void goForth(uint8_t isVert)
+	{
+	if(indexUI == 15)
+		{
+		updateHighlight(15, 0);
+		return;
+		}
+	else if(isVert)
+		{
+		uint8_t newIndex = indexUI+(navWSJumps[indexUI]&0x0F);
+		if(newIndex > 15) newIndex =0;
+		updateHighlight(indexUI, newIndex);
+		}
+	else updateHighlight(indexUI, indexUI+1);
+	}
 
+void goBack(uint8_t isVert)
+	{
+	if(indexUI == 0 && isVert == false)
+		{
+		updateHighlight(0, 15);
+		return;
+		}
+	else if(isVert)
+		{
+		uint8_t newIndex = indexUI-((navWSJumps[indexUI]&0xF0)>>4);
+		if(newIndex > 15) newIndex = 15- (0xFF - newIndex);
+		updateHighlight(indexUI, newIndex);
+		}
+	else updateHighlight(indexUI, indexUI-1);
+	}
 
+void updateValPunch(uint8_t valPunch)
+{
+sid_fields[indexUI].value = valPunch;
+if(indexUI == 0 && valPunch > 7) sid_fields[indexUI].value = 7;
+sid_fields[indexUI].is_dirty = true;
+updateValues();
+}
+
+void dealKeyPressed(uint8_t keyRaw)
+{
+	
+	switch(keyRaw)
+	{
+		case 0x87: //F7
+			randomInst();
+			break;
+		case 146: // top left backspace, meant as reset
+			exitCode = 0;
+			break;
+		case 0x00: // left shift
+		case 0x01: // right shift
+			shiftTog = true;
+			break;
+		case 0x93: //tab
+			if(shiftTog) goBack(0);
+			else goForth(0);
+			break;
+		case 0xB6: //up
+			goBack(1);
+			break;
+		case 0xB7: //down
+			goForth(1);
+			break;
+		case 0xB8: //left
+			goBack(0);
+			break;
+		case 0xB9: //right
+			goForth(0);
+			break;
+		case 0x3D: //=+
+			sid_fields[indexUI].value ++;
+			if(indexUI == 0 && sid_fields[indexUI].value>0x07) sid_fields[indexUI].value = 0x00;
+			if(sid_fields[indexUI].value>0x0F) sid_fields[indexUI].value = 0x00;
+			sid_fields[indexUI].is_dirty = true;
+			updateValues();
+			break;
+		case 0x2D: //-_
+			if(indexUI == 0 && sid_fields[indexUI].value==0x00) sid_fields[indexUI].value = 0x07;
+			else if(sid_fields[indexUI].value==0x00) sid_fields[indexUI].value = 0x0F;
+			else sid_fields[indexUI].value--;
+			sid_fields[indexUI].is_dirty = true;
+			updateValues();
+			break;
+		case 0x30: //0
+			updateValPunch(0);
+			break;
+		case 0x31: //1
+			updateValPunch(1);
+			break;
+		case 0x32: //2
+			updateValPunch(2);
+			break;
+		case 0x33: //3
+			updateValPunch(3);
+			break;
+		case 0x34: //4
+			updateValPunch(4);
+			break;
+		case 0x35: //5
+			updateValPunch(5);
+			break;
+		case 0x36: //6
+			updateValPunch(6);
+			break;
+		case 0x37: //7
+			updateValPunch(7);
+			break;
+		case 0x38: //8
+			updateValPunch(8);
+			break;
+		case 0x39: //9
+			updateValPunch(9);
+			break;
+		case 0x61: //A
+			updateValPunch(0xA);
+			break;
+		case 0x62: //B
+			updateValPunch(0xB);
+			break;
+		case 0x81: //C
+			updateValPunch(0xC);
+			break;
+		case 0x64: //D
+			updateValPunch(0xD);
+			break;
+		case 0x65: //E
+			updateValPunch(0xE);
+			break;
+		case 0x66: //F
+			updateValPunch(0xF);
+			break;
+
+	}
+	//
+}
+
+void dealKeyb()
+{
+	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(key.PRESSED))
+			{
+			dealKeyPressed(kernelEventData.key.raw);
+			}
+	else if(kernelEventData.type == kernelEvent(key.RELEASED))
+		{
+			if(kernelEventData.key.raw == 0x00 || kernelEventData.key.raw == 0x01) shiftTog = false;
+		}
+}
 
 int main(int argc, char *argv[]) {
 	midiInData gMID;
@@ -85,15 +232,17 @@ int main(int argc, char *argv[]) {
 	setup();
 	resetSID();
 	resetMID(&gMID);
+	initSIDFields();
 	
 	printInstrumentHeaders();
 	updateValues();
 	
-	while(true)
+	while(exitCode)
 	{
 	dealMIDIIn(&gMID);
+	dealKeyb();
 	}
 	
-	hitspace();
+	resetSID();
 	return 0;
 }

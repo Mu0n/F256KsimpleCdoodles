@@ -197,20 +197,20 @@ bool K2LCD() {
 }
 
 bool wrongMachineTest() {
-/*
+
 	if(isWave2() == false)
 		{
-*/
-		uint8_t mid = PEEK(0xD6A7)&0x3F;
-		printf("Your machine ID is %d.",mid);
+
+		uint8_t mid = PEEK(0xD6A7);
+		printf("Your machine ID is %02x.",mid);
 		printf("\nIn order to work, a VS1053b chip needs to be present.");
 		printf("\nThis chip is present in the Jr2 and K2.");
-		printf("\nHit space to proceed");
+		printf("\nHit space if you think you have it.");
 		hitspace();
-/*
+
 		return false;
 		}
-*/
+
 	return true;
 }
 
@@ -303,8 +303,8 @@ void setLCDReverseY() {
 void writeTopRight(bool wantCmds)
 {
 	textSetColor(5,0);
-	textGotoXY(66,1);textPrint("F256Amp v2.1");
-	textGotoXY(68,2);textPrint("July 2025");
+	textGotoXY(66,1);textPrint("F256Amp v2.2");
+	textGotoXY(68,2);textPrint("November 2025");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	textGotoXY(62,8);textPrint("[ESC]Quit");
 	
@@ -357,11 +357,12 @@ int main(int argc, char *argv[]) {
 
 	
     backgroundSetup();
-	if(wrongMachineTest() == false) return 0; //immediately quit
+	wrongMachineTest(); //test wave 2
 
 	greenLCD = K2LCD(); //if false, never try to write to LCD, on a Jr2, if true will display the initial image
+
 	if(greenLCD == true) setLCDReverseY();
-	
+
 
 	openAllCODEC();
 	boostVSClock();

@@ -25,7 +25,7 @@ bool hasCaseLCD(void) {
 bool isWave2(void) {
 	uint8_t mid;
 	mid = PEEK(0xD6A7)&0x3F;
-	return (mid == 0x22 || mid == 0x11); //22 is Jr2 and 11 is K2
+	return (mid == 0x22 || mid == 0x11 || mid == 0x02); //22 is Jr2 and 11 is K2
 }
 
 //graphics background cleardevice

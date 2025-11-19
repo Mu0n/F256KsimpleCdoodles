@@ -34,6 +34,8 @@ uint8_t pickFile(filePickRecord *picker);
 uint8_t filePickModal(filePickRecord *picker, uint8_t, uint8_t, char *, char *, char *, char *, bool);
 void reprepFPR(filePickRecord *, bool);
 
+void initFPR(void);
+uint8_t getTheFile(char *);
 void backUpDirectory(filePickRecord *picker);
 void initFilePickRecord(filePickRecord *picker, uint8_t, uint8_t, bool);
 void readDirectory(filePickRecord *picker);
@@ -41,5 +43,7 @@ bool isExtensionAllowed(filePickRecord *picker, const char *filename);
 void sortFileList(filePickRecord *picker);
 void displayFileList(filePickRecord *picker, int scrollOffset);
 void wipeArea(filePickRecord *picker);
+extern filePickRecord fpr;
+extern char name[];
 
 #endif // MUFILEPICKER_H

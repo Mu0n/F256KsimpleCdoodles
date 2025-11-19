@@ -26,7 +26,7 @@
 #define OPL_CH_FEED     0xC0     // 7: out_chan_d 6: out_chan_r 5: R 4:L 3-1: feedback 0: syn with 0=freqmod 1=additive_syn
 
 //Scope: operator
-#define OPL_OP_TVSKF    0x20     //Base address of Tremolo, vibrator, sustain, KSR, F multimap
+#define OPL_OP_TVSKF    0x20     //Base address of Tremolo, vibrato, sustain, KSR, F multimap
 #define OPL_OP_KSLVOL   0x40     //Base address of key scale level, output volume
 #define OPL_OP_AD       0x60     //Base address of attack, decay
 #define OPL_OP_SR       0x80     //Base address of sustain, release
@@ -34,6 +34,7 @@
 
 typedef struct opl3Instrument {
 	//OP2 Carrier, OP1 Modulator - they're in this order for easy copying from AdlibTracker 1.2 instrument information
+	uint8_t VT_DEPTH; //vibrato tremolo depth, highest 2 MSb
 	uint8_t OP2_TVSKF, OP1_TVSKF;
 	uint8_t OP2_KSLVOL, OP1_KSLVOL;
 	uint8_t OP2_AD, OP1_AD;
@@ -45,12 +46,14 @@ typedef struct opl3Instrument {
 void opl3_initialize(void);
 void opl3_quietAll(void);
 void opl3_write(uint16_t, uint8_t);
+void opl3_shadow(uint8_t, uint8_t, uint8_t);
 void opl3_note(uint8_t, uint16_t, uint8_t, bool);
 void opl3_setInstrument(struct opl3Instrument, uint8_t);
 void opl3_setInstrumentAllChannels(uint8_t);
+void opl3_StageOne(void);
+void opl3_StageTwo(uint8_t);
 
 extern const uint16_t opl3_fnums[];
 extern const uint8_t opl3_instrumentsSize;
-extern const char *opl3_instrument_names[];
 extern opl3I opl3_instrument_defs[];
 #endif // MUOPL3_H

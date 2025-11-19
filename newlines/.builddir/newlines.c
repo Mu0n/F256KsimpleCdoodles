@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
 uint8_t exitFlag = 0;
 uint16_t r1,r2,r3,r4;
 uint8_t y1,y2;
-uint8_t oldNewToggle = 0;
+uint8_t oldNewToggle = 1;
 
 setup();
 loadGFX();
@@ -126,8 +126,8 @@ while(exitFlag == 0)
 	}
 	else drawNewLine(r1,r2,y1,y2,LOW_BYTE(r4));
 
-	
+	exitFlag =1;
 	}
-
+hitspace();
 return 0;}
 

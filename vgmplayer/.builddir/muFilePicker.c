@@ -4,6 +4,33 @@
 #include "f256lib.h"
 #include "../src/muFilePicker.h"
 
+filePickRecord fpr;
+char name[100];
+
+void initFPR()
+{
+	strncpy(fpr.currentPath, "vgm", MAX_PATH_LEN);
+}
+uint8_t getTheFile(char *name) //job is to get a string containing the filename including directory
+{
+	
+//check if the vgm directory is here, if not, target the root
+	char *dirOpenResult = fileOpenDir(fpr.currentPath);
+	if(dirOpenResult != NULL)
+	{
+		strncpy(fpr.currentPath, fpr.currentPath, MAX_PATH_LEN);
+		fileCloseDir(dirOpenResult);
+	}
+	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
+
+
+	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "vgm", "", "", "", true);
+	if(wantsQuit==1) return 1;
+	sprintf(name, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+	return 0;
+}
+
+
 // Helper: compare file extension case-insensitively
 static bool endsWithExt(const char *filename, const char *ext) {
     size_t fileLen = strlen(filename);

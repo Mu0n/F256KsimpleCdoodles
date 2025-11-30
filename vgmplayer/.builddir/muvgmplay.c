@@ -17,28 +17,59 @@ FILE *load_VGM_file(char *name) {
 		}
 	return theVGMfile;
 }
+uint8_t extraLines(uint16_t ver)
+{
+	switch(ver)
+	{
+		case 0x0100 ... 0x0101:
+			return 0;
+		case 0x0102 ... 0x0150:
+			return 4;
+		case 0x0151 ... 0x0160:
+			return 12;
+		case 0x0161 ... 0x0170:
+			return 14;
+		case 0x0171 ... 0x180:
+			return 28;
+	}
+}
 
-void checkVGMHeader(FILE *theVGMfile)
+
+uint8_t checkVGMHeader(FILE *theVGMfile)
 {
 	uint8_t buffer[16];
 	size_t bytesRead = 0;
+	uint8_t extras =0;
+	uint16_t version=0;
+	bool isOPL3 = false;
+	uint8_t dataOffset = 0;
 	
-	textGotoXY(0,3);
-	for(uint8_t i = 0; i<8; i++)
+	
+	for(uint8_t i = 0; i<8+ extras; i++)
 	{
 	bytesRead = fileRead(buffer, sizeof(uint8_t), 16, theVGMfile );
-	if(bytesRead < 4) return;
+	if(i==0) {
+		version = (uint16_t)(buffer[0x9]<<8) | (uint16_t)buffer[0x8];
+		extras = extraLines(version);
+		}
+	if(i==3) dataOffset = buffer[4] + 0x34;
 	//for(uint8_t j = 0;j<16;j++) printf("%02x ", buffer[j]);
-	printf("\n");
 	if(i==5)
 		{
 		if((buffer[0] !=0 || buffer[1] !=0 || buffer[2] !=0 || buffer[3] !=0)) //YM3812 clock detection
 			opl3_write(0x105,0); //set the chip in opl2 mode
 	
-		if((buffer[12] !=0 || buffer[13] !=0 || buffer[14] !=0 || buffer[15] !=0)) //YM3812 clock detection
+		if((buffer[12] !=0 || buffer[13] !=0 || buffer[14] !=0 || buffer[15] !=0)) { //YMF262 clock detection
 			opl3_write(0x105,1); //set the chip in opl3 mode
+			isOPL3 = true;
+			}
+	
+		textGotoXY(0,2);textSetColor(7,0);printf("Using v%04x %s",version, isOPL3?"OPL3":"OPL2");
 		}
 	}
+
+return dataOffset;
+
 
 }
 

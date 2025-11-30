@@ -2,7 +2,7 @@
 #define MUVGMPLAY_H
 
 FILE *load_VGM_file(char *);
-void checkVGMHeader(FILE *);
+uint8_t checkVGMHeader(FILE *);
 int8_t playback(FILE *);
 
 extern uint32_t tooBigWait;

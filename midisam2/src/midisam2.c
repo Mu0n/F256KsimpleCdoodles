@@ -211,21 +211,6 @@ short optimizedMIDIShimmering() {
 		} // end if key pressed
 return 0;
 }
-void setupSerial()
-{
-	if(CLONE_TO_UART_EMWHITE==1)
-	{
-		//init speed of UART for EMWhite
-		POKE(0xD633,128);
-		POKE(0xD630,50);
-		POKE(0xD631,0);
-		POKE(0xD632,0);
-		POKE(0xD633,3);
-		
-		POKE(0xD632,0b11100111);
-		POKE(0xD631,0);
-	}
-}
 
 void machineDependent()
 {
@@ -273,6 +258,7 @@ int main(int argc, char *argv[]) {
 	
 	K2LCD();
 	
+	lilpause(1);
 	midiChip = false;
 	playbackTimer.units = TIMER_SECONDS;
 	playbackTimer.cookie = TIMER_PLAYBACK_COOKIE;
@@ -303,20 +289,16 @@ int main(int argc, char *argv[]) {
 	*/
 	
 	//check if the midi directory is here, if not, target the root
-	char *dirOpenResult = fileOpenDir("midi");
+	char *dirOpenResult = fileOpenDir("media/midi");
 	if(dirOpenResult != NULL) 
 	{
-		strncpy(fpr.currentPath, "midi", MAX_PATH_LEN);
+		strncpy(fpr.currentPath, "media/midi", MAX_PATH_LEN);
 		fileCloseDir(dirOpenResult);
 	}
 	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
 	
 
-	
-
-		
-
-
+	lilpause(1);
 	if(argc > 1)
 	{
 		i=0;
@@ -347,6 +329,8 @@ int main(int argc, char *argv[]) {
 				return 0;
 				}
 			}
+			
+	lilpause(1);
 	}
 	else 
 	{
@@ -355,6 +339,7 @@ int main(int argc, char *argv[]) {
 	sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
 	loadSMFile(myRecord.fileName, MUSIC_BASE);
 
+	lilpause(1);
 	}
 	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
 

@@ -4,6 +4,14 @@
 #include "f256lib.h"
 #include "../src/muFilePicker.h"
 
+filePickRecord fpr;
+char name[120];
+
+void initFPR()
+{
+	strncpy(fpr.currentPath, "media/sid/", MAX_PATH_LEN);
+}
+
 // Helper: compare file extension case-insensitively
 static bool endsWithExt(const char *filename, const char *ext) {
     size_t fileLen = strlen(filename);

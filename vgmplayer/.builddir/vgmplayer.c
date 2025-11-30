@@ -47,7 +47,7 @@ if(kernelEventData.type == kernelEvent(key.PRESSED))
 	{
 		if(kernelEventData.key.raw == 0x83) //F3
 			{
-				eraseLine(0);eraseLine(39);
+				eraseLine(0);eraseLine(1);
 				return 1;
 	
 			}
@@ -69,13 +69,21 @@ return 0;
 
 void instructions()
 {
-textSetColor(15,0);
-textGotoXY(0,0);printf("OPL3 Snooper");
-textGotoXY(0,1);printf("     Created by Mu0n, November 2025 v0.3");
+textEnableBackgroundColors(true);
+textSetColor(13,1);
+textGotoXY(0,0);printf("OPL3 Snooper                               ");
+textGotoXY(0,1);printf("     Created by Mu0n, November 2025 v0.3   ");
 }
 void textUI()
 {
-textGotoXY(0,INSTR_LINE);printf("[ESC: Quit] [F3: Load]");
+
+textGotoXY(0,INSTR_LINE);
+textSetColor(7,6);printf("[ESC]");
+textSetColor(15,0);printf(" Quit ");
+textSetColor(7,6);printf("[F3]");
+textSetColor(15,0);printf(" Load ");
+textSetColor(7,6);printf("[Space]");
+textSetColor(15,0);printf(" Pause and Snoop!");
 }
 
 void eraseLine(uint8_t line)
@@ -136,6 +144,7 @@ FILE *theFile;
 uint8_t exitFlag = 0;
 int checkKey = 0;
 midiInData gMID;
+uint8_t startByte  =0;
 
 setup();
 resetMID(&gMID);
@@ -147,11 +156,12 @@ while(exitFlag == 0)
 	instructions();
 	if(getTheFile(name)!=0) return 0;
 	theFile = load_VGM_file(name); //gets a FILE opened and ready to use
-	checkVGMHeader(theFile);
+	startByte = checkVGMHeader(theFile);
+	fseek(theFile, (uint32_t)startByte, SEEK_SET);
 	
 	//info on screen
-	eraseLine(0);eraseLine(1);
-	textGotoXY(0,0);printf("Playing: %s",name);
+	eraseLine(3);
+	textGotoXY(0,3);textSetColor(7,0);printf("Playing: %s",name);
 	textUI();
 	
 	comeRightTrough = true; //to kickstart it

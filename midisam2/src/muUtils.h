@@ -10,12 +10,11 @@
 #include "f256lib.h"
 
 
-void wipeBitmapBackground(uint8_t, uint8_t, uint8_t);
 void wipeText(void);
 bool setTimer(const struct timer_t *);
 uint8_t getTimerAbsolute(uint8_t);
 void injectChar40col(uint8_t, uint8_t, uint8_t, uint8_t);
 void openAllCODEC(void);
 void hitspace(void);
-
+void lilpause(uint8_t);
 #endif // UTIL_H

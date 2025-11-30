@@ -25,17 +25,8 @@ void eraseLine(uint8_t);
 
 // Global playback variables
 struct timer_t sidTimer;
-filePickRecord fpr;
-char name[100];
+FILE *theFile;
 
-
-void swapBlock5(void)
-{
-	POKE(0x0000, 0x91); //edit 3 act 3
-	POKE(0x0009, 0x33); //point bank 4 to block $33 of RAM
-	
-	POKE(0x8123, 0xAB); //poke something
-}
 //Opens the std MIDI file
 FILE *load_sid_file() {
 	FILE *theSIDfile;
@@ -122,13 +113,17 @@ uint8_t playback(FILE *theSIDfile)
 
 void instructions()
 {
-textSetColor(15,0);
+textSetColor(13,1);
 textGotoXY(0,0);printf("Raw PSID player: plays files from the HVS Collection converted with zigreSID");
-textGotoXY(0,1);printf("     Created by Mu0n, sept 2025 v0.1");
+textSetColor(13,0);textGotoXY(0,1);printf("     Created by Mu0n, Nov 2025 v0.2");
 }
 void textUI()
 {
-textGotoXY(0,INSTR_LINE);printf("[ESC: Quit] [F3: Load]");
+textGotoXY(0,INSTR_LINE);
+textSetColor(7,6);printf("[ESC]");
+textSetColor(15,0);printf(" Quit ");
+textSetColor(7,6);printf("[F3]");
+textSetColor(15,0);printf(" Load");
 }
 
 void eraseLine(uint8_t line)
@@ -139,16 +134,16 @@ uint8_t getTheFile() //job is to get a string containing the filename including 
 {
 	
 //check if the midi directory is here, if not, target the root
-	char *dirOpenResult = fileOpenDir("sid");
+	char *dirOpenResult = fileOpenDir("media/sid");
 	if(dirOpenResult != NULL)
 	{
-		strncpy(fpr.currentPath, "sid", MAX_PATH_LEN);
+		strncpy(fpr.currentPath, "media/sid", MAX_PATH_LEN);
 		fileCloseDir(dirOpenResult);
 	}
 	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
 
 
-	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "raw", "", "", "", true);
+	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "rsd", "", "", "", true);
 	if(wantsQuit==1) return 1;
 	sprintf(name, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
 	return 0;
@@ -156,8 +151,9 @@ uint8_t getTheFile() //job is to get a string containing the filename including 
 
 
 int main(int argc, char *argv[]) {
-FILE *theFile;
 uint8_t exitFlag = 0;
+bool cliFile = false; //first time it loads, next times it keeps the cursor position
+
 
 POKE(MMU_IO_CTRL, 0x00);
 // XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
@@ -171,15 +167,46 @@ POKE(0xD00F,0x00);
 
 setMonoSID();
 
-swapBlock5();
-hitspace();
+initFPR();
+
+if(argc > 1)
+	{
+	uint8_t i=0;
+	char fileName[120];
+
+	
+	if(argv[1][0] != '-')
+		{
+		while(argv[1][i] != '\0')
+			{
+				fileName[i] = argv[1][i];
+				i++;
+			}
+		fileName[i] = '\0';
+	
+		cliFile = true;
+		sprintf(name, "%s", fileName);
+		//sprintf(fpr.selectedFile, "%s", fileName);
+		}
+	}
+
+lilpause(1);
+//printf("%s", fpr.selectedFile);
 
 while(exitFlag == 0)
 	{
 	clearSIDRegisters();
 	instructions();
-	if(getTheFile()!=0) return 0;
-	theFile = load_sid_file(); //gets a FILE opened and ready to use
+	
+	if(cliFile == false)
+		{
+		if(getTheFile()!=0) return 0;
+		theFile = load_sid_file(); //gets a FILE opened and ready to use
+		}
+	else theFile = load_sid_file();
+	
+	
+	cliFile = false;
 	switch(playback(theFile))
 		{
 			case 0: //success playing or switch file name

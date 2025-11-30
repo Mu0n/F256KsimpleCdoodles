@@ -302,7 +302,7 @@ uint8_t filePickModal(filePickRecord *fpr, uint8_t x, uint8_t y, char *ext0, cha
 char *queryFudge[] = {
 "                                                       ",
 "        Choose a MIDI File for playback                ", 
-"         The default directory is 0:midi/              ",
+"     The default directory is 0:media/midi/            ",
 "                                                       "
 };
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70

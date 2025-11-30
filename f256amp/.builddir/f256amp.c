@@ -305,8 +305,8 @@ void setLCDReverseY() {
 void writeTopRight(bool wantCmds)
 {
 	textSetColor(5,0);
-	textGotoXY(66,1);textPrint("F256Amp v2.2");
-	textGotoXY(68,2);textPrint("November 2025");
+	textGotoXY(66,1);textPrint("F256Amp v2.3");
+	textGotoXY(67,2);textPrint("November 2025");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	textGotoXY(62,8);textPrint("[ESC]Quit");
 	
@@ -363,6 +363,7 @@ int main(int argc, char *argv[]) {
 
 	greenLCD = K2LCD(); //if false, never try to write to LCD, on a Jr2, if true will display the initial image
 
+lilpause(1);
 	if(greenLCD == true) setLCDReverseY();
 
 
@@ -371,10 +372,10 @@ int main(int argc, char *argv[]) {
 	writeTopRight(false);
 	
 	//check if the mp3 directory is here, if not, target the root
-	char *dirOpenResult = fileOpenDir("mp3");
+	char *dirOpenResult = fileOpenDir("media/mp3");
 	if(dirOpenResult != NULL)
 	{
-		strncpy(fpr.currentPath, "mp3", MAX_PATH_LEN);
+		strncpy(fpr.currentPath, "media/mp3", MAX_PATH_LEN);
 		fileCloseDir(dirOpenResult);
 	}
 	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);

@@ -309,7 +309,7 @@ char *queryFudge[] = {
 "                                                       ",
 "       Choose an audio file for playback               ",
 " mp3, wav, ogg, wma formats are supported              ",
-"         The default directory is 0:mp3/               ",
+"     The default directory is 0:media/mp3/             ",
 "                                                       "
 };
 	initFilePickRecord(fpr, x, y, firstTime);// Set starting path

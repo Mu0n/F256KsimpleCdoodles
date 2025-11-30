@@ -29,7 +29,6 @@
 
 void initVS1053Plugin(const uint16_t[], uint16_t);
 void boostVSClock(void);
-void boostVSBass(void);
 void initRTMIDI(void);
 void getCenterSAValues(uint16_t, uint16_t *);
 uint16_t checkClock(void);

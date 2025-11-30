@@ -5,7 +5,7 @@
 #include "../src/muFilePicker.h"
 
 filePickRecord fpr;
-char name[100];
+char name[120];
 
 void initFPR()
 {
@@ -289,7 +289,7 @@ void wipeArea(filePickRecord *fpr)
 {
 	for(uint8_t i=0; i<MAX_VISIBLE_FILES+1; i++)
 	{
-		for(uint8_t j=fpr->tlY; j<fpr->tlY + MAX_FILENAME_LEN; j++)
+		for(uint8_t j=fpr->tlY; j<80; j++)
 		{
 		printf(" ");
 		}
@@ -316,7 +316,7 @@ void displayFileList(filePickRecord *picker, int scrollOffset) {
         int isCursor = (picker->cursorIndex == i);
 		if(isCursor) printf("%c", 0xFA);
 		else printf("%c", ' ');
-        printf("%s%s", picker->fileList[i], picker->isDirList[i]?"/":" ");
+        printf("%.75s%1s", picker->fileList[i], picker->isDirList[i]?"/":" ");
     }
 	textGotoXY(picker->tlX + 2, picker->tlY + visibleEnd - visibleStart + 1);
 	printf("%c %c",

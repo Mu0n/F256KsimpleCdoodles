@@ -53,245 +53,158 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30      300       3a     1 .zp.data
+      30      300        4     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       3a     1         psidplayer.lto.o:(.zp.data)
-      33      303       30     1                 textColors
-      63      333        1     1                 _MAX_COL
-      64      334        1     1                 _MAX_ROW
-      65      335        1     1                 _ccolor
-      66      336        2     1                 stdout
-      68      338        2     1                 (anonymous namespace)::heap_limit
-      6a      33a        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      6a      33a        0     1 __zp_data_size = SIZEOF(.zp.data)
-      6a       6a       33     1 .zp.bss
-      6a       6a        0     1         __zp_bss_start = .
-      6a       6a       33     1         psidplayer.lto.o:(.zp.bss)
-      6a       6a        2     1                 kernelArgs
-      6c       6c        7     1                 kernelEventData
-      73       73        1     1                 kernelError
-      74       74        1     1                 _col
-      75       75        1     1                 _row
-      76       76        c     1                 _BITMAP_BASE
-      82       82        1     1                 _active
-      83       83        1     1                 _color
-      84       84        1     1                 _MAX_X
-      85       85        1     1                 _MAX_Y
-      86       86        3     1                 _BITMAP_CLUT
-      89       89        3     1                 _tileSize
-      8c       8c        8     1                 _dirStream
-      94       94        3     1                 sidTimer
-      97       97        1     1                 (anonymous namespace)::initialized
-      98       98        1     1                 (anonymous namespace)::last_free
-      99       99        2     1                 (anonymous namespace)::free_size
-      9b       9b        2     1                 (anonymous namespace)::free_list
-      9d       9d        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      9d       9d       4c     1 .zp
-      9d       9d       4c     1         psidplayer.lto.o:(.zp.noinit)
-     33a      33a     49a7     2 .text
-     33a      33a        0     1         _init = .
-     33a      33a        0     1         _start = .
-     33a      33a        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     33a      33a        0     1                 __do_init_stack
-     342      342        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     342      342        0     1                 __do_zero_bss
-     345      345        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     345      345        0     1                 __do_zero_zp_bss
-     348      348        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     348      348        0     1                 __do_copy_zp_data
-     34b      34b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     34e      34e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     34e      34e        0     1                 __after_main
-     351      351        0     1         _fini = .
-     351      351        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     352      352      135     2         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     352      352      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     488      488       d7     2         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     488      488       d7     1                 (anonymous namespace)::FreeChunk::remove()
-     560      560        3     2         psidplayer.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
-     560      560        3     1                 __impl::VarInt::make(void*, char)
-     564      564        d     2         psidplayer.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
-     564      564        d     1                 __impl::VarInt::high_bit() const
-     572      572        d     2         psidplayer.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
-     572      572        d     1                 __impl::VarInt::negative() const
-     580      580       47     2         psidplayer.lto.o:(.text._ZN6__impl6VarInt6negateEv)
-     580      580       47     1                 __impl::VarInt::negate()
-     5c8      5c8       3b     2         psidplayer.lto.o:(.text._ZN6__impl6VarInt3shlEv)
-     5c8      5c8       3b     1                 __impl::VarInt::shl()
-     603      603        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
-     603      603        0     1                 __call_indir
-     606      606       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     606      606       13     1                 __zero_bss
-     619      619       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     619      619       13     1                 __zero_zp_bss
-     62c      62c       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     62c      62c       17     1                 __copy_zp_data
-     643      643      10a     1         psidplayer.lto.o:(.text.isExtensionAllowed)
-     643      643      10a     1                 isExtensionAllowed
-     74d      74d      326     1         psidplayer.lto.o:(.text.sortFileList)
-     74d      74d      326     1                 sortFileList
-     a73      a73      c4e     1         psidplayer.lto.o:(.text.pickFile)
-     a73      a73      c4e     1                 pickFile
-    16c1     16c1      3ea     1         psidplayer.lto.o:(.text.displayFileList)
-    16c1     16c1      3ea     1                 displayFileList
-    1aab     1aab      1d5     1         psidplayer.lto.o:(.text.readDirectory)
-    1aab     1aab      1d5     1                 readDirectory
-    1c80     1c80      4ac     1         psidplayer.lto.o:(.text.filePickModal)
-    1c80     1c80      4ac     1                 filePickModal
-    212c     212c       2c     1         psidplayer.lto.o:(.text.clearSIDRegisters)
-    212c     212c       2c     1                 clearSIDRegisters
-    2158     2158        9     1         psidplayer.lto.o:(.text.setMonoSID)
-    2158     2158        9     1                 setMonoSID
-    2161     2161       1c     1         psidplayer.lto.o:(.text.setTimer0)
-    2161     2161       1c     1                 setTimer0
-    217d     217d       33     1         psidplayer.lto.o:(.text.setTimer)
-    217d     217d       33     1                 setTimer
-    21b0     21b0       21     1         psidplayer.lto.o:(.text.getTimerAbsolute)
-    21b0     21b0       21     1                 getTimerAbsolute
-    21d1     21d1       34     1         psidplayer.lto.o:(.text.hitspace)
-    21d1     21d1       34     1                 hitspace
-    2205     2205      17c     1         psidplayer.lto.o:(.text.f256Init)
-    2205     2205      17c     1                 f256Init
-    2381     2381      173     1         psidplayer.lto.o:(.text.textReset)
-    2381     2381      173     1                 textReset
-    24f4     24f4      156     1         psidplayer.lto.o:(.text.bitmapReset)
-    24f4     24f4      156     1                 bitmapReset
-    264a     264a       24     1         psidplayer.lto.o:(.text.main)
-    264a     264a       24     1                 main
-    266e     266e      174     1         psidplayer.lto.o:(.text.f256main)
-    266e     266e      174     1                 f256main
-    27e2     27e2      16c     1         psidplayer.lto.o:(.text.getTheFile)
-    27e2     27e2      16c     1                 getTheFile
-    294e     294e      103     1         psidplayer.lto.o:(.text.fileOpen)
-    294e     294e      103     1                 fileOpen
-    2a51     2a51      216     1         psidplayer.lto.o:(.text.playback)
-    2a51     2a51      216     1                 playback
-    2c67     2c67      1bf     1         psidplayer.lto.o:(.text.fileRead)
-    2c67     2c67      1bf     1                 fileRead
-    2e26     2e26      106     1         psidplayer.lto.o:(.text.fileOpenDir)
-    2e26     2e26      106     1                 fileOpenDir
-    2f2c     2f2c       11     1         psidplayer.lto.o:(.text.textGotoXY)
-    2f2c     2f2c       11     1                 textGotoXY
-    2f3d     2f3d      25a     1         psidplayer.lto.o:(.text.textPrint)
-    2f3d     2f3d      25a     1                 textPrint
-    3197     3197        c     1         psidplayer.lto.o:(.text.textSetColor)
-    3197     3197        c     1                 textSetColor
-    31a3     31a3       66     1         psidplayer.lto.o:(.text.fileCloseDir)
-    31a3     31a3       66     1                 fileCloseDir
-    3209     3209      13d     1         psidplayer.lto.o:(.text.fileReadDir)
-    3209     3209      13d     1                 fileReadDir
-    3346     3346        e     1         psidplayer.lto.o:(.text.__putchar)
-    3346     3346        e     1                 __putchar
-    3354     3354        e     1         psidplayer.lto.o:(.text.exit)
-    3354     3354        e     1                 exit
-    3362     3362        2     1         psidplayer.lto.o:(.text._Exit)
-    3362     3362        2     1                 _Exit
-    3364     3364        d     1         psidplayer.lto.o:(.text.tolower)
-    3364     3364        d     1                 tolower
-    3371     3371      218     1         psidplayer.lto.o:(.text.vfprintf)
-    3371     3371      218     1                 vfprintf
-    3589     3589      b44     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
-    3589     3589      b44     1                 (anonymous namespace)::print(char const*, Status*)
-    40cd     40cd       e1     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    40cd     40cd       e1     1                 (anonymous namespace)::put(char, Status*)
-    41ae     41ae      174     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    41ae     41ae      174     1                 (anonymous namespace)::print_string(char const*, Status*)
-    4322     4322       57     1         psidplayer.lto.o:(.text.printf)
-    4322     4322       57     1                 printf
-    4379     4379      29c     1         psidplayer.lto.o:(.text.vsnprintf)
-    4379     4379      29c     1                 vsnprintf
-    4615     4615       4a     1         psidplayer.lto.o:(.text.sprintf)
-    4615     4615       4a     1                 sprintf
-    465f     465f        3     1         psidplayer.lto.o:(.text.fputc)
-    465f     465f        3     1                 fputc
-    4662     4662       28     1         psidplayer.lto.o:(.text.putchar)
-    4662     4662       28     1                 putchar
-    468a     468a        7     1         psidplayer.lto.o:(.text.putchar_wrapper)
-    468a     468a        7     1                 putchar_wrapper
-    4691     4691        3     1         psidplayer.lto.o:(.text.putc)
-    4691     4691        3     1                 putc
-    4694     4694        b     1         psidplayer.lto.o:(.text.__from_ascii)
-    4694     4694        b     1                 __from_ascii
-    469f     469f      100     1         psidplayer.lto.o:(.text.malloc)
-    469f     469f      100     1                 malloc
-    479f     479f       b6     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
-    479f     479f       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
-    4855     4855      186     1         psidplayer.lto.o:(.text.free)
-    4855     4855      186     1                 free
-    49db     49db       2c     1         psidplayer.lto.o:(.text.memcpy)
-    49db     49db       2c     1                 memcpy
-    4a07     4a07       20     1         psidplayer.lto.o:(.text.__memset)
-    4a07     4a07       20     1                 __memset
-    4a27     4a27       3b     1         psidplayer.lto.o:(.text.strcpy)
-    4a27     4a27       3b     1                 strcpy
-    4a62     4a62       84     1         psidplayer.lto.o:(.text.strncpy)
-    4a62     4a62       84     1                 strncpy
-    4ae6     4ae6       39     1         psidplayer.lto.o:(.text.strlen)
-    4ae6     4ae6       39     1                 strlen
-    4b1f     4b1f       28     1         psidplayer.lto.o:(.text.strcmp)
-    4b1f     4b1f       28     1                 strcmp
-    4b47     4b47       3a     1         psidplayer.lto.o:(.text.strrchr)
-    4b47     4b47       3a     1                 strrchr
-    4b81     4b81       6e     1         psidplayer.lto.o:(.text.__simple_strtoui)
-    4b81     4b81       6e     1                 __simple_strtoui
-    4bef     4bef       32     1         psidplayer.lto.o:(.text.__mulhi3)
-    4bef     4bef       32     1                 __mulhi3
-    4c21     4c21       c0     1         psidplayer.lto.o:(.text.__udivhi3)
-    4c21     4c21       c0     1                 __udivhi3
-    4ce1     4ce1        0     1         __init_array_start = .
-    4ce1     4ce1        0     1         __init_array_end = .
-    4ce1     4ce1        0     1         __fini_array_start = .
-    4ce1     4ce1        0     1         __fini_array_end = .
-    4ce1     4ce1      227     1 .rodata
-    4ce1     4ce1       50     1         psidplayer.lto.o:(.rodata.pickFile)
-    4d31     4d31        8     1         psidplayer.lto.o:(.rodata.filePickModal)
-    4d39     4d39       16     1         psidplayer.lto.o:(.rodata.fileReadDir)
-    4d4f     4d4f       3a     1         psidplayer.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
-    4d89     4d89      113     1         <internal>:(.rodata.str1.1)
-    4e9c     4e9c       2c     1         psidplayer.lto.o:(.rodata..Lstr)
-    4ec8     4ec8       40     1         <internal>:(.rodata.cst32)
-    4f08     4f08        0     1 .data
-    4f08     4f08        0     1         __data_start = .
-    4f08     4f08        0     1         __data_end = .
-    4f08     4f08        0     1 __data_load_start = LOADADDR(.data)
-    4f08     4f08        0     1 __data_size = SIZEOF(.data)
-    4f08     4f08     139e     1 .bss
-    4f08     4f08        0     1         __bss_start = .
-    4f08     4f08       40     1         psidplayer.lto.o:(.bss._spriteCtl)
-    4f08     4f08       40     1                 _spriteCtl
-    4f48     4f48      102     1         psidplayer.lto.o:(.bss.fileReadDir.fileDirEntS)
-    4f48     4f48      102     1                 fileReadDir.fileDirEntS
-    504a     504a        2     1         psidplayer.lto.o:(.bss.__putchar.s)
-    504a     504a        2     1                 __putchar.s
-    504c     504c       64     1         psidplayer.lto.o:(.bss.name)
-    504c     504c       64     1                 name
-    50b0     50b0     11f6     1         psidplayer.lto.o:(.bss.fpr)
-    50b0     50b0     11f6     1                 fpr
-    62a6     62a6        0     1         __bss_end = .
-    62a6     62a6        0     1 __bss_size = SIZEOF(.bss)
-    62a6     62a6        0     1 .noinit
-    62a6     62a6        0     1         __heap_start = ALIGN(., 2)
-    62a6     62a6        0     1 end_block8 = .
-    62a6     62a6        0     1 end_block9 = .
-    62a6     62a6        0     1 end_block10 = .
-    62a6     62a6        0     1 end_block11 = .
-    62a6     62a6        0     1 end_block12 = .
-    62a6     62a6        0     1 end_block13 = .
-    62a6     62a6        0     1 end_block14 = .
-    62a6     62a6        0     1 end_block15 = .
-    62a6     62a6        0     1 end_block16 = .
-    62a6     62a6        0     1 end_block17 = .
-    62a6     62a6        0     1 end_block18 = .
-    62a6     62a6        0     1 end_block19 = .
-    62a6     62a6        0     1 end_block20 = .
-    62a6     62a6        0     1 end_block21 = .
-    62a6     62a6        0     1 end_block22 = .
-    62a6     62a6        0     1 end_block23 = .
+      30      300        4     1         psidplayer.lto.o:(.zp.data)
+      33      303        1     1                 _ccolor
+      34      304        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      34      304        0     1 __zp_data_size = SIZEOF(.zp.data)
+      34       34       14     1 .zp.bss
+      34       34        0     1         __zp_bss_start = .
+      34       34       14     1         psidplayer.lto.o:(.zp.bss)
+      34       34        7     1                 kernelEventData
+      3b       3b        1     1                 kernelError
+      3c       3c        1     1                 _col
+      3d       3d        1     1                 _row
+      3e       3e        8     1                 _dirStream
+      46       46        2     1                 __putchar.s
+      48       48        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      48       48       8d     1 .zp
+      48       48       8d     1         psidplayer.lto.o:(.zp.noinit)
+     304      304     3ef7     2 .text
+     304      304        0     1         _init = .
+     304      304        0     1         _start = .
+     304      304        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     304      304        0     1                 __do_init_stack
+     30c      30c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     30c      30c        0     1                 __do_zero_bss
+     30f      30f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30f      30f        0     1                 __do_zero_zp_bss
+     312      312        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     312      312        0     1                 __do_copy_zp_data
+     315      315        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     318      318        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     318      318        0     1                 __after_main
+     31b      31b        0     1         _fini = .
+     31b      31b        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     31c      31c      13d     2         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     31c      31c      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     45a      45a       df     2         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     45a      45a       df     1                 (anonymous namespace)::FreeChunk::remove()
+     539      539       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     539      539       13     1                 __zero_bss
+     54c      54c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     54c      54c       13     1                 __zero_zp_bss
+     55f      55f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     55f      55f       17     1                 __copy_zp_data
+     576      576      34c     1         psidplayer.lto.o:(.text.sortFileList)
+     576      576      34c     1                 sortFileList
+     8c2      8c2      c4d     1         psidplayer.lto.o:(.text.pickFile)
+     8c2      8c2      c4d     1                 pickFile
+    150f     150f      38c     1         psidplayer.lto.o:(.text.displayFileList)
+    150f     150f      38c     1                 displayFileList
+    189b     189b      401     1         psidplayer.lto.o:(.text.readDirectory)
+    189b     189b      401     1                 readDirectory
+    1c9c     1c9c      de7     1         psidplayer.lto.o:(.text.main)
+    1c9c     1c9c      de7     1                 main
+    2a83     2a83      136     1         psidplayer.lto.o:(.text.fileOpen)
+    2a83     2a83      136     1                 fileOpen
+    2bb9     2bb9      114     1         psidplayer.lto.o:(.text.fileOpenDir)
+    2bb9     2bb9      114     1                 fileOpenDir
+    2ccd     2ccd       11     1         psidplayer.lto.o:(.text.textGotoXY)
+    2ccd     2ccd       11     1                 textGotoXY
+    2cde     2cde       df     1         psidplayer.lto.o:(.text.fileReadDir)
+    2cde     2cde       df     1                 fileReadDir
+    2dbd     2dbd        5     1         psidplayer.lto.o:(.text.exit)
+    2dbd     2dbd        5     1                 exit
+    2dc2     2dc2      b34     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    2dc2     2dc2      b34     1                 (anonymous namespace)::print(char const*, Status*)
+    38f6     38f6       d3     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    38f6     38f6       d3     1                 (anonymous namespace)::put(char, Status*)
+    39c9     39c9      10c     1         psidplayer.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    39c9     39c9      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    3ad5     3ad5       82     1         psidplayer.lto.o:(.text.printf)
+    3ad5     3ad5       82     1                 printf
+    3b57     3b57       da     1         psidplayer.lto.o:(.text.sprintf)
+    3b57     3b57       da     1                 sprintf
+    3c31     3c31      1e5     1         psidplayer.lto.o:(.text.putchar)
+    3c31     3c31      1e5     1                 putchar
+    3e16     3e16      1d5     1         psidplayer.lto.o:(.text.malloc)
+    3e16     3e16      1d5     1                 malloc
+    3feb     3feb      192     1         psidplayer.lto.o:(.text.free)
+    3feb     3feb      192     1                 free
+    417d     417d       2c     1         psidplayer.lto.o:(.text.memcpy)
+    417d     417d       2c     1                 memcpy
+    41a9     41a9       20     1         psidplayer.lto.o:(.text.__memset)
+    41a9     41a9       20     1                 __memset
+    41c9     41c9       32     1         psidplayer.lto.o:(.text.__mulhi3)
+    41c9     41c9       32     1                 __mulhi3
+    41fb     41fb        0     1         __init_array_start = .
+    41fb     41fb        0     1         __init_array_end = .
+    41fb     41fb        0     1         __fini_array_start = .
+    41fb     41fb        0     1         __fini_array_end = .
+    41fb     41fb      27b     1 .rodata
+    41fb     41fb        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    41fb     41fb        0     1                 __set_v
+    41fc     41fc       50     1         psidplayer.lto.o:(.rodata.pickFile)
+    424c     424c        8     1         psidplayer.lto.o:(.rodata.main)
+    4254     4254       16     1         psidplayer.lto.o:(.rodata.fileReadDir)
+    426a     426a       3a     1         psidplayer.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    42a4     42a4      116     1         <internal>:(.rodata.str1.1)
+    43ba     43ba       60     1         <internal>:(.rodata.cst32)
+    441a     441a       2c     1         psidplayer.lto.o:(.rodata..Lstr.12)
+    4446     4446       30     1         psidplayer.lto.o:(.rodata.textColors)
+    4446     4446       30     1                 textColors
+    4476     4476        0     1 .data
+    4476     4476        0     1         __data_start = .
+    4476     4476        0     1         __data_end = .
+    4476     4476        0     1 __data_load_start = LOADADDR(.data)
+    4476     4476        0     1 __data_size = SIZEOF(.data)
+    4476     4476     1379     1 .bss
+    4476     4476        0     1         __bss_start = .
+    4476     4476      102     1         psidplayer.lto.o:(.bss.fileReadDir.fileDirEntS)
+    4476     4476      102     1                 fileReadDir.fileDirEntS
+    4578     4578       78     1         psidplayer.lto.o:(.bss.name)
+    4578     4578       78     1                 name
+    45f0     45f0        1     1         psidplayer.lto.o:(.bss.sidTimer.1)
+    45f0     45f0        1     1                 sidTimer.1
+    45f1     45f1     11f6     1         psidplayer.lto.o:(.bss.fpr)
+    45f1     45f1     11f6     1                 fpr
+    57e7     57e7        2     1         psidplayer.lto.o:(.bss.theFile)
+    57e7     57e7        2     1                 theFile
+    57e9     57e9        1     1         psidplayer.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    57e9     57e9        1     1                 (anonymous namespace)::initialized
+    57ea     57ea        1     1         psidplayer.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    57ea     57ea        1     1                 (anonymous namespace)::last_free
+    57eb     57eb        2     1         psidplayer.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    57eb     57eb        2     1                 (anonymous namespace)::free_size
+    57ed     57ed        2     1         psidplayer.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    57ed     57ed        2     1                 (anonymous namespace)::free_list
+    57ef     57ef        0     1         __bss_end = .
+    57ef     57ef        0     1 __bss_size = SIZEOF(.bss)
+    57ef     57ef        0     1 .noinit
+    57ef     57ef        0     1         __heap_start = ALIGN(., 2)
+    57ef     57ef        0     1 end_block8 = .
+    57ef     57ef        0     1 end_block9 = .
+    57ef     57ef        0     1 end_block10 = .
+    57ef     57ef        0     1 end_block11 = .
+    57ef     57ef        0     1 end_block12 = .
+    57ef     57ef        0     1 end_block13 = .
+    57ef     57ef        0     1 end_block14 = .
+    57ef     57ef        0     1 end_block15 = .
+    57ef     57ef        0     1 end_block16 = .
+    57ef     57ef        0     1 end_block17 = .
+    57ef     57ef        0     1 end_block18 = .
+    57ef     57ef        0     1 end_block19 = .
+    57ef     57ef        0     1 end_block20 = .
+    57ef     57ef        0     1 end_block21 = .
+    57ef     57ef        0     1 end_block22 = .
+    57ef     57ef        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      c30     4 .symtab
-       0        0      c30     4         <internal>:(.symtab)
+       0        0      8f0     4 .symtab
+       0        0      8f0     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      986     1 .strtab
-       0        0      986     1         <internal>:(.strtab)
+       0        0      6d3     1 .strtab
+       0        0      6d3     1         <internal>:(.strtab)

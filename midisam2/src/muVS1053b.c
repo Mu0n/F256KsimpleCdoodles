@@ -67,19 +67,6 @@ POKE(VS_SCI_CTRL,0);
 		;
 }
 
-void boostVSBass(void)
-{
-//target the clock register
-POKEW(VS_SCI_ADDR, VS_SCI_ADDR_BASS);
-//aim for 2.5X clock multiplier, no frills
-POKEW(VS_SCI_DATA,0x00F6);
-//trigger the command
-POKE(VS_SCI_CTRL,CTRL_Start);
-POKE(VS_SCI_CTRL,0);
-//check to see if it's done
-	while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
-		;	
-}
 
 uint16_t checkClock()
 {

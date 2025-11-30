@@ -14,17 +14,7 @@ void wipeText()
 	}
 	POKE(MMU_IO_CTRL,keep);
 }
-//graphics background cleardevice
-void wipeBitmapBackground(uint8_t blue, uint8_t green, uint8_t red)
-{
-	byte backup;
-	backup = PEEK(MMU_IO_CTRL);
-	POKE(MMU_IO_CTRL,0);
-	POKE(0xD00D,blue); //force black graphics background
-	POKE(0xD00E,green);
-	POKE(0xD00F,red);
-	POKE(MMU_IO_CTRL,backup);
-}
+
 //codec enable all lines
 void openAllCODEC()
 {
@@ -75,5 +65,27 @@ void hitspace()
 						break;
 				}
 			}
+	}
+}
+void lilpause(uint8_t timedelay) {
+	struct timer_t pauseTimer;
+	bool noteExitFlag = false;
+	pauseTimer.units = 0; //frames
+	pauseTimer.cookie = 213; //let's hope you never use this cookie!
+	pauseTimer.absolute = getTimerAbsolute(0) + timedelay;
+	setTimer(&pauseTimer);
+	noteExitFlag = false;
+	while(!noteExitFlag)
+	{
+		kernelNextEvent();
+		if(kernelEventData.type == kernelEvent(timer.EXPIRED))
+		{
+			switch(kernelEventData.timer.cookie)
+			{
+			case 213:
+				noteExitFlag = true;
+				break;
+			}
+		}
 	}
 }

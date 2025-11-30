@@ -5,7 +5,7 @@
 #include "../src/setup.h"
 #include <string.h>
 
-char nameVersion[] = {" CozyMIDI  v2.1 by Mu0n, July 2025                                    "};
+char nameVersion[] = {" CozyMIDI  v2.2 by Mu0n, November 2025                                    "};
 
 void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 {
@@ -18,7 +18,7 @@ void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 	fP->fileCount = 0;
 	
 	//checking the contents of the directory
-	dirOpenResult = fileOpenDir("midi");
+	dirOpenResult = fileOpenDir("media/midi");
 	
 	myDirEntry = fileReadDir(dirOpenResult);
 	while((myDirEntry = fileReadDir(dirOpenResult))!= NULL)

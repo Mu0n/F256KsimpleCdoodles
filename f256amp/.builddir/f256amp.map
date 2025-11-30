@@ -69,26 +69,24 @@
       30      300        1     1                 _ccolor
       44      314        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       44      314        0     1 __zp_data_size = SIZEOF(.zp.data)
-      44       44       27     1 .zp.bss
+      44       44       1f     1 .zp.bss
       44       44        0     1         __zp_bss_start = .
-      44       44       27     1         f256amp.lto.o:(.zp.bss)
+      44       44       1f     1         f256amp.lto.o:(.zp.bss)
       44       44        1     1                 _col
       45       45        1     1                 _row
       46       46        4     1                 _BITMAP_BASE.0
-      4a       4a        4     1                 _BITMAP_BASE.1
-      4e       4e        4     1                 _BITMAP_BASE.2
-      52       52        8     1                 _dirStream
-      5a       5a        2     1                 __putchar.s
-      5c       5c        2     1                 theMP3file
-      5e       5e        1     1                 kernelError
-      5f       5f        7     1                 kernelEventData
-      66       66        1     1                 (anonymous namespace)::last_free
-      67       67        2     1                 (anonymous namespace)::free_size
-      69       69        2     1                 (anonymous namespace)::free_list
-      6b       6b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      6b       6b       7d     1 .zp
-      6b       6b       7d     1         f256amp.lto.o:(.zp.noinit)
-     314      314     7875     1 .text
+      4a       4a        8     1                 _dirStream
+      52       52        2     1                 __putchar.s
+      54       54        2     1                 theMP3file
+      56       56        1     1                 kernelError
+      57       57        7     1                 kernelEventData
+      5e       5e        1     1                 (anonymous namespace)::last_free
+      5f       5f        2     1                 (anonymous namespace)::free_size
+      61       61        2     1                 (anonymous namespace)::free_list
+      63       63        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      63       63       8d     1 .zp
+      63       63       8d     1         f256amp.lto.o:(.zp.noinit)
+     314      314     571c     2 .text
      314      314        0     1         _init = .
      314      314        0     1         _start = .
      314      314        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -104,103 +102,113 @@
      328      328        0     1                 __after_main
      32b      32b        0     1         _fini = .
      32b      32b        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     32c      32c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     32c      32c       13     1                 __zero_bss
-     33f      33f       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     33f      33f       13     1                 __zero_zp_bss
-     352      352       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     352      352       17     1                 __copy_zp_data
-     369      369     4258     1         f256amp.lto.o:(.text.main)
-     369      369     4258     1                 main
-    45c1     45c1      12b     1         f256amp.lto.o:(.text.writeTopRight)
-    45c1     45c1      12b     1                 writeTopRight
-    46ec     46ec      25f     1         f256amp.lto.o:(.text.colMatrixSetup)
-    46ec     46ec      25f     1                 colMatrixSetup
-    494b     494b      36f     1         f256amp.lto.o:(.text.textPrint)
-    494b     494b      36f     1                 textPrint
-    4cba     4cba       11     1         f256amp.lto.o:(.text.textGotoXY)
-    4cba     4cba       11     1                 textGotoXY
-    4ccb     4ccb       df     1         f256amp.lto.o:(.text.fileReadDir)
-    4ccb     4ccb       df     1                 fileReadDir
-    4daa     4daa      c4d     1         f256amp.lto.o:(.text.pickFile)
-    4daa     4daa      c4d     1                 pickFile
-    59f7     59f7      35e     1         f256amp.lto.o:(.text.displayFileList)
-    59f7     59f7      35e     1                 displayFileList
-    5d55     5d55      3bd     1         f256amp.lto.o:(.text.wipeArea)
-    5d55     5d55      3bd     1                 wipeArea
-    6112     6112      85a     1         f256amp.lto.o:(.text.readDirectory)
-    6112     6112      85a     1                 readDirectory
-    696c     696c      31d     1         f256amp.lto.o:(.text.initVS1053Plugin)
-    696c     696c      31d     1                 initVS1053Plugin
-    6c89     6c89        5     1         f256amp.lto.o:(.text.exit)
-    6c89     6c89        5     1                 exit
-    6c8e     6c8e      b34     1         f256amp.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
-    6c8e     6c8e      b34     1                 (anonymous namespace)::print(char const*, Status*)
-    77c2     77c2       db     1         f256amp.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    77c2     77c2       db     1                 (anonymous namespace)::put(char, Status*)
-    789d     789d      10c     1         f256amp.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    789d     789d      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    79a9     79a9       88     1         f256amp.lto.o:(.text.printf)
-    79a9     79a9       88     1                 printf
-    7a31     7a31       da     1         f256amp.lto.o:(.text.sprintf)
-    7a31     7a31       da     1                 sprintf
-    7b0b     7b0b       2c     1         f256amp.lto.o:(.text.memcpy)
-    7b0b     7b0b       2c     1                 memcpy
-    7b37     7b37       20     1         f256amp.lto.o:(.text.__memset)
-    7b37     7b37       20     1                 __memset
-    7b57     7b57       32     1         f256amp.lto.o:(.text.__mulhi3)
-    7b57     7b57       32     1                 __mulhi3
-    7b89     7b89        0     1         __init_array_start = .
-    7b89     7b89        0     1         __init_array_end = .
-    7b89     7b89        0     1         __fini_array_start = .
-    7b89     7b89        0     1         __fini_array_end = .
-    7b89     7b89      420     1 .rodata
-    7b89     7b89        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    7b89     7b89        0     1                 __set_v
-    7b8a     7b8a        8     1         f256amp.lto.o:(.rodata.main)
-    7b92     7b92       16     1         f256amp.lto.o:(.rodata.fileReadDir)
-    7ba8     7ba8       50     1         f256amp.lto.o:(.rodata.pickFile)
-    7bf8     7bf8       3a     1         f256amp.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
-    7c32     7c32       30     1         f256amp.lto.o:(.rodata.textColors)
-    7c32     7c32       30     1                 textColors
-    7c62     7c62      2db     1         <internal>:(.rodata.str1.1)
-    7f3d     7f3d       40     1         <internal>:(.rodata.cst32)
-    7f7d     7f7d       2c     1         f256amp.lto.o:(.rodata..Lstr.7)
-    7fa9     7fa9        0     1 .data
-    7fa9     7fa9        0     1         __data_start = .
-    7fa9     7fa9        0     1         __data_end = .
-    7fa9     7fa9        0     1 __data_load_start = LOADADDR(.data)
-    7fa9     7fa9        0     1 __data_size = SIZEOF(.data)
-    7fa9     7fa9     1339     1 .bss
-    7fa9     7fa9        0     1         __bss_start = .
-    7fa9     7fa9      102     1         f256amp.lto.o:(.bss.fileReadDir.fileDirEntS)
-    7fa9     7fa9      102     1                 fileReadDir.fileDirEntS
-    80ab     80ab     11f6     1         f256amp.lto.o:(.bss.fpr)
-    80ab     80ab     11f6     1                 fpr
-    92a1     92a1       40     1         f256amp.lto.o:(.bss.finalName)
-    92a1     92a1       40     1                 finalName
-    92e1     92e1        1     1         f256amp.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    92e1     92e1        1     1                 (anonymous namespace)::initialized
-    92e2     92e2        0     1         __bss_end = .
-    92e2     92e2        0     1 __bss_size = SIZEOF(.bss)
-    92e2     92e2        0     1 .noinit
-    92e2     92e2        0     1         __heap_start = ALIGN(., 2)
-    92e2     92e2        0     1 end_block8 = .
-    92e2     92e2        0     1 end_block9 = .
-    92e2     92e2        0     1 end_block10 = .
-    92e2     92e2        0     1 end_block11 = .
-    92e2     92e2        0     1 end_block12 = .
-    92e2     92e2        0     1 end_block13 = .
-    92e2     92e2        0     1 end_block14 = .
-    92e2     92e2        0     1 end_block15 = .
-    92e2     92e2        0     1 end_block16 = .
-    92e2     92e2        0     1 end_block17 = .
-    92e2     92e2        0     1 end_block18 = .
-    92e2     92e2        0     1 end_block19 = .
-    92e2     92e2        0     1 end_block20 = .
-    92e2     92e2        0     1 end_block21 = .
-    92e2     92e2        0     1 end_block22 = .
-    92e2     92e2        0     1 end_block23 = .
+     32c      32c      135     2         f256amp.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     32c      32c      135     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     462      462       d7     2         f256amp.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     462      462       d7     1                 (anonymous namespace)::FreeChunk::remove()
+     539      539       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     539      539       13     1                 __zero_bss
+     54c      54c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     54c      54c       13     1                 __zero_zp_bss
+     55f      55f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     55f      55f       17     1                 __copy_zp_data
+     576      576     21a4     1         f256amp.lto.o:(.text.main)
+     576      576     21a4     1                 main
+    271a     271a      12b     1         f256amp.lto.o:(.text.writeTopRight)
+    271a     271a      12b     1                 writeTopRight
+    2845     2845      114     1         f256amp.lto.o:(.text.fileOpenDir)
+    2845     2845      114     1                 fileOpenDir
+    2959     2959      149     1         f256amp.lto.o:(.text.fileRead)
+    2959     2959      149     1                 fileRead
+    2aa2     2aa2      1e7     1         f256amp.lto.o:(.text.textPrint)
+    2aa2     2aa2      1e7     1                 textPrint
+    2c89     2c89       11     1         f256amp.lto.o:(.text.textGotoXY)
+    2c89     2c89       11     1                 textGotoXY
+    2c9a     2c9a       df     1         f256amp.lto.o:(.text.fileReadDir)
+    2c9a     2c9a       df     1                 fileReadDir
+    2d79     2d79      34c     1         f256amp.lto.o:(.text.sortFileList)
+    2d79     2d79      34c     1                 sortFileList
+    30c5     30c5      c4d     1         f256amp.lto.o:(.text.pickFile)
+    30c5     30c5      c4d     1                 pickFile
+    3d12     3d12      3a8     1         f256amp.lto.o:(.text.displayFileList)
+    3d12     3d12      3a8     1                 displayFileList
+    40ba     40ba      401     1         f256amp.lto.o:(.text.readDirectory)
+    40ba     40ba      401     1                 readDirectory
+    44bb     44bb      314     1         f256amp.lto.o:(.text.initVS1053Plugin)
+    44bb     44bb      314     1                 initVS1053Plugin
+    47cf     47cf        5     1         f256amp.lto.o:(.text.exit)
+    47cf     47cf        5     1                 exit
+    47d4     47d4      b34     1         f256amp.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    47d4     47d4      b34     1                 (anonymous namespace)::print(char const*, Status*)
+    5308     5308       db     1         f256amp.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    5308     5308       db     1                 (anonymous namespace)::put(char, Status*)
+    53e3     53e3      10c     1         f256amp.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    53e3     53e3      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
+    54ef     54ef       88     1         f256amp.lto.o:(.text.printf)
+    54ef     54ef       88     1                 printf
+    5577     5577       da     1         f256amp.lto.o:(.text.sprintf)
+    5577     5577       da     1                 sprintf
+    5651     5651      1d1     1         f256amp.lto.o:(.text.malloc)
+    5651     5651      1d1     1                 malloc
+    5822     5822      190     1         f256amp.lto.o:(.text.free)
+    5822     5822      190     1                 free
+    59b2     59b2       2c     1         f256amp.lto.o:(.text.memcpy)
+    59b2     59b2       2c     1                 memcpy
+    59de     59de       20     1         f256amp.lto.o:(.text.__memset)
+    59de     59de       20     1                 __memset
+    59fe     59fe       32     1         f256amp.lto.o:(.text.__mulhi3)
+    59fe     59fe       32     1                 __mulhi3
+    5a30     5a30        0     1         __init_array_start = .
+    5a30     5a30        0     1         __init_array_end = .
+    5a30     5a30        0     1         __fini_array_start = .
+    5a30     5a30        0     1         __fini_array_end = .
+    5a30     5a30      42a     1 .rodata
+    5a30     5a30        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    5a30     5a30        0     1                 __set_v
+    5a31     5a31        8     1         f256amp.lto.o:(.rodata.main)
+    5a39     5a39       16     1         f256amp.lto.o:(.rodata.fileReadDir)
+    5a4f     5a4f       50     1         f256amp.lto.o:(.rodata.pickFile)
+    5a9f     5a9f       3a     1         f256amp.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    5ad9     5ad9       30     1         f256amp.lto.o:(.rodata.textColors)
+    5ad9     5ad9       30     1                 textColors
+    5b09     5b09      2e5     1         <internal>:(.rodata.str1.1)
+    5dee     5dee       40     1         <internal>:(.rodata.cst32)
+    5e2e     5e2e       2c     1         f256amp.lto.o:(.rodata..Lstr.7)
+    5e5a     5e5a        0     1 .data
+    5e5a     5e5a        0     1         __data_start = .
+    5e5a     5e5a        0     1         __data_end = .
+    5e5a     5e5a        0     1 __data_load_start = LOADADDR(.data)
+    5e5a     5e5a        0     1 __data_size = SIZEOF(.data)
+    5e5a     5e5a     1339     1 .bss
+    5e5a     5e5a        0     1         __bss_start = .
+    5e5a     5e5a      102     1         f256amp.lto.o:(.bss.fileReadDir.fileDirEntS)
+    5e5a     5e5a      102     1                 fileReadDir.fileDirEntS
+    5f5c     5f5c     11f6     1         f256amp.lto.o:(.bss.fpr)
+    5f5c     5f5c     11f6     1                 fpr
+    7152     7152       40     1         f256amp.lto.o:(.bss.finalName)
+    7152     7152       40     1                 finalName
+    7192     7192        1     1         f256amp.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    7192     7192        1     1                 (anonymous namespace)::initialized
+    7193     7193        0     1         __bss_end = .
+    7193     7193        0     1 __bss_size = SIZEOF(.bss)
+    7193     7193        0     1 .noinit
+    7193     7193        0     1         __heap_start = ALIGN(., 2)
+    7193     7193        0     1 end_block8 = .
+    7193     7193        0     1 end_block9 = .
+    7193     7193        0     1 end_block10 = .
+    7193     7193        0     1 end_block11 = .
+    7193     7193        0     1 end_block12 = .
+    7193     7193        0     1 end_block13 = .
+    7193     7193        0     1 end_block14 = .
+    7193     7193        0     1 end_block15 = .
+    7193     7193        0     1 end_block16 = .
+    7193     7193        0     1 end_block17 = .
+    7193     7193        0     1 end_block18 = .
+    7193     7193        0     1 end_block19 = .
+    7193     7193        0     1 end_block20 = .
+    7193     7193        0     1 end_block21 = .
+    7193     7193        0     1 end_block22 = .
+    7193     7193        0     1 end_block23 = .
    20000    20000    20d00    16 .mac
    20000    20000    20d00    16         f256amp.lto.o:(.mac)
    20000    20000        0     1                 mac_start
@@ -228,9 +236,9 @@
    597d0    597d0        0     1 end_saplug = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      a70     4 .symtab
-       0        0      a70     4         <internal>:(.symtab)
+       0        0      aa0     4 .symtab
+       0        0      aa0     4         <internal>:(.symtab)
        0        0       7a     1 .shstrtab
        0        0       7a     1         <internal>:(.shstrtab)
-       0        0      7ca     1 .strtab
-       0        0      7ca     1         <internal>:(.strtab)
+       0        0      80e     1 .strtab
+       0        0      80e     1         <internal>:(.strtab)

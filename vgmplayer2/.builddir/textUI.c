@@ -10,7 +10,7 @@ void instructions()
 textEnableBackgroundColors(true);
 textSetColor(13,1);
 textGotoXY(0,0);printf("OPL3 Snooper                               ");
-textGotoXY(0,1);printf("     Created by Mu0n, November 2025 v0.5   ");
+textGotoXY(0,1);printf("     Created by Mu0n, December 2025 v0.6   ");
 }
 void textUI()
 {

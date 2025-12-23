@@ -14,10 +14,10 @@
 #include "../src/mudispatch.h"
 #include "../src/textUI.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #define LCDBIN 0x40000
-
 void textUI(void);
 void eraseLine(uint8_t);
 void snoopLoop();
@@ -66,6 +66,10 @@ if(kernelEventData.type == kernelEvent(key.PRESSED))
 		if(kernelEventData.key.raw == 0x87) //F7
 			{
 			return -3;
+			}
+		if(kernelEventData.key.raw == 0x93) //tab
+			{
+			return -4;
 			}
 	}
 return 0;
@@ -260,16 +264,16 @@ while(true)//main play and input loop
 			if(iRT==false) wipe_inst();
 			}
 		checkKey = dealPressedKey();
-		if(checkKey == 1)
+		if(checkKey == 1) //f3 load is hit
 			{
 			break;
 			}
-		if(checkKey == -1)
+		if(checkKey == -1) //esc is hit
 			{
 			exitFlag = 1;
 			break;
 			}
-		if(checkKey == -2) //pause is hit
+		if(checkKey == -2) //pause (space) is hit
 			{
 			pauseRequested = true;
 			}
@@ -287,66 +291,197 @@ while(true)//main play and input loop
 				iRT = true;
 				}
 			}
+		if(checkKey == -4) //tab is hit
+			{
+				pauseRequested = false;
+				break;
+			}
 	}
 	return exitFlag;
+}
+long countLines(FILE *fp) {
+    long lines = 0;
+    char c;
+
+    while (fileRead(&c, 1, 1, fp) == 1) {
+        if (c == '\n')
+            lines++;
+    }
+
+    return lines;
+}
+
+int readLine(FILE *fp, char *buf, int max) {
+    int i = 0;
+    char c;
+
+    while (fileRead(&c, 1, 1, fp) == 1) {
+		if (c == 0x0a) //line feed control detected
+            continue;
+	
+        if (c == 0x0d) //carriage return detected
+            break;
+
+        if (i < max - 1)
+            buf[i++] = c;
+    }
+
+    if (i == 0 && c != 0x0d)
+        return 0; // EOF
+
+    buf[i] = '\0';
+    return 1;
+}
+
+void fetchNextPLEntry(FILE *playlistFile, uint16_t *curLine, uint16_t nbLines)
+{
+if(playlistFile == NULL) return; //not normal to not have a playlist when using this function
+
+for(uint8_t z=0;z<MAX_FILENAME_LEN;z++)
+	{
+	name[z]=0; //empty out the global extern name
+	}
+readLine(playlistFile, name, MAX_FILENAME_LEN);
+lilpause(1);
+*curLine = (*curLine)++;
+if(*curLine == nbLines)
+	{
+	fseek(playlistFile, 0, SEEK_SET);
+	*curLine=0;
+	}
 }
 
 int main(int argc, char *argv[]) {
 bool cliFile = false; //first time it loads, next times it keeps the cursor position
+bool isPlayListing = false; //becomes true if a .spl simple playlist file has been opened and is being dealt with
+
 uint8_t exitFlag = 0;
 
+FILE *playlistFile;
+
 setup();
-
-if(argc > 1)
+	/*
+if(argc == 3)
 	{
-	uint8_t i=0;
-	char fileName[120];
-
+	uint8_t i=0, j=0,m=0;
+	char *lastSlash;
+	size_t dirLen=0;
 	
-	if(argv[1][0] != '-')
+	while(argv[1][i] != '\0') //copy the directory
 		{
-		while(argv[1][i] != '\0')
-			{
-				fileName[i] = argv[1][i];
-				i++;
-			}
-		fileName[i] = '\0';
-	
-		cliFile = true;
-		sprintf(name, "%s", fileName);
+			fpr.currentPath[i] = argv[1][i];
+			i++;
 		}
+	fpr.currentPath[i] = '\0';
+	
+	while(argv[1][j] != '\0') //copy the filename
+		{
+	
+			if(argv[1][j]=='.') m++;
+			if(m==1 && (argv[1][j]=='v' || argv[1][j]=='V')) m++;
+			else m=0;
+			if(m==2 && (argv[1][j]=='g' || argv[1][j]=='G')) m++;
+			else m=0;
+			if(m==3 && (argv[1][j]=='m' || argv[1][j]=='M')) m++;
+			else m=0;
+			name[j] = argv[1][j];
+			j++;
+			if(m==4){name[j] = '\0'; break;}
+		}
+	lastSlash = strrchr(name, '/');
+	dirLen = lastSlash - name; // include '/'
+	
+	memset(fpr.currentPath, 0, sizeof(fpr.currentPath));
+	strncpy(fpr.currentPath, name, dirLen);
+	fpr.currentPath[dirLen] = '\0';
+
+	memset(fpr.selectedFile, 0, sizeof(fpr.selectedFile));
+	strncpy(fpr.selectedFile, lastSlash+1, sizeof(fpr.selectedFile)-1);
+	fpr.selectedFile[sizeof(fpr.selectedFile)-1] = '\0';
+	
+	
+	//sprintf(name, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+	
+	//printf("\nfinal form is: ");
+	//printf("%s",name);
+	
+	cliFile = true;
 	}
+
+	*/
 	
 
 if(hasCaseLCD())displayImage(LCDBIN);
-
-
 lilpause(1);
+
+uint16_t nbLines = 538;
+uint16_t curLine = 0;
+
 while(exitFlag == 0)
 	{
+	bool foundOne = false;
+	
+	theFile = NULL;
 	opl3_initialize();
 	instructions();
 	wipe_inst();
 	opl3_initialize_defs();
 	
+	if(theFile!=NULL){fileClose(theFile); theFile=NULL;}
+	
+	while(!foundOne)
+		{
+		if(cliFile == false) //force a file pick if the command line arguments were not set
+			{
+				if(isPlayListing) //will not enter this block the first time around since a playlist has to be chosen during runtime to get to one
+					{
+					fetchNextPLEntry(playlistFile, &curLine, nbLines); //next .vgm gets fetched from an active opened playlist file
+					}
+				else
+					{
+						if(getTheFile(name)!=0) return 0; //calls the file picker and force the user to pick something, either .vgm or .spl
+					}
+				eraseLine(3);eraseLine(4);
+				textGotoXY(0,3);textSetColor(7,0);printf("Loading: %.71s",name);
+	
+				//at this point, must determine if it's a .VGM or a .SPL
+				const char *extension = name + strlen(name) - 3; //gets last 3 characters
+	
+				if(strcmp(extension,"spl") == 0) //it's a playlist that has been picked for the first time, feed a .vgm into the name string
+					{
+					isPlayListing = true;
+					playlistFile = fileOpen(name,"r");
+	
+					fetchNextPLEntry(playlistFile, &curLine, nbLines); //next .vgm gets fetched from an active opened playlist file
+					}
+				theFile = load_VGM_file(name); //reaching this point, name WILL carry a .vgm file name and it must be opened.
+				lilpause(1);
+			}
+		else theFile = load_VGM_file(name); //if there was a CL argument, then use the fetched name to load the vgm directly.
 
-	if(cliFile == false)
-	{
-		if(getTheFile(name)!=0) return 0;
-		theFile = load_VGM_file(name); //gets a FILE opened and ready to use
-	}
-	else theFile = load_VGM_file(name);
+		if(theFile != NULL) foundOne = true;
+		else { //not supposed to happen
+			textGotoXY(0,2);printf("isNULL");
+			hitspace();
+			}
+		} //end of while(!foundOne)
 	
 	checkVGMHeader(theFile);
 	eraseLine(3);eraseLine(4);
+	eraseLine(5);eraseLine(6);
+	eraseLine(7);eraseLine(8);
 	textGotoXY(0,3);textSetColor(7,0);printf("Playing: %.71s",name);
-	cliFile = false;
+	cliFile = false; //from the 2nd file and on, the cli argument is no longer used
 	//info on screen
 	textUI();
 	comeRightTrough = true; //to kickstart it
 	
 	exitFlag = mainLoop();
 	}
+
+
+if(theFile!=NULL){fileClose(theFile);}
+if(playlistFile!=NULL) {fileClose(playlistFile);}
 
 opl3_initialize();
 return 0;}

@@ -19,5 +19,6 @@ extern uint32_t loopBackTo;
 extern uint32_t samplesSoFar;
 extern uint16_t readDebug;
 extern bool iRT;
+extern bool oneLoop;
 
 #endif // MUVGMPLAY_H

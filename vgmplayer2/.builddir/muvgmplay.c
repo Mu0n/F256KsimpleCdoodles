@@ -15,6 +15,7 @@ uint32_t samplesSoFar; //done samples so far, to trigger end of song
 uint32_t gd3Location; //gd3 tag so we can ignore iteration
 
 uint16_t readDebug = 0;
+bool oneLoop = false; //for songs that have a loop, set this once and do one loop, then finish the song. hybrid approach for jukeboxing and authenticity
 
 //Opens the std VGM file
 __attribute__((optnone))
@@ -74,6 +75,7 @@ void checkVGMHeader(FILE *theVGMfile)
 	bool isOPL3 = false;
 	uint8_t dataOffset=0x00;
 	gd3Location = 0;
+	oneLoop = false;
 	
 	for(uint8_t i = 0; i<8; i++)
 		{
@@ -168,11 +170,12 @@ int8_t playback(FILE *theVGMfile, bool iRT, bool pReq)
 			comeRightTrough = false;
 			//countRead = fileRead(&nextRead, sizeof(uint8_t), 1, theVGMfile);
 	
-			if((samplesSoFar >= totalWait || needle > gd3Location) && gd3Location != 0)
+			if((samplesSoFar >= totalWait || needle >= gd3Location) && gd3Location != 0)
 			{
-				if(loopBackTo == 0) return -1; //end of file
-				needle = loopBackTo;
+				if(loopBackTo == 0 || oneLoop == true) return -1; //end of file, there was no loop to do
+				needle = loopBackTo; //loop is performed here
 				samplesSoFar = 0;
+				oneLoop = true;
 			}
 			nextRead = PEEK24(needle++);
 			countRead = 1; //bypass old file read check
@@ -246,9 +249,12 @@ int8_t playback(FILE *theVGMfile, bool iRT, bool pReq)
 						samplesSoFar+=882;
 						break;
 					case 0x66: // End of sound data
+						return -1;
+						if(loopBackTo == 0 && oneLoop == true) return -1;
+						else if(loopBackTo != 0) oneLoop = true;
 						comeRightTrough = true;
 						break;
-					case 0x67: // End of sound data
+					case 0x67: // data block
 						needle+=2;
 						uint32_t skippy = (PEEK24(needle)) | (PEEK24(needle+1)<<8) | (PEEK24(needle+2)<<16) | (PEEK24(needle+3)<<24);
 						needle+=4+skippy;

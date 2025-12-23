@@ -258,7 +258,6 @@ int main(int argc, char *argv[]) {
 	
 	K2LCD();
 	
-	lilpause(1);
 	midiChip = false;
 	playbackTimer.units = TIMER_SECONDS;
 	playbackTimer.cookie = TIMER_PLAYBACK_COOKIE;
@@ -296,9 +295,10 @@ int main(int argc, char *argv[]) {
 		fileCloseDir(dirOpenResult);
 	}
 	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
-	
+printf("arg snoop 0 %c %c %c %c %c\n", argv[0][0], argv[0][1], argv[0][2], argv[0][3], argv[0][4]);
+printf("arg snoop 1 %c %c %c %c %c\n", argv[1][0], argv[1][1], argv[1][2], argv[1][3], argv[1][4]);
+hitspace();
 
-	lilpause(1);
 	if(argc > 1)
 	{
 		i=0;

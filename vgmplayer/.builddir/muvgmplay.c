@@ -42,7 +42,7 @@ uint8_t checkVGMHeader(FILE *theVGMfile)
 	uint8_t extras =0;
 	uint16_t version=0;
 	bool isOPL3 = false;
-	uint8_t dataOffset = 0;
+	uint8_t dataOffset = 0x40;
 	
 	
 	for(uint8_t i = 0; i<8+ extras; i++)

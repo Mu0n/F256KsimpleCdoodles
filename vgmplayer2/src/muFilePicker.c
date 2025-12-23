@@ -1,30 +1,39 @@
 
 #include "f256lib.h"
 #include "../src/muFilePicker.h"
+#include "../src/muUtils.h"
+
 
 filePickRecord fpr;
-char name[120];
+char name[MAX_FILENAME_LEN];
 
 void initFPR()
 {
-	strncpy(fpr.currentPath, "media/vgm", MAX_PATH_LEN);
+	strncpy(fpr.currentPath, "media/vgm", MAX_FILENAME_LEN);
 }
 uint8_t getTheFile(char *name) //job is to get a string containing the filename including directory
 {
 	
 //check if the vgm directory is here, if not, target the root
 	char *dirOpenResult = fileOpenDir(fpr.currentPath);
+	
+	
+	
 	if(dirOpenResult != NULL) 
 	{
-		strncpy(fpr.currentPath, fpr.currentPath, MAX_PATH_LEN);
+		strncpy(fpr.currentPath, fpr.currentPath, MAX_FILENAME_LEN);
 		fileCloseDir(dirOpenResult);
 	}
-	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
+	else strncpy(fpr.currentPath, "0:/", MAX_FILENAME_LEN);
 
-
-	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "vgm", "", "", "", true);
+	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "vgm", "spl", "", "", true);
 	if(wantsQuit==1) return 1;
-	sprintf(name, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+	sprintf(name, "%s%s%s", fpr.currentPath,"/",fpr.selectedFile);
+	
+	/*
+	textGotoXY(0,10);printf("checkup %s",name);
+	hitspace();
+	*/
 	return 0;
 }
 

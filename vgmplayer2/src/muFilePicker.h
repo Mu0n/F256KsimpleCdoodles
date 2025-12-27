@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define MAX_FILES 100
+#define MAX_FILES 200
 #define MAX_FILENAME_LEN 120
 #define MAX_PATH_LEN 60
 #define MAX_FILE_EXTS 4
@@ -14,7 +14,7 @@
 #define RESERVED_ENTRY_INDEX 0
 #define DIRECTORY_X 0
 #define DIRECTORY_Y 3
-#define FPR_BASE 0x20000
+#define FPR_BASE 0x30000
 
 #define FPR_tlX              0
 #define FPR_tlY              1

@@ -27,6 +27,6 @@
 #include "f256lib.h"
 
 
-void displayImage(uint32_t);
+void displayImage(uint32_t, uint8_t);
 
 #endif // MULCD_H

@@ -100,10 +100,6 @@ uint8_t getTheFile_far(char *name)
     // 2. Try to open directory
     // ---------------------------------------------------------
     dirOpenResult = fileOpenDir(localPath);
-printf("\nDEBUG path='%s' (len=%d)\n", localPath, strlen(localPath));
-printf("\ndirOpenResult ='%p'\n", dirOpenResult);
-
-hitspace();
 
     if (dirOpenResult != NULL)
     {
@@ -268,7 +264,7 @@ void sortFileList(filePickRecord *picker) {
     }
 }
 */
-
+/*
 void sortFileList_far(void)
 {
     // ---------------------------------------------------------
@@ -372,6 +368,102 @@ void sortFileList_far(void)
         }
     }
 }
+*/
+
+void sortFileList_far(void)
+{
+    // ---------------------------------------------------------
+    // 1. Write ".." into fileList[0]
+    // ---------------------------------------------------------
+    FAR_POKE(FPR_BASE + FPR_fileList + 0, '.');
+    FAR_POKE(FPR_BASE + FPR_fileList + 1, '.');
+    FAR_POKE(FPR_BASE + FPR_fileList + 2, 0);
+
+    for (int i = 3; i < MAX_FILENAME_LEN; i++)
+        FAR_POKE(FPR_BASE + FPR_fileList + i, 0);
+
+    FAR_POKE(FPR_BASE + FPR_isDirList + 0, 1);
+
+    // ---------------------------------------------------------
+    // 2. Read fileCount
+    // ---------------------------------------------------------
+    uint16_t fileCount = FAR_PEEKW(FPR_BASE + FPR_fileCount);
+    int start = 1;
+
+    // ---------------------------------------------------------
+    // 3. Insertion sort (folders first, then alphabetical)
+    // ---------------------------------------------------------
+    for (int i = start + 1; i < fileCount; i++)
+    {
+        // Load key entry (filename + dir flag)
+        char keyName[MAX_FILENAME_LEN];
+        bool keyIsDir = FAR_PEEK(FPR_BASE + FPR_isDirList + i);
+
+        uint32_t keyBase = FPR_BASE + FPR_fileList + (i * MAX_FILENAME_LEN);
+        for (int k = 0; k < MAX_FILENAME_LEN; k++) {
+            keyName[k] = FAR_PEEK(keyBase + k);
+            if (keyName[k] == 0) break;
+        }
+
+        int j = i - 1;
+
+        // Shift entries until correct position is found
+        while (j >= start)
+        {
+            bool jIsDir = FAR_PEEK(FPR_BASE + FPR_isDirList + j);
+
+            // Compare directory priority
+            bool shouldShift = false;
+
+            if (!keyIsDir && jIsDir) {
+                // key is file, j is dir → key goes after j → no shift
+                break;
+            }
+            else if (keyIsDir && !jIsDir) {
+                // key is dir, j is file → key goes before j → shift
+                shouldShift = true;
+            }
+            else {
+                // Same type → alphabetical compare
+                char jName[MAX_FILENAME_LEN];
+                uint32_t jBase = FPR_BASE + FPR_fileList + (j * MAX_FILENAME_LEN);
+
+                for (int k = 0; k < MAX_FILENAME_LEN; k++) {
+                    jName[k] = FAR_PEEK(jBase + k);
+                    if (jName[k] == 0) break;
+                }
+
+                if (strcasecmp_local(jName, keyName) > 0)
+                    shouldShift = true;
+            }
+
+            if (!shouldShift)
+                break;
+
+            // Shift j → j+1
+            uint32_t srcBase = FPR_BASE + FPR_fileList + (j * MAX_FILENAME_LEN);
+            uint32_t dstBase = FPR_BASE + FPR_fileList + ((j + 1) * MAX_FILENAME_LEN);
+
+            for (int k = 0; k < MAX_FILENAME_LEN; k++) {
+                FAR_POKE(dstBase + k, FAR_PEEK(srcBase + k));
+                if (FAR_PEEK(srcBase + k) == 0) break;
+            }
+
+            FAR_POKE(FPR_BASE + FPR_isDirList + (j + 1), jIsDir);
+
+            j--;
+        }
+
+        // Insert key at j+1
+        uint32_t dstBase = FPR_BASE + FPR_fileList + ((j + 1) * MAX_FILENAME_LEN);
+        for (int k = 0; k < MAX_FILENAME_LEN; k++) {
+            FAR_POKE(dstBase + k, keyName[k]);
+            if (keyName[k] == 0) break;
+        }
+
+        FAR_POKE(FPR_BASE + FPR_isDirList + (j + 1), keyIsDir);
+    }
+}
 
 /*
 void reprepFPR(filePickRecord *picker, bool newFolder)
@@ -445,13 +537,14 @@ void initFilePickRecord_far(uint8_t x, uint8_t y, bool firstTime)
         FAR_POKE(FPR_BASE + FPR_selectedFile + i, 0);
     }
 
+/*
     // ---------------------------------------------------------
     // Clear currentPath (60 bytes)
     // ---------------------------------------------------------
     for (int i = 0; i < MAX_PATH_LEN; i++) {
         FAR_POKE(FPR_BASE + FPR_currentPath + i, 0);
     }
-
+*/
     // ---------------------------------------------------------
     // Call your far‑memory version of reprepFPR()
     // (You will need to convert reprepFPR() the same way)

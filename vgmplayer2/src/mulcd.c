@@ -8,11 +8,21 @@
 //look for my instructions in https://wiki.f256foenix.com/index.php?title=Use_the_K2_LCD
 
 #pragma clang optimize off
-void displayImage(uint32_t addr)
+void displayImage(uint32_t addr, uint8_t boost)
 {
 	uint32_t i;
 	uint32_t j;
 	uint32_t index = 0;
+	uint8_t innerLoop = 240/boost;
+	uint8_t skip = 2 * boost;
+	bool doubleSpeed = false, quadSpeed = false;
+	uint16_t curPixel = 0x0000;
+	
+	if(boost ==2) doubleSpeed = true;
+	if(boost ==4) {
+		doubleSpeed = true;	
+		quadSpeed = true;
+		}
 	POKE(LCD_CMD_CMD, LCD_WIN_X);
 	POKE(LCD_CMD_DTA, 0); //xstart high
 	POKE(LCD_CMD_DTA, 0); //xstart low
@@ -29,11 +39,19 @@ void displayImage(uint32_t addr)
 	
 	for(j=0;j<280;j++)
 	{
-		for(i=0;i<240;i++)
+		//240 is the default
+		for(i=0;i<innerLoop;i++)
 		{
-			POKE(LCD_PIX_LO, FAR_PEEK(addr + index));
-			POKE(LCD_PIX_HI, FAR_PEEK(addr + index + (uint32_t)1));
-			index+=2;
+			curPixel = FAR_PEEKW(addr + index);
+			POKEW(LCD_PIX_LO, curPixel);
+			if(doubleSpeed)POKEW(LCD_PIX_LO, curPixel);
+			if(quadSpeed)
+				{
+				POKEW(LCD_PIX_LO, curPixel);
+				POKEW(LCD_PIX_LO, curPixel);
+				}
+			//POKE(LCD_PIX_HI, FAR_PEEK(addr + index + (uint32_t)1));
+			index+=skip; //default 2
 		}
 	}
 }

@@ -10,6 +10,7 @@
 
 void instructions(void);
 void textUI(void);
+void pauseTextUI(void);
 void eraseLine(uint8_t);
 void axes_info(uint8_t);
 void show_inst(uint8_t);

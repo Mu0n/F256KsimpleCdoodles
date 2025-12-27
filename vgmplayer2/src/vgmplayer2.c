@@ -48,7 +48,7 @@ if(kernelEventData.type == kernelEvent(key.PRESSED))
 	{
 		if(kernelEventData.key.raw == 0x83) //F3
 			{
-				eraseLine(0);eraseLine(1);eraseLine(39);
+				eraseLine(0);eraseLine(1);eraseLine(2);eraseLine(3);eraseLine(39);
 				return 1;
 				
 			}
@@ -140,6 +140,7 @@ void snoopLoop() //reached when in paused mode
 
 
 	bitmapSetVisible(0,true);
+	pauseTextUI();
 	textSetColor(15,1);
 	//textSetDouble(false,false);
 	show_inst(playChan);
@@ -232,6 +233,7 @@ void snoopLoop() //reached when in paused mode
 	textGotoXY(START_X_VIS+52,START_HEIGHT_VIS_ALT);printf(" %02x ",chip_enable);
 	*/
 	bitmapSetVisible(0,false);
+	textUI();
 	}
 
 
@@ -240,7 +242,7 @@ uint8_t mainLoop()
 bool iRT = false;
 bool pauseRequested = false;
 int checkKey = 0;
-uint8_t exitFlag = 0;
+uint8_t exitFlag = 1;
 
 	
 while(true)//main play and input loop
@@ -264,11 +266,12 @@ while(true)//main play and input loop
 		checkKey = dealPressedKey();
 		if(checkKey == 1) //f3 load is hit
 			{
+			exitFlag = 2;
 			break;
 			}
 		if(checkKey == -1) //esc is hit
 			{
-			exitFlag = 1;
+			exitFlag = 0;
 			break;
 			}	
 		if(checkKey == -2) //pause (space) is hit
@@ -353,24 +356,26 @@ int main(int argc, char *argv[]) {
 bool cliFile = false; //first time it loads, next times it keeps the cursor position
 bool isPlayListing = false; //becomes true if a .spl simple playlist file has been opened and is being dealt with
 
-uint8_t exitFlag = 0;
+uint8_t exitFlag = 1;
 
 FILE *playlistFile;
 
 setup();
-	/*
+	
 if(argc == 3)
 	{
 	uint8_t i=0, j=0,m=0;
 	char *lastSlash;
 	size_t dirLen=0;
+	char cliPath[MAX_PATH_LEN];
+	
 	
 	while(argv[1][i] != '\0') //copy the directory
 		{
-			fpr.currentPath[i] = argv[1][i];
+			cliPath[i] = argv[1][i];
 			i++;
 		}	
-	fpr.currentPath[i] = '\0';
+	cliPath[i] = '\0';
 	
 	while(argv[1][j] != '\0') //copy the filename
 		{
@@ -389,14 +394,10 @@ if(argc == 3)
 	lastSlash = strrchr(name, '/');
 	dirLen = lastSlash - name; // include '/'
 	
-	memset(fpr.currentPath, 0, sizeof(fpr.currentPath));
-	strncpy(fpr.currentPath, name, dirLen);
-	fpr.currentPath[dirLen] = '\0';
-
-	memset(fpr.selectedFile, 0, sizeof(fpr.selectedFile));
-	strncpy(fpr.selectedFile, lastSlash+1, sizeof(fpr.selectedFile)-1);
-	fpr.selectedFile[sizeof(fpr.selectedFile)-1] = '\0';
-	
+	memset(cliPath, 0, sizeof(cliPath));
+	strncpy(cliPath, name, dirLen);
+	cliPath[dirLen] = '\0';
+	fpr_set_currentPath(cliPath);
 	
 	//sprintf(name, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
 	
@@ -406,16 +407,17 @@ if(argc == 3)
 	cliFile = true;
 	}
 
-	*/
+	
 	
 
-if(hasCaseLCD())displayImage(LCDBIN);
+if(hasCaseLCD())displayImage(LCDBIN, 2);
 lilpause(1);
+
 
 uint16_t nbLines = 538;
 uint16_t curLine = 0;
 
-while(exitFlag == 0)
+while(exitFlag > 0)
 	{
 	bool foundOne = false;
 	
@@ -437,7 +439,7 @@ while(exitFlag == 0)
 					}
 				else 
 					{
-						if(getTheFile(name)!=0) return 0; //calls the file picker and force the user to pick something, either .vgm or .spl
+						if(getTheFile_far(name)!=0) return 0; //calls the file picker and force the user to pick something, either .vgm or .spl
 					}
 				eraseLine(3);eraseLine(4);
 				textGotoXY(0,3);textSetColor(7,0);printf("Loading: %.71s",name);
@@ -475,11 +477,16 @@ while(exitFlag == 0)
 	comeRightTrough = true; //to kickstart it
 	
 	exitFlag = mainLoop();
+	if(exitFlag == 2 && isPlayListing) 
+		{ 
+		fileClose(playlistFile);
+		playlistFile = NULL;
+		isPlayListing = false;
+		}
 	}
 
 
-if(theFile!=NULL){fileClose(theFile);}
-if(playlistFile!=NULL) {fileClose(playlistFile);}
+if(isPlayListing) {fileClose(playlistFile);}
 
 opl3_initialize();
 return 0;}

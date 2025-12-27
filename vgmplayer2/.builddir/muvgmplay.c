@@ -5,6 +5,7 @@
 #include "../src/muopl3.h" //opl3 chip routines
 #include "../src/muUtils.h" //useful routines
 #include "../src/muvgmplay.h" //useful routines
+#include "../src/textUI.h"
 
 uint32_t tooBigWait = 0x00000000; //keeps track of too big delays between events between vgmplay loop dips
 bool comeRightTrough; //lets a chain of 0 delay events happen when returning to a new passthrough of playback()
@@ -14,11 +15,10 @@ uint32_t loopBackTo; //loopback to this position
 uint32_t samplesSoFar; //done samples so far, to trigger end of song
 uint32_t gd3Location; //gd3 tag so we can ignore iteration
 
-uint16_t readDebug = 0;
 bool oneLoop = false; //for songs that have a loop, set this once and do one loop, then finish the song. hybrid approach for jukeboxing and authenticity
 
 //Opens the std VGM file
-__attribute__((optnone))
+//__attribute__((optnone))
 FILE *load_VGM_file(char *name) {
 	FILE *theVGMfile;
 	
@@ -116,6 +116,7 @@ void checkVGMHeader(FILE *theVGMfile)
 	textGotoXY(0,3);printf("                                                                                ");
 	textGotoXY(0,4);printf("                                                                                ");
 	*/
+	eraseLine(3);
 	textGotoXY(0,3);textSetColor(7,0);printf("Loading, please wait");
 	//copy to high ramhitspace();
 	fileSeek(theVGMfile,(uint32_t)dataOffset, SEEK_SET);

@@ -408,9 +408,10 @@ if(argc == 3)
 
 	*/
 	
-
+/*
 if(hasCaseLCD())displayImage(LCDBIN);
 lilpause(1);
+*/
 
 uint16_t nbLines = 538;
 uint16_t curLine = 0;
@@ -437,7 +438,7 @@ while(exitFlag == 0)
 					}
 				else 
 					{
-						if(getTheFile(name)!=0) return 0; //calls the file picker and force the user to pick something, either .vgm or .spl
+						if(getTheFile_far(name)!=0) return 0; //calls the file picker and force the user to pick something, either .vgm or .spl
 					}
 				eraseLine(3);eraseLine(4);
 				textGotoXY(0,3);textSetColor(7,0);printf("Loading: %.71s",name);

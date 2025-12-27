@@ -14,11 +14,10 @@ uint32_t loopBackTo; //loopback to this position
 uint32_t samplesSoFar; //done samples so far, to trigger end of song
 uint32_t gd3Location; //gd3 tag so we can ignore iteration
 
-uint16_t readDebug = 0;
 bool oneLoop = false; //for songs that have a loop, set this once and do one loop, then finish the song. hybrid approach for jukeboxing and authenticity
 
 //Opens the std VGM file
-__attribute__((optnone))
+//__attribute__((optnone))
 FILE *load_VGM_file(char *name) {
 	FILE *theVGMfile;
 	

@@ -12,8 +12,6 @@ uint8_t chipAct[5] ={0,0,0,0,0};
 uint8_t polyOPL3Buffer[18] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint8_t polyOPL3ChanBits[18]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-
-
 uint8_t selectableChan[18] = {1,1,1, 1,1,1, 1,1,1, 1,1,1, 1,1,1, 1,1,1}; //all yes by default
 
 struct glTh *gPtr;

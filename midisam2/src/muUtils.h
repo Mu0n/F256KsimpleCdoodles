@@ -17,4 +17,5 @@ void injectChar40col(uint8_t, uint8_t, uint8_t, uint8_t);
 void openAllCODEC(void);
 void hitspace(void);
 void lilpause(uint8_t);
+bool hasCaseLCD(void);
 #endif // UTIL_H

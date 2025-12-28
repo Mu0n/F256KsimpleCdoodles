@@ -10,15 +10,12 @@
 uint16_t disp[10] = {0xD6B3, 0xD6B4, 0xD6AD,
 				     0xD6AE, 0xD6AF, 0xD6AA,
 					 0xD6AB, 0xD6AC, 0xD6A7, 0xD6A9};
-bool shimmerChanged[16][8];
-uint8_t shimmerBuffer[16][8];
+uint8_t shimmerBuffer[16];
 struct MIDIParser theOne;
 bool midiChip;
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool wantAlt) {
 		uint8_t chan = (msg0)&0x0F;
-		uint8_t bufferLocation = (msg1)>>4;
-		uint8_t bitLocation = (msg1)%8;
 	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg0);
 	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg1);
 	
@@ -28,16 +25,9 @@ void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool w
 	}
 	if((msg0 & 0xF0) == 0x90 && msg2 != 0x00)
 		{
-			shimmerChanged[chan][bufferLocation]=true; //mark this channel as changed
-			SET_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
+			shimmerBuffer[chan]=21;
+			//SET_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
 			//POKE(disp[chan],msg1<<2);
-		}
-	
-	else if((msg0 & 0xF0) == 0x80 || ((msg0 & 0xF0) == 0x90 && msg2 == 0x00))
-		{
-			shimmerChanged[chan][bufferLocation]=true; //mark this channel as changed
-			CLEAR_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
-			//POKE(disp[chan],0);
 		}
 	else if((msg0 & 0xF0) == 0xC0)
 	{

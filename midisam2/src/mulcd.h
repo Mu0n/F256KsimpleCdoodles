@@ -27,9 +27,6 @@
 #include "f256lib.h"
 
 
-void clearVisible(uint16_t);
-void displayImage(uint32_t);
-void prepareRect(uint8_t, uint16_t, uint8_t, uint16_t);
-void setLCDReverseY(void);
+void displayImage(uint32_t, uint8_t);
 
 #endif // MULCD_H

@@ -12,9 +12,8 @@
 #define EXT_LEN 3
 #define MAX_VISIBLE_FILES 16
 #define RESERVED_ENTRY_INDEX 0
-
-#define DIRECTORY_X 1
-#define DIRECTORY_Y 6
+#define DIRECTORY_X 0
+#define DIRECTORY_Y 3
 #define FPR_BASE 0x30000
 
 #define FPR_tlX              0

@@ -1,10 +1,7 @@
-#include "D:\F256\llvm-mos\code\midisam2\.builddir\trampoline.h"
-
 
 #include "f256lib.h"
 #include "../src/muFilePicker.h"
 #include "../src/muUtils.h"
-#include "../src/muTextUI.h"
 
 
 //filePickRecord *fpr;
@@ -51,7 +48,7 @@ void initFPR()
 {
 	//**
 	//strncpy(fpr->currentPath, "media/vgm", MAX_FILENAME_LEN);
-	fpr_set_currentPath("media/midi");
+	fpr_set_currentPath("media/vgm");
 }
 
 /*
@@ -66,7 +63,7 @@ uint8_t getTheFile(char *name) //job is to get a string containing the filename 
 	fpr_get_currentPath(dirOpenResult);
 	
 	
-	if(dirOpenResult != NULL)
+	if(dirOpenResult != NULL) 
 	{
 		strncpy(fpr->currentPath, fpr->currentPath, MAX_FILENAME_LEN);
 		fileCloseDir(dirOpenResult);
@@ -125,7 +122,7 @@ uint8_t getTheFile_far(char *name)
     // ---------------------------------------------------------
     uint8_t wantsQuit =
         filePickModal_far(DIRECTORY_X, DIRECTORY_Y,
-                          "mid", "", "", "", true);
+                          "vgm", "spl", "", "", true);
 
     if (wantsQuit == 1)
         return 1;
@@ -633,14 +630,14 @@ void backUpDirectory_far(void)
 __attribute__((optnone))
 uint8_t pickFile(filePickRecord *fP)
 //  0 backtracking a folder level, 1 forward giong to a new folder, 2 a file is picked, 3 should never be reached
-{
+{					
 	for(;;)
 	{
 	kernelNextEvent();
 	if(kernelEventData.type == kernelEvent(key.PRESSED))
 		{
 		switch(kernelEventData.key.raw)
-			{
+			{				
 			case 146: //esc
 					return 3;
 			case 148: //enter
@@ -649,18 +646,18 @@ uint8_t pickFile(filePickRecord *fP)
 				else if(fP->isDirList[fP->cursorIndex]) return 1;
 				else return 2;
 			case 0xb6: //up arrow
-			if(fP->cursorIndex>0)
+			if(fP->cursorIndex>0) 
 				{
 				if(fP->visualIndex > 0) //only move the cursor up if you're past visual index 0
 					{
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",32); //erase old
 					fP->cursorIndex--; fP->visualIndex--;
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",0xFA); //bring in new position
-					}
+					}	
 				else if(fP->visualIndex == 0)
 					{
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",32); //erase old
-					fP->visualIndex=MAX_VISIBLE_FILES-1;
+					fP->visualIndex=MAX_VISIBLE_FILES-1; 
 					fP->scrollOffset-=MAX_VISIBLE_FILES-1;
 					displayFileList(fP, fP->scrollOffset);
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",0xFA); //bring in new position
@@ -681,12 +678,12 @@ uint8_t pickFile(filePickRecord *fP)
 				   && fP->fileCount > fP->cursorIndex) //and there's more files to explore
 					{
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",32); //erase old
-					fP->visualIndex=0;
+					fP->visualIndex=0; 
 					fP->scrollOffset+=MAX_VISIBLE_FILES-1;
 					displayFileList(fP, fP->scrollOffset);
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",0xFA); //bring in new position
 					}
-				}
+				}	
 			//textGotoXY(0,29);printf("vidx %d cIdx %d offs %d fCnt %d ", fP->visualIndex, fP->cursorIndex, fP->scrollOffset, fP->fileCount);
 				break;
 			case 0xB8: //left arrow
@@ -705,14 +702,14 @@ uint8_t pickFile(filePickRecord *fP)
 					{
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",32); //erase old
 					fP->cursorIndex += (MAX_VISIBLE_FILES-1 - fP->visualIndex);
-					fP->visualIndex=0;
+					fP->visualIndex=0; 
 					fP->scrollOffset +=MAX_VISIBLE_FILES-1;
 					displayFileList(fP, fP->scrollOffset);
 					textGotoXY(fP->tlX,fP->tlY+fP->visualIndex);printf("%c",0xFA); //bring in new position
 					}
 			//textGotoXY(0,29);printf("vidx %d cIdx %d offs %d fCnt %d ", fP->visualIndex, fP->cursorIndex, fP->scrollOffset, fP->fileCount);
 				break;
-	
+				
 			}
 		}
 	}
@@ -940,7 +937,7 @@ uint8_t pickFile_far(void)
 /*
 void readDirectory(filePickRecord *picker) {
 	char *dirOpenResult;
-	struct fileDirEntS *myDirEntry;
+	struct fileDirEntS *myDirEntry;	
 	
 	//checking the contents of the directory
 	dirOpenResult = fileOpenDir(picker->currentPath);
@@ -1076,7 +1073,7 @@ void readDirectory_far(void)
 }
 /*
 void wipeArea(filePickRecord *fpr)
-{
+{	
 	for(uint8_t i=0; i<MAX_VISIBLE_FILES+1; i++)
 	{
 		for(uint8_t j=fpr->tlY; j<80; j++)
@@ -1119,7 +1116,7 @@ void displayFileList(filePickRecord *picker, int scrollOffset) {
 
     // Show up to 19 more entries, scrolled by scrollOffset
     for (int i = visibleStart; i < visibleEnd; i++) {
-	
+		
 		textGotoXY(picker->tlX, picker->tlY + i - visibleStart + 1);
         int isCursor = (picker->cursorIndex == i);
 		if(isCursor) printf("%c", 0xFA);
@@ -1127,7 +1124,7 @@ void displayFileList(filePickRecord *picker, int scrollOffset) {
         printf("%.75s%1s", picker->fileList[i], picker->isDirList[i]?"/":" ");
     }
 	textGotoXY(picker->tlX + 2, picker->tlY + visibleEnd - visibleStart + 1);
-	printf("%c %c",
+	printf("%c %c", 
 	picker->cursorIndex >= (MAX_VISIBLE_FILES-1)?0xFB:' ',
 	picker->fileCount > (picker->cursorIndex - picker->visualIndex + MAX_VISIBLE_FILES) ?0xF8:' ');\
 }
@@ -1150,7 +1147,7 @@ void displayFileList_far(int scrollOffset)
     // ---------------------------------------------------------
     // Compute visible range
     // ---------------------------------------------------------
-    int visibleStart = RESERVED_ENTRY_INDEX + scrollOffset + 1;
+    int visibleStart = RESERVED_ENTRY_INDEX + scrollOffset + 1;  
     int visibleEnd   = visibleStart + (MAX_VISIBLE_FILES - 1);
 
     if (visibleEnd >= fileCount)
@@ -1252,7 +1249,7 @@ uint8_t filePickModal(uint8_t x, uint8_t y, char *ext0, char *ext1, char *ext2, 
 		readDirectory(fpr);
 		sortFileList(fpr);
 		displayFileList(fpr, fpr->scrollOffset);
-	
+		
 		}
 	else if(result == 1) //choosing to go deeper a folder level
 		{
@@ -1262,7 +1259,7 @@ uint8_t filePickModal(uint8_t x, uint8_t y, char *ext0, char *ext1, char *ext2, 
 		reprepFPR(fpr, true);
 		strncpy(fpr->currentPath, finalDir, MAX_PATH_LEN);
 		readDirectory(fpr);
-	
+				
 		sortFileList(fpr);
 		displayFileList(fpr, fpr->scrollOffset);
 	
@@ -1288,14 +1285,6 @@ uint8_t filePickModal_far(uint8_t x, uint8_t y,
                           char *ext0, char *ext1, char *ext2, char *ext3,
                           bool firstTime)
 {
-	const char *queryFudge[] = {
-"                                                       ",
-"        Choose a MIDI File for playback                ",
-"     The default directory is 0:media/midi/            ",
-"                                                       "
-};
-
-modalHelp(queryFudge, sizeof(queryFudge)/sizeof(queryFudge[0]));
     // ---------------------------------------------------------
     // Initialize far‑memory filePickRecord
     // ---------------------------------------------------------
@@ -1410,7 +1399,7 @@ modalHelp(queryFudge, sizeof(queryFudge)/sizeof(queryFudge[0]));
     textGotoXY(tlX, tlY);
     wipeArea_far();
 
-	eraseModalHelp(sizeof(queryFudge)/sizeof(queryFudge[0]));
     return 0;
 }
 
+	}

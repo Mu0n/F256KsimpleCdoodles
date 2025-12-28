@@ -2,10 +2,11 @@
 
 #include "f256lib.h"
 #include "../src/muTextUI.h"
+#include "../src/muFilePicker.h"
 #include "../src/setup.h"
 #include <string.h>
 
-char nameVersion[] = {" CozyMIDI  v2.2 by Mu0n, November 2025                                    "};
+char nameVersion[] = {" CozyMIDI  v2.4 by Mu0n, December 2025                                    "};
 
 void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 {
@@ -68,18 +69,18 @@ void displayInfo(struct midiRecord *rec) {
 	
 	textGotoXY(1,1);
 	textSetColor(1,0);textPrint("Filename: ");
-	textSetColor(0,0);printf("%s",rec->fileName);
+	textSetColor(0,0);printf("%s",name);
 	textGotoXY(1,2);
 	textSetColor(1,0);textPrint("Type ");textSetColor(0,0);printf(" %d ", rec->format);
 	textSetColor(1,0);textPrint("MIDI file with ");
 	textSetColor(0,0);printf("%d ",rec->trackcount);
 	textSetColor(1,0);(rec->trackcount)>1?textPrint("tracks"):textPrint("track");
-	textSetColor(0,0);textGotoXY(1,7);textPrint("CH Instrument");
+	textSetColor(0,0);textGotoXY(1,7);textPrint("CH   Instrument");
 	for(i=0;i<16;i++)
 	{
 		textGotoXY(1,8+i);printf("%02d ",i);
 	}
-	textGotoXY(4,8+9);textSetColor(10,0);textPrint("Percussion");
+	textGotoXY(INST_NAME_X,8+9);textSetColor(10,0);textPrint("Percussion");
 	
 	textGotoXY(0,25);printf(" ->Currently parsing file %s...",rec->fileName);
 }
@@ -119,20 +120,20 @@ void superExtraInfo(struct midiRecord *rec) {
 }
 void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
 	uint8_t i=0,j=0;
-	textGotoXY(4,8+chan);textSetColor(chan+1,0);
+	textGotoXY(INST_NAME_X,8+chan);textSetColor(chan+1,0);
 	if(chan==9)
 		{
 			textPrint("Percussion");
 			return;
 		}
-	for(i=0;i<12;i++)
+	for(i=0;i<36;i++)
 	{
 
 		if(midi_instruments[pgr][i]=='\0')
 		{
-			for(j=i;j<12;j++) textPrint(" ");
+			for(j=i;j<36;j++) __putchar(32);
 			break;
 		}
-		printf("%c",midi_instruments[pgr][i]);
+		__putchar(midi_instruments[pgr][i]);
 	}
 }

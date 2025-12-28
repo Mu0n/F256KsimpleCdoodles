@@ -13,6 +13,7 @@
 #define textColorLightBlue 0x07
 #define DIR_NEXT_COL 29
 
+#define INST_NAME_X 6
 #define MENU_Y 29
 
 

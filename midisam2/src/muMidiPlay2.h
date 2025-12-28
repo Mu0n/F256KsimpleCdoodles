@@ -48,6 +48,6 @@ void sendAME(uint8_t, uint8_t, uint8_t, uint8_t, bool);
 
 extern struct MIDIParser theOne;
 extern bool midiChip;
-extern bool shimmerChanged[16][8];
-extern uint8_t shimmerBuffer[16][8];
+extern bool shimmerChanged[16];
+extern uint8_t shimmerBuffer[16];
 #endif // MUMIDIPLAY2_H

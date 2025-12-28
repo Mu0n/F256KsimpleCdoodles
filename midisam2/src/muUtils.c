@@ -22,7 +22,13 @@ void openAllCODEC()
 	while(PEEK(0xD622) & 0x01);
 }
 
-
+//will return true if the optical keyboard is detected, enabling the case embedded LCD present as well
+bool hasCaseLCD(void)
+{
+	//if the 2nd to last least significant bit is set, it's a mechanical keyboard, LCD not available, don't use it!
+	//if it's cleared, then it's an optical keyboard, you can use it!
+	return ((PEEK(0xDDC1) & 0x02)==0); //here the bit is cleared, so it's true it's an optical keyboard, it "hasCaseLCD"
+}
 //Sends a kernel based timer. You must prepare a timer_t struct first and initialize its fields
 bool setTimer(const struct timer_t *timer)
 {

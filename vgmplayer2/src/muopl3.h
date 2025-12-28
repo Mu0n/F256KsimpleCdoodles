@@ -1,7 +1,6 @@
 #ifndef MUOPL3_H
 #define MUOPL3_H
 
-
 #include "f256lib.h"
 
 #define OPL_ADDR_L   0xD580   //Address pointer for ports 0x000 - 0x0FF

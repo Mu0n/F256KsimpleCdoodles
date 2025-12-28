@@ -9,15 +9,13 @@
 
 #include "f256lib.h"
 
-
+uint8_t PEEK24(uint32_t addr);
+uint8_t POKE24(uint32_t addr, uint8_t value);
+void lilpause(uint8_t);
 void wipeBitmapBackground(uint8_t, uint8_t, uint8_t);
-void realTextClear(void);
 bool setTimer(const struct timer_t *);
 uint8_t getTimerAbsolute(uint8_t);
-void injectChar40col(uint8_t, uint8_t, uint8_t, uint8_t);
-void openAllCODEC(void);
 void hitspace(void);
-void lilpause(uint8_t);
 bool isAnyK(void);
 bool hasCaseLCD(void);
 void shutDownIfNoK2(void);

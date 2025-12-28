@@ -21,13 +21,10 @@
 #define TIMER_PLAYBACK_COOKIE 0
 #define TIMER_DELAY_COOKIE 1
 #define TIMER_SHIMMER_COOKIE 2
-#define TIMER_SHIMMER_DELAY 10
-
-#define DIRECTORY_X 1
-#define DIRECTORY_Y 6
+#define TIMER_SHIMMER_DELAY 3
 
 #define CLONE_TO_UART_EMWHITE 0
-
+#define ACTIVITY_CHAN_X 4
 EMBED(cozyLCD, "../assets/cozyLCD", 0x30000);
 
 //STRUCTS
@@ -39,7 +36,7 @@ bool isTrulyDone = false;
 struct midiRecord myRecord;
 
 FILE *theMIDIfile;
-filePickRecord fpr;
+//filePickRecord fpr;
 	
 bool repeatFlag = false;
 //PROTOTYPES
@@ -58,20 +55,17 @@ bool isK2(void)
 }
 bool K2LCD()
 {
-	if(isK2())
-	{
-	displayImage(0x30000);
-	return true;
-	}
-	else return false;
+if(hasCaseLCD())displayImage(0x30000, 2);
+lilpause(1);
 }
 
 void wipeShimmer()
 {
 	for(uint8_t i=0;i<16;i++) //channels
 		{
-		textGotoXY(16,8+i);
-		textPrint("                                                           ");
+		shimmerBuffer[i]=21;
+		textGotoXY(ACTIVITY_CHAN_X,8+i);
+		for(uint8_t j=0;j<40;j++)  __putchar(32);
 		}
 }
 short optimizedMIDIShimmering() {
@@ -81,26 +75,24 @@ short optimizedMIDIShimmering() {
 		switch(kernelEventData.timer.cookie)
 		{
 			case TIMER_SHIMMER_COOKIE:
-				shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
-				setTimer(&shimmerTimer);
+	
 				for(uint8_t i=0;i<16;i++) //channels
 					{
-					textSetColor(i+1,0);
-					for(uint8_t j=0;j<8;j++) //number of bytes to represent on screen
-						{
-						textGotoXY(11+(j<<3),8+i);
-						if(shimmerChanged[i][j]==false) continue; //no change, so let's continue
-						shimmerChanged[i][j]=false; //will be dealt with so mark it as changed and done for next evaluation
-						__putchar(shimmerBuffer[i][j]&0x01?42:32);
-						__putchar(shimmerBuffer[i][j]&0x02?42:32);
-						__putchar(shimmerBuffer[i][j]&0x04?42:32);
-						__putchar(shimmerBuffer[i][j]&0x08?42:32);
-						__putchar(shimmerBuffer[i][j]&0x10?42:32);
-						__putchar(shimmerBuffer[i][j]&0x20?42:32);
-						__putchar(shimmerBuffer[i][j]&0x40?42:32);
-						__putchar(shimmerBuffer[i][j]&0x80?42:32);
-						}
+					if(shimmerBuffer[i]==0)continue;
+					if(shimmerBuffer[i]==14) {
+						textGotoXY(ACTIVITY_CHAN_X,8+i);
+						shimmerBuffer[i]=0;
+						__putchar(32);
+						continue;
 					}
+					textSetColor(i+1,0);
+					textGotoXY(ACTIVITY_CHAN_X,8+i);
+					__putchar(shimmerBuffer[i]);
+					shimmerBuffer[i]--;
+					}
+	
+				shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+				setTimer(&shimmerTimer);
 				break;
 		}
 	}
@@ -119,12 +111,14 @@ short optimizedMIDIShimmering() {
 					destroyTrack();
 					zeroOutStuff();
 					wipeText();
-					uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", false);
-					if(wantsQuit==1) return 0;
-					sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
-					loadSMFile(myRecord.fileName, MUSIC_BASE);
+					if(getTheFile_far(name)!=0) return 0;
+	
 					setColors();
-					textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
+					textGotoXY(0,25);printf("->Currently Loading file %s...",name);
+	
+	
+					loadSMFile(name, MUSIC_BASE);
+	
 	
 					detectStructure(0, &myRecord);
 					initTrack(MUSIC_BASE);
@@ -244,8 +238,7 @@ void zeroOutStuff()
 	{
 		for(uint8_t j=0;j<8;j++)
 		{
-			shimmerChanged[i][j]=false;
-			shimmerBuffer[i][j]=0;
+			shimmerBuffer[i]=14;
 		}
 	}
 	if(myRecord.fileName != NULL) free(myRecord.fileName);
@@ -255,12 +248,13 @@ void zeroOutStuff()
 
 int main(int argc, char *argv[]) {
 	uint16_t i;
+	
+	bool cliFile = false; //first time it loads, next times it keeps the cursor position
 	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions
 	//initVS1053MIDI();  //if the VS1053b is used
 	
 	K2LCD();
 	
-	lilpause(1);
 	midiChip = false;
 	playbackTimer.units = TIMER_SECONDS;
 	playbackTimer.cookie = TIMER_PLAYBACK_COOKIE;
@@ -290,61 +284,80 @@ int main(int argc, char *argv[]) {
 	}
 	*/
 	
-	//check if the midi directory is here, if not, target the root
-	char *dirOpenResult = fileOpenDir("media/midi");
-	if(dirOpenResult != NULL)
-	{
-		strncpy(fpr.currentPath, "media/midi", MAX_PATH_LEN);
-		fileCloseDir(dirOpenResult);
-	}
-	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
-	
 
-	lilpause(1);
-	if(argc > 1)
-	{
-		i=0;
-		if(argv[1][0] == '-')
-			{
-			uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", true);
-			if(wantsQuit==1) return 0;
-			sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
-			loadSMFile(myRecord.fileName, MUSIC_BASE);
-			}
-		else
-			{
-			while(argv[1][i] != '\0')
-				{
-					myRecord.fileName[i] = argv[1][i];
-					i++;
-				}
 
-			myRecord.fileName[i] = '\0';
+	if(argc == 3)
+		{
+		uint8_t i=0, j=0,m=0;
+		char *lastSlash;
+		size_t dirLen=0;
+		char cliPath[MAX_PATH_LEN];
 	
-			sprintf(fpr.selectedFile, "%s", myRecord.fileName);
 	
-			if(loadSMFile(argv[1], MUSIC_BASE))
-				{
-				printf("\nCouldn't open %s\n",argv[1]);
-				printf("Press space to exit.");
-				hitspace();
-				return 0;
-				}
+		while(argv[1][i] != '\0') //copy the directory
+			{
+				cliPath[i] = argv[1][i];
+				i++;
 			}
+		cliPath[i] = '\0';
 	
-	lilpause(1);
-	}
+		while(argv[1][j] != '\0') //copy the filename
+			{
+	
+				if(argv[1][j]=='.') m++;
+				if(m==1 && (argv[1][j]=='m' || argv[1][j]=='M')) m++;
+				else m=0;
+				if(m==2 && (argv[1][j]=='i' || argv[1][j]=='I')) m++;
+				else m=0;
+				if(m==3 && (argv[1][j]=='d' || argv[1][j]=='D')) m++;
+				else m=0;
+				name[j] = argv[1][j];
+				j++;
+				if(m==4){name[j] = '\0'; break;}
+			}
+		lastSlash = strrchr(name, '/');
+		dirLen = lastSlash - name; // include '/'
+	
+		memset(cliPath, 0, sizeof(cliPath));
+		strncpy(cliPath, name, dirLen);
+		cliPath[dirLen] = '\0';
+		fpr_set_currentPath(cliPath);
+	
+		setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",name);
+		loadSMFile(name, MUSIC_BASE);
+		lilpause(1);
+	
+	
+		//sprintf(name, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
+	
+		//printf("\nfinal form is: ");
+		//printf("%s",name);
+	
+	cliFile = true;
+		}
 	else
+		{
+	//check if the midi directory is here, if not, target the root
+		char *dirOpenResult = fileOpenDir("media/midi");
+		if(dirOpenResult != NULL)
+			{
+			fpr_set_currentPath("media/midi");
+			fileCloseDir(dirOpenResult);
+			}
+		else fpr_set_currentPath("0:");
+		}
+	
+	if(cliFile == false)
 	{
-	uint8_t wantsQuit = filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mid", "", "", "", true);
-	if(wantsQuit==1) return 0;
-	sprintf(myRecord.fileName, "%s%s%s", fpr.currentPath,"/", fpr.selectedFile);
-	loadSMFile(myRecord.fileName, MUSIC_BASE);
-
+	
+	if(getTheFile_far(name)!=0) return 0;
+	
+	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",name);
+	loadSMFile(name, MUSIC_BASE);
 	lilpause(1);
-	}
-	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",myRecord.fileName);
 
+	}
+	
 	wipeText();
 	detectStructure(0, &myRecord);
 	displayInfo(&myRecord);

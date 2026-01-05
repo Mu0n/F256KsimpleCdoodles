@@ -6,7 +6,7 @@
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/mulcd.h" //contains functions for the K2 LCD
 
-EMBED(mac, "../assets/mom.bin", 0x10000);
+EMBED(mac, "../assets/wildbits.bin", 0x10000);
 
 int main(int argc, char *argv[]) {
 	

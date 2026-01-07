@@ -6,7 +6,7 @@
 #include "../src/setup.h"
 #include <string.h>
 
-char nameVersion[] = {" CozyMIDI  v2.4 by Mu0n, December 2025                                    "};
+char nameVersion[] = {" CozyMIDI  v2.5 by Mu0n, January 2026                                    "};
 
 void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 {

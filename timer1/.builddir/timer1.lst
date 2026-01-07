@@ -1,5 +1,5 @@
 
-timer0.elf:	file format elf32-mos
+timer1.elf:	file format elf32-mos
 
 SYMBOL TABLE:
 00000000 l    df *ABS*	00000000 zero-bss.c
@@ -637,20 +637,20 @@ Disassembly of section .text:
      70d: a2 09        	ldx	#$9
      70f: 86 13        	stx	$13                     ; 0x13 <__rc3>
      711: 20 5a 07     	jsr	$75a <textPrint>
-     714: a2 10        	ldx	#$10
+     714: a2 20        	ldx	#$20
      716: 8e 60 d6     	stx	$d660                   ; 0xd660 <end_block9+0xccac>
      719: a2 02        	ldx	#$2
-     71b: 8e 50 d6     	stx	$d650                   ; 0xd650 <end_block9+0xcc9c>
-     71e: a0 ff        	ldy	#$ff
-     720: 8c 55 d6     	sty	$d655                   ; 0xd655 <end_block9+0xcca1>
-     723: 8c 56 d6     	sty	$d656                   ; 0xd656 <end_block9+0xcca2>
-     726: 8c 57 d6     	sty	$d657                   ; 0xd657 <end_block9+0xcca3>
-     729: 9c 54 d6     	stz	$d654                   ; 0xd654 <end_block9+0xcca0>
-     72c: 8e 50 d6     	stx	$d650                   ; 0xd650 <end_block9+0xcc9c>
+     71b: 8e 58 d6     	stx	$d658                   ; 0xd658 <end_block9+0xcca4>
+     71e: a0 3f        	ldy	#$3f
+     720: 8c 5d d6     	sty	$d65d                   ; 0xd65d <end_block9+0xcca9>
+     723: 9c 5e d6     	stz	$d65e                   ; 0xd65e <end_block9+0xccaa>
+     726: 9c 5f d6     	stz	$d65f                   ; 0xd65f <end_block9+0xccab>
+     729: 9c 5c d6     	stz	$d65c                   ; 0xd65c <end_block9+0xcca8>
+     72c: 8e 58 d6     	stx	$d658                   ; 0xd658 <end_block9+0xcca4>
      72f: a2 89        	ldx	#$89
-     731: 8e 50 d6     	stx	$d650                   ; 0xd650 <end_block9+0xcc9c>
+     731: 8e 58 d6     	stx	$d658                   ; 0xd658 <end_block9+0xcca4>
      734: ad 60 d6     	lda	$d660                   ; 0xd660 <end_block9+0xccac>
-     737: 29 10        	and	#$10
+     737: 29 20        	and	#$20
      739: f0 f9        	beq	$734 <f256main+0x3a>
      73b: a2 90        	ldx	#$90
      73d: 8e a1 dd     	stx	$dda1                   ; 0xdda1 <end_block9+0xd3ed>

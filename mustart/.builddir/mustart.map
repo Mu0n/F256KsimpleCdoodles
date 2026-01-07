@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__stack = 0xA000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -57,17 +57,20 @@
       30       30        0     1         __zp_data_start = .
       30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30        b     1 .zp.bss
+      30       30        e     1 .zp.bss
       30       30        0     1         __zp_bss_start = .
-      30       30        b     1         mustart.lto.o:(.zp.bss)
-      30       30        1     1                 _col
-      31       31        1     1                 _row
-      32       32        2     1                 __putchar.s
-      34       34        7     1                 kernelEventData
-      3b       3b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3b       3b        2     1 .zp
-      3b       3b        2     1         mustart.lto.o:(.zp.noinit)
-     300      300      85e     1 .text
+      30       30        e     1         mustart.lto.o:(.zp.bss)
+      30       30        1     1                 _ccolor
+      31       31        1     1                 _col
+      32       32        1     1                 _row
+      33       33        2     1                 __putchar.s
+      35       35        1     1                 selected
+      36       36        7     1                 kernelEventData
+      3d       3d        1     1                 kernelError
+      3e       3e        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      3e       3e       5c     1 .zp
+      3e       3e       5c     1         mustart.lto.o:(.zp.noinit)
+     300      300     1ef4     2 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -81,62 +84,79 @@
      311      311        0     1                 __after_main
      314      314        0     1         _fini = .
      314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     315      315       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     315      315       13     1                 __zero_bss
-     328      328       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     328      328       13     1                 __zero_zp_bss
-     33b      33b      5eb     1         mustart.lto.o:(.text.main)
-     33b      33b      5eb     1                 main
-     926      926        5     1         mustart.lto.o:(.text.exit)
-     926      926        5     1                 exit
-     92b      92b      1e7     1         mustart.lto.o:(.text.putchar)
-     92b      92b      1e7     1                 putchar
-     b12      b12       2c     1         mustart.lto.o:(.text.memcpy)
-     b12      b12       2c     1                 memcpy
-     b3e      b3e       20     1         mustart.lto.o:(.text.__memset)
-     b3e      b3e       20     1                 __memset
-     b5e      b5e        0     1         __init_array_start = .
-     b5e      b5e        0     1         __init_array_end = .
-     b5e      b5e        0     1         __fini_array_start = .
-     b5e      b5e        0     1         __fini_array_end = .
-     b5e      b5e       3f     1 .rodata
-     b5e      b5e       30     1         mustart.lto.o:(.rodata.textColors)
-     b5e      b5e       30     1                 textColors
-     b8e      b8e        f     1         <internal>:(.rodata.str1.1)
-     b9d      b9d        0     1 .data
-     b9d      b9d        0     1         __data_start = .
-     b9d      b9d        0     1         __data_end = .
-     b9d      b9d        0     1 __data_load_start = LOADADDR(.data)
-     b9d      b9d        0     1 __data_size = SIZEOF(.data)
-     b9d      b9d        1     1 .bss
-     b9d      b9d        0     1         __bss_start = .
-     b9d      b9d        1     1         mustart.lto.o:(.bss.kernelError)
-     b9d      b9d        1     1                 kernelError
-     b9e      b9e        0     1         __bss_end = .
-     b9e      b9e        0     1 __bss_size = SIZEOF(.bss)
-     b9e      b9e        0     1 .noinit
-     b9e      b9e        0     1         __heap_start = ALIGN(., 2)
-     b9e      b9e        0     1 end_block8 = .
-     b9e      b9e        0     1 end_block9 = .
-     b9e      b9e        0     1 end_block10 = .
-     b9e      b9e        0     1 end_block11 = .
-     b9e      b9e        0     1 end_block12 = .
-     b9e      b9e        0     1 end_block13 = .
-     b9e      b9e        0     1 end_block14 = .
-     b9e      b9e        0     1 end_block15 = .
-     b9e      b9e        0     1 end_block16 = .
-     b9e      b9e        0     1 end_block17 = .
-     b9e      b9e        0     1 end_block18 = .
-     b9e      b9e        0     1 end_block19 = .
-     b9e      b9e        0     1 end_block20 = .
-     b9e      b9e        0     1 end_block21 = .
-     b9e      b9e        0     1 end_block22 = .
-     b9e      b9e        0     1 end_block23 = .
+     316      316      153     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     469      469       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     469      469       13     1                 __zero_bss
+     47c      47c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     47c      47c       13     1                 __zero_zp_bss
+     48f      48f      947     1         mustart.lto.o:(.text.main)
+     48f      48f      947     1                 main
+     dd6      dd6        5     1         mustart.lto.o:(.text.exit)
+     dd6      dd6        5     1                 exit
+     ddb      ddb       d7     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+     ddb      ddb       d7     1                 (anonymous namespace)::put(char, Status*)
+     eb2      eb2      10f     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+     eb2      eb2      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+     fc1      fc1      d31     1         mustart.lto.o:(.text.printf)
+     fc1      fc1      d31     1                 printf
+    1cf2     1cf2      1e0     1         mustart.lto.o:(.text.putchar)
+    1cf2     1cf2      1e0     1                 putchar
+    1ed2     1ed2      2d6     1         mustart.lto.o:(.text.malloc)
+    1ed2     1ed2      2d6     1                 malloc
+    21a8     21a8       2c     1         mustart.lto.o:(.text.memcpy)
+    21a8     21a8       2c     1                 memcpy
+    21d4     21d4       20     1         mustart.lto.o:(.text.__memset)
+    21d4     21d4       20     1                 __memset
+    21f4     21f4        0     1         __init_array_start = .
+    21f4     21f4        0     1         __init_array_end = .
+    21f4     21f4        0     1         __fini_array_start = .
+    21f4     21f4        0     1         __fini_array_end = .
+    21f4     21f4       7b     1 .rodata
+    21f4     21f4       3a     1         mustart.lto.o:(.rodata.printf)
+    222e     222e       11     1         <internal>:(.rodata.str1.1)
+    223f     223f       30     1         mustart.lto.o:(.rodata.textColors)
+    223f     223f       30     1                 textColors
+    226f     226f        0     1 .data
+    226f     226f        0     1         __data_start = .
+    226f     226f        0     1         __data_end = .
+    226f     226f        0     1 __data_load_start = LOADADDR(.data)
+    226f     226f        0     1 __data_size = SIZEOF(.data)
+    226f     226f      4b5     1 .bss
+    226f     226f        0     1         __bss_start = .
+    226f     226f      4b0     1         mustart.lto.o:(.bss.menuItems)
+    226f     226f      4b0     1                 menuItems
+    271f     271f        1     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    271f     271f        1     1                 (anonymous namespace)::initialized
+    2720     2720        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    2720     2720        2     1                 (anonymous namespace)::free_size
+    2722     2722        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    2722     2722        2     1                 (anonymous namespace)::free_list
+    2724     2724        0     1         __bss_end = .
+    2724     2724        0     1 __bss_size = SIZEOF(.bss)
+    2724     2724        0     1 .noinit
+    2724     2724        0     1         __heap_start = ALIGN(., 2)
+    2724     2724        0     1 end_block8 = .
+    2724     2724        0     1 end_block9 = .
+    2724     2724        0     1 end_block10 = .
+    2724     2724        0     1 end_block11 = .
+    2724     2724        0     1 end_block12 = .
+    2724     2724        0     1 end_block13 = .
+    2724     2724        0     1 end_block14 = .
+    2724     2724        0     1 end_block15 = .
+    2724     2724        0     1 end_block16 = .
+    2724     2724        0     1 end_block17 = .
+    2724     2724        0     1 end_block18 = .
+    2724     2724        0     1 end_block19 = .
+    2724     2724        0     1 end_block20 = .
+    2724     2724        0     1 end_block21 = .
+    2724     2724        0     1 end_block22 = .
+    2724     2724        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      6e0     4 .symtab
-       0        0      6e0     4         <internal>:(.symtab)
+       0        0      790     4 .symtab
+       0        0      790     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      49d     1 .strtab
-       0        0      49d     1         <internal>:(.strtab)
+       0        0      593     1 .strtab
+       0        0      593     1         <internal>:(.strtab)

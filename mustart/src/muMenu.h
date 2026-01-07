@@ -5,8 +5,9 @@
 
 
 void displayMenu(uint8_t, uint8_t);
+void displayOneItem(uint8_t, uint8_t, uint8_t);
 
-extern const char *menuItems[];
+extern char menuItems[][120];
 extern uint8_t itemCount;
 
 #endif // MUMENU_H

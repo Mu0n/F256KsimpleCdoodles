@@ -14,6 +14,9 @@ void setup(void);
 int8_t dealPressedKey(void);
 
 
+uint8_t selected = 0;
+
+
 int8_t dealPressedKey()
 {
 kernelNextEvent();
@@ -35,6 +38,24 @@ if(kernelEventData.type == kernelEvent(key.PRESSED))
 		if(kernelEventData.key.raw == 0x93) //tab
 			{		
 			}
+		if(kernelEventData.key.raw == 0xB7) //down
+			{		
+			textSetColor(15,0);
+			displayOneItem(5, 10, selected++);
+			textSetColor(13,1);
+			displayOneItem(5, 10, selected);
+			}
+		if(kernelEventData.key.raw == 0xB6) //up
+			{
+			textSetColor(15,0);
+			displayOneItem(5, 10, selected--);
+			textSetColor(13,1);
+			displayOneItem(5, 10, selected);
+			}
+		if(kernelEventData.key.raw == 0x94) //enter
+			{		
+			return 1;
+			}
 	}
 return 0;
 }
@@ -45,24 +66,30 @@ POKE(MMU_IO_CTRL, 0x00);
 // XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
 POKE(VKY_MSTR_CTRL_0, 0b00001111); //sprite,graph,overlay,text
 // XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
+POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, double height text, 320x240 at 60 Hz;
 POKE(VKY_LAYER_CTRL_0, 0b00010000); //bitmap 0 in layer 0, bitmap 1 in layer 1
 POKE(0xD00D,0x00); //force black graphics background
 POKE(0xD00E,0x00);
 POKE(0xD00F,0x00);	
 
 POKE(MMU_IO_CTRL,0); //MMU I/O to page 0
+
+textEnableBackgroundColors(true);
 }
 
 
 int main(int argc, char *argv[]) {
-
 uint8_t exitFlag = 0;
 
 setup();
 
 displayMenu(5,10);
-hitspace();
+textSetColor(13,1);
+displayOneItem(5, 10, 0);
+while(!exitFlag)
+{
+	if(dealPressedKey()==1) exitFlag=1;
+}
 
 
 /*
@@ -97,8 +124,8 @@ kernelArgs->common.buflen = 2;
 kernelArgs->common.ext = (char *)0x0280;
 kernelArgs->common.extlen = 6;
 
-uint8_t pathLen = strlen("vgmplayer2.pgz") + 1;
-strcpy((char *)0x0202, "vgmplayer2.pgz");
+uint8_t pathLen = strlen(menuItems[selected]) + 1;
+strcpy((char *)0x0202, menuItems[selected]);
 
 //arg0
 *(uint8_t*)0x0200 = '-';

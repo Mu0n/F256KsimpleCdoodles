@@ -55,19 +55,19 @@
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
       30      300        2     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300        2     1         timer0.lto.o:(.zp.data)
+      30      300        2     1         timer1.lto.o:(.zp.data)
       30      300        1     1                 _ccolor
       31      301        1     1                 color
       32      302        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       32      302        0     1 __zp_data_size = SIZEOF(.zp.data)
       32       32        2     1 .zp.bss
       32       32        0     1         __zp_bss_start = .
-      32       32        2     1         timer0.lto.o:(.zp.bss)
+      32       32        2     1         timer1.lto.o:(.zp.bss)
       32       32        1     1                 _col
       33       33        1     1                 _row
       34       34        0     1 __zp_bss_size = SIZEOF(.zp.bss)
       34       34        9     1 .zp
-      34       34        9     1         timer0.lto.o:(.zp.noinit)
+      34       34        9     1         timer1.lto.o:(.zp.noinit)
      302      302      677     1 .text
      302      302        0     1         _init = .
      302      302        0     1         _start = .
@@ -90,26 +90,26 @@
      32d      32d       13     1                 __zero_zp_bss
      340      340       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
      340      340       17     1                 __copy_zp_data
-     357      357      39d     1         timer0.lto.o:(.text.f256Init)
+     357      357      39d     1         timer1.lto.o:(.text.f256Init)
      357      357      39d     1                 f256Init
-     6f4      6f4        6     1         timer0.lto.o:(.text.main)
+     6f4      6f4        6     1         timer1.lto.o:(.text.main)
      6f4      6f4        6     1                 main
-     6fa      6fa       60     1         timer0.lto.o:(.text.f256main)
+     6fa      6fa       60     1         timer1.lto.o:(.text.f256main)
      6fa      6fa       60     1                 f256main
-     75a      75a      1ce     1         timer0.lto.o:(.text.textPrint)
+     75a      75a      1ce     1         timer1.lto.o:(.text.textPrint)
      75a      75a      1ce     1                 textPrint
-     928      928        5     1         timer0.lto.o:(.text.exit)
+     928      928        5     1         timer1.lto.o:(.text.exit)
      928      928        5     1                 exit
-     92d      92d       2c     1         timer0.lto.o:(.text.memcpy)
+     92d      92d       2c     1         timer1.lto.o:(.text.memcpy)
      92d      92d       2c     1                 memcpy
-     959      959       20     1         timer0.lto.o:(.text.__memset)
+     959      959       20     1         timer1.lto.o:(.text.__memset)
      959      959       20     1                 __memset
      979      979        0     1         __init_array_start = .
      979      979        0     1         __init_array_end = .
      979      979        0     1         __fini_array_start = .
      979      979        0     1         __fini_array_end = .
      979      979       33     1 .rodata
-     979      979       30     1         timer0.lto.o:(.rodata.textColors)
+     979      979       30     1         timer1.lto.o:(.rodata.textColors)
      979      979       30     1                 textColors
      9a9      9a9        3     1         <internal>:(.rodata.str1.1)
      9ac      9ac        0     1 .data
@@ -119,9 +119,9 @@
      9ac      9ac        0     1 __data_size = SIZEOF(.data)
      9ac      9ac        8     1 .bss
      9ac      9ac        0     1         __bss_start = .
-     9ac      9ac        7     1         timer0.lto.o:(.bss.kernelEventData)
+     9ac      9ac        7     1         timer1.lto.o:(.bss.kernelEventData)
      9ac      9ac        7     1                 kernelEventData
-     9b3      9b3        1     1         timer0.lto.o:(.bss.kernelError)
+     9b3      9b3        1     1         timer1.lto.o:(.bss.kernelError)
      9b3      9b3        1     1                 kernelError
      9b4      9b4        0     1         __bss_end = .
      9b4      9b4        0     1 __bss_size = SIZEOF(.bss)

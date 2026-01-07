@@ -18,11 +18,12 @@ by having edited the irq vector to handle them.
 
 #include "f256lib.h"
 
-#define T0_PEND     0xD660
-#define T0_MASK     0xD66C
-
 #define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
-#define T0_STAT     0xD650 //master control register for timer0, read bit0 set = reached target val
+#define T0_CMP_CTR  0xD654 //b0: t0 returns 0 on reaching target. b1: CMP = last value written to T0_VAL
+#define T0_CMP_L    0xD655 //24 bit target value for comparison
+#define T0_CMP_M    0xD656
+#define T0_CMP_H    0xD657
+#define INT_PENDING_0  0xD660
 
 #define CTR_INTEN   0x80  //present only for timer1? or timer0 as well?
 #define CTR_ENABLE  0x01
@@ -30,17 +31,6 @@ by having edited the irq vector to handle them.
 #define CTR_LOAD    0x04
 #define CTR_UPDOWN  0x08
 
-#define T0_VAL_L    0xD651 //current 24 bit value of the timer
-#define T0_VAL_M    0xD652
-#define T0_VAL_H    0xD653
-
-#define T0_CMP_CTR  0xD654 //b0: t0 returns 0 on reaching target. b1: CMP = last value written to T0_VAL
-#define T0_CMP_L    0xD655 //24 bit target value for comparison
-#define T0_CMP_M    0xD656
-#define T0_CMP_H    0xD657
-
-#define T0_CMP_CTR_RECLEAR 0x01
-#define T0_CMP_CTR_RELOAD  0x02
 
 
 #define MIDI 0xDDA1 //sam2695 to hear that timer0 is working
@@ -49,10 +39,9 @@ uint8_t color = 1; //used for text color for when we write ** on screen
 
 void noteOnMIDI(void);
 void writeStars(void);
-void setTimer0(void);
+void setTimer0(uint32_t);
+void loadTimer(uint32_t);
 void resetTimer0(void);
-uint32_t readTimer0(void);
-uint8_t isTimerDone(void);
 
 void noteOnMIDI()
 {
@@ -65,39 +54,37 @@ void writeStars()
 	textSetColor(color+10,0);textPrint("**"); //do something visually for machines who can't deal MIDI
 }
 
-void setTimer0()
-{
-	resetTimer0();
-	POKE(T0_CMP_CTR, T0_CMP_CTR_RECLEAR); //when the target is reached, bring it back to value 0x000000
-	POKE(T0_CMP_L,0xFF);POKE(T0_CMP_M,0xFF);POKE(T0_CMP_H,0xFF); //inject the compare value as max value
+
+void loadTimer(uint32_t value) {
+    POKE(T0_CTR, CTR_CLEAR);
+    POKEA(T0_CMP_L, value);
 }
 
-void resetTimer0()
-{
-	POKE(T0_CTR, CTR_CLEAR);
-	POKE(T0_CTR, CTR_UPDOWN | CTR_ENABLE);
-	POKE(T0_PEND,0x10); //clear pending timer0
-}
-uint32_t readTimer0()
-{
-	return (uint32_t)((PEEK(T0_VAL_H)))<<16 | (uint32_t)((PEEK(T0_VAL_M)))<<8 | (uint32_t)((PEEK(T0_VAL_L)));
+void resetTimer0(){
+    POKE(T0_CMP_CTR, 0); //when the target is reached, bring it back to value 0x000000
+    POKE(T0_CTR, CTR_CLEAR);
+    POKE(T0_CTR, CTR_INTEN | CTR_UPDOWN | CTR_ENABLE);
 }
 
-uint8_t isTimerDone()
+void setTimer0(uint32_t value)
 {
-	return PEEK(T0_PEND)&0x10;
+    loadTimer(value);//inject the compare value as max value
+    resetTimer0();
 }
-
-
 int main(int argc, char *argv[]) {
-
-setTimer0();
+	
+	setTimer0(0x00FFFFFF);
 while(true)
 {
-	while(isTimerDone()==0);
+	if(PEEK(INT_PENDING_0)&0x10) //timer0 interrupt is raised
+		{
+		noteOnMIDI();
+		writeStars();
+		POKE(INT_PENDING_0,0x10); //clear pending timer0
+  //do stuff at the end of the delay
+		setTimer0(0x00FFFFFF); //set a 24-bit value from 0 to 0x00FFFFFF. Real world time is from 0s to 0.6666s. if you need more, set regular companion variables like a uint8_t that can cycle through 255 of these 2/3rds of a second. you get the idea.
+  //and resend it once more, set the argument to taste
+		}
 	
-	noteOnMIDI();
-	writeStars();
-	POKE(T0_PEND,0x10); //clear timer0 at 0x10
 }
 return 0;}

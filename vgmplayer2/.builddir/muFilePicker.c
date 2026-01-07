@@ -109,7 +109,7 @@ uint8_t getTheFile_far(char *name)
     else
     {
         // Directory missing → set currentPath = "0:/"
-        const char *fallback = "0:/";
+        const char *fallback = "0:";
 		fpr_set_currentPath(fallback);
 		/*
         for (int i = 0; i < MAX_PATH_LEN; i++) {

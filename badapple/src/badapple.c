@@ -17,6 +17,19 @@
 #define CLEAR_PIXEL 32
 #define TOPLEFT 0xC000
 #define BUFFERSIZE 200
+#define NIBBLE_TABLE_SIZE 16
+
+static uint8_t expandNibble[NIBBLE_TABLE_SIZE][4];
+
+void initNibbleTable(void)
+{
+    for (uint8_t v = 0; v < NIBBLE_TABLE_SIZE; v++) {
+        expandNibble[v][0] = (v & 0x8) ? CLEAR_PIXEL : SET_PIXEL;
+        expandNibble[v][1] = (v & 0x4) ? CLEAR_PIXEL : SET_PIXEL;
+        expandNibble[v][2] = (v & 0x2) ? CLEAR_PIXEL : SET_PIXEL;
+        expandNibble[v][3] = (v & 0x1) ? CLEAR_PIXEL : SET_PIXEL;
+    }
+}
 
 void read8KChunk(void *buf, FILE *f)
 {
@@ -66,6 +79,28 @@ void fillFrame(uint8_t val)
 	POKE(MMU_IO_CTRL,0);
 }
 
+static inline void writePixelsForByte(uint8_t value, uint16_t vramAddr)
+{
+    uint8_t hi = value >> 4;     // upper nibble  (0–15)
+    uint8_t lo = value & 0x0F;   // lower nibble  (0–15)
+
+    uint8_t *dst = (uint8_t *)vramAddr;
+
+    const uint8_t *srcHi = expandNibble[hi];
+    const uint8_t *srcLo = expandNibble[lo];
+
+    dst[0] = srcHi[0];
+    dst[1] = srcHi[1];
+    dst[2] = srcHi[2];
+    dst[3] = srcHi[3];
+
+    dst[4] = srcLo[0];
+    dst[5] = srcLo[1];
+    dst[6] = srcLo[2];
+    dst[7] = srcLo[3];
+}
+
+__attribute__((optnone))
 int main(int argc, char *argv[]) {
 FILE *fileNum =0;
 FILE *theMP3file =0;
@@ -81,7 +116,7 @@ uint16_t bufferIndex=0; //index for the local 8k buffer register
 char buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
 uint16_t rawFIFOCount=0;
 uint16_t bytesToTopOff=0;
-uint16_t multipleOf64b = 0;
+uint16_t multipleOf128b = 0;
 bool finished = false;
 uint8_t deliveredBytes=0;
 uint16_t readEntryBufferIndex = 0;
@@ -96,13 +131,12 @@ POKE(MMU_IO_CTRL,0);  //MMU I/O to page 1
 POKE(0xD00D, 0x00);
 
 setTextColorMatrix();
-
 fillFrame(32);
 
 openAllCODEC();
 boostVSClock();
 //initBigPatch();
-	
+initNibbleTable();
 	
 //file loading
 fileNum = fileOpen("demos/ba_anim.bin","r");
@@ -147,6 +181,7 @@ while(!isDone)
 	//animation	
 	target = 0xC000;
 	sTarget=0;	
+	
 	for(uint8_t a=0;a<3;a++) //each frame is 600 bytes, so read every third chunk, 200 bytes
 		{
 		bTarget=0;	
@@ -157,23 +192,50 @@ while(!isDone)
 		if(bytesRead == 0) isDone = true;
 		else 
 			{
-			for(uint8_t c=0;c<20;c++) //one third of screen
+			for(uint8_t c=0;c<200;c++) 
 				{
-				for(uint8_t b=0;b<10;b++) //one line
-					{
-					if(sBuffer[sTarget] == tBuffer[bTarget]) {sTarget++; target+=8; bTarget++; continue;}	
-					sBuffer[sTarget] = tBuffer[bTarget]; //backup					
-					if((tBuffer[bTarget]&0x80)==0x80) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x40)==0x40) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x20)==0x20) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x10)==0x10) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x08)==0x08) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x04)==0x04) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x02)==0x02) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((tBuffer[bTarget]&0x01)==0x01) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					uint8_t old = sBuffer[sTarget];
+					uint8_t new = tBuffer[bTarget];
+
+
+					if(old == new) {sTarget++; target+=8; bTarget++; continue;}	
+					sBuffer[sTarget] = new; //backup					
+				
+				
+	uint8_t hi = new >> 4;     // upper nibble  (0–15)
+    uint8_t lo = new & 0x0F;   // lower nibble  (0–15)
+
+    uint8_t *dst = (uint8_t *)target;
+
+    const uint8_t *srcHi = expandNibble[hi];
+    const uint8_t *srcLo = expandNibble[lo];
+
+    dst[0] = srcHi[0];
+    dst[1] = srcHi[1];
+    dst[2] = srcHi[2];
+    dst[3] = srcHi[3];
+
+    dst[4] = srcLo[0];
+    dst[5] = srcLo[1];
+    dst[6] = srcLo[2];
+    dst[7] = srcLo[3];
+	
+	/*
+					 writePixelsForByte(new, target);
+					 
+					if((new&0x80)==0x80) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x40)==0x40) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x20)==0x20) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x10)==0x10) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x08)==0x08) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x04)==0x04) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x02)==0x02) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+					if((new&0x01)==0x01) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
+	*/
 					bTarget++;
 					sTarget++;
-					}
+					target+=8;
+
 				}
 			}
 
@@ -184,9 +246,9 @@ while(!isDone)
 	
 	rawFIFOCount = PEEKW(VS_FIFO_COUNT);
 	bytesToTopOff = CHUNK2K - (rawFIFOCount&0x07FF); //found how many bytes are left in the 2KB buffer
-	multipleOf64b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
+	multipleOf128b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
 	
-	for(i=0; i<multipleOf64b; i++)
+	for(i=0; i<multipleOf128b; i++)
 			{
 			if(finished) isDone = true;			//make sure we intercept key presses during copying
 			

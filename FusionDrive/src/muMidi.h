@@ -53,7 +53,6 @@
 
 #include "f256lib.h"
 
-extern const char *midi_instruments[128];
 
 //keeps track of tempo changes and pre-calculations of usPerTick and usPerTimer0 to make it lighter during parsing
 typedef struct tempoChange{

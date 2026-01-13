@@ -53,110 +53,155 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30       30        0     1 .zp.data
-      30       30        0     1         __zp_data_start = .
-      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
-      30       30        e     1 .zp.bss
-      30       30        0     1         __zp_bss_start = .
-      30       30        e     1         mustart.lto.o:(.zp.bss)
-      30       30        1     1                 _ccolor
-      31       31        1     1                 _col
-      32       32        1     1                 _row
-      33       33        2     1                 __putchar.s
-      35       35        1     1                 selected
-      36       36        7     1                 kernelEventData
-      3d       3d        1     1                 kernelError
-      3e       3e        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3e       3e       5c     1 .zp
-      3e       3e       5c     1         mustart.lto.o:(.zp.noinit)
-     300      300     1ef4     2 .text
-     300      300        0     1         _init = .
-     300      300        0     1         _start = .
-     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     300      300        0     1                 __do_init_stack
-     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     308      308        0     1                 __do_zero_bss
-     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30b      30b        0     1                 __do_zero_zp_bss
-     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     311      311        0     1                 __after_main
-     314      314        0     1         _fini = .
-     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     316      316      153     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     316      316      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     469      469       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     469      469       13     1                 __zero_bss
-     47c      47c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     47c      47c       13     1                 __zero_zp_bss
-     48f      48f      947     1         mustart.lto.o:(.text.main)
-     48f      48f      947     1                 main
-     dd6      dd6        5     1         mustart.lto.o:(.text.exit)
-     dd6      dd6        5     1                 exit
-     ddb      ddb       d7     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-     ddb      ddb       d7     1                 (anonymous namespace)::put(char, Status*)
-     eb2      eb2      10f     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-     eb2      eb2      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-     fc1      fc1      d31     1         mustart.lto.o:(.text.printf)
-     fc1      fc1      d31     1                 printf
-    1cf2     1cf2      1e0     1         mustart.lto.o:(.text.putchar)
-    1cf2     1cf2      1e0     1                 putchar
-    1ed2     1ed2      2d6     1         mustart.lto.o:(.text.malloc)
-    1ed2     1ed2      2d6     1                 malloc
-    21a8     21a8       2c     1         mustart.lto.o:(.text.memcpy)
-    21a8     21a8       2c     1                 memcpy
-    21d4     21d4       20     1         mustart.lto.o:(.text.__memset)
-    21d4     21d4       20     1                 __memset
-    21f4     21f4        0     1         __init_array_start = .
-    21f4     21f4        0     1         __init_array_end = .
-    21f4     21f4        0     1         __fini_array_start = .
-    21f4     21f4        0     1         __fini_array_end = .
-    21f4     21f4       7b     1 .rodata
-    21f4     21f4       3a     1         mustart.lto.o:(.rodata.printf)
-    222e     222e       11     1         <internal>:(.rodata.str1.1)
-    223f     223f       30     1         mustart.lto.o:(.rodata.textColors)
-    223f     223f       30     1                 textColors
-    226f     226f        0     1 .data
-    226f     226f        0     1         __data_start = .
-    226f     226f        0     1         __data_end = .
-    226f     226f        0     1 __data_load_start = LOADADDR(.data)
-    226f     226f        0     1 __data_size = SIZEOF(.data)
-    226f     226f      4b5     1 .bss
-    226f     226f        0     1         __bss_start = .
-    226f     226f      4b0     1         mustart.lto.o:(.bss.menuItems)
-    226f     226f      4b0     1                 menuItems
-    271f     271f        1     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    271f     271f        1     1                 (anonymous namespace)::initialized
-    2720     2720        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    2720     2720        2     1                 (anonymous namespace)::free_size
-    2722     2722        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    2722     2722        2     1                 (anonymous namespace)::free_list
-    2724     2724        0     1         __bss_end = .
-    2724     2724        0     1 __bss_size = SIZEOF(.bss)
-    2724     2724        0     1 .noinit
-    2724     2724        0     1         __heap_start = ALIGN(., 2)
-    2724     2724        0     1 end_block8 = .
-    2724     2724        0     1 end_block9 = .
-    2724     2724        0     1 end_block10 = .
-    2724     2724        0     1 end_block11 = .
-    2724     2724        0     1 end_block12 = .
-    2724     2724        0     1 end_block13 = .
-    2724     2724        0     1 end_block14 = .
-    2724     2724        0     1 end_block15 = .
-    2724     2724        0     1 end_block16 = .
-    2724     2724        0     1 end_block17 = .
-    2724     2724        0     1 end_block18 = .
-    2724     2724        0     1 end_block19 = .
-    2724     2724        0     1 end_block20 = .
-    2724     2724        0     1 end_block21 = .
-    2724     2724        0     1 end_block22 = .
-    2724     2724        0     1 end_block23 = .
+       0        0        0     1 __pal_lma = 0x10000
+       0        0        0     1 __pal_size = 0x400
+       0        0        0     1 __bmmenu_lma = 0x10400
+       0        0        0     1 __bmmenu_size = 0x12c00
+      30      300        1     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300        1     1         mustart.lto.o:(.zp.data)
+      30      300        1     1                 _ccolor
+      31      301        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      31      301        0     1 __zp_data_size = SIZEOF(.zp.data)
+      31       31       10     1 .zp.bss
+      31       31        0     1         __zp_bss_start = .
+      31       31       10     1         mustart.lto.o:(.zp.bss)
+      31       31        1     1                 menuSoundTimer.1
+      32       32        1     1                 menuSoundTimer.2
+      33       33        1     1                 _col
+      34       34        1     1                 _row
+      35       35        2     1                 __putchar.s
+      37       37        1     1                 selected
+      38       38        1     1                 catSelected
+      39       39        7     1                 kernelEventData
+      40       40        1     1                 kernelError
+      41       41        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      41       41       6c     1 .zp
+      41       41       6c     1         mustart.lto.o:(.zp.noinit)
+     302      302     3eb5     2 .text
+     302      302        0     1         _init = .
+     302      302        0     1         _start = .
+     302      302        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     302      302        0     1                 __do_init_stack
+     30a      30a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     30a      30a        0     1                 __do_zero_bss
+     30d      30d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30d      30d        0     1                 __do_zero_zp_bss
+     310      310        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     310      310        0     1                 __do_copy_zp_data
+     313      313        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     316      316        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     316      316        0     1                 __after_main
+     319      319        0     1         _fini = .
+     319      319        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     31a      31a      153     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     31a      31a      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     46e      46e       f0     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     46e      46e       f0     1                 (anonymous namespace)::FreeChunk::remove()
+     55e      55e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     55e      55e       13     1                 __zero_bss
+     571      571       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     571      571       13     1                 __zero_zp_bss
+     584      584       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     584      584       17     1                 __copy_zp_data
+     59b      59b      8b3     1         mustart.lto.o:(.text.goLeftOrRight)
+     59b      59b      8b3     1                 goLeftOrRight
+     e4e      e4e       d7     1         mustart.lto.o:(.text.displayCats)
+     e4e      e4e       d7     1                 displayCats
+     f25      f25      1e8     1         mustart.lto.o:(.text.goUpOrDown)
+     f25      f25      1e8     1                 goUpOrDown
+    110d     110d      780     1         mustart.lto.o:(.text.readLine)
+    110d     110d      780     1                 readLine
+    188d     188d     13f0     1         mustart.lto.o:(.text.main)
+    188d     188d     13f0     1                 main
+    2c7d     2c7d       da     1         mustart.lto.o:(.text.fileRead)
+    2c7d     2c7d       da     1                 fileRead
+    2d57     2d57        5     1         mustart.lto.o:(.text.exit)
+    2d57     2d57        5     1                 exit
+    2d5c     2d5c       d7     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    2d5c     2d5c       d7     1                 (anonymous namespace)::put(char, Status*)
+    2e33     2e33      10f     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    2e33     2e33      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    2f42     2f42      d31     1         mustart.lto.o:(.text.printf)
+    2f42     2f42      d31     1                 printf
+    3c73     3c73      1f7     1         mustart.lto.o:(.text.putchar)
+    3c73     3c73      1f7     1                 putchar
+    3e6a     3e6a       e7     1         mustart.lto.o:(.text.atoi)
+    3e6a     3e6a       e7     1                 atoi
+    3f51     3f51      1e8     1         mustart.lto.o:(.text.malloc)
+    3f51     3f51      1e8     1                 malloc
+    4139     4139       2c     1         mustart.lto.o:(.text.memcpy)
+    4139     4139       2c     1                 memcpy
+    4165     4165       20     1         mustart.lto.o:(.text.__memset)
+    4165     4165       20     1                 __memset
+    4185     4185       32     1         mustart.lto.o:(.text.__mulhi3)
+    4185     4185       32     1                 __mulhi3
+    41b7     41b7        0     1         __init_array_start = .
+    41b7     41b7        0     1         __init_array_end = .
+    41b7     41b7        0     1         __fini_array_start = .
+    41b7     41b7        0     1         __fini_array_end = .
+    41b7     41b7       a4     1 .rodata
+    41b7     41b7        8     1         mustart.lto.o:(.rodata.readLine)
+    41bf     41bf       3a     1         mustart.lto.o:(.rodata.printf)
+    41f9     41f9       18     1         mustart.lto.o:(.rodata.catNames)
+    41f9     41f9       18     1                 catNames
+    4211     4211       1a     1         <internal>:(.rodata.str1.1)
+    422b     422b       30     1         mustart.lto.o:(.rodata.textColors)
+    422b     422b       30     1                 textColors
+    425b     425b        0     1 .data
+    425b     425b        0     1         __data_start = .
+    425b     425b        0     1         __data_end = .
+    425b     425b        0     1 __data_load_start = LOADADDR(.data)
+    425b     425b        0     1 __data_size = SIZEOF(.data)
+    425b     425b     11de     1 .bss
+    425b     425b        0     1         __bss_start = .
+    425b     425b        4     1         mustart.lto.o:(.bss._BITMAP_BASE.0)
+    425b     425b        4     1                 _BITMAP_BASE.0
+    425f     425f     11d4     1         mustart.lto.o:(.bss.cats)
+    425f     425f     11d4     1                 cats
+    5433     5433        1     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    5433     5433        1     1                 (anonymous namespace)::initialized
+    5434     5434        1     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    5434     5434        1     1                 (anonymous namespace)::last_free
+    5435     5435        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    5435     5435        2     1                 (anonymous namespace)::free_size
+    5437     5437        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    5437     5437        2     1                 (anonymous namespace)::free_list
+    5439     5439        0     1         __bss_end = .
+    5439     5439        0     1 __bss_size = SIZEOF(.bss)
+    5439     5439        0     1 .noinit
+    5439     5439        0     1         __heap_start = ALIGN(., 2)
+    5439     5439        0     1 end_block8 = .
+    5439     5439        0     1 end_block9 = .
+    5439     5439        0     1 end_block10 = .
+    5439     5439        0     1 end_block11 = .
+    5439     5439        0     1 end_block12 = .
+    5439     5439        0     1 end_block13 = .
+    5439     5439        0     1 end_block14 = .
+    5439     5439        0     1 end_block15 = .
+    5439     5439        0     1 end_block16 = .
+    5439     5439        0     1 end_block17 = .
+    5439     5439        0     1 end_block18 = .
+    5439     5439        0     1 end_block19 = .
+    5439     5439        0     1 end_block20 = .
+    5439     5439        0     1 end_block21 = .
+    5439     5439        0     1 end_block22 = .
+    5439     5439        0     1 end_block23 = .
+   10000    10000      400    16 .pal
+   10000    10000      400    16         mustart.lto.o:(.pal)
+   10000    10000        0     1                 pal_start
+   10400    10400        0     1                 pal_end
+   10400    10400        0     1 end_pal = .
+   10400    10400    12c00    16 .bmmenu
+   10400    10400    12c00    16         mustart.lto.o:(.bmmenu)
+   10400    10400        0     1                 bmmenu_start
+   23000    23000        0     1                 bmmenu_end
+   23000    23000        0     1 end_bmmenu = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      790     4 .symtab
-       0        0      790     4         <internal>:(.symtab)
-       0        0       5a     1 .shstrtab
-       0        0       5a     1         <internal>:(.shstrtab)
-       0        0      593     1 .strtab
-       0        0      593     1         <internal>:(.strtab)
+       0        0      940     4 .symtab
+       0        0      940     4         <internal>:(.symtab)
+       0        0       67     1 .shstrtab
+       0        0       67     1         <internal>:(.shstrtab)
+       0        0      6f8     1 .strtab
+       0        0      6f8     1         <internal>:(.strtab)

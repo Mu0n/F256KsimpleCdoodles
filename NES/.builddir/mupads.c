@@ -22,5 +22,6 @@ return (PEEK(PAD_STAT) & STAT_DONE); //if true, it's ready
 
 void padPollDelayUntilReady()
 {
-while ((PEEK(PAD_STAT) & STAT_DONE) == 0) asm("NOP");
+while((PEEK(PAD_CTRL) & STAT_DONE) != STAT_DONE)
+					;
 }

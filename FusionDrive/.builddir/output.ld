@@ -36,9 +36,3 @@
   BYTE((end_backbmp - __backbmp_lma)>>16)
   TRIM(backbmp)
 
-  SHORT(ORIGIN(music))
-  BYTE(ORIGIN(music)>>16)
-  SHORT(end_music - __music_lma)
-  BYTE((end_music - __music_lma)>>16)
-  TRIM(music)
-

@@ -6,4 +6,3 @@
   carB : ORIGIN = __carB_lma, LENGTH = __carB_size
   yellow : ORIGIN = __yellow_lma, LENGTH = __yellow_size
   backbmp : ORIGIN = __backbmp_lma, LENGTH = __backbmp_size
-  music : ORIGIN = __music_lma, LENGTH = __music_size

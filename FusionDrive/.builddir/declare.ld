@@ -18,6 +18,3 @@
   __backbmp_lma  = 0x20000;
   __backbmp_size = 0x12c00;
 
-  __music_lma  = 0x50000;
-  __music_size = 0x223dc;
-

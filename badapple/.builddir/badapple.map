@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__stack = 0xA000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -66,9 +66,9 @@
       34       34        1     1                 kernelError
       35       35        7     1                 kernelEventData
       3c       3c        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3c       3c       59     1 .zp
-      3c       3c       59     1         badapple.lto.o:(.zp.noinit)
-     300      300     2965     2 .text
+      3c       3c       5d     1 .zp
+      3c       3c       5d     1         badapple.lto.o:(.zp.noinit)
+     300      300     3154     2 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -82,91 +82,105 @@
      311      311        0     1                 __after_main
      314      314        0     1         _fini = .
      314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     316      316      13d     2         badapple.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     316      316      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     454      454       df     2         badapple.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     454      454       df     1                 (anonymous namespace)::FreeChunk::remove()
-     533      533       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     533      533       13     1                 __zero_bss
-     546      546       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     546      546       13     1                 __zero_zp_bss
-     559      559     1273     1         badapple.lto.o:(.text.main)
-     559      559     1273     1                 main
-    17cc     17cc      380     1         badapple.lto.o:(.text.fileOpen)
-    17cc     17cc      380     1                 fileOpen
-    1b4c     1b4c      129     1         badapple.lto.o:(.text.fileRead)
-    1b4c     1b4c      129     1                 fileRead
-    1c75     1c75        5     1         badapple.lto.o:(.text.exit)
-    1c75     1c75        5     1                 exit
-    1c7a     1c7a       d3     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    1c7a     1c7a       d3     1                 (anonymous namespace)::put(char, Status*)
-    1d4d     1d4d      10c     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1d4d     1d4d      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    1e59     1e59      bd9     1         badapple.lto.o:(.text.printf)
-    1e59     1e59      bd9     1                 printf
-    2a32     2a32      1e7     1         badapple.lto.o:(.text.putchar)
-    2a32     2a32      1e7     1                 putchar
-    2c19     2c19       2c     1         badapple.lto.o:(.text.memcpy)
-    2c19     2c19       2c     1                 memcpy
-    2c45     2c45       20     1         badapple.lto.o:(.text.__memset)
-    2c45     2c45       20     1                 __memset
-    2c65     2c65        0     1         __init_array_start = .
-    2c65     2c65        0     1         __init_array_end = .
-    2c65     2c65        0     1         __fini_array_start = .
-    2c65     2c65        0     1         __fini_array_end = .
-    2c65     2c65       cd     1 .rodata
-    2c65     2c65        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2c65     2c65        0     1                 __set_v
-    2c66     2c66       3a     1         badapple.lto.o:(.rodata.printf)
-    2ca0     2ca0       30     1         badapple.lto.o:(.rodata.textColors)
-    2ca0     2ca0       30     1                 textColors
-    2cd0     2cd0       62     1         <internal>:(.rodata.str1.1)
-    2d32     2d32        0     1 .data
-    2d32     2d32        0     1         __data_start = .
-    2d32     2d32        0     1         __data_end = .
-    2d32     2d32        0     1 __data_load_start = LOADADDR(.data)
-    2d32     2d32        0     1 __data_size = SIZEOF(.data)
-    2d32     2d32       12     1 .bss
-    2d32     2d32        0     1         __bss_start = .
-    2d32     2d32        4     1         badapple.lto.o:(.bss._BITMAP_BASE.0)
-    2d32     2d32        4     1                 _BITMAP_BASE.0
-    2d36     2d36        4     1         badapple.lto.o:(.bss._BITMAP_BASE.1)
-    2d36     2d36        4     1                 _BITMAP_BASE.1
-    2d3a     2d3a        4     1         badapple.lto.o:(.bss._BITMAP_BASE.2)
-    2d3a     2d3a        4     1                 _BITMAP_BASE.2
-    2d3e     2d3e        1     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    2d3e     2d3e        1     1                 (anonymous namespace)::initialized
-    2d3f     2d3f        1     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    2d3f     2d3f        1     1                 (anonymous namespace)::last_free
-    2d40     2d40        2     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    2d40     2d40        2     1                 (anonymous namespace)::free_size
-    2d42     2d42        2     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    2d42     2d42        2     1                 (anonymous namespace)::free_list
-    2d44     2d44        0     1         __bss_end = .
-    2d44     2d44        0     1 __bss_size = SIZEOF(.bss)
-    2d44     2d44        0     1 .noinit
-    2d44     2d44        0     1         __heap_start = ALIGN(., 2)
-    2d44     2d44        0     1 end_block8 = .
-    2d44     2d44        0     1 end_block9 = .
-    2d44     2d44        0     1 end_block10 = .
-    2d44     2d44        0     1 end_block11 = .
-    2d44     2d44        0     1 end_block12 = .
-    2d44     2d44        0     1 end_block13 = .
-    2d44     2d44        0     1 end_block14 = .
-    2d44     2d44        0     1 end_block15 = .
-    2d44     2d44        0     1 end_block16 = .
-    2d44     2d44        0     1 end_block17 = .
-    2d44     2d44        0     1 end_block18 = .
-    2d44     2d44        0     1 end_block19 = .
-    2d44     2d44        0     1 end_block20 = .
-    2d44     2d44        0     1 end_block21 = .
-    2d44     2d44        0     1 end_block22 = .
-    2d44     2d44        0     1 end_block23 = .
+     316      316      153     2         badapple.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     46a      46a       f0     2         badapple.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     46a      46a       f0     1                 (anonymous namespace)::FreeChunk::remove()
+     55a      55a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     55a      55a       13     1                 __zero_bss
+     56d      56d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     56d      56d       13     1                 __zero_zp_bss
+     580      580      452     1         badapple.lto.o:(.text.main)
+     580      580      452     1                 main
+     9d2      9d2      e43     1         badapple.lto.o:(.text.f256main)
+     9d2      9d2      e43     1                 f256main
+    1815     1815       40     1         badapple.lto.o:(.text.setTextColorMatrix)
+    1815     1815       40     1                 setTextColorMatrix
+    1855     1855       40     1         badapple.lto.o:(.text.fillFrame)
+    1855     1855       40     1                 fillFrame
+    1895     1895       57     1         badapple.lto.o:(.text.initNibbleTable)
+    1895     1895       57     1                 initNibbleTable
+    18ec     18ec      13c     1         badapple.lto.o:(.text.fileOpen)
+    18ec     18ec      13c     1                 fileOpen
+    1a28     1a28       43     1         badapple.lto.o:(.text.read8KChunk)
+    1a28     1a28       43     1                 read8KChunk
+    1a6b     1a6b      179     1         badapple.lto.o:(.text.fileRead)
+    1a6b     1a6b      179     1                 fileRead
+    1be4     1be4      4b2     1         badapple.lto.o:(.text.fileClose)
+    1be4     1be4      4b2     1                 fileClose
+    2096     2096       17     1         badapple.lto.o:(.text.openAllCODEC)
+    2096     2096       17     1                 openAllCODEC
+    20ad     20ad       2d     1         badapple.lto.o:(.text.hitspace)
+    20ad     20ad       2d     1                 hitspace
+    20da     20da       1e     1         badapple.lto.o:(.text.boostVSClock)
+    20da     20da       1e     1                 boostVSClock
+    20f8     20f8        5     1         badapple.lto.o:(.text.exit)
+    20f8     20f8        5     1                 exit
+    20fd     20fd       d7     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    20fd     20fd       d7     1                 (anonymous namespace)::put(char, Status*)
+    21d4     21d4      10f     1         badapple.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    21d4     21d4      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    22e3     22e3      d3a     1         badapple.lto.o:(.text.printf)
+    22e3     22e3      d3a     1                 printf
+    301d     301d      203     1         badapple.lto.o:(.text.putchar)
+    301d     301d      203     1                 putchar
+    3220     3220      1e8     1         badapple.lto.o:(.text.malloc)
+    3220     3220      1e8     1                 malloc
+    3408     3408       2c     1         badapple.lto.o:(.text.memcpy)
+    3408     3408       2c     1                 memcpy
+    3434     3434       20     1         badapple.lto.o:(.text.__memset)
+    3434     3434       20     1                 __memset
+    3454     3454        0     1         __init_array_start = .
+    3454     3454        0     1         __init_array_end = .
+    3454     3454        0     1         __fini_array_start = .
+    3454     3454        0     1         __fini_array_end = .
+    3454     3454       cc     1 .rodata
+    3454     3454       3a     1         badapple.lto.o:(.rodata.printf)
+    348e     348e       30     1         badapple.lto.o:(.rodata.textColors)
+    348e     348e       30     1                 textColors
+    34be     34be       62     1         <internal>:(.rodata.str1.1)
+    3520     3520        0     1 .data
+    3520     3520        0     1         __data_start = .
+    3520     3520        0     1         __data_end = .
+    3520     3520        0     1 __data_load_start = LOADADDR(.data)
+    3520     3520        0     1 __data_size = SIZEOF(.data)
+    3520     3520       46     1 .bss
+    3520     3520        0     1         __bss_start = .
+    3520     3520       40     1         badapple.lto.o:(.bss.expandNibble)
+    3520     3520       40     1                 expandNibble
+    3560     3560        1     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    3560     3560        1     1                 (anonymous namespace)::initialized
+    3561     3561        1     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    3561     3561        1     1                 (anonymous namespace)::last_free
+    3562     3562        2     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    3562     3562        2     1                 (anonymous namespace)::free_size
+    3564     3564        2     1         badapple.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    3564     3564        2     1                 (anonymous namespace)::free_list
+    3566     3566        0     1         __bss_end = .
+    3566     3566        0     1 __bss_size = SIZEOF(.bss)
+    3566     3566        0     1 .noinit
+    3566     3566        0     1         __heap_start = ALIGN(., 2)
+    3566     3566        0     1 end_block8 = .
+    3566     3566        0     1 end_block9 = .
+    3566     3566        0     1 end_block10 = .
+    3566     3566        0     1 end_block11 = .
+    3566     3566        0     1 end_block12 = .
+    3566     3566        0     1 end_block13 = .
+    3566     3566        0     1 end_block14 = .
+    3566     3566        0     1 end_block15 = .
+    3566     3566        0     1 end_block16 = .
+    3566     3566        0     1 end_block17 = .
+    3566     3566        0     1 end_block18 = .
+    3566     3566        0     1 end_block19 = .
+    3566     3566        0     1 end_block20 = .
+    3566     3566        0     1 end_block21 = .
+    3566     3566        0     1 end_block22 = .
+    3566     3566        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      7d0     4 .symtab
-       0        0      7d0     4         <internal>:(.symtab)
+       0        0      840     4 .symtab
+       0        0      840     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      5fa     1 .strtab
-       0        0      5fa     1         <internal>:(.strtab)
+       0        0      648     1 .strtab
+       0        0      648     1         <internal>:(.strtab)

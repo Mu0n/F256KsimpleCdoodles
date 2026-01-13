@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__stack = 0xA000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -66,9 +66,9 @@
       34       34        1     1                 kernelError
       35       35        7     1                 kernelEventData
       3c       3c        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      3c       3c       59     1 .zp
-      3c       3c       59     1         badapple2x.lto.o:(.zp.noinit)
-     300      300     29ad     2 .text
+      3c       3c       5d     1 .zp
+      3c       3c       5d     1         badapple2x.lto.o:(.zp.noinit)
+     300      300     2bc4     2 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -82,91 +82,89 @@
      311      311        0     1                 __after_main
      314      314        0     1         _fini = .
      314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     316      316      13d     2         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     316      316      13d     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     454      454       df     2         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     454      454       df     1                 (anonymous namespace)::FreeChunk::remove()
-     533      533       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     533      533       13     1                 __zero_bss
-     546      546       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     546      546       13     1                 __zero_zp_bss
-     559      559     12bb     1         badapple2x.lto.o:(.text.main)
-     559      559     12bb     1                 main
-    1814     1814      380     1         badapple2x.lto.o:(.text.fileOpen)
-    1814     1814      380     1                 fileOpen
-    1b94     1b94      129     1         badapple2x.lto.o:(.text.fileRead)
-    1b94     1b94      129     1                 fileRead
-    1cbd     1cbd        5     1         badapple2x.lto.o:(.text.exit)
-    1cbd     1cbd        5     1                 exit
-    1cc2     1cc2       d3     1         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    1cc2     1cc2       d3     1                 (anonymous namespace)::put(char, Status*)
-    1d95     1d95      10c     1         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1d95     1d95      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    1ea1     1ea1      bd9     1         badapple2x.lto.o:(.text.printf)
-    1ea1     1ea1      bd9     1                 printf
-    2a7a     2a7a      1e7     1         badapple2x.lto.o:(.text.putchar)
-    2a7a     2a7a      1e7     1                 putchar
-    2c61     2c61       2c     1         badapple2x.lto.o:(.text.memcpy)
-    2c61     2c61       2c     1                 memcpy
-    2c8d     2c8d       20     1         badapple2x.lto.o:(.text.__memset)
-    2c8d     2c8d       20     1                 __memset
-    2cad     2cad        0     1         __init_array_start = .
-    2cad     2cad        0     1         __init_array_end = .
-    2cad     2cad        0     1         __fini_array_start = .
-    2cad     2cad        0     1         __fini_array_end = .
-    2cad     2cad       cd     1 .rodata
-    2cad     2cad        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    2cad     2cad        0     1                 __set_v
-    2cae     2cae       3a     1         badapple2x.lto.o:(.rodata.printf)
-    2ce8     2ce8       30     1         badapple2x.lto.o:(.rodata.textColors)
-    2ce8     2ce8       30     1                 textColors
-    2d18     2d18       62     1         <internal>:(.rodata.str1.1)
-    2d7a     2d7a        0     1 .data
-    2d7a     2d7a        0     1         __data_start = .
-    2d7a     2d7a        0     1         __data_end = .
-    2d7a     2d7a        0     1 __data_load_start = LOADADDR(.data)
-    2d7a     2d7a        0     1 __data_size = SIZEOF(.data)
-    2d7a     2d7a       12     1 .bss
-    2d7a     2d7a        0     1         __bss_start = .
-    2d7a     2d7a        4     1         badapple2x.lto.o:(.bss._BITMAP_BASE.0)
-    2d7a     2d7a        4     1                 _BITMAP_BASE.0
-    2d7e     2d7e        4     1         badapple2x.lto.o:(.bss._BITMAP_BASE.1)
-    2d7e     2d7e        4     1                 _BITMAP_BASE.1
-    2d82     2d82        4     1         badapple2x.lto.o:(.bss._BITMAP_BASE.2)
-    2d82     2d82        4     1                 _BITMAP_BASE.2
-    2d86     2d86        1     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    2d86     2d86        1     1                 (anonymous namespace)::initialized
-    2d87     2d87        1     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    2d87     2d87        1     1                 (anonymous namespace)::last_free
-    2d88     2d88        2     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    2d88     2d88        2     1                 (anonymous namespace)::free_size
-    2d8a     2d8a        2     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    2d8a     2d8a        2     1                 (anonymous namespace)::free_list
-    2d8c     2d8c        0     1         __bss_end = .
-    2d8c     2d8c        0     1 __bss_size = SIZEOF(.bss)
-    2d8c     2d8c        0     1 .noinit
-    2d8c     2d8c        0     1         __heap_start = ALIGN(., 2)
-    2d8c     2d8c        0     1 end_block8 = .
-    2d8c     2d8c        0     1 end_block9 = .
-    2d8c     2d8c        0     1 end_block10 = .
-    2d8c     2d8c        0     1 end_block11 = .
-    2d8c     2d8c        0     1 end_block12 = .
-    2d8c     2d8c        0     1 end_block13 = .
-    2d8c     2d8c        0     1 end_block14 = .
-    2d8c     2d8c        0     1 end_block15 = .
-    2d8c     2d8c        0     1 end_block16 = .
-    2d8c     2d8c        0     1 end_block17 = .
-    2d8c     2d8c        0     1 end_block18 = .
-    2d8c     2d8c        0     1 end_block19 = .
-    2d8c     2d8c        0     1 end_block20 = .
-    2d8c     2d8c        0     1 end_block21 = .
-    2d8c     2d8c        0     1 end_block22 = .
-    2d8c     2d8c        0     1 end_block23 = .
+     316      316      153     2         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     46a      46a       f0     2         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     46a      46a       f0     1                 (anonymous namespace)::FreeChunk::remove()
+     55a      55a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     55a      55a       13     1                 __zero_bss
+     56d      56d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     56d      56d       13     1                 __zero_zp_bss
+     580      580     12d0     1         badapple2x.lto.o:(.text.main)
+     580      580     12d0     1                 main
+    1850     1850      394     1         badapple2x.lto.o:(.text.fileOpen)
+    1850     1850      394     1                 fileOpen
+    1be4     1be4      16c     1         badapple2x.lto.o:(.text.fileRead)
+    1be4     1be4      16c     1                 fileRead
+    1d50     1d50        5     1         badapple2x.lto.o:(.text.exit)
+    1d50     1d50        5     1                 exit
+    1d55     1d55       d7     1         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    1d55     1d55       d7     1                 (anonymous namespace)::put(char, Status*)
+    1e2c     1e2c      10f     1         badapple2x.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1e2c     1e2c      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1f3b     1f3b      d3a     1         badapple2x.lto.o:(.text.printf)
+    1f3b     1f3b      d3a     1                 printf
+    2c75     2c75      203     1         badapple2x.lto.o:(.text.putchar)
+    2c75     2c75      203     1                 putchar
+    2e78     2e78       2c     1         badapple2x.lto.o:(.text.memcpy)
+    2e78     2e78       2c     1                 memcpy
+    2ea4     2ea4       20     1         badapple2x.lto.o:(.text.__memset)
+    2ea4     2ea4       20     1                 __memset
+    2ec4     2ec4        0     1         __init_array_start = .
+    2ec4     2ec4        0     1         __init_array_end = .
+    2ec4     2ec4        0     1         __fini_array_start = .
+    2ec4     2ec4        0     1         __fini_array_end = .
+    2ec4     2ec4       cc     1 .rodata
+    2ec4     2ec4       3a     1         badapple2x.lto.o:(.rodata.printf)
+    2efe     2efe       30     1         badapple2x.lto.o:(.rodata.textColors)
+    2efe     2efe       30     1                 textColors
+    2f2e     2f2e       62     1         <internal>:(.rodata.str1.1)
+    2f90     2f90        0     1 .data
+    2f90     2f90        0     1         __data_start = .
+    2f90     2f90        0     1         __data_end = .
+    2f90     2f90        0     1 __data_load_start = LOADADDR(.data)
+    2f90     2f90        0     1 __data_size = SIZEOF(.data)
+    2f90     2f90       12     1 .bss
+    2f90     2f90        0     1         __bss_start = .
+    2f90     2f90        4     1         badapple2x.lto.o:(.bss._BITMAP_BASE.0)
+    2f90     2f90        4     1                 _BITMAP_BASE.0
+    2f94     2f94        4     1         badapple2x.lto.o:(.bss._BITMAP_BASE.1)
+    2f94     2f94        4     1                 _BITMAP_BASE.1
+    2f98     2f98        4     1         badapple2x.lto.o:(.bss._BITMAP_BASE.2)
+    2f98     2f98        4     1                 _BITMAP_BASE.2
+    2f9c     2f9c        1     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    2f9c     2f9c        1     1                 (anonymous namespace)::initialized
+    2f9d     2f9d        1     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    2f9d     2f9d        1     1                 (anonymous namespace)::last_free
+    2f9e     2f9e        2     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    2f9e     2f9e        2     1                 (anonymous namespace)::free_size
+    2fa0     2fa0        2     1         badapple2x.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    2fa0     2fa0        2     1                 (anonymous namespace)::free_list
+    2fa2     2fa2        0     1         __bss_end = .
+    2fa2     2fa2        0     1 __bss_size = SIZEOF(.bss)
+    2fa2     2fa2        0     1 .noinit
+    2fa2     2fa2        0     1         __heap_start = ALIGN(., 2)
+    2fa2     2fa2        0     1 end_block8 = .
+    2fa2     2fa2        0     1 end_block9 = .
+    2fa2     2fa2        0     1 end_block10 = .
+    2fa2     2fa2        0     1 end_block11 = .
+    2fa2     2fa2        0     1 end_block12 = .
+    2fa2     2fa2        0     1 end_block13 = .
+    2fa2     2fa2        0     1 end_block14 = .
+    2fa2     2fa2        0     1 end_block15 = .
+    2fa2     2fa2        0     1 end_block16 = .
+    2fa2     2fa2        0     1 end_block17 = .
+    2fa2     2fa2        0     1 end_block18 = .
+    2fa2     2fa2        0     1 end_block19 = .
+    2fa2     2fa2        0     1 end_block20 = .
+    2fa2     2fa2        0     1 end_block21 = .
+    2fa2     2fa2        0     1 end_block22 = .
+    2fa2     2fa2        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      7d0     4 .symtab
-       0        0      7d0     4         <internal>:(.symtab)
+       0        0      7c0     4 .symtab
+       0        0      7c0     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      5fa     1 .strtab
-       0        0      5fa     1         <internal>:(.strtab)
+       0        0      5f2     1 .strtab
+       0        0      5f2     1         <internal>:(.strtab)

@@ -107,8 +107,8 @@
 #include <stdlib.h>
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
-#include "../src/muMidiPlay.h"  //digested .dim midi file player
-#include "../src/timer0.h"  //contains timer0 routines
+#include "../src/muMidiPlay2.h"  //digested .dim midi file player
+#include "../src/muTimer0Int.h"  //contains timer0 routines
 
 EMBED(palback, "../assets/Urban4.data.pal", 0x10000); //1kb
 EMBED(carF, "../assets/carfront.bin",0x10400); //2kb
@@ -117,7 +117,6 @@ EMBED(carB, "../assets/carback.bin",0x11400); //2kb
 EMBED(yellow, "../assets/yellow.bin",0x11C00); //5kb
 //next would be at 0x13000
 EMBED(backbmp, "../assets/Urban4.data", 0x20000);
-EMBED(music, "../assets/continen.dim", 0x50000);
 
 //GLOBALS
 struct timer_t carTimer, laneTimer, carForceTimer;
@@ -473,19 +472,37 @@ int main(int argc, char *argv[]) {
 	
 	resetInstruments(false); //resets all channels to piano, for sam2695
 	midiShutUp(false); //ends trailing previous notes if any, for sam2695
-	playEmbeddedDim(MUSIC_BASE);
+	
+	if(loadSMFile("media/midi/continen.mid",MUSIC_BASE) == 1) printf("error loading");
+	
+    initTrack(MUSIC_BASE);	
+	for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
+	resetTimer0();	
+	
+	//playEmbeddedDim(MUSIC_BASE);
 	midiShutAllChannels(false);	
 	
 	while(!exitFlag)
 		{
 		while(!isDone)
 			{
+				if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
+						{
+						POKE(INT_PENDING_0,0x10); //clear the timer0 delay
+						playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+						}
+					
+					if(theOne.isWaiting == false) 
+						{
+						sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
+						}
 			}
-/*			
+			/*
 			index++;
 			if(index>4) index=0;
 			POKEA(VKY_SP0_AD_L, frame[index]);
-*/			
+			*/
+			
 			
 		}
 	return 0;}

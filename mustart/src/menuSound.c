@@ -1,8 +1,11 @@
 #include "f256lib.h"
 #include "../src/menuSound.h"
 #include "../src/muUtils.h" //contains helper functions I often use
+#include "../src/musid.h" //contains helper functions I often use
+#include "../src/muopl3.h" //contains helper functions I often use
 
 struct timer_t menuSoundTimer;
+/*
 const uint8_t psgLow[] = {
 
 0x86, 0x8d,0x87,0x84,0x84,0x87,0x8d,0x84,0x8e,0x8b,0x89,0x89,
@@ -21,6 +24,9 @@ const uint8_t psgHigh[] = {
 0x07, 0x07,0x07,0x06,0x06,0x05,0x05,0x05,0x04,0x04,0x04,0x04,
 0x03, 0x03,0x03,0x03,0x03,0x02,0x02,0x02,0x02,0x02,0x02,0x02,
 0x01, 0x01,0x01,0x01};
+*/
+/*
+
 void shutPSG()
 {
 	for(uint8_t i=1;i<=7;i+=2)
@@ -29,15 +35,7 @@ void shutPSG()
 		POKE(PSG_RIGHT, 0x9F | (i<<4));
 	}
 }
-void midiShutAllChannels()
-{
-	for(uint8_t i=0;i<16;i++)
-	{
-	POKE(0xDDA1, 0xB0 | i); // control change message
-	POKE(0xDDA1, 0x7B); // all notes off command
-	POKE(0xDDA1, 0x00); 
-	}
-}
+
 
 void psgNoteOn(uint8_t chan, uint16_t addr, uint8_t loByte, uint8_t hiByte,uint8_t velo)
 {
@@ -45,7 +43,8 @@ void psgNoteOn(uint8_t chan, uint16_t addr, uint8_t loByte, uint8_t hiByte,uint8
 	POKE(addr,loByte | chan); //chan is either 0, 2 or 4 in bit
 	POKE(addr,hiByte);
 }
-
+*/
+/*
 void psgNoteOff(uint8_t chan,uint16_t addr)
 {
 	POKE(addr,0x9F | chan);
@@ -56,13 +55,15 @@ void setStereoPSG()
 	sys1 = sys1 & 0b11111111;
 	POKE(PSG_SYS1,sys1);
 }
+*/
 void killSound()
 {
 	//MIDI 
-midiShutAllChannels();
+midiShutAllChannels(false);
 	//PSG
 shutPSG();
-
+shutAllSIDVoices();
+opl3_quietAll();
 }
 
 void initMenuSoundTimer()
@@ -76,7 +77,7 @@ setTimer(&menuSoundTimer);
 void relaunchTimer(uint8_t choice)
 {
 
-psgNoteOn(0,PSG_BOTH,psgLow[8+ 20*choice],psgHigh[8+ 20*choice],0x3F);
+psgNoteOn(0,PSG_BOTH,psgLow[8+ 20*choice],psgHigh[8+ 20*choice],0x5F);
 //POKE(0xDDA1,0x90);POKE(0xDDA1,0x3C);POKE(0xDDA1,0x7F);
 menuSoundTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_MENUSOUND_DELAY;
 setTimer(&menuSoundTimer);	

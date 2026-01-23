@@ -6,12 +6,23 @@
 #include "../src/menuSound.h" //contains helper functions I often use
 
 const char catNames[4][6] = {"Games", "Music", "Demos", "Quick"};
+uint8_t chipActive = 0;
 
-struct menuCatList cats[4];
+struct menuCatList cats[3];
 
 uint8_t currentCat = 0;
 
-void goLeftOrRight(bool left, uint8_t *selected, uint8_t *currentCat)
+void updateSoundStatus(uint8_t *currentCat) //heart symbol for active sound test playback, clear rest
+{
+	if(*currentCat!=3)return;
+	for(uint8_t i=0;i<5;i++)
+	{
+		textGotoXY(MENUTOPX, MENUTOPY+1+i);printf("    ");
+	}
+	if(chipActive>0){textGotoXY(MENUTOPX+2, MENUTOPY+1 +chipActive);printf("%c",252);}
+}
+
+void goLeftOrRight(bool left, uint8_t *selected, uint8_t *currentCat) //menu navigating left/right for categories
 {
 	if(*currentCat == 3 && !left) return;
 	if(*currentCat == 0 && left) return;
@@ -31,33 +42,51 @@ void goLeftOrRight(bool left, uint8_t *selected, uint8_t *currentCat)
 	textGotoXY(MENUTOPX, MENUTOPY+3);printf("    2  test the SID\n");
 	textGotoXY(MENUTOPX, MENUTOPY+4);printf("    3  test the OPL3\n");
 	textGotoXY(MENUTOPX, MENUTOPY+5);printf("    4  test the MIDI\n");
-	textGotoXY(MENUTOPX, MENUTOPY+6);printf("SPACE  stop all sounds\n");
+	textGotoXY(MENUTOPX, MENUTOPY+6);printf("SPACE  pause all sounds\n");
+	if(chipActive)
+	{
+		updateSoundStatus(currentCat);
+	}
 	displayCats(MENUTOPX,MENUTOPY, *currentCat);
 	return;
 	}
+	
+	//display the contents
 	*selected  =0;
 	textSetColor(15,0);
 	textClear();
 	displayMenu(MENUTOPX,MENUTOPY, *currentCat);
+	
+	//highlight first item
 	textSetColor(13,1);
 	displayOneItem(MENUTOPX, MENUTOPY, 0, *currentCat);
 	
 }
-void goUpOrDown(bool up, uint8_t *selected, uint8_t cat)
+void goUpOrDown(bool up, uint8_t *selected, uint8_t cat)  //menu navigating up/down for items
 {
 	if(cat==3) return;
 	if(*selected == (cats[cat].fillIndex-1) && !up) return;
 	if(*selected == 0 && up) return;
 	
 	relaunchTimer(0); //make sound and start timer to kill it
+	
+	//un-highlight old item
 	textSetColor(15,0);
 	displayOneItem(MENUTOPX, MENUTOPY, *selected, cat);
 	if(up) (*selected)--;
 	else (*selected)++;
+	
+	//highlight new item
 	textSetColor(13,1);
 	displayOneItem(MENUTOPX, MENUTOPY, *selected, cat);
 }
-void initItems()
+
+
+
+
+
+
+void initItems() //empty out all the strings
 {
 for(uint8_t k=0;k<4;k++) //iterate all categories
 	{
@@ -71,7 +100,8 @@ for(uint8_t k=0;k<4;k++) //iterate all categories
 	}
 }
 
-__attribute__((optnone))
+
+__attribute__((optnone)) //read from the file vcfmenu.txt
 int readLine(FILE *fp) {
     int nameind = 0, descind = 0, fileind = 0, secind = 0; //indices for reading line data
     char c;
@@ -130,7 +160,10 @@ int readLine(FILE *fp) {
     return 1;
 }
 
-FILE *loadMenuFile(void)
+
+
+
+FILE *loadMenuFile(void) //open up the hardcoded text file for menu content
 {
 	FILE *theVGMfile;
 	theVGMfile = fileOpen("vcfmenu.txt","r"); // open file in read mode
@@ -141,16 +174,16 @@ FILE *loadMenuFile(void)
 }
 
 
-void readMenuContent()
+void readMenuContent() //high level reading of the file
 {
 	FILE *theFile = loadMenuFile();
-	for(uint8_t i=0; i<20;i++)
+	for(uint8_t i=0; i<30;i++)
 	{
 	readLine(theFile);
 	}
 	fclose(theFile);
 }
-void displayMenu(uint8_t x, uint8_t y, uint8_t cat)
+void displayMenu(uint8_t x, uint8_t y, uint8_t cat) //high level display of the menu contents
 {
 	for(uint8_t i=0; i < cats[cat].fillIndex; i++)
 	{
@@ -159,6 +192,8 @@ void displayMenu(uint8_t x, uint8_t y, uint8_t cat)
 	
 	displayCats(x,y, cat);
 }
+
+
 void displayOneItem(uint8_t x, uint8_t y, uint8_t which, uint8_t cat)
 {
 	textGotoXY(x,y+which);
@@ -168,6 +203,38 @@ void displayOneItem(uint8_t x, uint8_t y, uint8_t which, uint8_t cat)
 	printf("%s",cats[cat].items[which].desc);
 	
 }
+/*
+void displayOneItem(uint8_t x, uint8_t y, uint8_t which, uint8_t cat)
+{
+	uint8_t count=0;
+	while(true) //name
+	{
+		char c = FAR_PEEK(((uint32_t)MENU_BASE +      (uint32_t)(PERITEM) * (uint32_t)which)     +      cat * (uint32_t)(PERCAT));
+		if(c == '\0') break;
+		textGotoXY(x+count,y+which);
+		printf("%c",c);
+		count++;
+		if(count == MAXNAME) break;
+	}
+	
+	count=0;
+	while(true) //desc
+	{
+		char c = FAR_PEEK(((uint32_t)MENU_BASE +   (uint32_t)MAXNAME +   (uint32_t)(PERITEM) * (uint32_t)which)     +      cat * (uint32_t)(PERCAT));
+		if(c == '\0') break;
+		textGotoXY(x+count,y+which);
+		printf("%c",c);
+		count++;
+		if(count == MAXDESC) break;
+	}
+}
+*/
+
+
+
+
+
+
 void displayCats(uint8_t x, uint8_t y, uint8_t cat)
 {
 	

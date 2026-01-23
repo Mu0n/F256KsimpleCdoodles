@@ -1,10 +1,6 @@
 #ifndef MUPADS_H
 #define MUPADS_H
 
-
-#define TIMER_PAD_COOKIE 99
-#define TIMER_PAD_DELAY 2
-
 #define PAD_CTRL    0xD880
 #define PAD_STAT    0xD880
 //D880 settings
@@ -13,7 +9,11 @@
 
 #define CTRL_TRIG     0b10000000 // use this to launch a trigger of the polling. 
 #define CTRL_TRIG_OFF 0b00000000 // clears the trigger
-#define STAT_DONE     0b01000000     //use this to verify the polling is done and the states are ready to be read
+#define STAT_DONE     0b01000000     //use this to verify the polling is done and the 
+
+//states are ready to be read
+
+
 
 //use either of these with a bitwise 'or' with the previous 3 lines to select NES or SNES modes
 #define CTRL_MODE_NES  0b00000001
@@ -29,14 +29,15 @@
 #define PAD3_S   0xD88B //snes only
 
 //Poll the pad, do a bitwise 'And' and if the value is 0, then it's pressed
-#define NES_A      0x80
-#define NES_B      0x40
-#define NES_SELECT 0x20
-#define NES_START  0x10
-#define NES_UP     0x08
-#define NES_DOWN   0x04
-#define NES_LEFT   0x02
-#define NES_RIGHT  0x01
+
+#define NES_A      0x7F
+#define NES_B      0xBF
+#define NES_SELECT 0xDF
+#define NES_START  0xEF
+#define NES_UP     0xF7
+#define NES_DOWN   0xFB
+#define NES_LEFT   0xFD
+#define NES_RIGHT  0xFE
 
 //Poll the pad, do a bitwise 'And' and if the value is 0, then it's pressed
 #define SNES_B      0x80

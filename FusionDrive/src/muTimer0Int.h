@@ -1,6 +1,10 @@
 #ifndef MUTIMER0INT_H
 #define MUTIMER0INT_H
 
+#define LINT_CTRL   0xD018 //line interr control, set bit0 to 1 to activate
+#define LINT_L_LO   0xD019 //low part of 12 bit resolution line number
+#define LINT_L_HI   0xD01A //hi part
+
 
 #define T0_CTR      0xD650 //master control register for timer0, write.b0=ticks b1=reset b2=set to last value of VAL b3=set count up, clear count down
 #define T0_STAT     0xD650 //master control register for timer0, read bit0 set = reached target val
@@ -48,11 +52,14 @@
 
 typedef void (*funcPtr)();
 
-byte setMMU(byte, byte);
 void enableTimer(funcPtr, funcPtr);
 void loadTimer(uint32_t);
 void setTimer0(uint32_t);
 void resetTimer0(void);
+
+void setSOL(void);
+void setSOL_line(uint16_t);
+
 
 extern funcPtr original_irq_handler;
 

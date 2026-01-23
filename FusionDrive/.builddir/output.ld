@@ -36,3 +36,9 @@
   BYTE((end_backbmp - __backbmp_lma)>>16)
   TRIM(backbmp)
 
+  SHORT(ORIGIN(back2bmp))
+  BYTE(ORIGIN(back2bmp)>>16)
+  SHORT(end_back2bmp - __back2bmp_lma)
+  BYTE((end_back2bmp - __back2bmp_lma)>>16)
+  TRIM(back2bmp)
+

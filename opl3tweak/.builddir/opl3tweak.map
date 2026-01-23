@@ -1,8 +1,8 @@
      VMA      LMA     Size Align Out     In      Symbol
-       0        0        0     1 PROVIDE(__stack = 0xC000)
+       0        0        0     1 PROVIDE(__stack = 0xA000)
        0        0        0     1 PROVIDE(__f256_start = 0x300)
        0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
-       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xC000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
        0        0        0     1 __rc0 = 0x10
        0        0        0     1 __rc1 = __rc0 + 1
        0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
@@ -75,9 +75,9 @@
       4f       4f        1     1                 exitCode
       50       50        1     1                 indexUI
       51       51        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      51       51       5b     1 .zp
-      51       51       5b     1         opl3tweak.lto.o:(.zp.noinit)
-     301      301     40a7     1 .text
+      51       51       5e     1 .zp
+      51       51       5e     1         opl3tweak.lto.o:(.zp.noinit)
+     301      301     44b4     1 .text
      301      301        0     1         _init = .
      301      301        0     1         _start = .
      301      301        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -99,83 +99,81 @@
      32c      32c       13     1                 __zero_zp_bss
      33f      33f       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
      33f      33f       17     1                 __copy_zp_data
-     356      356      13a     1         opl3tweak.lto.o:(.text.opl3_initialize)
-     356      356      13a     1                 opl3_initialize
-     490      490      151     1         opl3tweak.lto.o:(.text.opl3_setInstrumentAllChannels)
-     490      490      151     1                 opl3_setInstrumentAllChannels
-     5e1      5e1     1cc1     1         opl3tweak.lto.o:(.text.main)
-     5e1      5e1     1cc1     1                 main
-    22a2     22a2      1e7     1         opl3tweak.lto.o:(.text.textPrint)
-    22a2     22a2      1e7     1                 textPrint
-    2489     2489      fe0     1         opl3tweak.lto.o:(.text.updateValues)
-    2489     2489      fe0     1                 updateValues
-    3469     3469        5     1         opl3tweak.lto.o:(.text.exit)
-    3469     3469        5     1                 exit
-    346e     346e       db     1         opl3tweak.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    346e     346e       db     1                 (anonymous namespace)::put(char, Status*)
-    3549     3549      10c     1         opl3tweak.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    3549     3549      10c     1                 (anonymous namespace)::print_string(char const*, Status*)
-    3655     3655      c2c     1         opl3tweak.lto.o:(.text.printf)
-    3655     3655      c2c     1                 printf
-    4281     4281       2c     1         opl3tweak.lto.o:(.text.memcpy)
-    4281     4281       2c     1                 memcpy
-    42ad     42ad       20     1         opl3tweak.lto.o:(.text.__memset)
-    42ad     42ad       20     1                 __memset
-    42cd     42cd       db     1         opl3tweak.lto.o:(.text.__udivmodhi4)
-    42cd     42cd       db     1                 __udivmodhi4
-    43a8     43a8        0     1         __init_array_start = .
-    43a8     43a8        0     1         __init_array_end = .
-    43a8     43a8        0     1         __fini_array_start = .
-    43a8     43a8        0     1         __fini_array_end = .
-    43a8     43a8      4f9     1 .rodata
-    43a8     43a8        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    43a8     43a8        0     1                 __set_v
-    43a9     43a9      1cc     1         opl3tweak.lto.o:(.rodata.main)
-    4575     4575       3a     1         opl3tweak.lto.o:(.rodata.printf)
-    45af     45af       58     1         opl3tweak.lto.o:(.rodata.noteColors)
-    45af     45af       58     1                 noteColors
-    4607     4607       18     1         opl3tweak.lto.o:(.rodata.opl3_fnums)
-    4607     4607       18     1                 opl3_fnums
-    461f     461f       30     1         opl3tweak.lto.o:(.rodata.textColors)
-    461f     461f       30     1                 textColors
-    464f     464f       16     1         opl3tweak.lto.o:(.rodata.navWSJumps)
-    464f     464f       16     1                 navWSJumps
-    4665     4665      23c     1         <internal>:(.rodata.str1.1)
-    48a1     48a1        0     1 .data
-    48a1     48a1        0     1         __data_start = .
-    48a1     48a1        0     1         __data_end = .
-    48a1     48a1        0     1 __data_load_start = LOADADDR(.data)
-    48a1     48a1        0     1 __data_size = SIZEOF(.data)
-    48a1     48a1       a0     1 .bss
-    48a1     48a1        0     1         __bss_start = .
-    48a1     48a1        1     1         opl3tweak.lto.o:(.bss.kernelError)
-    48a1     48a1        1     1                 kernelError
-    48a2     48a2        4     1         opl3tweak.lto.o:(.bss._BITMAP_BASE.0)
-    48a2     48a2        4     1                 _BITMAP_BASE.0
-    48a6     48a6        1     1         opl3tweak.lto.o:(.bss.shiftTog)
-    48a6     48a6        1     1                 shiftTog
-    48a7     48a7       9a     1         opl3tweak.lto.o:(.bss.opl3_fields)
-    48a7     48a7       9a     1                 opl3_fields
-    4941     4941        0     1         __bss_end = .
-    4941     4941        0     1 __bss_size = SIZEOF(.bss)
-    4941     4941        0     1 .noinit
-    4941     4941        0     1         __heap_start = ALIGN(., 2)
-    4941     4941        0     1 end_block8 = .
-    4941     4941        0     1 end_block9 = .
-    4941     4941        0     1 end_block10 = .
-    4941     4941        0     1 end_block11 = .
-    4941     4941        0     1 end_block12 = .
-    4941     4941        0     1 end_block13 = .
-    4941     4941        0     1 end_block14 = .
-    4941     4941        0     1 end_block15 = .
-    4941     4941        0     1 end_block16 = .
-    4941     4941        0     1 end_block17 = .
-    4941     4941        0     1 end_block18 = .
-    4941     4941        0     1 end_block19 = .
-    4941     4941        0     1 end_block20 = .
-    4941     4941        0     1 end_block21 = .
-    4941     4941        0     1 end_block22 = .
-    4941     4941        0     1 end_block23 = .
+     356      356      15f     1         opl3tweak.lto.o:(.text.opl3_initialize)
+     356      356      15f     1                 opl3_initialize
+     4b5      4b5      151     1         opl3tweak.lto.o:(.text.opl3_setInstrumentAllChannels)
+     4b5      4b5      151     1                 opl3_setInstrumentAllChannels
+     606      606     1f4d     1         opl3tweak.lto.o:(.text.main)
+     606      606     1f4d     1                 main
+    2553     2553      1f9     1         opl3tweak.lto.o:(.text.textPrint)
+    2553     2553      1f9     1                 textPrint
+    274c     274c     1013     1         opl3tweak.lto.o:(.text.updateValues)
+    274c     274c     1013     1                 updateValues
+    375f     375f        5     1         opl3tweak.lto.o:(.text.exit)
+    375f     375f        5     1                 exit
+    3764     3764       df     1         opl3tweak.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    3764     3764       df     1                 (anonymous namespace)::put(char, Status*)
+    3843     3843      10f     1         opl3tweak.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    3843     3843      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    3952     3952      d40     1         opl3tweak.lto.o:(.text.printf)
+    3952     3952      d40     1                 printf
+    4692     4692       2c     1         opl3tweak.lto.o:(.text.memcpy)
+    4692     4692       2c     1                 memcpy
+    46be     46be       20     1         opl3tweak.lto.o:(.text.__memset)
+    46be     46be       20     1                 __memset
+    46de     46de       d7     1         opl3tweak.lto.o:(.text.__udivmodhi4)
+    46de     46de       d7     1                 __udivmodhi4
+    47b5     47b5        0     1         __init_array_start = .
+    47b5     47b5        0     1         __init_array_end = .
+    47b5     47b5        0     1         __fini_array_start = .
+    47b5     47b5        0     1         __fini_array_end = .
+    47b5     47b5      4f8     1 .rodata
+    47b5     47b5      1cc     1         opl3tweak.lto.o:(.rodata.main)
+    4981     4981       3a     1         opl3tweak.lto.o:(.rodata.printf)
+    49bb     49bb       58     1         opl3tweak.lto.o:(.rodata.noteColors)
+    49bb     49bb       58     1                 noteColors
+    4a13     4a13       18     1         opl3tweak.lto.o:(.rodata.opl3_fnums)
+    4a13     4a13       18     1                 opl3_fnums
+    4a2b     4a2b       30     1         opl3tweak.lto.o:(.rodata.textColors)
+    4a2b     4a2b       30     1                 textColors
+    4a5b     4a5b       16     1         opl3tweak.lto.o:(.rodata.navWSJumps)
+    4a5b     4a5b       16     1                 navWSJumps
+    4a71     4a71      23c     1         <internal>:(.rodata.str1.1)
+    4cad     4cad        0     1 .data
+    4cad     4cad        0     1         __data_start = .
+    4cad     4cad        0     1         __data_end = .
+    4cad     4cad        0     1 __data_load_start = LOADADDR(.data)
+    4cad     4cad        0     1 __data_size = SIZEOF(.data)
+    4cad     4cad       a0     1 .bss
+    4cad     4cad        0     1         __bss_start = .
+    4cad     4cad        1     1         opl3tweak.lto.o:(.bss.kernelError)
+    4cad     4cad        1     1                 kernelError
+    4cae     4cae        4     1         opl3tweak.lto.o:(.bss._BITMAP_BASE.0)
+    4cae     4cae        4     1                 _BITMAP_BASE.0
+    4cb2     4cb2        1     1         opl3tweak.lto.o:(.bss.shiftTog)
+    4cb2     4cb2        1     1                 shiftTog
+    4cb3     4cb3       9a     1         opl3tweak.lto.o:(.bss.opl3_fields)
+    4cb3     4cb3       9a     1                 opl3_fields
+    4d4d     4d4d        0     1         __bss_end = .
+    4d4d     4d4d        0     1 __bss_size = SIZEOF(.bss)
+    4d4d     4d4d        0     1 .noinit
+    4d4d     4d4d        0     1         __heap_start = ALIGN(., 2)
+    4d4d     4d4d        0     1 end_block8 = .
+    4d4d     4d4d        0     1 end_block9 = .
+    4d4d     4d4d        0     1 end_block10 = .
+    4d4d     4d4d        0     1 end_block11 = .
+    4d4d     4d4d        0     1 end_block12 = .
+    4d4d     4d4d        0     1 end_block13 = .
+    4d4d     4d4d        0     1 end_block14 = .
+    4d4d     4d4d        0     1 end_block15 = .
+    4d4d     4d4d        0     1 end_block16 = .
+    4d4d     4d4d        0     1 end_block17 = .
+    4d4d     4d4d        0     1 end_block18 = .
+    4d4d     4d4d        0     1 end_block19 = .
+    4d4d     4d4d        0     1 end_block20 = .
+    4d4d     4d4d        0     1 end_block21 = .
+    4d4d     4d4d        0     1 end_block22 = .
+    4d4d     4d4d        0     1 end_block23 = .
    30000    30000      3fc    16 .pianopal
    30000    30000      3fc    16         opl3tweak.lto.o:(.pianopal)
    30000    30000        0     1                 pianopal_start
@@ -188,9 +186,9 @@
    43000    43000        0     1 end_keys = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      8e0     4 .symtab
-       0        0      8e0     4         <internal>:(.symtab)
+       0        0      8d0     4 .symtab
+       0        0      8d0     4         <internal>:(.symtab)
        0        0       6a     1 .shstrtab
        0        0       6a     1         <internal>:(.shstrtab)
-       0        0      665     1 .strtab
-       0        0      665     1         <internal>:(.strtab)
+       0        0      65d     1 .strtab
+       0        0      65d     1         <internal>:(.strtab)

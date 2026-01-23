@@ -2,3 +2,4 @@
 
   .pal : { *(.pal .pal*) } >pal end_pal = .;
   .bmmenu : { *(.bmmenu .bmmenu*) } >bmmenu end_bmmenu = .;
+  .canyon : { *(.canyon .canyon*) } >canyon end_canyon = .;

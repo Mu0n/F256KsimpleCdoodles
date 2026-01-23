@@ -6,7 +6,7 @@
 
 int8_t findFreeChannel(uint8_t *, uint8_t, uint8_t *);
 int8_t liberateChannel(uint8_t , uint8_t *, uint8_t);
-void dispatchNote(bool, uint8_t, uint8_t, uint8_t, bool, uint8_t, bool, uint8_t);
+void dispatchNote(bool, uint8_t, uint8_t, uint8_t, bool, uint8_t, bool);
 
 extern uint8_t chipAct[];
 

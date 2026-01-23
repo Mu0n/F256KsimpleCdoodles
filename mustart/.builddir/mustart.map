@@ -57,136 +57,193 @@
        0        0        0     1 __pal_size = 0x400
        0        0        0     1 __bmmenu_lma = 0x10400
        0        0        0     1 __bmmenu_size = 0x12c00
-      30      300        1     1 .zp.data
+       0        0        0     1 __canyon_lma = 0x30000
+       0        0        0     1 __canyon_size = 0x14b4
+      30      300        d     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300        1     1         mustart.lto.o:(.zp.data)
-      30      300        1     1                 _ccolor
-      31      301        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      31      301        0     1 __zp_data_size = SIZEOF(.zp.data)
-      31       31       10     1 .zp.bss
-      31       31        0     1         __zp_bss_start = .
-      31       31       10     1         mustart.lto.o:(.zp.bss)
-      31       31        1     1                 menuSoundTimer.1
-      32       32        1     1                 menuSoundTimer.2
-      33       33        1     1                 _col
-      34       34        1     1                 _row
-      35       35        2     1                 __putchar.s
-      37       37        1     1                 selected
-      38       38        1     1                 catSelected
-      39       39        7     1                 kernelEventData
-      40       40        1     1                 kernelError
-      41       41        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      41       41       6c     1 .zp
-      41       41       6c     1         mustart.lto.o:(.zp.noinit)
-     302      302     3eb5     2 .text
-     302      302        0     1         _init = .
-     302      302        0     1         _start = .
-     302      302        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     302      302        0     1                 __do_init_stack
-     30a      30a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     30a      30a        0     1                 __do_zero_bss
-     30d      30d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     30d      30d        0     1                 __do_zero_zp_bss
-     310      310        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     310      310        0     1                 __do_copy_zp_data
-     313      313        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     316      316        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     316      316        0     1                 __after_main
-     319      319        0     1         _fini = .
-     319      319        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     31a      31a      153     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     31a      31a      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     46e      46e       f0     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
-     46e      46e       f0     1                 (anonymous namespace)::FreeChunk::remove()
-     55e      55e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     55e      55e       13     1                 __zero_bss
-     571      571       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     571      571       13     1                 __zero_zp_bss
-     584      584       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     584      584       17     1                 __copy_zp_data
-     59b      59b      8b3     1         mustart.lto.o:(.text.goLeftOrRight)
-     59b      59b      8b3     1                 goLeftOrRight
-     e4e      e4e       d7     1         mustart.lto.o:(.text.displayCats)
-     e4e      e4e       d7     1                 displayCats
-     f25      f25      1e8     1         mustart.lto.o:(.text.goUpOrDown)
-     f25      f25      1e8     1                 goUpOrDown
-    110d     110d      780     1         mustart.lto.o:(.text.readLine)
-    110d     110d      780     1                 readLine
-    188d     188d     13f0     1         mustart.lto.o:(.text.main)
-    188d     188d     13f0     1                 main
-    2c7d     2c7d       da     1         mustart.lto.o:(.text.fileRead)
-    2c7d     2c7d       da     1                 fileRead
-    2d57     2d57        5     1         mustart.lto.o:(.text.exit)
-    2d57     2d57        5     1                 exit
-    2d5c     2d5c       d7     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    2d5c     2d5c       d7     1                 (anonymous namespace)::put(char, Status*)
-    2e33     2e33      10f     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    2e33     2e33      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-    2f42     2f42      d31     1         mustart.lto.o:(.text.printf)
-    2f42     2f42      d31     1                 printf
-    3c73     3c73      1f7     1         mustart.lto.o:(.text.putchar)
-    3c73     3c73      1f7     1                 putchar
-    3e6a     3e6a       e7     1         mustart.lto.o:(.text.atoi)
-    3e6a     3e6a       e7     1                 atoi
-    3f51     3f51      1e8     1         mustart.lto.o:(.text.malloc)
-    3f51     3f51      1e8     1                 malloc
-    4139     4139       2c     1         mustart.lto.o:(.text.memcpy)
-    4139     4139       2c     1                 memcpy
-    4165     4165       20     1         mustart.lto.o:(.text.__memset)
-    4165     4165       20     1                 __memset
-    4185     4185       32     1         mustart.lto.o:(.text.__mulhi3)
-    4185     4185       32     1                 __mulhi3
-    41b7     41b7        0     1         __init_array_start = .
-    41b7     41b7        0     1         __init_array_end = .
-    41b7     41b7        0     1         __fini_array_start = .
-    41b7     41b7        0     1         __fini_array_end = .
-    41b7     41b7       a4     1 .rodata
-    41b7     41b7        8     1         mustart.lto.o:(.rodata.readLine)
-    41bf     41bf       3a     1         mustart.lto.o:(.rodata.printf)
-    41f9     41f9       18     1         mustart.lto.o:(.rodata.catNames)
-    41f9     41f9       18     1                 catNames
-    4211     4211       1a     1         <internal>:(.rodata.str1.1)
-    422b     422b       30     1         mustart.lto.o:(.rodata.textColors)
-    422b     422b       30     1                 textColors
-    425b     425b        0     1 .data
-    425b     425b        0     1         __data_start = .
-    425b     425b        0     1         __data_end = .
-    425b     425b        0     1 __data_load_start = LOADADDR(.data)
-    425b     425b        0     1 __data_size = SIZEOF(.data)
-    425b     425b     11de     1 .bss
-    425b     425b        0     1         __bss_start = .
-    425b     425b        4     1         mustart.lto.o:(.bss._BITMAP_BASE.0)
-    425b     425b        4     1                 _BITMAP_BASE.0
-    425f     425f     11d4     1         mustart.lto.o:(.bss.cats)
-    425f     425f     11d4     1                 cats
-    5433     5433        1     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    5433     5433        1     1                 (anonymous namespace)::initialized
-    5434     5434        1     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    5434     5434        1     1                 (anonymous namespace)::last_free
-    5435     5435        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    5435     5435        2     1                 (anonymous namespace)::free_size
-    5437     5437        2     1         mustart.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    5437     5437        2     1                 (anonymous namespace)::free_list
-    5439     5439        0     1         __bss_end = .
-    5439     5439        0     1 __bss_size = SIZEOF(.bss)
-    5439     5439        0     1 .noinit
-    5439     5439        0     1         __heap_start = ALIGN(., 2)
-    5439     5439        0     1 end_block8 = .
-    5439     5439        0     1 end_block9 = .
-    5439     5439        0     1 end_block10 = .
-    5439     5439        0     1 end_block11 = .
-    5439     5439        0     1 end_block12 = .
-    5439     5439        0     1 end_block13 = .
-    5439     5439        0     1 end_block14 = .
-    5439     5439        0     1 end_block15 = .
-    5439     5439        0     1 end_block16 = .
-    5439     5439        0     1 end_block17 = .
-    5439     5439        0     1 end_block18 = .
-    5439     5439        0     1 end_block19 = .
-    5439     5439        0     1 end_block20 = .
-    5439     5439        0     1 end_block21 = .
-    5439     5439        0     1 end_block22 = .
-    5439     5439        0     1 end_block23 = .
+      30      300        d     1         mustart.lto.o:(.zp.data)
+      30      300        6     1                 sidChoiceToVoice
+      36      306        6     1                 polyPSGChanBits
+      3c      30c        1     1                 _ccolor
+      3d      30d        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      3d      30d        0     1 __zp_data_size = SIZEOF(.zp.data)
+      3d       3d       44     1 .zp.bss
+      3d       3d        0     1         __zp_bss_start = .
+      3d       3d       44     1         mustart.lto.o:(.zp.bss)
+      3d       3d        1     1                 menuSoundTimer.1
+      3e       3e        1     1                 menuSoundTimer.2
+      3f       3f        1     1                 doneWithFudge
+      40       40        1     1                 _col
+      41       41        1     1                 _row
+      42       42        4     1                 _BITMAP_BASE.0
+      46       46        2     1                 __putchar.s
+      48       48        1     1                 selected
+      49       49        1     1                 catSelected
+      4a       4a        1     1                 readyForPads
+      4b       4b        1     1                 isJingleActive
+      4c       4c        1     1                 padDelayTimer.1
+      4d       4d        1     1                 padDelayTimer.2
+      4e       4e        1     1                 chipActive
+      4f       4f       10     1                 chipXChannel
+      5f       5f        1     1                 fudge
+      60       60        2     1                 theOne.0
+      62       62        2     1                 theOne.1
+      64       64        4     1                 theOne.2
+      68       68        1     1                 theOne.4
+      69       69        4     1                 theOne.5
+      6d       6d        2     1                 theOne.6
+      6f       6f        2     1                 theOne.7
+      71       71        2     1                 theOne.8
+      73       73        7     1                 kernelEventData
+      7a       7a        1     1                 kernelError
+      7b       7b        1     1                 (anonymous namespace)::initialized
+      7c       7c        1     1                 (anonymous namespace)::last_free
+      7d       7d        2     1                 (anonymous namespace)::free_size
+      7f       7f        2     1                 (anonymous namespace)::free_list
+      81       81        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      81       81       6e     1 .zp
+      81       81       6e     1         mustart.lto.o:(.zp.noinit)
+     30e      30e     6b9c     2 .text
+     30e      30e        0     1         _init = .
+     30e      30e        0     1         _start = .
+     30e      30e        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     30e      30e        0     1                 __do_init_stack
+     316      316        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     316      316        0     1                 __do_zero_bss
+     319      319        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     319      319        0     1                 __do_zero_zp_bss
+     31c      31c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     31c      31c        0     1                 __do_copy_zp_data
+     31f      31f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     322      322        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     322      322        0     1                 __after_main
+     325      325        0     1         _fini = .
+     325      325        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     326      326      14b     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     326      326      14b     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     472      472       e8     2         mustart.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     472      472       e8     1                 (anonymous namespace)::FreeChunk::remove()
+     55a      55a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     55a      55a       13     1                 __zero_bss
+     56d      56d       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     56d      56d       13     1                 __zero_zp_bss
+     580      580       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     580      580       17     1                 __copy_zp_data
+     597      597      191     1         mustart.lto.o:(.text.killSound)
+     597      597      191     1                 killSound
+     728      728       ef     1         mustart.lto.o:(.text.updateSoundStatus)
+     728      728       ef     1                 updateSoundStatus
+     817      817      8f9     1         mustart.lto.o:(.text.goLeftOrRight)
+     817      817      8f9     1                 goLeftOrRight
+    1110     1110       f7     1         mustart.lto.o:(.text.displayCats)
+    1110     1110       f7     1                 displayCats
+    1207     1207      227     1         mustart.lto.o:(.text.goUpOrDown)
+    1207     1207      227     1                 goUpOrDown
+    142e     142e      780     1         mustart.lto.o:(.text.readLine)
+    142e     142e      780     1                 readLine
+    1bae     1bae      2f0     1         mustart.lto.o:(.text.sendAME)
+    1bae     1bae      2f0     1                 sendAME
+    1e9e     1e9e      4c1     1         mustart.lto.o:(.text.readDelta)
+    1e9e     1e9e      4c1     1                 readDelta
+    235f     235f      5c5     1         mustart.lto.o:(.text.readMIDICmd)
+    235f     235f      5c5     1                 readMIDICmd
+    2924     2924      216     1         mustart.lto.o:(.text.skipWhenFFCmd)
+    2924     2924      216     1                 skipWhenFFCmd
+    2b3a     2b3a      2f8     1         mustart.lto.o:(.text.exhaustZeroes)
+    2b3a     2b3a      2f8     1                 exhaustZeroes
+    2e32     2e32      536     1         mustart.lto.o:(.text.initTrack)
+    2e32     2e32      536     1                 initTrack
+    3368     3368     2187     1         mustart.lto.o:(.text.main)
+    3368     3368     2187     1                 main
+    54ef     54ef       4d     1         mustart.lto.o:(.text.resetPadReadiness)
+    54ef     54ef       4d     1                 resetPadReadiness
+    553c     553c       da     1         mustart.lto.o:(.text.fileRead)
+    553c     553c       da     1                 fileRead
+    5616     5616        5     1         mustart.lto.o:(.text.exit)
+    5616     5616        5     1                 exit
+    561b     561b       d7     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    561b     561b       d7     1                 (anonymous namespace)::put(char, Status*)
+    56f2     56f2      10f     1         mustart.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    56f2     56f2      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    5801     5801      d3a     1         mustart.lto.o:(.text.printf)
+    5801     5801      d3a     1                 printf
+    653b     653b      1f7     1         mustart.lto.o:(.text.putchar)
+    653b     653b      1f7     1                 putchar
+    6732     6732       e7     1         mustart.lto.o:(.text.atoi)
+    6732     6732       e7     1                 atoi
+    6819     6819      1e2     1         mustart.lto.o:(.text.malloc)
+    6819     6819      1e2     1                 malloc
+    69fb     69fb      18b     1         mustart.lto.o:(.text.free)
+    69fb     69fb      18b     1                 free
+    6b86     6b86       2c     1         mustart.lto.o:(.text.memcpy)
+    6b86     6b86       2c     1                 memcpy
+    6bb2     6bb2       20     1         mustart.lto.o:(.text.__memset)
+    6bb2     6bb2       20     1                 __memset
+    6bd2     6bd2      15f     1         mustart.lto.o:(.text.__udivsi3)
+    6bd2     6bd2      15f     1                 __udivsi3
+    6d31     6d31       d7     1         mustart.lto.o:(.text.__udivmodhi4)
+    6d31     6d31       d7     1                 __udivmodhi4
+    6e08     6e08       32     1         mustart.lto.o:(.text.__mulhi3)
+    6e08     6e08       32     1                 __mulhi3
+    6e3a     6e3a       70     1         mustart.lto.o:(.text.__mulsi3)
+    6e3a     6e3a       70     1                 __mulsi3
+    6eaa     6eaa        0     1         __init_array_start = .
+    6eaa     6eaa        0     1         __init_array_end = .
+    6eaa     6eaa        0     1         __fini_array_start = .
+    6eaa     6eaa        0     1         __fini_array_end = .
+    6eaa     6eaa      2cc     1 .rodata
+    6eaa     6eaa        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
+    6eaa     6eaa        0     1                 __set_v
+    6eab     6eab        8     1         mustart.lto.o:(.rodata.readLine)
+    6eb3     6eb3        a     1         mustart.lto.o:(.rodata.sendAME)
+    6ebd     6ebd       b4     1         mustart.lto.o:(.rodata.skipWhenFFCmd)
+    6f71     6f71       3a     1         mustart.lto.o:(.rodata.printf)
+    6fab     6fab        c     1         mustart.lto.o:(.rodata.psgChoiceToVoice)
+    6fab     6fab        c     1                 psgChoiceToVoice
+    6fb7     6fb7       18     1         mustart.lto.o:(.rodata.catNames)
+    6fb7     6fb7       18     1                 catNames
+    6fcf     6fcf       7f     1         <internal>:(.rodata.str1.1)
+    704e     704e       18     1         mustart.lto.o:(.rodata.opl3_fnums)
+    704e     704e       18     1                 opl3_fnums
+    7066     7066       40     1         mustart.lto.o:(.rodata.psgLow)
+    7066     7066       40     1                 psgLow
+    70a6     70a6       40     1         mustart.lto.o:(.rodata.psgHigh)
+    70a6     70a6       40     1                 psgHigh
+    70e6     70e6       60     1         mustart.lto.o:(.rodata.sidLow)
+    70e6     70e6       60     1                 sidLow
+    7146     7146       30     1         mustart.lto.o:(.rodata.textColors)
+    7146     7146       30     1                 textColors
+    7176     7176        0     1 .data
+    7176     7176        0     1         __data_start = .
+    7176     7176        0     1         __data_end = .
+    7176     7176        0     1 __data_load_start = LOADADDR(.data)
+    7176     7176        0     1 __data_size = SIZEOF(.data)
+    7176     7176      d95     1 .bss
+    7176     7176        0     1         __bss_start = .
+    7176     7176       36     1         mustart.lto.o:(.bss.sidInstruments)
+    7176     7176       36     1                 sidInstruments
+    71ac     71ac      d5f     1         mustart.lto.o:(.bss.cats)
+    71ac     71ac      d5f     1                 cats
+    7f0b     7f0b        0     1         __bss_end = .
+    7f0b     7f0b        0     1 __bss_size = SIZEOF(.bss)
+    7f0b     7f0b        0     1 .noinit
+    7f0b     7f0b        0     1         __heap_start = ALIGN(., 2)
+    7f0b     7f0b        0     1 end_block8 = .
+    7f0b     7f0b        0     1 end_block9 = .
+    7f0b     7f0b        0     1 end_block10 = .
+    7f0b     7f0b        0     1 end_block11 = .
+    7f0b     7f0b        0     1 end_block12 = .
+    7f0b     7f0b        0     1 end_block13 = .
+    7f0b     7f0b        0     1 end_block14 = .
+    7f0b     7f0b        0     1 end_block15 = .
+    7f0b     7f0b        0     1 end_block16 = .
+    7f0b     7f0b        0     1 end_block17 = .
+    7f0b     7f0b        0     1 end_block18 = .
+    7f0b     7f0b        0     1 end_block19 = .
+    7f0b     7f0b        0     1 end_block20 = .
+    7f0b     7f0b        0     1 end_block21 = .
+    7f0b     7f0b        0     1 end_block22 = .
+    7f0b     7f0b        0     1 end_block23 = .
    10000    10000      400    16 .pal
    10000    10000      400    16         mustart.lto.o:(.pal)
    10000    10000        0     1                 pal_start
@@ -197,11 +254,16 @@
    10400    10400        0     1                 bmmenu_start
    23000    23000        0     1                 bmmenu_end
    23000    23000        0     1 end_bmmenu = .
+   30000    30000     14b4    16 .canyon
+   30000    30000     14b4    16         mustart.lto.o:(.canyon)
+   30000    30000        0     1                 canyon_start
+   314b4    314b4        0     1                 canyon_end
+   314b4    314b4        0     1 end_canyon = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      940     4 .symtab
-       0        0      940     4         <internal>:(.symtab)
-       0        0       67     1 .shstrtab
-       0        0       67     1         <internal>:(.shstrtab)
-       0        0      6f8     1 .strtab
-       0        0      6f8     1         <internal>:(.strtab)
+       0        0      c00     4 .symtab
+       0        0      c00     4         <internal>:(.symtab)
+       0        0       6f     1 .shstrtab
+       0        0       6f     1         <internal>:(.shstrtab)
+       0        0      8ef     1 .strtab
+       0        0      8ef     1         <internal>:(.strtab)

@@ -18,3 +18,6 @@
   __backbmp_lma  = 0x20000;
   __backbmp_size = 0x12c00;
 
+  __back2bmp_lma  = 0x44000;
+  __back2bmp_size = 0x12c00;
+

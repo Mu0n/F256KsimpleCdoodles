@@ -2,6 +2,8 @@
 #define MENUSOUND_H
 
 #include "f256lib.h"
+#include "../src/muMidi.h"
+#include "../src/mupsg.h"
 
 #define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
@@ -14,11 +16,12 @@
 #define PSG_BOTH  0xD608
 
 void killSound(void);
-void midiShutAllChannels(void);
+/*
 void setStereoPSG(void);
 void shutPSG(void);
 void psgNoteOn(uint8_t, uint16_t, uint8_t, uint8_t,uint8_t);
 void psgNoteOff(uint8_t, uint16_t);
+*/
 void initMenuSoundTimer(void);
 void relaunchTimer(uint8_t);
 

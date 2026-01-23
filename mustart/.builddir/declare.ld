@@ -6,3 +6,6 @@
   __bmmenu_lma  = 0x10400;
   __bmmenu_size = 0x12c00;
 
+  __canyon_lma  = 0x30000;
+  __canyon_size = 0x14b4;
+

@@ -24,10 +24,19 @@ while(true)
 	
 	pollSNES();
 	textGotoXY(30,4);textPrint("SNES pads");
-	textGotoXY(30,5);printf("pad0 status %02x", PEEK(PAD0));
-	textGotoXY(30,6);printf("pad1 status %02x", PEEK(PAD1));
-	textGotoXY(30,7);printf("pad2 status %02x", PEEK(PAD2));
-	textGotoXY(30,8);printf("pad3 status %02x", PEEK(PAD3));
+	textGotoXY(30,5);printf("pad0 status %02x %02x", PEEK(PAD0),PEEK(PAD0_S));
+	textGotoXY(30,6);printf("pad1 status %02x %02x", PEEK(PAD1),PEEK(PAD1_S));
+	textGotoXY(30,7);printf("pad1 status %02x %02x", PEEK(PAD2),PEEK(PAD2_S));
+	textGotoXY(30,8);printf("pad3 status %02x %02x", PEEK(PAD3),PEEK(PAD3_S));
+	
+	kernelNextEvent();
+	
+	if(kernelEventData.type == kernelEvent(key.PRESSED))
+		{
+		if(kernelEventData.key.raw == 146) //ESC
+			return 0;
+		}
+
 	
 }
 

@@ -12,3 +12,9 @@
   BYTE((end_bmmenu - __bmmenu_lma)>>16)
   TRIM(bmmenu)
 
+  SHORT(ORIGIN(canyon))
+  BYTE(ORIGIN(canyon)>>16)
+  SHORT(end_canyon - __canyon_lma)
+  BYTE((end_canyon - __canyon_lma)>>16)
+  TRIM(canyon)
+

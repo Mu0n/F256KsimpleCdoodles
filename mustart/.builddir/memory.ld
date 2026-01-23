@@ -2,3 +2,4 @@
 
   pal : ORIGIN = __pal_lma, LENGTH = __pal_size
   bmmenu : ORIGIN = __bmmenu_lma, LENGTH = __bmmenu_size
+  canyon : ORIGIN = __canyon_lma, LENGTH = __canyon_size

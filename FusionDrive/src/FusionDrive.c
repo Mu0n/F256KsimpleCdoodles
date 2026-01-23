@@ -33,6 +33,8 @@
 #define TIMER_CAR_DELAY 1
 #define TIMER_LANE_DELAY 3
 #define TIMER_CAR_FORCE_DELAY 3
+#define TIMER_ROAD_TWIST_COOKIE 3
+#define TIMER_ROAD_TWIST_DELAY 10
 
 #define VKY_SP0_CTRL  0xD900 //Sprite #0’s control register
 #define VKY_SP0_AD_L  0xD901 // Sprite #0’s pixel data address register
@@ -81,6 +83,7 @@
 
 #define PAL_BASE    0x10000
 #define BITMAP_BASE      0x20000
+#define BITMAP_BASE2      0x44000
 #define SPR_FRONT_L 0x10400
 #define SPR_FRONT_R 0x10800
 #define SPR_MIDDLE_L 0x10C00
@@ -117,9 +120,10 @@ EMBED(carB, "../assets/carback.bin",0x11400); //2kb
 EMBED(yellow, "../assets/yellow.bin",0x11C00); //5kb
 //next would be at 0x13000
 EMBED(backbmp, "../assets/Urban4.data", 0x20000);
+EMBED(back2bmp, "../assets/Urban4.data", 0x44000);
 
 //GLOBALS
-struct timer_t carTimer, laneTimer, carForceTimer;
+struct timer_t carTimer, laneTimer, carForceTimer, roadTwistDelay;
 
 bool readyForNextNote = 1; //interrupt-led flag to signal the loop it's ready for the next MIDI event
 int16_t tempAddr; //used to compute addresses for pokes
@@ -127,6 +131,7 @@ uint16_t *parsers; //indices for the various type 1 tracks during playback
 uint32_t *targetParse; //will pick the default 0x20000 if the file doesn't load
 uint8_t nn=4, dd=2, cc=24, bb=8; //nn numerator of time signature, dd= denom. cc=nb of midi clocks in metro click. bb = nb of 32nd notes in a beat
 uint8_t gSineIndex=0;
+uint8_t z=0; //index for SIN lookup in road twist
 
 int16_t SIN[] = {
        0,    1,    3,    4,    6,    7,    9,   10,
@@ -163,6 +168,7 @@ int16_t SIN[] = {
      -12,  -10,   -9,   -7,   -6,   -4,   -3,   -1,
 };
 
+const uint16_t linesForCurves[]={0,440,450,460,470};
 //GLOBALS
 typedef struct sprStatus
 {
@@ -190,7 +196,7 @@ struct sprStatus car_back_L, car_back_R, car_mid_L, car_mid_R, car_front_L, car_
 void setup(void);
 
 void mySetCar(uint8_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint8_t, bool, struct sprStatus *);
-void updateCarPos(uint8_t *);
+void updateCarPos();
 void setCarPos(int16_t, int16_t);
 void swapColors(uint8_t, uint8_t);
 void setEnemyPos(struct sprStatus*);
@@ -261,23 +267,26 @@ void setEnemyPos(struct sprStatus *theSpr)
 	if(theSpr->z < 0) theSpr->z = 0;
 	
 }
-void updateCarPos(uint8_t *value)
+void updateCarPos()
 {
-	POKE(NES_CTRL, NES_CTRL_MODE_NES | NES_CTRL_TRIG);
+
 	kernelNextEvent();
 	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
 	{		
 		switch(kernelEventData.timer.cookie)
 		{
 			case TIMER_CAR_COOKIE:
-			/*
-				setCarPos(160+SIN[(*value)], 220);
-				(*value)+=6;
+			
 				
-				*/
+			
 				carTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_CAR_DELAY;
 				setTimer(&carTimer);
-				while((PEEK(NES_STAT) & NES_STAT_DONE) != NES_STAT_DONE)
+			
+				POKE(NES_CTRL, NES_CTRL_MODE_NES | NES_CTRL_TRIG);
+				asm("NOP");
+				asm("NOP");
+				POKE(NES_CTRL, NES_CTRL_MODE_NES);
+				while((PEEK(NES_CTRL) & NES_STAT_DONE) != NES_STAT_DONE)
 					;
 				if(PEEK(NES_PAD1)==NES_LEFT)
 				{
@@ -344,11 +353,15 @@ void updateCarPos(uint8_t *value)
 				carForceTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_CAR_FORCE_DELAY;
 				setTimer(&carForceTimer);
 				break;
+			case TIMER_ROAD_TWIST_COOKIE:
+			/*
+				roadTwistDelay.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_ROAD_TWIST_DELAY;
+				setTimer(&roadTwistDelay);
+				*/
+				break;
 				
 		}
 	}
-	//clear the trig
-	POKE(NES_CTRL, NES_CTRL_MODE_NES);	
 }
 
 void swapColors(uint8_t c1, uint8_t c2)
@@ -395,11 +408,28 @@ void setup()
 	bitmapSetActive(2);
 	bitmapSetAddress(2,BITMAP_BASE);
 	bitmapSetCLUT(0);
-	
+	/*
+	bitmapSetActive(1);
+	bitmapSetCLUT(0);
+	bitmapSetAddress(1,BITMAP_BASE2);
+	*/
+	/*
+	for(uint16_t x=0;x<320;x++)
+	{
+		for(uint16_t y=0;y<140;y++)
+		{
+			FAR_POKE(BITMAP_BASE2 + y*320+x,0);
+		}
+	}
+	*/
 	bitmapSetVisible(0,false);
 	bitmapSetVisible(1,false);
 	bitmapSetVisible(2,true); //furthermost to act as a real background
 
+	//bitmapSetActive(2);
+	
+	printf("yo");
+	hitspace();
 /*
 void mySetCar(uint8_t s, uint32_t addr, uint8_t size, uint8_t clut, uint8_t layer, uint8_t frame, uint16_t x, uint16_t y, uint8_t z, bool wantVisible, struct sprStatus *theCarPart) 
 */
@@ -457,18 +487,24 @@ void prepTimers()
 	carForceTimer.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_CAR_FORCE_DELAY;
 	carForceTimer.cookie = TIMER_CAR_FORCE_COOKIE;
 	setTimer(&carForceTimer);
+	
+	roadTwistDelay.units = TIMER_FRAMES;
+	roadTwistDelay.absolute = getTimerAbsolute(TIMER_FRAMES) + TIMER_ROAD_TWIST_DELAY;
+	roadTwistDelay.cookie = TIMER_ROAD_TWIST_COOKIE;
+	setTimer(&roadTwistDelay);
+	
 	}
 	
 			
 int main(int argc, char *argv[]) {
 	bool exitFlag=false;
-	//uint32_t frame[5] = {SPR_F1, SPR_F2, SPR_F3, SPR_F4, SPR_F5};
-	//uint8_t index=0;
+	uint16_t nextLine = 100;
+	
+	uint8_t index=0;
 	bool isDone = false;
 	
 	setup();
 	midiShutUp(false);
-	prepTimers();
 	
 	resetInstruments(false); //resets all channels to piano, for sam2695
 	midiShutUp(false); //ends trailing previous notes if any, for sam2695
@@ -478,25 +514,42 @@ int main(int argc, char *argv[]) {
     initTrack(MUSIC_BASE);	
 	for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
 	resetTimer0();	
-	
+	setSOL();
+	setSOL_line(0);
 	//playEmbeddedDim(MUSIC_BASE);
 	midiShutAllChannels(false);	
-	
+	uint8_t cycling =0;
+	prepTimers();
 	while(!exitFlag)
 		{
 		while(!isDone)
 			{
-				if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
-						{
-						POKE(INT_PENDING_0,0x10); //clear the timer0 delay
-						playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
-						}
+				if(PEEK(INT_PENDING_0)&INT_TIMER_0) //when the timer0 delay is up, go here
+					{
+					POKE(INT_PENDING_0,INT_TIMER_0); //clear the timer0 delay
+					playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+					}
 					
-					if(theOne.isWaiting == false) 
-						{
-						sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
-						}
+				if(theOne.isWaiting == false) 
+					{
+					sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
+					}
+				updateCarPos();
+				
+			//asm("sei");
+			/*
+				if(PEEK(INT_PENDING_0)&INT_VKY_SOL)
+					{
+					POKE(INT_PENDING_0,INT_VKY_SOL);	
+*/			
+			if(cycling++ == 0xFF) bitmapSetAddress(2,BITMAP_BASE+(int32_t)(SIN[index++]));
+//					setSOL_line(480-150+(uint16_t)index);
+//					if(index >150) index =0;
+					//}
+			
+			//asm("cli");		
 			}
+			
 			/*
 			index++;
 			if(index>4) index=0;

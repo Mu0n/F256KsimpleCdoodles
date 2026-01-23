@@ -6,6 +6,7 @@
 #define MAXNAME 20
 #define MAXDESC 35 
 #define MAXFILE 40
+
 #define MAXARGS 4
 #define MAXITEMS 12
 #define NBCATS 4
@@ -34,8 +35,9 @@ void displayMenu(uint8_t, uint8_t, uint8_t);
 void displayOneItem(uint8_t, uint8_t, uint8_t, uint8_t);
 void displayCats(uint8_t, uint8_t, uint8_t);
 int readLine(FILE *);
-
+void updateSoundStatus(uint8_t *);
 extern struct menuCatList cats[];
 extern uint8_t currentCat;
+extern uint8_t chipActive;
 
 #endif // MUMENU_H

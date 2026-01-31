@@ -1,11 +1,11 @@
 /* fake C Stack */
-PROVIDE(__stack = 0xC000);
+PROVIDE(__stack = 0xA000);
 /* entry point to my program - 0x200 to 0x2ff are command line arguments */
 PROVIDE(__f256_start = 0x300);
 /* page size of a block of memory */
 PROVIDE(__BLOCK_SIZE = 0x2000);
 /* swappable block address */
-PROVIDE(__SLOT_ADDR = 0xC000);
+PROVIDE(__SLOT_ADDR = 0xA000);
 
 /* f256k uses first 16 bytes of ZP for mmu control? */
 __rc0 = 0x10;
@@ -90,13 +90,20 @@ OUTPUT_FORMAT {
   /* RAM Segment */
   SHORT(ORIGIN(ram))              /* where to load it, 24 bits */
   BYTE(0x00)
-  SHORT(__bss_start-ORIGIN(ram))  /* size to load */
+  SHORT(__data_end-ORIGIN(ram))  /* size to load */
   BYTE(0x00)
   TRIM(ram)
 
   /* Overlay Segments and Binary Data */
   INCLUDE output.ld
-
+  
+/* Hand Coded output.ld records */
+  SHORT(8*0x2000)
+  BYTE(8/8)
+  SHORT(end_block8 - __block8_lma)
+  BYTE(0x00)
+  TRIM(block8)
+    
   /* Launch the program, at _start */
   SHORT(_start)
   LONG(0)

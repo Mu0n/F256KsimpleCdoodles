@@ -15,6 +15,7 @@
 
 #define INST_NAME_X 6
 #define MENU_Y 29
+#define MIDI_INST_NAME 0x20000
 
 
 typedef struct filePick {
@@ -22,16 +23,14 @@ typedef struct filePick {
 	uint8_t choice; //selection number for the directory browser. is used for placing the arrow character left of a filename
 }fiPi;
 
-void modalHelp(char *[], uint16_t);
+void modalHelp(const char **, uint16_t);
 void eraseModalHelp(uint16_t);
 void directory(uint16_t, uint8_t, struct filePick *);
 
 void displayInfo(struct midiRecord *);
 void extraInfo(struct midiRecord *,struct bigParsedEventList *);
-void superExtraInfo(struct midiRecord *);
+void superExtraInfo(struct midiRecord *, uint8_t);
 void updateInstrumentDisplay(uint8_t, uint8_t);
-
-
 
 
 #endif // MUTEXTUI_H

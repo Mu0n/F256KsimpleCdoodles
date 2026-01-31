@@ -103,7 +103,7 @@ OUTPUT_FORMAT {
   SHORT(end_block8 - __block8_lma)
   BYTE(0x00)
   TRIM(block8)
-    
+  
   /* Launch the program, at _start */
   SHORT(_start)
   LONG(0)

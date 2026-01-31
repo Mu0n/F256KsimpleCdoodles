@@ -4,7 +4,7 @@
 #include "../src/setup.h"
 #include <string.h>
 
-char nameVersion[] = {" CozyMIDI  v2.5 by Mu0n, January 2026                                    "};
+char nameVersion[] = {" CozyMIDI  v2.7 by Mu0n, January 2026                                    "};
 
 void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 {
@@ -40,7 +40,7 @@ void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 }
 
 
-void modalHelp(char *textBuffer[], uint16_t size)
+void modalHelp(const char **textBuffer, uint16_t size)
 {
 	textSetColor(textColorLightBlue,textColorGray);
 	for(uint8_t i = 0; i< size;i++)
@@ -80,7 +80,7 @@ void displayInfo(struct midiRecord *rec) {
 	}
 	textGotoXY(INST_NAME_X,8+9);textSetColor(10,0);textPrint("Percussion");
 	
-	textGotoXY(0,25);printf(" ->Currently parsing file %s...",rec->fileName);
+	textGotoXY(0,25);printf(" ->Currently parsing file %s...",name);
 }
 
 void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list) {
@@ -97,25 +97,51 @@ void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list) {
 	textSetColor(0,0);printf("%d:%d",rec->nn,1<<(rec->dd));
 	textGotoXY(0,25);printf("  ->Preparing for playback...                   ");
 }
-void superExtraInfo(struct midiRecord *rec) {
+void superExtraInfo(struct midiRecord *rec, uint8_t mChip) {
 	uint16_t temp;
 	
 	temp=(uint32_t)((rec->totalDuration)/125000);
 	temp=(uint32_t)((((double)temp))/((double)(rec->fudge)));
 	rec->totalSec = temp;
 	//textGotoXY(68,5); printf("%d:%02d",temp/60,temp % 60);
-	textSetColor(1,0);textGotoXY(1,MENU_Y);textPrint("[ESC]: ");
-	textSetColor(0,0);textPrint("quit");
-	textSetColor(1,0);textPrint("    [SPACE]:");
-	textSetColor(0,0);textPrint("  pause    ");
-	textSetColor(1,0);textPrint("[F1]   ");
-	textSetColor(1,0);textPrint("SAM2695");
-    textSetColor(0,0);textPrint("   VS1053b");
-	textGotoXY(0,25);printf("%s",nameVersion);
-	textSetColor(1,0);textGotoXY(62,MENU_Y);textPrint("[F3]:");
-	textSetColor(0,0);textPrint("  Load");
+	textSetColor(1,0);textGotoXY(1,MENU_Y);textPrint("[ESC]:");
+	textSetColor(0,0);textPrint("quit ");
+	textSetColor(1,0);textPrint("[SPACE]:");
+	textSetColor(0,0);textPrint("pause ");
+	textSetColor(1,0);textPrint("[F1]:");
+	textSetColor(0,0);textPrint("Light Show ");
+	textSetColor(1,0);textPrint("[F3]:");
+	textSetColor(0,0);textPrint("Load ");
+	textSetColor(1,0);textPrint("[F5]:");
+	textSetColor(0,0);textPrint("SAM2695 VS1053b");
 	textGotoXY(1,26);textPrint("  [r] toggle repeat when done");
+	textGotoXY(0,25);printf("%s",nameVersion);
+	textSetColor(1,0);
+	if(mChip==0) {textGotoXY(57,MENU_Y);textPrint("SAM2695");}
+	else {textGotoXY(65,MENU_Y);textPrint("VS1053b");}
 }
+void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
+	
+	uint8_t i=0,j=0;
+	textGotoXY(INST_NAME_X,8+chan);textSetColor(chan+1,0);
+	if(chan==9)
+		{
+			textPrint("Percussion");
+			return;
+		}
+	for(i=0;i<36;i++)
+	{
+		char theChar = FAR_PEEK(MIDI_INST_NAME+(uint32_t)21*(uint32_t)pgr+(uint32_t)i);
+		if(theChar=='\0') 
+		{
+			for(j=i;j<36;j++) __putchar(32);
+			break;
+		}
+		__putchar(theChar);
+	}
+}
+
+/*
 void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
 	uint8_t i=0,j=0;
 	textGotoXY(INST_NAME_X,8+chan);textSetColor(chan+1,0);
@@ -135,4 +161,5 @@ void updateInstrumentDisplay(uint8_t chan, uint8_t pgr) {
 		__putchar(midi_instruments[pgr][i]);
 	}
 }
+*/
 }

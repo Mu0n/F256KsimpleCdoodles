@@ -24,6 +24,7 @@ typedef struct MIDIParser {
 
 void detectStructure(uint16_t, struct midiRecord *);
 uint8_t loadSMFile(char *, uint32_t);
+uint8_t FAR8_loadSMFile(char *, uint32_t);
 uint16_t readBigEndian16(uint32_t);
 uint32_t readBigEndian32(uint32_t);
 uint32_t divide32by16(uint32_t, uint16_t);
@@ -50,4 +51,7 @@ extern struct MIDIParser theOne;
 extern bool midiChip;
 extern bool shimmerChanged[16];
 extern uint8_t shimmerBuffer[16];
+extern uint16_t disp[16];
+extern uint8_t vals[16];
+
 #endif // MUMIDIPLAY2_H

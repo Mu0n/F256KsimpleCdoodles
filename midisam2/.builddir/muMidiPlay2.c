@@ -7,28 +7,42 @@
 #include "../src/muTimer0Int.h" //contains helper functions I often use
 #include "../src/muTextUI.h"
 
-uint16_t disp[10] = {0xD6B3, 0xD6B4, 0xD6AD,
-				     0xD6AE, 0xD6AF, 0xD6AA,
-					 0xD6AB, 0xD6AC, 0xD6A7, 0xD6A9};
+//RGB case LED addresses
+uint16_t disp[16] = {0xD6B3, 0xD6B4, 0xD6B5,
+					 0xD6AD, 0xD6AE, 0xD6AF,
+					 0xD6AA, 0xD6AB, 0xD6AC,
+					 0xD6A7, 0xD6A8, 0xD6A9,
+					 0xD6B3,0xD6AD,0xD6AA,0xD6A7};
+//color values to hold
+uint8_t vals[16] = {0,0,0,0,
+					0,0,0,0,
+					0,0,0,0,
+					0,0,0,0};
 uint8_t shimmerBuffer[16];
 struct MIDIParser theOne;
+
 bool midiChip;
+
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool wantAlt) {
 		uint8_t chan = (msg0)&0x0F;
-	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg0);
-	POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg1);
+	POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, msg0);
+	POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, msg1);
 	
 	if(byteCount == 3) {
-		POKE(wantAlt?MIDI_FIFO_ALT:MIDI_FIFO, msg2);
+		POKE(midiChip?MIDI_FIFO_ALT:MIDI_FIFO, msg2);
 	
 	}
 	if((msg0 & 0xF0) == 0x90 && msg2 != 0x00)
 		{
 			shimmerBuffer[chan]=21;
 			//SET_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
-			//POKE(disp[chan],msg1<<2);
+			POKE(disp[chan],255);
 		}
+	else if((msg0 & 0xF0) == 0xC0)
+	{
+		 updateInstrumentDisplay(msg0 & 0x0F, msg1);
+	}
 	else if((msg0 & 0xF0) == 0xC0)
 	{
 		 updateInstrumentDisplay(msg0 & 0x0F, msg1);
@@ -46,6 +60,51 @@ void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool w
 	}
 	*/
 }
+
+
+	
+
+#pragma clang optimize off
+__attribute__((noinline))
+uint8_t loadSMFile(char *name, uint32_t targetAddress) {
+	volatile uint8_t retVal = 0;
+    volatile unsigned char ___mmu = (unsigned char)*(volatile unsigned char *)0x000d;
+    *(volatile unsigned char *)0x000d = 8;
+    FAR8_loadSMFile(name, targetAddress);
+    *(volatile unsigned char *)0x000d = ___mmu;
+	return retVal;
+}
+#pragma clang optimize on
+	
+	
+//Opens the std MIDI file
+__attribute__((noinline, section(".block8")))
+uint8_t FAR8_loadSMFile(char *name, uint32_t targetAddress) {
+	FILE *theMIDIfile;
+	uint8_t buffer[255];
+	size_t bytesRead = 0;
+	uint32_t totalBytesRead = 0;
+	uint16_t i=0;
+
+	theMIDIfile = fileOpen(name,"r"); // open file in read mode
+	if(theMIDIfile == NULL) {
+		return 1;
+		}
+
+	while ((bytesRead = fileRead(buffer, sizeof(uint8_t), 250, theMIDIfile))>0) {
+			buffer[0]=buffer[0];
+			//dump the buffer into a special RAM area
+			for(i=0;i<bytesRead;i++)
+				{
+				FAR_POKE((uint32_t)targetAddress+(uint32_t)totalBytesRead+(uint32_t)i,buffer[i]);
+				}
+			totalBytesRead += (uint32_t) bytesRead;
+			if(bytesRead < 250) break;
+			}
+	fileClose(theMIDIfile);
+	return 0;
+}
+
 
 //checks the tempo, number of tracks, etc
 void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
@@ -95,34 +154,6 @@ void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
 	}
 	
 	
-	
-//Opens the std MIDI file
-uint8_t loadSMFile(char *name, uint32_t targetAddress) {
-	FILE *theMIDIfile;
-	uint8_t buffer[255];
-	size_t bytesRead = 0;
-	uint32_t totalBytesRead = 0;
-	uint16_t i=0;
-
-	theMIDIfile = fileOpen(name,"r"); // open file in read mode
-	if(theMIDIfile == NULL) {
-		return 1;
-		}
-
-	while ((bytesRead = fileRead(buffer, sizeof(uint8_t), 250, theMIDIfile))>0) {
-			buffer[0]=buffer[0];
-			//dump the buffer into a special RAM area
-			for(i=0;i<bytesRead;i++)
-				{
-				FAR_POKE((uint32_t)targetAddress+(uint32_t)totalBytesRead+(uint32_t)i,buffer[i]);
-				}
-			totalBytesRead += (uint32_t) bytesRead;
-			if(bytesRead < 250) break;
-			}
-	fileClose(theMIDIfile);
-	return 0;
-}
-
 uint16_t readBigEndian16(uint32_t where) {
     uint8_t bytes[2];
 	bytes[0] = FAR_PEEK(where);

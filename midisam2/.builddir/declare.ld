@@ -3,3 +3,6 @@
   __cozyLCD_lma  = 0x30000;
   __cozyLCD_size = 0x20d00;
 
+  __midiinst_lma  = 0x20000;
+  __midiinst_size = 0xa80;
+

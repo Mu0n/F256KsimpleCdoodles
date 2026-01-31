@@ -69,7 +69,6 @@ POKE(VS_SCI_CTRL,0);
 		;
 }
 
-
 uint16_t checkClock()
 {
 POKEW(VS_SCI_ADDR, VS_SCI_ADDR_CLOCKF);
@@ -82,59 +81,6 @@ POKE(VS_SCI_CTRL,0);
 return PEEKW(VS_SCI_DATA);
 }
 
-uint16_t getNbBands()
-{
-	//Getting the number of bands (should be 14)
-	//target the wram addr register
-	POKEW(VS_SCI_ADDR, VS_SCI_ADDR_WRAMADDR);
-	//target the number of used bands in 0x1802
-	POKEW(VS_SCI_DATA, 0x1802);
-	//trigger the command
-	POKE(VS_SCI_CTRL, CTRL_Start);
-	POKE(VS_SCI_CTRL,0);
-	//check to see if it's done
-		while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
-			;
-	//target the wram register
-	POKEW(VS_SCI_ADDR, VS_SCI_ADDR_WRAM);
-	//trigger the read command
-	POKE(VS_SCI_CTRL, CTRL_Start | CTRL_RWn);
-	POKE(VS_SCI_CTRL,0);
-	//check to see if it's done
-		while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
-			;
-	return PEEKW(VS_SCI_DATA);
-}
-//Assuming the spectrum analyzer plugin has been loaded beforehand
-//this can read the results for each of the default 14 bands
-void getCenterSAValues(uint16_t nbBands, uint16_t *values)
-{
-uint16_t i = 0;
-
-
-for(i=0; i<nbBands; i++)
-	{
-	POKEW(VS_SCI_ADDR, VS_SCI_ADDR_WRAMADDR);
-	//target the wram with band data in 0x1814
-	POKEW(VS_SCI_DATA, 0x1814+i);
-	POKE(VS_SCI_CTRL, CTRL_Start);
-	POKE(VS_SCI_CTRL,0);
-	//check to see if it's done
-	while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
-		;
-
-	//target the wram register
-	POKEW(VS_SCI_ADDR, VS_SCI_ADDR_WRAM);
-	
-	//trigger the read command
-	POKE(VS_SCI_CTRL, CTRL_Start | CTRL_RWn);
-	POKE(VS_SCI_CTRL,0);
-	//check to see if it's done
-	while (PEEK(VS_SCI_CTRL) & CTRL_Busy)
-		;
-	values[i] = (PEEKW(VS_SCI_DATA)); //only pick the values, discard the peaks
-	}
-}
 
 //Enable the real time MIDI mode
 void initRTMIDI()

@@ -2,9 +2,9 @@
 #include "f256lib.h"
 #include "../src/muUtils.h" //contains helper functions I often use
 #include "../src/setup.h" //contains helper functions I often use
-#include "../src/muVS1053b.h" //VS1053b stuff
 #include "../src/muMidi.h"  //contains basic MIDI functions I often use
 #include "../src/muMidiPlay2.h"  //contains basic MIDI functions I often use
+#include "../src/muVS1053b.h"  //contains basic MIDI functions I often use
 #include "../src/muFilePicker.h"  //contains basic MIDI functions I often use
 #include "../src/muTimer0Int.h"  //contains basic cpu based timer0 functions I often use
 #include "../src/muTextUI.h" //text dialogs and file directory and file picking
@@ -24,12 +24,14 @@
 #define CLONE_TO_UART_EMWHITE 0
 #define ACTIVITY_CHAN_X 4
 EMBED(cozyLCD, "../assets/cozyLCD", 0x30000);
+EMBED(midiinst, "../assets/midi_instruments.bin", 0x20000);
 
 //STRUCTS
 struct timer_t playbackTimer, shimmerTimer;
 struct time_t time_data;
 bool isPaused = false;
 bool isTrulyDone = false;
+bool isLightShow = false; //to enable case RGB lights
 
 struct midiRecord myRecord;
 
@@ -51,7 +53,7 @@ bool isK2(void)
 	uint8_t value = PEEK(0xD6A7) & 0x1F;
 	return (value == 0x11);
 }
-bool K2LCD()
+void K2LCD()
 {
 if(hasCaseLCD())displayImage(0x30000, 2);
 lilpause(1);
@@ -81,11 +83,14 @@ short optimizedMIDIShimmering() {
 						textGotoXY(ACTIVITY_CHAN_X,8+i);
 						shimmerBuffer[i]=0;
 						__putchar(32);
+						
+						if(isLightShow)POKE(disp[i],0);
 						continue;
 					}
 					textSetColor(i+1,0);
 					textGotoXY(ACTIVITY_CHAN_X,8+i);
 					__putchar(shimmerBuffer[i]);
+					if(isLightShow)POKE(disp[i],1<<(shimmerBuffer[i]-14));
 					shimmerBuffer[i]--;
 					}
 				
@@ -104,7 +109,7 @@ short optimizedMIDIShimmering() {
 						midiShutAllChannels(true);
 						midiShutAllChannels(false);
 						isPaused = true;
-						textSetColor(1,0);textGotoXY(26,MENU_Y);textPrint("pause");
+						textSetColor(1,0);textGotoXY(20,MENU_Y);textPrint("pause");
 					}
 					destroyTrack();
 					zeroOutStuff();
@@ -123,12 +128,17 @@ short optimizedMIDIShimmering() {
 					wipeText();
 					initProgress();
 					displayInfo(&myRecord);
-					superExtraInfo(&myRecord);		
+					superExtraInfo(&myRecord,midiChip);		
 					isPaused = false;
-					textSetColor(0,0);textGotoXY(26,MENU_Y);textPrint("pause");
+					textSetColor(0,0);textGotoXY(20,MENU_Y);textPrint("pause");
 					shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
 					wipeShimmer();
 					setTimer(&shimmerTimer);
+					
+					if(isLightShow)
+					{textSetColor(1,0);
+					textGotoXY(31,MENU_Y);textPrint("Light Show");
+					}
 				}
 			if(kernelEventData.key.raw == 146) //esc
 				{
@@ -142,30 +152,51 @@ short optimizedMIDIShimmering() {
 				{
 					midiShutAllChannels(midiChip);
 					isPaused = true;
-					textSetColor(1,0);textGotoXY(26,MENU_Y);textPrint("pause");
+					textSetColor(1,0);textGotoXY(20,MENU_Y);textPrint("pause");
 				}	
 				else
 				{
 					isPaused = false;
-					textSetColor(0,0);textGotoXY(26,MENU_Y);textPrint("pause");				
+					textSetColor(0,0);textGotoXY(20,MENU_Y);textPrint("pause");				
 				}
 			}
 			if(kernelEventData.key.raw == 129) //F1
 			{
+				if(isLightShow==true)
+					{
+					textSetColor(0,0);
+					textGotoXY(31,MENU_Y);textPrint("Light Show");
+					isLightShow = false;
+					
+					POKE(0xD6A0,PEEK(0xD6A0) & 0x9C);//turn off
+					}
+				else
+					{
+					textSetColor(1,0);
+					textGotoXY(31,MENU_Y);textPrint("Light Show");
+					isLightShow = true;
+					
+					POKE(0xD6A0,PEEK(0xD6A0) | 0x63); //turn on
+					}
+
+					
+			}
+			if(kernelEventData.key.raw == 0x85) //F5
+				{
 				midiShutAllChannels(midiChip);
 				if(midiChip==true)
 					{
-					textSetColor(1,0);textGotoXY(42,MENU_Y);textPrint("SAM2695");
-					textSetColor(0,0);textGotoXY(52,MENU_Y);textPrint("VS1053b");
+					textSetColor(1,0);textGotoXY(57,MENU_Y);textPrint("SAM2695");
+					textSetColor(0,0);textGotoXY(65,MENU_Y);textPrint("VS1053b");
 					midiChip = false;
 					}
 				else
 					{
-					textSetColor(0,0);textGotoXY(42,MENU_Y);textPrint("SAM2695");
-					textSetColor(1,0);textGotoXY(52,MENU_Y);textPrint("VS1053b");
+					textSetColor(0,0);textGotoXY(57,MENU_Y);textPrint("SAM2695");
+					textSetColor(1,0);textGotoXY(65,MENU_Y);textPrint("VS1053b");
 					midiChip = true;
 					}
-			}
+				}
 			if(kernelEventData.key.raw == 0x72) //r
 				{
 				repeatFlag = !repeatFlag;
@@ -225,9 +256,6 @@ void machineDependent()
 */
 }
 
-
-
-
 void zeroOutStuff()
 {
 	for(uint8_t k=0;k<32;k++) currentFilePicked[k]=0;
@@ -245,11 +273,8 @@ void zeroOutStuff()
 }
 
 int main(int argc, char *argv[]) {
-	uint16_t i;
-	
+
 	bool cliFile = false; //first time it loads, next times it keeps the cursor position
-	openAllCODEC(); //if the VS1053b is used, this might be necessary for some board revisions	
-	//initVS1053MIDI();  //if the VS1053b is used
 	
 	K2LCD();
 	
@@ -267,7 +292,6 @@ int main(int argc, char *argv[]) {
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
 	
-
 	machineDependent();
 	zeroOutStuff();
 	setColors();		
@@ -359,9 +383,9 @@ int main(int argc, char *argv[]) {
 	wipeText();
 	detectStructure(0, &myRecord);
 	displayInfo(&myRecord);
-	resetInstruments(false); //resets all channels to piano, for sam2695
-	midiShutUp(false); //ends trailing previous notes if any, for sam2695
+	resetInstruments(midiChip); //resets all channels to piano, for sam2695
 	midiShutUp(true); //ends trailing previous notes if any, for sam2695
+	midiShutUp(false); //ends trailing previous notes if any, for sam2695
 
 	midiShutAllChannels(true);
 	midiShutAllChannels(false);
@@ -377,7 +401,7 @@ int main(int argc, char *argv[]) {
 	while(!isTrulyDone)
 	{
 			wipeStatus();
-			superExtraInfo(&myRecord);		
+			superExtraInfo(&myRecord, midiChip);		
 		
 			initProgress();
 			setColors();

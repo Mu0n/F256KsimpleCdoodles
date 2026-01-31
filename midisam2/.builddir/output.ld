@@ -6,3 +6,9 @@
   BYTE((end_cozyLCD - __cozyLCD_lma)>>16)
   TRIM(cozyLCD)
 
+  SHORT(ORIGIN(midiinst))
+  BYTE(ORIGIN(midiinst)>>16)
+  SHORT(end_midiinst - __midiinst_lma)
+  BYTE((end_midiinst - __midiinst_lma)>>16)
+  TRIM(midiinst)
+

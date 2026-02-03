@@ -53,27 +53,25 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-       0        0        0     1 __palgrudge_lma = 0x10000
-       0        0        0     1 __palgrudge_size = 0x400
-       0        0        0     1 __thing_lma = 0x10800
-       0        0        0     1 __thing_size = 0x400
       30      300       30     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       30     1         float.lto.o:(.zp.data)
+      30      300       30     1         skull.lto.o:(.zp.data)
       30      300       30     1                 textColors
       60      330        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       60      330        0     1 __zp_data_size = SIZEOF(.zp.data)
-      60       60       49     1 .zp.bss
+      60       60        a     1 .zp.bss
       60       60        0     1         __zp_bss_start = .
-      60       60       49     1         float.lto.o:(.zp.bss)
+      60       60        a     1         skull.lto.o:(.zp.bss)
       60       60        1     1                 _col
       61       61        1     1                 _row
-      62       62       40     1                 _spriteCtl
-      a2       a2        7     1                 kernelEventData
-      a9       a9        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      a9       a9       15     1 .zp
-      a9       a9       15     1         float.lto.o:(.zp.noinit)
-     330      330     16ab     1 .text
+      62       62        4     1                 _BITMAP_BASE.0
+      66       66        1     1                 _color
+      67       67        1     1                 _MAX_X
+      68       68        2     1                 __putchar.s
+      6a       6a        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      6a       6a       5d     1 .zp
+      6a       6a       5d     1         skull.lto.o:(.zp.noinit)
+     330      330     2943     1 .text
      330      330        0     1         _init = .
      330      330        0     1         _start = .
      330      330        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -95,93 +93,82 @@
      35b      35b       13     1                 __zero_zp_bss
      36e      36e       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
      36e      36e       17     1                 __copy_zp_data
-     385      385      145     1         float.lto.o:(.text)
+     385      385      145     1         skull.lto.o:(.text)
      385      385        0     1                 mathFloatAdd
      3d6      3d6        0     1                 mathFloatSub
      427      427        0     1                 mathFloatMul
      476      476        0     1                 mathFloatDiv
-     4ca      4ca      393     1         float.lto.o:(.text.f256Init)
-     4ca      4ca      393     1                 f256Init
-     85d      85d        6     1         float.lto.o:(.text.main)
-     85d      85d        6     1                 main
-     863      863      43e     1         float.lto.o:(.text.f256main)
-     863      863      43e     1                 f256main
-     ca1      ca1      1d8     1         float.lto.o:(.text.textPrint)
-     ca1      ca1      1d8     1                 textPrint
-     e79      e79        5     1         float.lto.o:(.text.exit)
-     e79      e79        5     1                 exit
-     e7e      e7e       2c     1         float.lto.o:(.text.memcpy)
-     e7e      e7e       2c     1                 memcpy
-     eaa      eaa       20     1         float.lto.o:(.text.__memset)
-     eaa      eaa       20     1                 __memset
-     eca      eca       17     1         float.lto.o:(.text.__ashlsi3)
-     eca      eca       17     1                 __ashlsi3
-     ee1      ee1       17     1         float.lto.o:(.text.__lshrsi3)
-     ee1      ee1       17     1                 __lshrsi3
-     ef8      ef8       c3     1         float.lto.o:(.text.__fixsfsi)
-     ef8      ef8       c3     1                 __fixsfsi
-     fbb      fbb       70     1         float.lto.o:(.text.__mulsi3)
-     fbb      fbb       70     1                 __mulsi3
-    102b     102b       f8     1         float.lto.o:(.text.__muldi3)
-    102b     102b       f8     1                 __muldi3
-    1123     1123      8b8     1         float.lto.o:(.text.__mulsf3)
-    1123     1123      8b8     1                 __mulsf3
-    19db     19db        0     1         __init_array_start = .
-    19db     19db        0     1         __init_array_end = .
-    19db     19db        0     1         __fini_array_start = .
-    19db     19db        0     1         __fini_array_end = .
-    19db     19db      149     1 .rodata
-    19db     19db        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(const.S.obj):(.rodata)
-    19db     19db        0     1                 __set_v
-    19dc     19dc       f0     1         float.lto.o:(.rodata.sinTable)
-    19dc     19dc       f0     1                 sinTable
-    1acc     1acc       58     1         <internal>:(.rodata.str1.1)
-    1b24     1b24        0     1 .data
-    1b24     1b24        0     1         __data_start = .
-    1b24     1b24        0     1         __data_end = .
-    1b24     1b24        0     1 __data_load_start = LOADADDR(.data)
-    1b24     1b24        0     1 __data_size = SIZEOF(.data)
-    1b24     1b24        2     1 .bss
-    1b24     1b24        0     1         __bss_start = .
-    1b24     1b24        1     1         float.lto.o:(.bss.g_fp_last_status)
-    1b24     1b24        1     1                 g_fp_last_status
-    1b25     1b25        1     1         float.lto.o:(.bss.kernelError)
-    1b25     1b25        1     1                 kernelError
-    1b26     1b26        0     1         __bss_end = .
-    1b26     1b26        0     1 __bss_size = SIZEOF(.bss)
-    1b26     1b26        0     1 .noinit
-    1b26     1b26        0     1         __heap_start = ALIGN(., 2)
-    1b26     1b26        0     1 end_block8 = .
-    1b26     1b26        0     1 end_block9 = .
-    1b26     1b26        0     1 end_block10 = .
-    1b26     1b26        0     1 end_block11 = .
-    1b26     1b26        0     1 end_block12 = .
-    1b26     1b26        0     1 end_block13 = .
-    1b26     1b26        0     1 end_block14 = .
-    1b26     1b26        0     1 end_block15 = .
-    1b26     1b26        0     1 end_block16 = .
-    1b26     1b26        0     1 end_block17 = .
-    1b26     1b26        0     1 end_block18 = .
-    1b26     1b26        0     1 end_block19 = .
-    1b26     1b26        0     1 end_block20 = .
-    1b26     1b26        0     1 end_block21 = .
-    1b26     1b26        0     1 end_block22 = .
-    1b26     1b26        0     1 end_block23 = .
-   10000    10000      400    16 .palgrudge
-   10000    10000      400    16         float.lto.o:(.palgrudge)
-   10000    10000        0     1                 palgrudge_start
-   10400    10400        0     1                 palgrudge_end
-   10400    10400        0     1 end_palgrudge = .
-   10800    10800      400    16 .thing
-   10800    10800      400    16         float.lto.o:(.thing)
-   10800    10800        0     1                 thing_start
-   10c00    10c00        0     1                 thing_end
-   10c00    10c00        0     1 end_thing = .
+     4ca      4ca      3a5     1         skull.lto.o:(.text.f256Init)
+     4ca      4ca      3a5     1                 f256Init
+     86f      86f        6     1         skull.lto.o:(.text.main)
+     86f      86f        6     1                 main
+     875      875      e81     1         skull.lto.o:(.text.f256main)
+     875      875      e81     1                 f256main
+    16f6     16f6      43d     1         skull.lto.o:(.text.bitmapLine)
+    16f6     16f6      43d     1                 bitmapLine
+    1b33     1b33        5     1         skull.lto.o:(.text.exit)
+    1b33     1b33        5     1                 exit
+    1b38     1b38       d7     1         skull.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    1b38     1b38       d7     1                 (anonymous namespace)::put(char, Status*)
+    1c0f     1c0f      10f     1         skull.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1c0f     1c0f      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1d1e     1d1e      d31     1         skull.lto.o:(.text.printf)
+    1d1e     1d1e      d31     1                 printf
+    2a4f     2a4f      1d8     1         skull.lto.o:(.text.putchar)
+    2a4f     2a4f      1d8     1                 putchar
+    2c27     2c27       2c     1         skull.lto.o:(.text.memcpy)
+    2c27     2c27       2c     1                 memcpy
+    2c53     2c53       20     1         skull.lto.o:(.text.__memset)
+    2c53     2c53       20     1                 __memset
+    2c73     2c73        0     1         __init_array_start = .
+    2c73     2c73        0     1         __init_array_end = .
+    2c73     2c73        0     1         __fini_array_start = .
+    2c73     2c73        0     1         __fini_array_end = .
+    2c73     2c73     4fda     1 .rodata
+    2c73     2c73       3a     1         skull.lto.o:(.rodata.printf)
+    2cad     2cad     41a0     1         skull.lto.o:(.rodata.scene_vertices)
+    2cad     2cad     41a0     1                 scene_vertices
+    6e4d     6e4d      df8     1         skull.lto.o:(.rodata.scene_indices)
+    6e4d     6e4d      df8     1                 scene_indices
+    7c45     7c45        8     1         <internal>:(.rodata.str1.1)
+    7c4d     7c4d        0     1 .data
+    7c4d     7c4d        0     1         __data_start = .
+    7c4d     7c4d        0     1         __data_end = .
+    7c4d     7c4d        0     1 __data_load_start = LOADADDR(.data)
+    7c4d     7c4d        0     1 __data_size = SIZEOF(.data)
+    7c4d     7c4d        9     1 .bss
+    7c4d     7c4d        0     1         __bss_start = .
+    7c4d     7c4d        1     1         skull.lto.o:(.bss.g_fp_last_status)
+    7c4d     7c4d        1     1                 g_fp_last_status
+    7c4e     7c4e        7     1         skull.lto.o:(.bss.kernelEventData)
+    7c4e     7c4e        7     1                 kernelEventData
+    7c55     7c55        1     1         skull.lto.o:(.bss.kernelError)
+    7c55     7c55        1     1                 kernelError
+    7c56     7c56        0     1         __bss_end = .
+    7c56     7c56        0     1 __bss_size = SIZEOF(.bss)
+    7c56     7c56        0     1 .noinit
+    7c56     7c56        0     1         __heap_start = ALIGN(., 2)
+    7c56     7c56        0     1 end_block8 = .
+    7c56     7c56        0     1 end_block9 = .
+    7c56     7c56        0     1 end_block10 = .
+    7c56     7c56        0     1 end_block11 = .
+    7c56     7c56        0     1 end_block12 = .
+    7c56     7c56        0     1 end_block13 = .
+    7c56     7c56        0     1 end_block14 = .
+    7c56     7c56        0     1 end_block15 = .
+    7c56     7c56        0     1 end_block16 = .
+    7c56     7c56        0     1 end_block17 = .
+    7c56     7c56        0     1 end_block18 = .
+    7c56     7c56        0     1 end_block19 = .
+    7c56     7c56        0     1 end_block20 = .
+    7c56     7c56        0     1 end_block21 = .
+    7c56     7c56        0     1 end_block22 = .
+    7c56     7c56        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      8a0     4 .symtab
-       0        0      8a0     4         <internal>:(.symtab)
-       0        0       6c     1 .shstrtab
-       0        0       6c     1         <internal>:(.shstrtab)
-       0        0      5f5     1 .strtab
-       0        0      5f5     1         <internal>:(.strtab)
+       0        0      810     4 .symtab
+       0        0      810     4         <internal>:(.symtab)
+       0        0       5a     1 .shstrtab
+       0        0       5a     1         <internal>:(.shstrtab)
+       0        0      5bc     1 .strtab
+       0        0      5bc     1         <internal>:(.strtab)

@@ -5,6 +5,9 @@
 #include "..\src\muUtils.h"
 #include "..\src\fp_module.h"
 
+
+
+
 #define CENTERX 160
 #define CENTERY 150
 #define RADIUS 100.0f
@@ -45,70 +48,97 @@ const float sinTable[60]={
 
 int main(int argc, char *argv[]) {
 	
-	POKE(MMU_IO_CTRL, 0x00);
-	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b00101111); //sprite,graph,overlay,text
-	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-	POKE(VKY_MSTR_CTRL_1, 0b00010000); //font overlay, double height text, 320x240 at 60 Hz;
+//sets the gfx vicky mode
+POKE(MMU_IO_CTRL, 0x00);
+// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
+POKE(VKY_MSTR_CTRL_0, 0b00101111); //sprite,graph,overlay,text
+// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
+POKE(VKY_MSTR_CTRL_1, 0b00010000); //font overlay, double height text, 320x240 at 60 Hz;
 
-	POKE(MMU_IO_CTRL,1);  //MMU I/O to page 1
-	// Set up CLUT0.
-	for(uint16_t c=0;c<1023;c++)
-	{
-		POKE(VKY_GR_CLUT_0+c, FAR_PEEK(PAL_BASE+c));
-	}
-	POKE(MMU_IO_CTRL,0);
+
+// Set up Color lookup table 0
+POKE(MMU_IO_CTRL,1);  //MMU I/O to page 1
+for(uint16_t c=0;c<1023;c++)
+{
+	POKE(VKY_GR_CLUT_0+c, FAR_PEEK(PAL_BASE+c));
+}
+POKE(MMU_IO_CTRL,0);
 	
-	
-float fx,fy;
-uint8_t mode = 1;
-uint8_t color = 0;
-
-uint8_t indexS = 0;
-uint8_t indexC = 15;
-
-int16_t x=10,y=0; //offset from center
-
-
+//Sprite setup
 spriteDefine(0, SPR_THNG_BASE, SPR_SIZE, 0, 0); //information for the vicky
 spriteSetVisible(0, true);
 spriteSetPosition(0,CENTERX,CENTERY);
-
-while(true){
 	
-//textGotoXY(x,y);textPrint(" ");
 
-if(mode == 0) //2x core feature of the floating point calculation fpga feature
+float fx,fy; //float based x and y components to add from a center position (displacement vector), will be computed every loop
+uint8_t mode = 0;
+//mode 0=uses classic C arithmetics, non-accelerated
+//mode 1=uses 2x core float block in fpga,
+//mode 2=uses 2x core with asm optimization
+
+//indices to cycle around the sinus look up table. S = sine, C =cosine
+uint8_t indexS = 0;
+uint8_t indexC = 15;
+
+int16_t x=10,y=0; //offset from center, these will be sent to set the sprite position
+
+
+textGotoXY(0,0);textPrint("Regular C float products                   ");
+POKE(0xD600,0x98);
+
+while(true)
 	{
-	fx = mathFloatMul(sinTable[indexC++],RADIUS);
-	fy = mathFloatMul(sinTable[indexS++],RADIUS);
-	if(indexC==TOTALINDEX)indexC=0;
-	if(indexS==TOTALINDEX)indexS=0;
+	
+	//textGotoXY(x,y);textPrint(" ");
+	switch(mode)
+		{
+		case 0: //mode 0=uses classic C arithmetics, non-accelerated
+			fx = sinTable[indexC++]*RADIUS;
+			fy = sinTable[indexS++]*RADIUS;
+			if(indexC==TOTALINDEX)indexC=0;
+			if(indexS==TOTALINDEX)indexS=0;
 
-	x = CENTERX + mathFloatToInt16(fx);
-	y = CENTERY + mathFloatToInt16(fy);
-	}
-else //regular float multiplication
-	{
-	fx = sinTable[indexC++]*RADIUS;
-	fy = sinTable[indexS++]*RADIUS;
-	if(indexC==TOTALINDEX)indexC=0;
-	if(indexS==TOTALINDEX)indexS=0;
+			x = (uint16_t)((int16_t)CENTERX + (int16_t)fx);
+			y = (uint16_t)((int16_t)CENTERY + (int16_t)fy);
+			break;
+		case 1: //mode 1=uses 2x core float block in fpga,
+			fx = mathFloatMul(sinTable[indexC++],RADIUS);
+			fy = mathFloatMul(sinTable[indexS++],RADIUS);
+			if(indexC==TOTALINDEX)indexC=0;
+			if(indexS==TOTALINDEX)indexS=0;
 
-	x = (uint16_t)((int16_t)CENTERX + (int16_t)fx);
-	y = (uint16_t)((int16_t)CENTERY + (int16_t)fy);
+			x = CENTERX + mathFloatToInt16(fx);
+			y = CENTERY + mathFloatToInt16(fy);
+			break;/*
+		case 2: //mode 2=uses 2x core with asm optimization
+	
+			break;
+			*/
+		}
+	POKE(0xD600,indexS&0x1F);POKE(0xD600,(indexS&0xF0)>>4);
+	spriteSetPosition(0,x,y);
+	kernelNextEvent();
+	if(kernelEventData.type == kernelEvent(key.PRESSED))
+		{
+			switch(mode)
+			{
+				case 0: //switch to regular float multiplication
+					mode = 1;
+					textGotoXY(0,0);textPrint("2x core float block                        ");
+					break;
+				case 1: //switch to optimizing with asm macros with 2x core float block
+					mode =0;
+					textGotoXY(0,0);textPrint("Regular C float products                   ");
+					break;
+					/*
+				case 2: //switch to 2x core float block
+					mode = 0;
+					textGotoXY(0,0);textPrint("Regular C float products                   ");textPrint("2x core float block with asm optimization  ");
+					break;
+					*/
+			}
+		}
 	}
-
-spriteSetPosition(0,x,y);
-kernelNextEvent();
-if(kernelEventData.type == kernelEvent(key.PRESSED))
-	{
-		if(mode)
-		{mode =0;textGotoXY(0,0);textPrint("2x core float block     ");}
-		else
-		{mode =1;textGotoXY(0,0);textPrint("Regular C float products");}
-	}
-}
 
 return 0;
 }

@@ -45,7 +45,6 @@ void playMidi(void);
 uint8_t readMIDIEvent(uint8_t);
 void sniffNextMIDI(void);
 uint32_t shift_add_mul(uint32_t, uint32_t);
-void sendAME(uint8_t, uint8_t, uint8_t, uint8_t, bool);
 
 extern struct MIDIParser theOne;
 extern bool midiChip;

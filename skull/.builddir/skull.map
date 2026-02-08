@@ -53,122 +53,139 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30      300       30     1 .zp.data
+       0        0        0     1 __canyon_lma = 0x50000
+       0        0        0     1 __canyon_size = 0x561a
+      30      300       a8     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       30     1         skull.lto.o:(.zp.data)
-      30      300       30     1                 textColors
-      60      330        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      60      330        0     1 __zp_data_size = SIZEOF(.zp.data)
-      60       60        a     1 .zp.bss
-      60       60        0     1         __zp_bss_start = .
-      60       60        a     1         skull.lto.o:(.zp.bss)
-      60       60        1     1                 _col
-      61       61        1     1                 _row
-      62       62        4     1                 _BITMAP_BASE.0
-      66       66        1     1                 _color
-      67       67        1     1                 _MAX_X
-      68       68        2     1                 __putchar.s
-      6a       6a        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      6a       6a       5d     1 .zp
-      6a       6a       5d     1         skull.lto.o:(.zp.noinit)
-     330      330     2943     1 .text
-     330      330        0     1         _init = .
-     330      330        0     1         _start = .
-     330      330        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     330      330        0     1                 __do_init_stack
-     338      338        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     338      338        0     1                 __do_zero_bss
-     33b      33b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     33b      33b        0     1                 __do_zero_zp_bss
-     33e      33e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     33e      33e        0     1                 __do_copy_zp_data
-     341      341        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     344      344        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     344      344        0     1                 __after_main
-     347      347        0     1         _fini = .
-     347      347        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     348      348       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     348      348       13     1                 __zero_bss
-     35b      35b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     35b      35b       13     1                 __zero_zp_bss
-     36e      36e       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     36e      36e       17     1                 __copy_zp_data
-     385      385      145     1         skull.lto.o:(.text)
-     385      385        0     1                 mathFloatAdd
-     3d6      3d6        0     1                 mathFloatSub
-     427      427        0     1                 mathFloatMul
-     476      476        0     1                 mathFloatDiv
-     4ca      4ca      3a5     1         skull.lto.o:(.text.f256Init)
-     4ca      4ca      3a5     1                 f256Init
-     86f      86f        6     1         skull.lto.o:(.text.main)
-     86f      86f        6     1                 main
-     875      875      e81     1         skull.lto.o:(.text.f256main)
-     875      875      e81     1                 f256main
-    16f6     16f6      43d     1         skull.lto.o:(.text.bitmapLine)
-    16f6     16f6      43d     1                 bitmapLine
-    1b33     1b33        5     1         skull.lto.o:(.text.exit)
-    1b33     1b33        5     1                 exit
-    1b38     1b38       d7     1         skull.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    1b38     1b38       d7     1                 (anonymous namespace)::put(char, Status*)
-    1c0f     1c0f      10f     1         skull.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1c0f     1c0f      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-    1d1e     1d1e      d31     1         skull.lto.o:(.text.printf)
-    1d1e     1d1e      d31     1                 printf
-    2a4f     2a4f      1d8     1         skull.lto.o:(.text.putchar)
-    2a4f     2a4f      1d8     1                 putchar
-    2c27     2c27       2c     1         skull.lto.o:(.text.memcpy)
-    2c27     2c27       2c     1                 memcpy
-    2c53     2c53       20     1         skull.lto.o:(.text.__memset)
-    2c53     2c53       20     1                 __memset
-    2c73     2c73        0     1         __init_array_start = .
-    2c73     2c73        0     1         __init_array_end = .
-    2c73     2c73        0     1         __fini_array_start = .
-    2c73     2c73        0     1         __fini_array_end = .
-    2c73     2c73     4fda     1 .rodata
-    2c73     2c73       3a     1         skull.lto.o:(.rodata.printf)
-    2cad     2cad     41a0     1         skull.lto.o:(.rodata.scene_vertices)
-    2cad     2cad     41a0     1                 scene_vertices
-    6e4d     6e4d      df8     1         skull.lto.o:(.rodata.scene_indices)
-    6e4d     6e4d      df8     1                 scene_indices
-    7c45     7c45        8     1         <internal>:(.rodata.str1.1)
-    7c4d     7c4d        0     1 .data
-    7c4d     7c4d        0     1         __data_start = .
-    7c4d     7c4d        0     1         __data_end = .
-    7c4d     7c4d        0     1 __data_load_start = LOADADDR(.data)
-    7c4d     7c4d        0     1 __data_size = SIZEOF(.data)
-    7c4d     7c4d        9     1 .bss
-    7c4d     7c4d        0     1         __bss_start = .
-    7c4d     7c4d        1     1         skull.lto.o:(.bss.g_fp_last_status)
-    7c4d     7c4d        1     1                 g_fp_last_status
-    7c4e     7c4e        7     1         skull.lto.o:(.bss.kernelEventData)
-    7c4e     7c4e        7     1                 kernelEventData
-    7c55     7c55        1     1         skull.lto.o:(.bss.kernelError)
-    7c55     7c55        1     1                 kernelError
-    7c56     7c56        0     1         __bss_end = .
-    7c56     7c56        0     1 __bss_size = SIZEOF(.bss)
-    7c56     7c56        0     1 .noinit
-    7c56     7c56        0     1         __heap_start = ALIGN(., 2)
-    7c56     7c56        0     1 end_block8 = .
-    7c56     7c56        0     1 end_block9 = .
-    7c56     7c56        0     1 end_block10 = .
-    7c56     7c56        0     1 end_block11 = .
-    7c56     7c56        0     1 end_block12 = .
-    7c56     7c56        0     1 end_block13 = .
-    7c56     7c56        0     1 end_block14 = .
-    7c56     7c56        0     1 end_block15 = .
-    7c56     7c56        0     1 end_block16 = .
-    7c56     7c56        0     1 end_block17 = .
-    7c56     7c56        0     1 end_block18 = .
-    7c56     7c56        0     1 end_block19 = .
-    7c56     7c56        0     1 end_block20 = .
-    7c56     7c56        0     1 end_block21 = .
-    7c56     7c56        0     1 end_block22 = .
-    7c56     7c56        0     1 end_block23 = .
+      30      300       a8     1         skull.lto.o:(.zp.data)
+      30      300       60     1                 skull_vertices
+      90      360       48     1                 skull_indices
+      d8      3a8        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      d8      3a8        0     1 __zp_data_size = SIZEOF(.zp.data)
+      d8       d8        f     1 .zp.bss
+      d8       d8        0     1         __zp_bss_start = .
+      d8       d8        f     1         skull.lto.o:(.zp.bss)
+      d8       d8        2     1                 theOne.0
+      da       da        2     1                 theOne.7
+      dc       dc        2     1                 theOne.8
+      de       de        1     1                 _col
+      df       df        1     1                 _row
+      e0       e0        1     1                 _active
+      e1       e1        1     1                 _color
+      e2       e2        1     1                 (anonymous namespace)::initialized
+      e3       e3        2     1                 (anonymous namespace)::free_size
+      e5       e5        2     1                 (anonymous namespace)::free_list
+      e7       e7        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      e7       e7        9     1 .zp
+      e7       e7        9     1         skull.lto.o:(.zp.noinit)
+     3a8      3a8     2cca     2 .text
+     3a8      3a8        0     1         _init = .
+     3a8      3a8        0     1         _start = .
+     3a8      3a8        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     3a8      3a8        0     1                 __do_init_stack
+     3b0      3b0        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     3b0      3b0        0     1                 __do_zero_bss
+     3b3      3b3        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     3b3      3b3        0     1                 __do_zero_zp_bss
+     3b6      3b6        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     3b6      3b6        0     1                 __do_copy_zp_data
+     3b9      3b9        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     3bc      3bc        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     3bc      3bc        0     1                 __after_main
+     3bf      3bf        0     1         _fini = .
+     3bf      3bf        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     3c0      3c0      14b     2         skull.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     3c0      3c0      14b     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     50b      50b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     50b      50b       13     1                 __zero_bss
+     51e      51e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     51e      51e       13     1                 __zero_zp_bss
+     531      531       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     531      531       17     1                 __copy_zp_data
+     548      548      145     1         skull.lto.o:(.text)
+     548      548        0     1                 mathFloatAdd
+     599      599        0     1                 mathFloatSub
+     5ea      5ea        0     1                 mathFloatMul
+     639      639        0     1                 mathFloatDiv
+     68d      68d       14     1         skull.lto.o:(.text.midiShutUp)
+     68d      68d       14     1                 midiShutUp
+     6a1      6a1       23     1         skull.lto.o:(.text.resetInstruments)
+     6a1      6a1       23     1                 resetInstruments
+     6c4      6c4      3e6     1         skull.lto.o:(.text.f256Init)
+     6c4      6c4      3e6     1                 f256Init
+     aaa      aaa        6     1         skull.lto.o:(.text.main)
+     aaa      aaa        6     1                 main
+     ab0      ab0     1272     1         skull.lto.o:(.text.f256main)
+     ab0      ab0     1272     1                 f256main
+    1d22     1d22       ad     1         skull.lto.o:(.text.bitmapClear)
+    1d22     1d22       ad     1                 bitmapClear
+    1dcf     1dcf      20e     1         skull.lto.o:(.text.rotateX)
+    1dcf     1dcf      20e     1                 rotateX
+    1fdd     1fdd      d46     1         skull.lto.o:(.text.redraw)
+    1fdd     1fdd      d46     1                 redraw
+    2d23     2d23        5     1         skull.lto.o:(.text.exit)
+    2d23     2d23        5     1                 exit
+    2d28     2d28      2cc     1         skull.lto.o:(.text.malloc)
+    2d28     2d28      2cc     1                 malloc
+    2ff4     2ff4       2c     1         skull.lto.o:(.text.memcpy)
+    2ff4     2ff4       2c     1                 memcpy
+    3020     3020       20     1         skull.lto.o:(.text.__memset)
+    3020     3020       20     1                 __memset
+    3040     3040       32     1         skull.lto.o:(.text.__mulhi3)
+    3040     3040       32     1                 __mulhi3
+    3072     3072        0     1         __init_array_start = .
+    3072     3072        0     1         __init_array_end = .
+    3072     3072        0     1         __fini_array_start = .
+    3072     3072        0     1         __fini_array_end = .
+    3072     3072       42     1 .rodata
+    3072     3072       12     1         skull.lto.o:(.rodata.f256main)
+    3084     3084       30     1         skull.lto.o:(.rodata.textColors)
+    3084     3084       30     1                 textColors
+    30b4     30b4        0     1 .data
+    30b4     30b4        0     1         __data_start = .
+    30b4     30b4        0     1         __data_end = .
+    30b4     30b4        0     1 __data_load_start = LOADADDR(.data)
+    30b4     30b4        0     1 __data_size = SIZEOF(.data)
+    30b4     30b4       15     1 .bss
+    30b4     30b4        0     1         __bss_start = .
+    30b4     30b4        1     1         skull.lto.o:(.bss.g_fp_last_status)
+    30b4     30b4        1     1                 g_fp_last_status
+    30b5     30b5        7     1         skull.lto.o:(.bss.kernelEventData)
+    30b5     30b5        7     1                 kernelEventData
+    30bc     30bc        1     1         skull.lto.o:(.bss.kernelError)
+    30bc     30bc        1     1                 kernelError
+    30bd     30bd        c     1         skull.lto.o:(.bss._BITMAP_BASE)
+    30bd     30bd        c     1                 _BITMAP_BASE
+    30c9     30c9        0     1         __bss_end = .
+    30c9     30c9        0     1 __bss_size = SIZEOF(.bss)
+    30c9     30c9        0     1 .noinit
+    30c9     30c9        0     1         __heap_start = ALIGN(., 2)
+    30c9     30c9        0     1 end_block8 = .
+    30c9     30c9        0     1 end_block9 = .
+    30c9     30c9        0     1 end_block10 = .
+    30c9     30c9        0     1 end_block11 = .
+    30c9     30c9        0     1 end_block12 = .
+    30c9     30c9        0     1 end_block13 = .
+    30c9     30c9        0     1 end_block14 = .
+    30c9     30c9        0     1 end_block15 = .
+    30c9     30c9        0     1 end_block16 = .
+    30c9     30c9        0     1 end_block17 = .
+    30c9     30c9        0     1 end_block18 = .
+    30c9     30c9        0     1 end_block19 = .
+    30c9     30c9        0     1 end_block20 = .
+    30c9     30c9        0     1 end_block21 = .
+    30c9     30c9        0     1 end_block22 = .
+    30c9     30c9        0     1 end_block23 = .
+   50000    50000     561a    16 .canyon
+   50000    50000     561a    16         skull.lto.o:(.canyon)
+   50000    50000        0     1                 canyon_start
+   5561a    5561a        0     1                 canyon_end
+   5561a    5561a        0     1 end_canyon = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      810     4 .symtab
-       0        0      810     4         <internal>:(.symtab)
-       0        0       5a     1 .shstrtab
-       0        0       5a     1         <internal>:(.shstrtab)
-       0        0      5bc     1 .strtab
-       0        0      5bc     1         <internal>:(.strtab)
+       0        0      8e0     4 .symtab
+       0        0      8e0     4         <internal>:(.symtab)
+       0        0       62     1 .shstrtab
+       0        0       62     1         <internal>:(.shstrtab)
+       0        0      66a     1 .strtab
+       0        0      66a     1         <internal>:(.strtab)

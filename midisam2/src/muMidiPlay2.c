@@ -4,6 +4,7 @@
 #include "../src/muMidiPlay2.h"
 #include "../src/muTimer0Int.h" //contains helper functions I often use
 #include "../src/muTextUI.h"
+#include "../src/fp_module.h"
 
 //RGB case LED addresses
 uint16_t disp[16] = {0xD6B3, 0xD6B4, 0xD6B5,
@@ -18,8 +19,7 @@ uint8_t vals[16] = {0,0,0,0,
 					0,0,0,0};
 uint8_t shimmerBuffer[16];
 struct MIDIParser theOne;
-
-bool midiChip; 
+uint8_t midiChip;
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool wantAlt) {
@@ -431,7 +431,19 @@ void performMIDICmd(uint8_t track)
 			theOne.timer0PerTick = (uint32_t)(usPerTick * FUDGE); //convert to the units of timer0
 			*/
 			
-			uint32_t usPerTick = (uint32_t)usPerBeat/(uint32_t)theOne.ticks;
+			//new version
+			uint32_t usPerTick = (uint32_t)
+									(mathFloatToInt16
+										(
+											mathFloatDiv(
+											(float)(usPerBeat),
+											(float)theOne.ticks
+											)
+										)
+									);
+			
+			//old school non-optimized division
+			//uint32_t usPerTick = (uint32_t)usPerBeat/(uint32_t)theOne.ticks;
 			theOne.timer0PerTick = (usPerTick<<3)+(usPerTick<<2); //convert to the units of timer0	
 			}
 		return;
@@ -605,7 +617,10 @@ void sniffNextMIDI(){
 					}
 				}
 
-			if(theOne.cuedDelta > 0) theOne.cuedDelta = theOne.cuedDelta * theOne.timer0PerTick; 
+			//new school multiplication
+			if(theOne.cuedDelta > 0) theOne.cuedDelta = mathUnsignedMultiply(theOne.cuedDelta,theOne.timer0PerTick); 
+			//old school non-optimized multiplication
+			//if(theOne.cuedDelta > 0) theOne.cuedDelta = theOne.cuedDelta * theOne.timer0PerTick; 
 			setTimer0(theOne.cuedDelta);
 			
 }

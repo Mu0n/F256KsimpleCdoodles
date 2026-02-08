@@ -1,4 +1,4 @@
-#include "D:\F256\llvm-mos\code\NES\.builddir\trampoline.h"
+#include "D:\F256\llvm-mos\code\nes\.builddir\trampoline.h"
 
 #define F256LIB_IMPLEMENTATION
 #include "f256lib.h"

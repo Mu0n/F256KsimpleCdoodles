@@ -1,0 +1,196 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __camera_lma = 0x10000
+       0        0        0     1 __camera_size = 0x3a0e
+       0        0        0     1 __bong_lma = 0x20000
+       0        0        0     1 __bong_size = 0x41a6
+      30      300       38     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       38     1         sfx2.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        4     1                 sfxPtr01
+      64      334        4     1                 sfxPtr02
+      68      338        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      68      338        0     1 __zp_data_size = SIZEOF(.zp.data)
+      68       68       1b     1 .zp.bss
+      68       68        0     1         __zp_bss_start = .
+      68       68       1b     1         sfx2.lto.o:(.zp.bss)
+      68       68        7     1                 kernelEventData
+      6f       6f        1     1                 _col
+      70       70        1     1                 _row
+      71       71        4     1                 _BITMAP_BASE.0
+      75       75        4     1                 _BITMAP_BASE.1
+      79       79        4     1                 _BITMAP_BASE.2
+      7d       7d        2     1                 __putchar.s
+      7f       7f        1     1                 nearingEnd
+      80       80        1     1                 hasEnded
+      81       81        1     1                 isPlaying
+      82       82        1     1                 doing2
+      83       83        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      83       83       5d     1 .zp
+      83       83       5d     1         sfx2.lto.o:(.zp.noinit)
+     338      338     1e82     1 .text
+     338      338        0     1         _init = .
+     338      338        0     1         _start = .
+     338      338        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     338      338        0     1                 __do_init_stack
+     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     340      340        0     1                 __do_zero_bss
+     343      343        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     343      343        0     1                 __do_zero_zp_bss
+     346      346        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     346      346        0     1                 __do_copy_zp_data
+     349      349        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     34c      34c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     34c      34c        0     1                 __after_main
+     34f      34f        0     1         _fini = .
+     34f      34f        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     350      350       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     350      350       13     1                 __zero_bss
+     363      363       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     363      363       13     1                 __zero_zp_bss
+     376      376       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     376      376       17     1                 __copy_zp_data
+     38d      38d       17     1         sfx2.lto.o:(.text.openAllCODEC)
+     38d      38d       17     1                 openAllCODEC
+     3a4      3a4       1e     1         sfx2.lto.o:(.text.boostVSClock)
+     3a4      3a4       1e     1                 boostVSClock
+     3c2      3c2       1e     1         sfx2.lto.o:(.text.lowVol)
+     3c2      3c2       1e     1                 lowVol
+     3e0      3e0       1c     1         sfx2.lto.o:(.text.highVol)
+     3e0      3e0       1c     1                 highVol
+     3fc      3fc       21     1         sfx2.lto.o:(.text.FAR_PEEK)
+     3fc      3fc       21     1                 FAR_PEEK
+     41d      41d      492     1         sfx2.lto.o:(.text.main)
+     41d      41d      492     1                 main
+     8af      8af      12d     1         sfx2.lto.o:(.text.f256main)
+     8af      8af      12d     1                 f256main
+     9dc      9dc       b3     1         sfx2.lto.o:(.text.headerPump)
+     9dc      9dc       b3     1                 headerPump
+     a8f      a8f      492     1         sfx2.lto.o:(.text.read2KChunk)
+     a8f      a8f      492     1                 read2KChunk
+     f21      f21       ee     1         sfx2.lto.o:(.text.silencePad)
+     f21      f21       ee     1                 silencePad
+    100f     100f       37     1         sfx2.lto.o:(.text.mix8)
+    100f     100f       37     1                 mix8
+    1046     1046        5     1         sfx2.lto.o:(.text.exit)
+    1046     1046        5     1                 exit
+    104b     104b       d7     1         sfx2.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    104b     104b       d7     1                 (anonymous namespace)::put(char, Status*)
+    1122     1122      10f     1         sfx2.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1122     1122      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1231     1231      d3a     1         sfx2.lto.o:(.text.printf)
+    1231     1231      d3a     1                 printf
+    1f6b     1f6b      203     1         sfx2.lto.o:(.text.putchar)
+    1f6b     1f6b      203     1                 putchar
+    216e     216e       2c     1         sfx2.lto.o:(.text.memcpy)
+    216e     216e       2c     1                 memcpy
+    219a     219a       20     1         sfx2.lto.o:(.text.__memset)
+    219a     219a       20     1                 __memset
+    21ba     21ba        0     1         __init_array_start = .
+    21ba     21ba        0     1         __init_array_end = .
+    21ba     21ba        0     1         __fini_array_start = .
+    21ba     21ba        0     1         __fini_array_end = .
+    21ba     21ba       55     1 .rodata
+    21ba     21ba       3a     1         sfx2.lto.o:(.rodata.printf)
+    21f4     21f4       1b     1         <internal>:(.rodata.str1.1)
+    220f     220f        0     1 .data
+    220f     220f        0     1         __data_start = .
+    220f     220f        0     1         __data_end = .
+    220f     220f        0     1 __data_load_start = LOADADDR(.data)
+    220f     220f        0     1 __data_size = SIZEOF(.data)
+    220f     220f        1     1 .bss
+    220f     220f        0     1         __bss_start = .
+    220f     220f        1     1         sfx2.lto.o:(.bss.kernelError)
+    220f     220f        1     1                 kernelError
+    2210     2210        0     1         __bss_end = .
+    2210     2210        0     1 __bss_size = SIZEOF(.bss)
+    2210     2210        0     1 .noinit
+    2210     2210        0     1         __heap_start = ALIGN(., 2)
+    2210     2210        0     1 end_block8 = .
+    2210     2210        0     1 end_block9 = .
+    2210     2210        0     1 end_block10 = .
+    2210     2210        0     1 end_block11 = .
+    2210     2210        0     1 end_block12 = .
+    2210     2210        0     1 end_block13 = .
+    2210     2210        0     1 end_block14 = .
+    2210     2210        0     1 end_block15 = .
+    2210     2210        0     1 end_block16 = .
+    2210     2210        0     1 end_block17 = .
+    2210     2210        0     1 end_block18 = .
+    2210     2210        0     1 end_block19 = .
+    2210     2210        0     1 end_block20 = .
+    2210     2210        0     1 end_block21 = .
+    2210     2210        0     1 end_block22 = .
+    2210     2210        0     1 end_block23 = .
+   10000    10000     3a0e    16 .camera
+   10000    10000     3a0e    16         sfx2.lto.o:(.camera)
+   10000    10000        0     1                 camera_start
+   13a0e    13a0e        0     1                 camera_end
+   13a0e    13a0e        0     1 end_camera = .
+   20000    20000     41a6    16 .bong
+   20000    20000     41a6    16         sfx2.lto.o:(.bong)
+   20000    20000        0     1                 bong_start
+   241a6    241a6        0     1                 bong_end
+   241a6    241a6        0     1 end_bong = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      910     4 .symtab
+       0        0      910     4         <internal>:(.symtab)
+       0        0       68     1 .shstrtab
+       0        0       68     1         <internal>:(.shstrtab)
+       0        0      658     1 .strtab
+       0        0      658     1         <internal>:(.strtab)

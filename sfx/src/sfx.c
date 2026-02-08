@@ -32,7 +32,7 @@ uint32_t sfxPtr01 = SFX01_CAM_BASE;
 uint32_t sfxPtr02 = SFX02_BONG_BASE;
 
 __attribute__((optnone))
-void read2KChunk(FILE *f)
+void read2KChunk()
 {
 	
 	if(hasEnded) return;
@@ -85,8 +85,6 @@ void read2KChunk(FILE *f)
 
 __attribute__((optnone))
 int main(int argc, char *argv[]) {
-FILE *theMP3file =0;
-
 //wipeBitmapBackground(0x2F,0x2F,0x2F);
 POKE(MMU_IO_CTRL, 0x00);
 	  // XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
@@ -106,7 +104,7 @@ highVol();
 	
 while(hasEnded == false) //sound it the first time
 	{	
-	read2KChunk(theMP3file); 
+	read2KChunk(); 
 	}
 
 printf("\nPress a key for a sound");	
@@ -114,7 +112,7 @@ while(true)
 	{
 	if(isPlaying)
 		{
-		read2KChunk(theMP3file); 
+		read2KChunk(); 
 		}
 		
 	kernelNextEvent();

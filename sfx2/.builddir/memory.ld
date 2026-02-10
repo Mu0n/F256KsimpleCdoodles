@@ -2,3 +2,5 @@
 
   camera : ORIGIN = __camera_lma, LENGTH = __camera_size
   bong : ORIGIN = __bong_lma, LENGTH = __bong_size
+  coin : ORIGIN = __coin_lma, LENGTH = __coin_size
+  tie : ORIGIN = __tie_lma, LENGTH = __tie_size

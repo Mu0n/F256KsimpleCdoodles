@@ -4,5 +4,11 @@
   __camera_size = 0x3a0e;
 
   __bong_lma  = 0x20000;
-  __bong_size = 0x41a6;
+  __bong_size = 0x2d4e;
+
+  __coin_lma  = 0x30000;
+  __coin_size = 0x1c06;
+
+  __tie_lma  = 0x40000;
+  __tie_size = 0x5a5c;
 

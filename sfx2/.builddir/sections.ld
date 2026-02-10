@@ -2,3 +2,5 @@
 
   .camera : { *(.camera .camera*) } >camera end_camera = .;
   .bong : { *(.bong .bong*) } >bong end_bong = .;
+  .coin : { *(.coin .coin*) } >coin end_coin = .;
+  .tie : { *(.tie .tie*) } >tie end_tie = .;

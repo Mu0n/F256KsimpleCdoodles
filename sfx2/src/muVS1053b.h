@@ -30,12 +30,9 @@
 void initVS1053Plugin(uint32_t, uint16_t);
 void boostVSClock(void);
 void boostVSBass(void);
-void initSpectrum(uint32_t);
-void getCenterSAValues(uint16_t, uint16_t *);
 uint16_t checkClock(void);
-uint16_t getNbBands(void);
-void initBigPatch(uint32_t);
 void lowVol(void);
 void highVol(void);
+
 
 #endif // MUVS1053b_H

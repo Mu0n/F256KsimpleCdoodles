@@ -12,3 +12,15 @@
   BYTE((end_bong - __bong_lma)>>16)
   TRIM(bong)
 
+  SHORT(ORIGIN(coin))
+  BYTE(ORIGIN(coin)>>16)
+  SHORT(end_coin - __coin_lma)
+  BYTE((end_coin - __coin_lma)>>16)
+  TRIM(coin)
+
+  SHORT(ORIGIN(tie))
+  BYTE(ORIGIN(tie)>>16)
+  SHORT(end_tie - __tie_lma)
+  BYTE((end_tie - __tie_lma)>>16)
+  TRIM(tie)
+

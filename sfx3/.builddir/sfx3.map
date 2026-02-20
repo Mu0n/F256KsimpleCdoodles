@@ -1,0 +1,273 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __camera_lma = 0x10000
+       0        0        0     1 __camera_size = 0x3a0e
+       0        0        0     1 __bong_lma = 0x20000
+       0        0        0     1 __bong_size = 0x2d4e
+       0        0        0     1 __coin_lma = 0x30000
+       0        0        0     1 __coin_size = 0x1c06
+       0        0        0     1 __tie_lma = 0x40000
+       0        0        0     1 __tie_size = 0x5a5c
+       0        0        0     1 __canyon_lma = 0x50000
+       0        0        0     1 __canyon_size = 0x8454
+      30       30        0     1 .zp.data
+      30       30        0     1         __zp_data_start = .
+      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
+      30       30       63     1 .zp.bss
+      30       30        0     1         __zp_bss_start = .
+      30       30       63     1         sfx3.lto.o:(.zp.bss)
+      30       30        7     1                 kernelEventData
+      37       37        1     1                 _col
+      38       38        1     1                 _row
+      39       39        4     1                 _BITMAP_BASE.0
+      3d       3d        4     1                 _BITMAP_BASE.1
+      41       41        4     1                 _BITMAP_BASE.2
+      45       45        2     1                 __putchar.s
+      47       47       34     1                 sfxChannels
+      7b       7b        1     1                 data0
+      7c       7c        1     1                 data1
+      7d       7d        1     1                 data2
+      7e       7e        1     1                 data3
+      7f       7f        2     1                 theOne.0
+      81       81        2     1                 theOne.1
+      83       83        4     1                 theOne.2
+      87       87        1     1                 theOne.4
+      88       88        4     1                 theOne.5
+      8c       8c        2     1                 theOne.6
+      8e       8e        2     1                 theOne.7
+      90       90        2     1                 theOne.8
+      92       92        1     1                 (anonymous namespace)::initialized
+      93       93        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      93       93       5d     1 .zp
+      93       93       5d     1         sfx3.lto.o:(.zp.noinit)
+     300      300     44d2     2 .text
+     300      300        0     1         _init = .
+     300      300        0     1         _start = .
+     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     300      300        0     1                 __do_init_stack
+     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     308      308        0     1                 __do_zero_bss
+     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30b      30b        0     1                 __do_zero_zp_bss
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     311      311        0     1                 __after_main
+     314      314        0     1         _fini = .
+     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     316      316      153     2         sfx3.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     469      469       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     469      469       13     1                 __zero_bss
+     47c      47c       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     47c      47c       13     1                 __zero_zp_bss
+     48f      48f       a5     1         sfx3.lto.o:(.text.midiShutAllChannels)
+     48f      48f       a5     1                 midiShutAllChannels
+     534      534        6     1         sfx3.lto.o:(.text.midiShutUp)
+     534      534        6     1                 midiShutUp
+     53a      53a      4c1     1         sfx3.lto.o:(.text.readDelta)
+     53a      53a      4c1     1                 readDelta
+     9fb      9fb      5c5     1         sfx3.lto.o:(.text.readMIDICmd)
+     9fb      9fb      5c5     1                 readMIDICmd
+     fc0      fc0      216     1         sfx3.lto.o:(.text.skipWhenFFCmd)
+     fc0      fc0      216     1                 skipWhenFFCmd
+    11d6     11d6      332     1         sfx3.lto.o:(.text.exhaustZeroes)
+    11d6     11d6      332     1                 exhaustZeroes
+    1508     1508      496     1         sfx3.lto.o:(.text.playMidi)
+    1508     1508      496     1                 playMidi
+    199e     199e      52c     1         sfx3.lto.o:(.text.initTrack)
+    199e     199e      52c     1                 initTrack
+    1eca     1eca      13d     1         sfx3.lto.o:(.text.sniffNextMIDI)
+    1eca     1eca      13d     1                 sniffNextMIDI
+    2007     2007        e     1         sfx3.lto.o:(.text.resetTimer0)
+    2007     2007        e     1                 resetTimer0
+    2015     2015       17     1         sfx3.lto.o:(.text.openAllCODEC)
+    2015     2015       17     1                 openAllCODEC
+    202c     202c       1e     1         sfx3.lto.o:(.text.boostVSClock)
+    202c     202c       1e     1                 boostVSClock
+    204a     204a       1e     1         sfx3.lto.o:(.text.lowVol)
+    204a     204a       1e     1                 lowVol
+    2068     2068       1c     1         sfx3.lto.o:(.text.highVol)
+    2068     2068       1c     1                 highVol
+    2084     2084      495     1         sfx3.lto.o:(.text.main)
+    2084     2084      495     1                 main
+    2519     2519      381     1         sfx3.lto.o:(.text.f256main)
+    2519     2519      381     1                 f256main
+    289a     289a      113     1         sfx3.lto.o:(.text.setupSound)
+    289a     289a      113     1                 setupSound
+    29ad     29ad       b3     1         sfx3.lto.o:(.text.headerPump)
+    29ad     29ad       b3     1                 headerPump
+    2a60     2a60       ee     1         sfx3.lto.o:(.text.silencePad)
+    2a60     2a60       ee     1                 silencePad
+    2b4e     2b4e      4cb     1         sfx3.lto.o:(.text.playChunk)
+    2b4e     2b4e      4cb     1                 playChunk
+    3019     3019       57     1         sfx3.lto.o:(.text.startSound)
+    3019     3019       57     1                 startSound
+    3070     3070       4b     1         sfx3.lto.o:(.text.dmaCopy16)
+    3070     3070       4b     1                 dmaCopy16
+    30bb     30bb       ce     1         sfx3.lto.o:(.text.mix_n)
+    30bb     30bb       ce     1                 mix_n
+    3189     3189        5     1         sfx3.lto.o:(.text.exit)
+    3189     3189        5     1                 exit
+    318e     318e       d7     1         sfx3.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    318e     318e       d7     1                 (anonymous namespace)::put(char, Status*)
+    3265     3265      10f     1         sfx3.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    3265     3265      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    3374     3374      d3a     1         sfx3.lto.o:(.text.printf)
+    3374     3374      d3a     1                 printf
+    40ae     40ae      203     1         sfx3.lto.o:(.text.putchar)
+    40ae     40ae      203     1                 putchar
+    42b1     42b1      2d4     1         sfx3.lto.o:(.text.malloc)
+    42b1     42b1      2d4     1                 malloc
+    4585     4585       2c     1         sfx3.lto.o:(.text.memcpy)
+    4585     4585       2c     1                 memcpy
+    45b1     45b1       20     1         sfx3.lto.o:(.text.__memset)
+    45b1     45b1       20     1                 __memset
+    45d1     45d1      15f     1         sfx3.lto.o:(.text.__udivsi3)
+    45d1     45d1      15f     1                 __udivsi3
+    4730     4730       32     1         sfx3.lto.o:(.text.__mulhi3)
+    4730     4730       32     1                 __mulhi3
+    4762     4762       70     1         sfx3.lto.o:(.text.__mulsi3)
+    4762     4762       70     1                 __mulsi3
+    47d2     47d2        0     1         __init_array_start = .
+    47d2     47d2        0     1         __init_array_end = .
+    47d2     47d2        0     1         __fini_array_start = .
+    47d2     47d2        0     1         __fini_array_end = .
+    47d2     47d2      1eb     1 .rodata
+    47d2     47d2       b4     1         sfx3.lto.o:(.rodata.skipWhenFFCmd)
+    4886     4886       2a     1         sfx3.lto.o:(.rodata.f256main)
+    48b0     48b0       3a     1         sfx3.lto.o:(.rodata.printf)
+    48ea     48ea       30     1         sfx3.lto.o:(.rodata.textColors)
+    48ea     48ea       30     1                 textColors
+    491a     491a       a3     1         <internal>:(.rodata.str1.1)
+    49bd     49bd        0     1 .data
+    49bd     49bd        0     1         __data_start = .
+    49bd     49bd        0     1         __data_end = .
+    49bd     49bd        0     1 __data_load_start = LOADADDR(.data)
+    49bd     49bd        0     1 __data_size = SIZEOF(.data)
+    49bd     49bd     2007     1 .bss
+    49bd     49bd        0     1         __bss_start = .
+    49bd     49bd        1     1         sfx3.lto.o:(.bss.doneWithFudge)
+    49bd     49bd        1     1                 doneWithFudge
+    49be     49be        1     1         sfx3.lto.o:(.bss.fudge)
+    49be     49be        1     1                 fudge
+    49bf     49bf        1     1         sfx3.lto.o:(.bss.kernelError)
+    49bf     49bf        1     1                 kernelError
+    49c0     49c0      800     1         sfx3.lto.o:(.bss.chan0)
+    49c0     49c0      800     1                 chan0
+    51c0     51c0      800     1         sfx3.lto.o:(.bss.chan1)
+    51c0     51c0      800     1                 chan1
+    59c0     59c0      800     1         sfx3.lto.o:(.bss.chan2)
+    59c0     59c0      800     1                 chan2
+    61c0     61c0      800     1         sfx3.lto.o:(.bss.chan3)
+    61c0     61c0      800     1                 chan3
+    69c0     69c0        2     1         sfx3.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    69c0     69c0        2     1                 (anonymous namespace)::free_size
+    69c2     69c2        2     1         sfx3.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    69c2     69c2        2     1                 (anonymous namespace)::free_list
+    69c4     69c4        0     1         __bss_end = .
+    69c4     69c4        0     1 __bss_size = SIZEOF(.bss)
+    69c4     69c4        0     1 .noinit
+    69c4     69c4        0     1         __heap_start = ALIGN(., 2)
+    69c4     69c4        0     1 end_block8 = .
+    69c4     69c4        0     1 end_block9 = .
+    69c4     69c4        0     1 end_block10 = .
+    69c4     69c4        0     1 end_block11 = .
+    69c4     69c4        0     1 end_block12 = .
+    69c4     69c4        0     1 end_block13 = .
+    69c4     69c4        0     1 end_block14 = .
+    69c4     69c4        0     1 end_block15 = .
+    69c4     69c4        0     1 end_block16 = .
+    69c4     69c4        0     1 end_block17 = .
+    69c4     69c4        0     1 end_block18 = .
+    69c4     69c4        0     1 end_block19 = .
+    69c4     69c4        0     1 end_block20 = .
+    69c4     69c4        0     1 end_block21 = .
+    69c4     69c4        0     1 end_block22 = .
+    69c4     69c4        0     1 end_block23 = .
+   10000    10000     3a0e    16 .camera
+   10000    10000     3a0e    16         sfx3.lto.o:(.camera)
+   10000    10000        0     1                 camera_start
+   13a0e    13a0e        0     1                 camera_end
+   13a0e    13a0e        0     1 end_camera = .
+   20000    20000     2d4e    16 .bong
+   20000    20000     2d4e    16         sfx3.lto.o:(.bong)
+   20000    20000        0     1                 bong_start
+   22d4e    22d4e        0     1                 bong_end
+   22d4e    22d4e        0     1 end_bong = .
+   30000    30000     1c06    16 .coin
+   30000    30000     1c06    16         sfx3.lto.o:(.coin)
+   30000    30000        0     1                 coin_start
+   31c06    31c06        0     1                 coin_end
+   31c06    31c06        0     1 end_coin = .
+   40000    40000     5a5c    16 .tie
+   40000    40000     5a5c    16         sfx3.lto.o:(.tie)
+   40000    40000        0     1                 tie_start
+   45a5c    45a5c        0     1                 tie_end
+   45a5c    45a5c        0     1 end_tie = .
+   50000    50000     8454    16 .canyon
+   50000    50000     8454    16         sfx3.lto.o:(.canyon)
+   50000    50000        0     1                 canyon_start
+   58454    58454        0     1                 canyon_end
+   58454    58454        0     1 end_canyon = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      be0     4 .symtab
+       0        0      be0     4         <internal>:(.symtab)
+       0        0       7b     1 .shstrtab
+       0        0       7b     1         <internal>:(.shstrtab)
+       0        0      862     1 .strtab
+       0        0      862     1         <internal>:(.strtab)

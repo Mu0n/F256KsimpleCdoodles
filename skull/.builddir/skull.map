@@ -59,19 +59,21 @@
       30      300       30     1                 textColors
       60      330        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       60      330        0     1 __zp_data_size = SIZEOF(.zp.data)
-      60       60        a     1 .zp.bss
+      60       60       12     1 .zp.bss
       60       60        0     1         __zp_bss_start = .
-      60       60        a     1         skull.lto.o:(.zp.bss)
+      60       60       12     1         skull.lto.o:(.zp.bss)
       60       60        1     1                 _col
       61       61        1     1                 _row
       62       62        4     1                 _BITMAP_BASE.0
-      66       66        1     1                 _color
-      67       67        1     1                 _MAX_X
-      68       68        2     1                 __putchar.s
-      6a       6a        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      6a       6a       5d     1 .zp
-      6a       6a       5d     1         skull.lto.o:(.zp.noinit)
-     330      330     2943     1 .text
+      66       66        4     1                 _BITMAP_BASE.1
+      6a       6a        4     1                 _BITMAP_BASE.2
+      6e       6e        1     1                 _color
+      6f       6f        1     1                 _MAX_X
+      70       70        2     1                 __putchar.s
+      72       72        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      72       72       5d     1 .zp
+      72       72       5d     1         skull.lto.o:(.zp.noinit)
+     330      330     2907     1 .text
      330      330        0     1         _init = .
      330      330        0     1         _start = .
      330      330        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -98,77 +100,77 @@
      3d6      3d6        0     1                 mathFloatSub
      427      427        0     1                 mathFloatMul
      476      476        0     1                 mathFloatDiv
-     4ca      4ca      3a5     1         skull.lto.o:(.text.f256Init)
-     4ca      4ca      3a5     1                 f256Init
-     86f      86f        6     1         skull.lto.o:(.text.main)
-     86f      86f        6     1                 main
-     875      875      e81     1         skull.lto.o:(.text.f256main)
-     875      875      e81     1                 f256main
-    16f6     16f6      43d     1         skull.lto.o:(.text.bitmapLine)
-    16f6     16f6      43d     1                 bitmapLine
-    1b33     1b33        5     1         skull.lto.o:(.text.exit)
-    1b33     1b33        5     1                 exit
-    1b38     1b38       d7     1         skull.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    1b38     1b38       d7     1                 (anonymous namespace)::put(char, Status*)
-    1c0f     1c0f      10f     1         skull.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1c0f     1c0f      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-    1d1e     1d1e      d31     1         skull.lto.o:(.text.printf)
-    1d1e     1d1e      d31     1                 printf
-    2a4f     2a4f      1d8     1         skull.lto.o:(.text.putchar)
-    2a4f     2a4f      1d8     1                 putchar
-    2c27     2c27       2c     1         skull.lto.o:(.text.memcpy)
-    2c27     2c27       2c     1                 memcpy
-    2c53     2c53       20     1         skull.lto.o:(.text.__memset)
-    2c53     2c53       20     1                 __memset
-    2c73     2c73        0     1         __init_array_start = .
-    2c73     2c73        0     1         __init_array_end = .
-    2c73     2c73        0     1         __fini_array_start = .
-    2c73     2c73        0     1         __fini_array_end = .
-    2c73     2c73     4fda     1 .rodata
-    2c73     2c73       3a     1         skull.lto.o:(.rodata.printf)
-    2cad     2cad     41a0     1         skull.lto.o:(.rodata.scene_vertices)
-    2cad     2cad     41a0     1                 scene_vertices
-    6e4d     6e4d      df8     1         skull.lto.o:(.rodata.scene_indices)
-    6e4d     6e4d      df8     1                 scene_indices
-    7c45     7c45        8     1         <internal>:(.rodata.str1.1)
-    7c4d     7c4d        0     1 .data
-    7c4d     7c4d        0     1         __data_start = .
-    7c4d     7c4d        0     1         __data_end = .
-    7c4d     7c4d        0     1 __data_load_start = LOADADDR(.data)
-    7c4d     7c4d        0     1 __data_size = SIZEOF(.data)
-    7c4d     7c4d        9     1 .bss
-    7c4d     7c4d        0     1         __bss_start = .
-    7c4d     7c4d        1     1         skull.lto.o:(.bss.g_fp_last_status)
-    7c4d     7c4d        1     1                 g_fp_last_status
-    7c4e     7c4e        7     1         skull.lto.o:(.bss.kernelEventData)
-    7c4e     7c4e        7     1                 kernelEventData
-    7c55     7c55        1     1         skull.lto.o:(.bss.kernelError)
-    7c55     7c55        1     1                 kernelError
-    7c56     7c56        0     1         __bss_end = .
-    7c56     7c56        0     1 __bss_size = SIZEOF(.bss)
-    7c56     7c56        0     1 .noinit
-    7c56     7c56        0     1         __heap_start = ALIGN(., 2)
-    7c56     7c56        0     1 end_block8 = .
-    7c56     7c56        0     1 end_block9 = .
-    7c56     7c56        0     1 end_block10 = .
-    7c56     7c56        0     1 end_block11 = .
-    7c56     7c56        0     1 end_block12 = .
-    7c56     7c56        0     1 end_block13 = .
-    7c56     7c56        0     1 end_block14 = .
-    7c56     7c56        0     1 end_block15 = .
-    7c56     7c56        0     1 end_block16 = .
-    7c56     7c56        0     1 end_block17 = .
-    7c56     7c56        0     1 end_block18 = .
-    7c56     7c56        0     1 end_block19 = .
-    7c56     7c56        0     1 end_block20 = .
-    7c56     7c56        0     1 end_block21 = .
-    7c56     7c56        0     1 end_block22 = .
-    7c56     7c56        0     1 end_block23 = .
+     4ca      4ca      42e     1         skull.lto.o:(.text.f256Init)
+     4ca      4ca      42e     1                 f256Init
+     8f8      8f8        6     1         skull.lto.o:(.text.main)
+     8f8      8f8        6     1                 main
+     8fe      8fe      d8f     1         skull.lto.o:(.text.f256main)
+     8fe      8fe      d8f     1                 f256main
+    168d     168d      43f     1         skull.lto.o:(.text.bitmapLine)
+    168d     168d      43f     1                 bitmapLine
+    1acc     1acc        5     1         skull.lto.o:(.text.exit)
+    1acc     1acc        5     1                 exit
+    1ad1     1ad1       d7     1         skull.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    1ad1     1ad1       d7     1                 (anonymous namespace)::put(char, Status*)
+    1ba8     1ba8      10f     1         skull.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    1ba8     1ba8      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    1cb7     1cb7      d31     1         skull.lto.o:(.text.printf)
+    1cb7     1cb7      d31     1                 printf
+    29e8     29e8      203     1         skull.lto.o:(.text.putchar)
+    29e8     29e8      203     1                 putchar
+    2beb     2beb       2c     1         skull.lto.o:(.text.memcpy)
+    2beb     2beb       2c     1                 memcpy
+    2c17     2c17       20     1         skull.lto.o:(.text.__memset)
+    2c17     2c17       20     1                 __memset
+    2c37     2c37        0     1         __init_array_start = .
+    2c37     2c37        0     1         __init_array_end = .
+    2c37     2c37        0     1         __fini_array_start = .
+    2c37     2c37        0     1         __fini_array_end = .
+    2c37     2c37     4fda     1 .rodata
+    2c37     2c37       3a     1         skull.lto.o:(.rodata.printf)
+    2c71     2c71     41a0     1         skull.lto.o:(.rodata.scene_vertices)
+    2c71     2c71     41a0     1                 scene_vertices
+    6e11     6e11      df8     1         skull.lto.o:(.rodata.scene_indices)
+    6e11     6e11      df8     1                 scene_indices
+    7c09     7c09        8     1         <internal>:(.rodata.str1.1)
+    7c11     7c11        0     1 .data
+    7c11     7c11        0     1         __data_start = .
+    7c11     7c11        0     1         __data_end = .
+    7c11     7c11        0     1 __data_load_start = LOADADDR(.data)
+    7c11     7c11        0     1 __data_size = SIZEOF(.data)
+    7c11     7c11        9     1 .bss
+    7c11     7c11        0     1         __bss_start = .
+    7c11     7c11        1     1         skull.lto.o:(.bss.g_fp_last_status)
+    7c11     7c11        1     1                 g_fp_last_status
+    7c12     7c12        7     1         skull.lto.o:(.bss.kernelEventData)
+    7c12     7c12        7     1                 kernelEventData
+    7c19     7c19        1     1         skull.lto.o:(.bss.kernelError)
+    7c19     7c19        1     1                 kernelError
+    7c1a     7c1a        0     1         __bss_end = .
+    7c1a     7c1a        0     1 __bss_size = SIZEOF(.bss)
+    7c1a     7c1a        0     1 .noinit
+    7c1a     7c1a        0     1         __heap_start = ALIGN(., 2)
+    7c1a     7c1a        0     1 end_block8 = .
+    7c1a     7c1a        0     1 end_block9 = .
+    7c1a     7c1a        0     1 end_block10 = .
+    7c1a     7c1a        0     1 end_block11 = .
+    7c1a     7c1a        0     1 end_block12 = .
+    7c1a     7c1a        0     1 end_block13 = .
+    7c1a     7c1a        0     1 end_block14 = .
+    7c1a     7c1a        0     1 end_block15 = .
+    7c1a     7c1a        0     1 end_block16 = .
+    7c1a     7c1a        0     1 end_block17 = .
+    7c1a     7c1a        0     1 end_block18 = .
+    7c1a     7c1a        0     1 end_block19 = .
+    7c1a     7c1a        0     1 end_block20 = .
+    7c1a     7c1a        0     1 end_block21 = .
+    7c1a     7c1a        0     1 end_block22 = .
+    7c1a     7c1a        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      810     4 .symtab
-       0        0      810     4         <internal>:(.symtab)
+       0        0      830     4 .symtab
+       0        0      830     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      5bc     1 .strtab
-       0        0      5bc     1         <internal>:(.strtab)
+       0        0      5da     1 .strtab
+       0        0      5da     1         <internal>:(.strtab)

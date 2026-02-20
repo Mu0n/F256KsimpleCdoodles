@@ -2,6 +2,9 @@
 #include "f256lib.h"
 #include "../src/muUtils.h"
 #include "../src/muVS1053b.h"
+#include "../src/muMidiPlay2.h"
+#include "../src/muMidi.h"
+#include "../src/muTimer0Int.h"
 
 
 #define CHUNK8K 0x2000
@@ -21,6 +24,8 @@
 #define SFX03_COIN_BASE 0x30000
 #define SFX04_TIEF_BASE 0x40000
 
+#define MUSIC_BASE 0x50000
+
 #define WAV_HEADER_OFFSET 0x2C
 #define SILENTBYTE        0x80
 
@@ -31,6 +36,7 @@ EMBED(camera, "../assets/camera.wav", 0x10000);//14,862 bytes
 EMBED(bong, "../assets/blip.wav", 0x20000);//11,598 bytes
 EMBED(coin, "../assets/coin.wav", 0x30000);//7,174 bytes
 EMBED(tie, "../assets/tie.wav", 0x40000);//23132 bytes
+EMBED(canyon, "../assets/canyon.mid", 0x50000);
 
 typedef struct pcmChannel{
 uint32_t startAddr;
@@ -187,6 +193,8 @@ void playChunk()
 
 __attribute__((optnone))
 int main(int argc, char *argv[]) {
+bool isMIDIActive = true;
+	
 //wipeBitmapBackground(0x2F,0x2F,0x2F);
 POKE(MMU_IO_CTRL, 0x00);
 	  // XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
@@ -209,14 +217,30 @@ headerPump();
 lowVol();
 silencePad();
 highVol();	
+midiShutUp(0);
 
+
+initTrack(MUSIC_BASE);
+resetTimer0();
 
 printf("\nPress 1 for [CAMERA SHUTTER]\nPress 2 for [BOING]\nPress 3 for [COIN]\nPress 4 for [TIEF]\n\n");	
 while(true)
 	{
 	
 	playChunk(); //always play something but verify inside
-
+	if(isMIDIActive)
+	{
+		if(PEEK(INT_PENDING_0)&0x10) //when the timer0 delay is up, go here
+			{
+			POKE(INT_PENDING_0,0x10); //clear the timer0 delay
+			playMidi(); //play the next chunk of the midi file, might deal with multiple 0 delay stuff
+			}
+		if(theOne.isWaiting == false) 
+			{
+			sniffNextMIDI(); //find next event to play, will cue up a timer0 delay
+			}
+	}
+				
 	kernelNextEvent();
 	if(kernelEventData.type == kernelEvent(key.PRESSED))
 		{	

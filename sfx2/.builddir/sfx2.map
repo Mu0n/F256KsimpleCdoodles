@@ -61,134 +61,171 @@
        0        0        0     1 __coin_size = 0x1c06
        0        0        0     1 __tie_lma = 0x40000
        0        0        0     1 __tie_size = 0x5a5c
-      30      300       30     1 .zp.data
-      30      300        0     1         __zp_data_start = .
-      30      300       30     1         sfx2.lto.o:(.zp.data)
-      30      300       30     1                 textColors
-      60      330        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      60      330        0     1 __zp_data_size = SIZEOF(.zp.data)
-      60       60       33     1 .zp.bss
-      60       60        0     1         __zp_bss_start = .
-      60       60       33     1         sfx2.lto.o:(.zp.bss)
-      60       60        7     1                 kernelEventData
-      67       67        1     1                 _col
-      68       68        1     1                 _row
-      69       69        2     1                 __putchar.s
-      6b       6b       24     1                 sfxChannels
-      8f       8f        1     1                 data0
-      90       90        1     1                 data1
-      91       91        1     1                 data2
-      92       92        1     1                 data3
-      93       93        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      93       93       5d     1 .zp
-      93       93       5d     1         sfx2.lto.o:(.zp.noinit)
-     330      330     1ef4     1 .text
-     330      330        0     1         _init = .
-     330      330        0     1         _start = .
-     330      330        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     330      330        0     1                 __do_init_stack
-     338      338        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     338      338        0     1                 __do_zero_bss
-     33b      33b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     33b      33b        0     1                 __do_zero_zp_bss
-     33e      33e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     33e      33e        0     1                 __do_copy_zp_data
-     341      341        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     344      344        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     344      344        0     1                 __after_main
-     347      347        0     1         _fini = .
-     347      347        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     348      348       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     348      348       13     1                 __zero_bss
-     35b      35b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     35b      35b       13     1                 __zero_zp_bss
-     36e      36e       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     36e      36e       17     1                 __copy_zp_data
-     385      385       17     1         sfx2.lto.o:(.text.openAllCODEC)
-     385      385       17     1                 openAllCODEC
-     39c      39c       1e     1         sfx2.lto.o:(.text.boostVSClock)
-     39c      39c       1e     1                 boostVSClock
-     3ba      3ba       1e     1         sfx2.lto.o:(.text.lowVol)
-     3ba      3ba       1e     1                 lowVol
-     3d8      3d8       1c     1         sfx2.lto.o:(.text.highVol)
-     3d8      3d8       1c     1                 highVol
-     3f4      3f4       21     1         sfx2.lto.o:(.text.FAR_PEEK)
-     3f4      3f4       21     1                 FAR_PEEK
-     415      415      4a6     1         sfx2.lto.o:(.text.main)
-     415      415      4a6     1                 main
-     8bb      8bb      1b6     1         sfx2.lto.o:(.text.f256main)
-     8bb      8bb      1b6     1                 f256main
-     a71      a71       94     1         sfx2.lto.o:(.text.setupSound)
-     a71      a71       94     1                 setupSound
-     b05      b05       b3     1         sfx2.lto.o:(.text.headerPump)
-     b05      b05       b3     1                 headerPump
-     bb8      bb8       ee     1         sfx2.lto.o:(.text.silencePad)
-     bb8      bb8       ee     1                 silencePad
-     ca6      ca6      2c3     1         sfx2.lto.o:(.text.playChunk)
-     ca6      ca6      2c3     1                 playChunk
-     f69      f69       46     1         sfx2.lto.o:(.text.startSound)
-     f69      f69       46     1                 startSound
-     faf      faf       26     1         sfx2.lto.o:(.text.howManySounds)
-     faf      faf       26     1                 howManySounds
-     fd5      fd5       db     1         sfx2.lto.o:(.text.mix_n)
-     fd5      fd5       db     1                 mix_n
-    10b0     10b0        5     1         sfx2.lto.o:(.text.exit)
-    10b0     10b0        5     1                 exit
-    10b5     10b5       d7     1         sfx2.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    10b5     10b5       d7     1                 (anonymous namespace)::put(char, Status*)
-    118c     118c      10f     1         sfx2.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    118c     118c      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-    129b     129b      d3a     1         sfx2.lto.o:(.text.printf)
-    129b     129b      d3a     1                 printf
-    1fd5     1fd5      203     1         sfx2.lto.o:(.text.putchar)
-    1fd5     1fd5      203     1                 putchar
-    21d8     21d8       2c     1         sfx2.lto.o:(.text.memcpy)
-    21d8     21d8       2c     1                 memcpy
-    2204     2204       20     1         sfx2.lto.o:(.text.__memset)
-    2204     2204       20     1                 __memset
-    2224     2224        0     1         __init_array_start = .
-    2224     2224        0     1         __init_array_end = .
-    2224     2224        0     1         __fini_array_start = .
-    2224     2224        0     1         __fini_array_end = .
-    2224     2224       a4     1 .rodata
-    2224     2224        8     1         sfx2.lto.o:(.rodata.f256main)
-    222c     222c       3a     1         sfx2.lto.o:(.rodata.printf)
-    2266     2266       62     1         <internal>:(.rodata.str1.1)
-    22c8     22c8        0     1 .data
-    22c8     22c8        0     1         __data_start = .
-    22c8     22c8        0     1         __data_end = .
-    22c8     22c8        0     1 __data_load_start = LOADADDR(.data)
-    22c8     22c8        0     1 __data_size = SIZEOF(.data)
-    22c8     22c8        d     1 .bss
-    22c8     22c8        0     1         __bss_start = .
-    22c8     22c8        1     1         sfx2.lto.o:(.bss.kernelError)
-    22c8     22c8        1     1                 kernelError
-    22c9     22c9        4     1         sfx2.lto.o:(.bss._BITMAP_BASE.0)
-    22c9     22c9        4     1                 _BITMAP_BASE.0
-    22cd     22cd        4     1         sfx2.lto.o:(.bss._BITMAP_BASE.1)
-    22cd     22cd        4     1                 _BITMAP_BASE.1
-    22d1     22d1        4     1         sfx2.lto.o:(.bss._BITMAP_BASE.2)
-    22d1     22d1        4     1                 _BITMAP_BASE.2
-    22d5     22d5        0     1         __bss_end = .
-    22d5     22d5        0     1 __bss_size = SIZEOF(.bss)
-    22d5     22d5        0     1 .noinit
-    22d5     22d5        0     1         __heap_start = ALIGN(., 2)
-    22d5     22d5        0     1 end_block8 = .
-    22d5     22d5        0     1 end_block9 = .
-    22d5     22d5        0     1 end_block10 = .
-    22d5     22d5        0     1 end_block11 = .
-    22d5     22d5        0     1 end_block12 = .
-    22d5     22d5        0     1 end_block13 = .
-    22d5     22d5        0     1 end_block14 = .
-    22d5     22d5        0     1 end_block15 = .
-    22d5     22d5        0     1 end_block16 = .
-    22d5     22d5        0     1 end_block17 = .
-    22d5     22d5        0     1 end_block18 = .
-    22d5     22d5        0     1 end_block19 = .
-    22d5     22d5        0     1 end_block20 = .
-    22d5     22d5        0     1 end_block21 = .
-    22d5     22d5        0     1 end_block22 = .
-    22d5     22d5        0     1 end_block23 = .
+       0        0        0     1 __canyon_lma = 0x50000
+       0        0        0     1 __canyon_size = 0x8454
+      30       30        0     1 .zp.data
+      30       30        0     1         __zp_data_start = .
+      30       30        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      30       30        0     1 __zp_data_size = SIZEOF(.zp.data)
+      30       30       59     1 .zp.bss
+      30       30        0     1         __zp_bss_start = .
+      30       30       59     1         sfx2.lto.o:(.zp.bss)
+      30       30        1     1                 doneWithFudge
+      31       31        1     1                 fudge
+      32       32        7     1                 kernelEventData
+      39       39        1     1                 _col
+      3a       3a        1     1                 _row
+      3b       3b        4     1                 _BITMAP_BASE.0
+      3f       3f        4     1                 _BITMAP_BASE.1
+      43       43        4     1                 _BITMAP_BASE.2
+      47       47        2     1                 __putchar.s
+      49       49       24     1                 sfxChannels
+      6d       6d        1     1                 data0
+      6e       6e        1     1                 data1
+      6f       6f        1     1                 data2
+      70       70        1     1                 data3
+      71       71        2     1                 theOne.0
+      73       73        2     1                 theOne.1
+      75       75        4     1                 theOne.2
+      79       79        1     1                 theOne.4
+      7a       7a        4     1                 theOne.5
+      7e       7e        2     1                 theOne.6
+      80       80        2     1                 theOne.7
+      82       82        2     1                 theOne.8
+      84       84        1     1                 (anonymous namespace)::initialized
+      85       85        2     1                 (anonymous namespace)::free_size
+      87       87        2     1                 (anonymous namespace)::free_list
+      89       89        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      89       89       5d     1 .zp
+      89       89       5d     1         sfx2.lto.o:(.zp.noinit)
+     300      300     4007     2 .text
+     300      300        0     1         _init = .
+     300      300        0     1         _start = .
+     300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     300      300        0     1                 __do_init_stack
+     308      308        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     308      308        0     1                 __do_zero_bss
+     30b      30b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     30b      30b        0     1                 __do_zero_zp_bss
+     30e      30e        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     311      311        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     311      311        0     1                 __after_main
+     314      314        0     1         _fini = .
+     314      314        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     316      316      14b     2         sfx2.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     316      316      14b     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     461      461       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     461      461       13     1                 __zero_bss
+     474      474       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     474      474       13     1                 __zero_zp_bss
+     487      487        6     1         sfx2.lto.o:(.text.midiShutUp)
+     487      487        6     1                 midiShutUp
+     48d      48d      4c1     1         sfx2.lto.o:(.text.readDelta)
+     48d      48d      4c1     1                 readDelta
+     94e      94e      5c5     1         sfx2.lto.o:(.text.readMIDICmd)
+     94e      94e      5c5     1                 readMIDICmd
+     f13      f13      216     1         sfx2.lto.o:(.text.skipWhenFFCmd)
+     f13      f13      216     1                 skipWhenFFCmd
+    1129     1129      32e     1         sfx2.lto.o:(.text.exhaustZeroes)
+    1129     1129      32e     1                 exhaustZeroes
+    1457     1457      492     1         sfx2.lto.o:(.text.playMidi)
+    1457     1457      492     1                 playMidi
+    18e9     18e9      52c     1         sfx2.lto.o:(.text.initTrack)
+    18e9     18e9      52c     1                 initTrack
+    1e15     1e15      13d     1         sfx2.lto.o:(.text.sniffNextMIDI)
+    1e15     1e15      13d     1                 sniffNextMIDI
+    1f52     1f52        e     1         sfx2.lto.o:(.text.resetTimer0)
+    1f52     1f52        e     1                 resetTimer0
+    1f60     1f60       17     1         sfx2.lto.o:(.text.openAllCODEC)
+    1f60     1f60       17     1                 openAllCODEC
+    1f77     1f77       1e     1         sfx2.lto.o:(.text.boostVSClock)
+    1f77     1f77       1e     1                 boostVSClock
+    1f95     1f95       1e     1         sfx2.lto.o:(.text.lowVol)
+    1f95     1f95       1e     1                 lowVol
+    1fb3     1fb3       1c     1         sfx2.lto.o:(.text.highVol)
+    1fb3     1fb3       1c     1                 highVol
+    1fcf     1fcf       21     1         sfx2.lto.o:(.text.FAR_PEEK)
+    1fcf     1fcf       21     1                 FAR_PEEK
+    1ff0     1ff0      495     1         sfx2.lto.o:(.text.main)
+    1ff0     1ff0      495     1                 main
+    2485     2485      202     1         sfx2.lto.o:(.text.f256main)
+    2485     2485      202     1                 f256main
+    2687     2687       94     1         sfx2.lto.o:(.text.setupSound)
+    2687     2687       94     1                 setupSound
+    271b     271b       b3     1         sfx2.lto.o:(.text.headerPump)
+    271b     271b       b3     1                 headerPump
+    27ce     27ce       ee     1         sfx2.lto.o:(.text.silencePad)
+    27ce     27ce       ee     1                 silencePad
+    28bc     28bc      2c3     1         sfx2.lto.o:(.text.playChunk)
+    28bc     28bc      2c3     1                 playChunk
+    2b7f     2b7f       46     1         sfx2.lto.o:(.text.startSound)
+    2b7f     2b7f       46     1                 startSound
+    2bc5     2bc5       26     1         sfx2.lto.o:(.text.howManySounds)
+    2bc5     2bc5       26     1                 howManySounds
+    2beb     2beb       db     1         sfx2.lto.o:(.text.mix_n)
+    2beb     2beb       db     1                 mix_n
+    2cc6     2cc6        5     1         sfx2.lto.o:(.text.exit)
+    2cc6     2cc6        5     1                 exit
+    2ccb     2ccb       d7     1         sfx2.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    2ccb     2ccb       d7     1                 (anonymous namespace)::put(char, Status*)
+    2da2     2da2      10f     1         sfx2.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    2da2     2da2      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    2eb1     2eb1      d3a     1         sfx2.lto.o:(.text.printf)
+    2eb1     2eb1      d3a     1                 printf
+    3beb     3beb      203     1         sfx2.lto.o:(.text.putchar)
+    3beb     3beb      203     1                 putchar
+    3dee     3dee      2cc     1         sfx2.lto.o:(.text.malloc)
+    3dee     3dee      2cc     1                 malloc
+    40ba     40ba       2c     1         sfx2.lto.o:(.text.memcpy)
+    40ba     40ba       2c     1                 memcpy
+    40e6     40e6       20     1         sfx2.lto.o:(.text.__memset)
+    40e6     40e6       20     1                 __memset
+    4106     4106      15f     1         sfx2.lto.o:(.text.__udivsi3)
+    4106     4106      15f     1                 __udivsi3
+    4265     4265       32     1         sfx2.lto.o:(.text.__mulhi3)
+    4265     4265       32     1                 __mulhi3
+    4297     4297       70     1         sfx2.lto.o:(.text.__mulsi3)
+    4297     4297       70     1                 __mulsi3
+    4307     4307        0     1         __init_array_start = .
+    4307     4307        0     1         __init_array_end = .
+    4307     4307        0     1         __fini_array_start = .
+    4307     4307        0     1         __fini_array_end = .
+    4307     4307      188     1 .rodata
+    4307     4307       b4     1         sfx2.lto.o:(.rodata.skipWhenFFCmd)
+    43bb     43bb        8     1         sfx2.lto.o:(.rodata.f256main)
+    43c3     43c3       3a     1         sfx2.lto.o:(.rodata.printf)
+    43fd     43fd       30     1         sfx2.lto.o:(.rodata.textColors)
+    43fd     43fd       30     1                 textColors
+    442d     442d       62     1         <internal>:(.rodata.str1.1)
+    448f     448f        0     1 .data
+    448f     448f        0     1         __data_start = .
+    448f     448f        0     1         __data_end = .
+    448f     448f        0     1 __data_load_start = LOADADDR(.data)
+    448f     448f        0     1 __data_size = SIZEOF(.data)
+    448f     448f        1     1 .bss
+    448f     448f        0     1         __bss_start = .
+    448f     448f        1     1         sfx2.lto.o:(.bss.kernelError)
+    448f     448f        1     1                 kernelError
+    4490     4490        0     1         __bss_end = .
+    4490     4490        0     1 __bss_size = SIZEOF(.bss)
+    4490     4490        0     1 .noinit
+    4490     4490        0     1         __heap_start = ALIGN(., 2)
+    4490     4490        0     1 end_block8 = .
+    4490     4490        0     1 end_block9 = .
+    4490     4490        0     1 end_block10 = .
+    4490     4490        0     1 end_block11 = .
+    4490     4490        0     1 end_block12 = .
+    4490     4490        0     1 end_block13 = .
+    4490     4490        0     1 end_block14 = .
+    4490     4490        0     1 end_block15 = .
+    4490     4490        0     1 end_block16 = .
+    4490     4490        0     1 end_block17 = .
+    4490     4490        0     1 end_block18 = .
+    4490     4490        0     1 end_block19 = .
+    4490     4490        0     1 end_block20 = .
+    4490     4490        0     1 end_block21 = .
+    4490     4490        0     1 end_block22 = .
+    4490     4490        0     1 end_block23 = .
    10000    10000     3a0e    16 .camera
    10000    10000     3a0e    16         sfx2.lto.o:(.camera)
    10000    10000        0     1                 camera_start
@@ -209,11 +246,16 @@
    40000    40000        0     1                 tie_start
    45a5c    45a5c        0     1                 tie_end
    45a5c    45a5c        0     1 end_tie = .
+   50000    50000     8454    16 .canyon
+   50000    50000     8454    16         sfx2.lto.o:(.canyon)
+   50000    50000        0     1                 canyon_start
+   58454    58454        0     1                 canyon_end
+   58454    58454        0     1 end_canyon = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      9d0     4 .symtab
-       0        0      9d0     4         <internal>:(.symtab)
-       0        0       73     1 .shstrtab
-       0        0       73     1         <internal>:(.shstrtab)
-       0        0      6cb     1 .strtab
-       0        0      6cb     1         <internal>:(.strtab)
+       0        0      ba0     4 .symtab
+       0        0      ba0     4         <internal>:(.symtab)
+       0        0       7b     1 .shstrtab
+       0        0       7b     1         <internal>:(.shstrtab)
+       0        0      843     1 .strtab
+       0        0      843     1         <internal>:(.strtab)

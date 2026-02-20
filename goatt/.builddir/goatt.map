@@ -69,7 +69,7 @@
       3b       3b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
       3b       3b        9     1 .zp
       3b       3b        9     1         goatt.lto.o:(.zp.noinit)
-     300      300      79f     1 .text
+     300      300      90f     1 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -89,55 +89,60 @@
      318      318       13     1                 __zero_bss
      32b      32b       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
      32b      32b       13     1                 __zero_zp_bss
-     33e      33e      3ea     1         goatt.lto.o:(.text.f256Init)
-     33e      33e      3ea     1                 f256Init
-     728      728        6     1         goatt.lto.o:(.text.main)
-     728      728        6     1                 main
-     72e      72e      149     1         goatt.lto.o:(.text.f256main)
-     72e      72e      149     1                 f256main
-     877      877        5     1         goatt.lto.o:(.text.exit)
-     877      877        5     1                 exit
-     87c      87c      203     1         goatt.lto.o:(.text.putchar)
-     87c      87c      203     1                 putchar
-     a7f      a7f       20     1         goatt.lto.o:(.text.__memset)
-     a7f      a7f       20     1                 __memset
-     a9f      a9f        0     1         __init_array_start = .
-     a9f      a9f        0     1         __init_array_end = .
-     a9f      a9f        0     1         __fini_array_start = .
-     a9f      a9f        0     1         __fini_array_end = .
-     a9f      a9f       60     1 .rodata
-     a9f      a9f       30     1         goatt.lto.o:(.rodata.textColors)
-     a9f      a9f       30     1                 textColors
-     acf      acf       30     1         <internal>:(.rodata.str1.1)
-     aff      aff        0     1 .data
-     aff      aff        0     1         __data_start = .
-     aff      aff        0     1         __data_end = .
-     aff      aff        0     1 __data_load_start = LOADADDR(.data)
-     aff      aff        0     1 __data_size = SIZEOF(.data)
-     aff      aff        1     1 .bss
-     aff      aff        0     1         __bss_start = .
-     aff      aff        1     1         goatt.lto.o:(.bss.kernelError)
-     aff      aff        1     1                 kernelError
-     b00      b00        0     1         __bss_end = .
-     b00      b00        0     1 __bss_size = SIZEOF(.bss)
-     b00      b00        0     1 .noinit
-     b00      b00        0     1         __heap_start = ALIGN(., 2)
-     b00      b00        0     1 end_block8 = .
-     b00      b00        0     1 end_block9 = .
-     b00      b00        0     1 end_block10 = .
-     b00      b00        0     1 end_block11 = .
-     b00      b00        0     1 end_block12 = .
-     b00      b00        0     1 end_block13 = .
-     b00      b00        0     1 end_block14 = .
-     b00      b00        0     1 end_block15 = .
-     b00      b00        0     1 end_block16 = .
-     b00      b00        0     1 end_block17 = .
-     b00      b00        0     1 end_block18 = .
-     b00      b00        0     1 end_block19 = .
-     b00      b00        0     1 end_block20 = .
-     b00      b00        0     1 end_block21 = .
-     b00      b00        0     1 end_block22 = .
-     b00      b00        0     1 end_block23 = .
+     33e      33e      441     1         goatt.lto.o:(.text.f256Init)
+     33e      33e      441     1                 f256Init
+     77f      77f        6     1         goatt.lto.o:(.text.main)
+     77f      77f        6     1                 main
+     785      785      262     1         goatt.lto.o:(.text.f256main)
+     785      785      262     1                 f256main
+     9e7      9e7        5     1         goatt.lto.o:(.text.exit)
+     9e7      9e7        5     1                 exit
+     9ec      9ec      203     1         goatt.lto.o:(.text.putchar)
+     9ec      9ec      203     1                 putchar
+     bef      bef       20     1         goatt.lto.o:(.text.__memset)
+     bef      bef       20     1                 __memset
+     c0f      c0f        0     1         __init_array_start = .
+     c0f      c0f        0     1         __init_array_end = .
+     c0f      c0f        0     1         __fini_array_start = .
+     c0f      c0f        0     1         __fini_array_end = .
+     c0f      c0f       30     1 .rodata
+     c0f      c0f       30     1         goatt.lto.o:(.rodata.textColors)
+     c0f      c0f       30     1                 textColors
+     c3f      c3f        0     1 .data
+     c3f      c3f        0     1         __data_start = .
+     c3f      c3f        0     1         __data_end = .
+     c3f      c3f        0     1 __data_load_start = LOADADDR(.data)
+     c3f      c3f        0     1 __data_size = SIZEOF(.data)
+     c3f      c3f        d     1 .bss
+     c3f      c3f        0     1         __bss_start = .
+     c3f      c3f        4     1         goatt.lto.o:(.bss._BITMAP_BASE.0)
+     c3f      c3f        4     1                 _BITMAP_BASE.0
+     c43      c43        4     1         goatt.lto.o:(.bss._BITMAP_BASE.1)
+     c43      c43        4     1                 _BITMAP_BASE.1
+     c47      c47        4     1         goatt.lto.o:(.bss._BITMAP_BASE.2)
+     c47      c47        4     1                 _BITMAP_BASE.2
+     c4b      c4b        1     1         goatt.lto.o:(.bss.kernelError)
+     c4b      c4b        1     1                 kernelError
+     c4c      c4c        0     1         __bss_end = .
+     c4c      c4c        0     1 __bss_size = SIZEOF(.bss)
+     c4c      c4c        0     1 .noinit
+     c4c      c4c        0     1         __heap_start = ALIGN(., 2)
+     c4c      c4c        0     1 end_block8 = .
+     c4c      c4c        0     1 end_block9 = .
+     c4c      c4c        0     1 end_block10 = .
+     c4c      c4c        0     1 end_block11 = .
+     c4c      c4c        0     1 end_block12 = .
+     c4c      c4c        0     1 end_block13 = .
+     c4c      c4c        0     1 end_block14 = .
+     c4c      c4c        0     1 end_block15 = .
+     c4c      c4c        0     1 end_block16 = .
+     c4c      c4c        0     1 end_block17 = .
+     c4c      c4c        0     1 end_block18 = .
+     c4c      c4c        0     1 end_block19 = .
+     c4c      c4c        0     1 end_block20 = .
+     c4c      c4c        0     1 end_block21 = .
+     c4c      c4c        0     1 end_block22 = .
+     c4c      c4c        0     1 end_block23 = .
     a000     a000      ba7    16 .sixpack
     a000     a000      ba7    16         goatt.lto.o:(.sixpack)
     a000     a000        0     1                 sixpack_start
@@ -145,9 +150,9 @@
     aba7     aba7        0     1 end_sixpack = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      750     4 .symtab
-       0        0      750     4         <internal>:(.symtab)
+       0        0      780     4 .symtab
+       0        0      780     4         <internal>:(.symtab)
        0        0       63     1 .shstrtab
        0        0       63     1         <internal>:(.shstrtab)
-       0        0      4f8     1 .strtab
-       0        0      4f8     1         <internal>:(.strtab)
+       0        0      525     1 .strtab
+       0        0      525     1         <internal>:(.strtab)

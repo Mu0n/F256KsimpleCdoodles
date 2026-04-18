@@ -67,6 +67,10 @@
        0        0        0     1 __level3_size = 0x12c00
        0        0        0     1 __bird_lma = 0x4ac00
        0        0        0     1 __bird_size = 0x400
+       0        0        0     1 __sunset_lma = 0x4b000
+       0        0        0     1 __sunset_size = 0x94
+       0        0        0     1 __tile3_lma = 0x4b400
+       0        0        0     1 __tile3_size = 0xb00
       30      300       56     1 .zp.data
       30      300        0     1         __zp_data_start = .
       30      300       56     1         gfxDemo.lto.o:(.zp.data)
@@ -79,23 +83,32 @@
       85      355        1     1                 sprBirdFrame.2
       86      356        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       86      356        0     1 __zp_data_size = SIZEOF(.zp.data)
-      86       86       10     1 .zp.bss
+      86       86       20     1 .zp.bss
       86       86        0     1         __zp_bss_start = .
-      86       86       10     1         gfxDemo.lto.o:(.zp.bss)
+      86       86       20     1         gfxDemo.lto.o:(.zp.bss)
       86       86        1     1                 _ccolor
       87       87        1     1                 _col
       88       88        1     1                 _row
-      89       89        1     1                 mEn
-      8a       8a        1     1                 sprFrame.0
-      8b       8b        1     1                 sprFrame.2
-      8c       8c        1     1                 sprBirdFrame.0
-      8d       8d        1     1                 sprAnim.1
-      8e       8e        1     1                 sprBirdAnim.1
-      8f       8f        7     1                 kernelEventData
-      96       96        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      96       96        9     1 .zp
-      96       96        9     1         gfxDemo.lto.o:(.zp.noinit)
-     356      356     147d     1 .text
+      89       89        1     1                 _BITMAP_CLUT.0
+      8a       8a        1     1                 _BITMAP_CLUT.1
+      8b       8b        1     1                 _BITMAP_CLUT.2
+      8c       8c        1     1                 _tileSize.2
+      8d       8d        1     1                 t2
+      8e       8e        2     1                 tm2_xf
+      90       90        1     1                 tm2_x
+      91       91        1     1                 mEn
+      92       92        1     1                 isSunset
+      93       93        1     1                 sprFrame.0
+      94       94        1     1                 sprFrame.2
+      95       95        1     1                 sprBirdFrame.0
+      96       96        3     1                 sprAnim
+      99       99        3     1                 sprBirdAnim
+      9c       9c        3     1                 tileAnim
+      9f       9f        7     1                 kernelEventData
+      a6       a6        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      a6       a6        9     1 .zp
+      a6       a6        9     1         gfxDemo.lto.o:(.zp.noinit)
+     356      356     1d42     1 .text
      356      356        0     1         _init = .
      356      356        0     1         _start = .
      356      356        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -117,68 +130,68 @@
      381      381       13     1                 __zero_zp_bss
      394      394       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
      394      394       17     1                 __copy_zp_data
-     3ab      3ab      449     1         gfxDemo.lto.o:(.text.f256Init)
-     3ab      3ab      449     1                 f256Init
-     7f4      7f4        6     1         gfxDemo.lto.o:(.text.main)
-     7f4      7f4        6     1                 main
-     7fa      7fa      bc2     1         gfxDemo.lto.o:(.text.f256main)
-     7fa      7fa      bc2     1                 f256main
-    13bc     13bc      394     1         gfxDemo.lto.o:(.text.textPrint)
-    13bc     13bc      394     1                 textPrint
-    1750     1750        5     1         gfxDemo.lto.o:(.text.exit)
-    1750     1750        5     1                 exit
-    1755     1755       2c     1         gfxDemo.lto.o:(.text.memcpy)
-    1755     1755       2c     1                 memcpy
-    1781     1781       20     1         gfxDemo.lto.o:(.text.__memset)
-    1781     1781       20     1                 __memset
-    17a1     17a1       32     1         gfxDemo.lto.o:(.text.__mulhi3)
-    17a1     17a1       32     1                 __mulhi3
-    17d3     17d3        0     1         __init_array_start = .
-    17d3     17d3        0     1         __init_array_end = .
-    17d3     17d3        0     1         __fini_array_start = .
-    17d3     17d3        0     1         __fini_array_end = .
-    17d3     17d3      21f     1 .rodata
-    17d3     17d3       90     1         gfxDemo.lto.o:(.rodata.f256main)
-    1863     1863       30     1         gfxDemo.lto.o:(.rodata.textColors)
-    1863     1863       30     1                 textColors
-    1893     1893      15f     1         <internal>:(.rodata.str1.1)
-    19f2     19f2        0     1 .data
-    19f2     19f2        0     1         __data_start = .
-    19f2     19f2        0     1         __data_end = .
-    19f2     19f2        0     1 __data_load_start = LOADADDR(.data)
-    19f2     19f2        0     1 __data_size = SIZEOF(.data)
-    19f2     19f2       4d     1 .bss
-    19f2     19f2        0     1         __bss_start = .
-    19f2     19f2        4     1         gfxDemo.lto.o:(.bss._BITMAP_BASE.0)
-    19f2     19f2        4     1                 _BITMAP_BASE.0
-    19f6     19f6        4     1         gfxDemo.lto.o:(.bss._BITMAP_BASE.1)
-    19f6     19f6        4     1                 _BITMAP_BASE.1
-    19fa     19fa        4     1         gfxDemo.lto.o:(.bss._BITMAP_BASE.2)
-    19fa     19fa        4     1                 _BITMAP_BASE.2
-    19fe     19fe       40     1         gfxDemo.lto.o:(.bss._spriteCtl)
-    19fe     19fe       40     1                 _spriteCtl
-    1a3e     1a3e        1     1         gfxDemo.lto.o:(.bss.kernelError)
-    1a3e     1a3e        1     1                 kernelError
-    1a3f     1a3f        0     1         __bss_end = .
-    1a3f     1a3f        0     1 __bss_size = SIZEOF(.bss)
-    1a3f     1a3f        0     1 .noinit
-    1a3f     1a3f        0     1         __heap_start = ALIGN(., 2)
-    1a3f     1a3f        0     1 end_block8 = .
-    1a3f     1a3f        0     1 end_block9 = .
-    1a3f     1a3f        0     1 end_block10 = .
-    1a3f     1a3f        0     1 end_block11 = .
-    1a3f     1a3f        0     1 end_block12 = .
-    1a3f     1a3f        0     1 end_block13 = .
-    1a3f     1a3f        0     1 end_block14 = .
-    1a3f     1a3f        0     1 end_block15 = .
-    1a3f     1a3f        0     1 end_block16 = .
-    1a3f     1a3f        0     1 end_block17 = .
-    1a3f     1a3f        0     1 end_block18 = .
-    1a3f     1a3f        0     1 end_block19 = .
-    1a3f     1a3f        0     1 end_block20 = .
-    1a3f     1a3f        0     1 end_block21 = .
-    1a3f     1a3f        0     1 end_block22 = .
-    1a3f     1a3f        0     1 end_block23 = .
+     3ab      3ab      461     1         gfxDemo.lto.o:(.text.f256Init)
+     3ab      3ab      461     1                 f256Init
+     80c      80c        6     1         gfxDemo.lto.o:(.text.main)
+     80c      80c        6     1                 main
+     812      812     146f     1         gfxDemo.lto.o:(.text.f256main)
+     812      812     146f     1                 f256main
+    1c81     1c81      394     1         gfxDemo.lto.o:(.text.textPrint)
+    1c81     1c81      394     1                 textPrint
+    2015     2015        5     1         gfxDemo.lto.o:(.text.exit)
+    2015     2015        5     1                 exit
+    201a     201a       2c     1         gfxDemo.lto.o:(.text.memcpy)
+    201a     201a       2c     1                 memcpy
+    2046     2046       20     1         gfxDemo.lto.o:(.text.__memset)
+    2046     2046       20     1                 __memset
+    2066     2066       32     1         gfxDemo.lto.o:(.text.__mulhi3)
+    2066     2066       32     1                 __mulhi3
+    2098     2098        0     1         __init_array_start = .
+    2098     2098        0     1         __init_array_end = .
+    2098     2098        0     1         __fini_array_start = .
+    2098     2098        0     1         __fini_array_end = .
+    2098     2098      246     1 .rodata
+    2098     2098       90     1         gfxDemo.lto.o:(.rodata.f256main)
+    2128     2128       30     1         gfxDemo.lto.o:(.rodata.textColors)
+    2128     2128       30     1                 textColors
+    2158     2158      186     1         <internal>:(.rodata.str1.1)
+    22de     22de        0     1 .data
+    22de     22de        0     1         __data_start = .
+    22de     22de        0     1         __data_end = .
+    22de     22de        0     1 __data_load_start = LOADADDR(.data)
+    22de     22de        0     1 __data_size = SIZEOF(.data)
+    22de     22de       4d     1 .bss
+    22de     22de        0     1         __bss_start = .
+    22de     22de        4     1         gfxDemo.lto.o:(.bss._BITMAP_BASE.0)
+    22de     22de        4     1                 _BITMAP_BASE.0
+    22e2     22e2        4     1         gfxDemo.lto.o:(.bss._BITMAP_BASE.1)
+    22e2     22e2        4     1                 _BITMAP_BASE.1
+    22e6     22e6        4     1         gfxDemo.lto.o:(.bss._BITMAP_BASE.2)
+    22e6     22e6        4     1                 _BITMAP_BASE.2
+    22ea     22ea       40     1         gfxDemo.lto.o:(.bss._spriteCtl)
+    22ea     22ea       40     1                 _spriteCtl
+    232a     232a        1     1         gfxDemo.lto.o:(.bss.kernelError)
+    232a     232a        1     1                 kernelError
+    232b     232b        0     1         __bss_end = .
+    232b     232b        0     1 __bss_size = SIZEOF(.bss)
+    232b     232b        0     1 .noinit
+    232b     232b        0     1         __heap_start = ALIGN(., 2)
+    232b     232b        0     1 end_block8 = .
+    232b     232b        0     1 end_block9 = .
+    232b     232b        0     1 end_block10 = .
+    232b     232b        0     1 end_block11 = .
+    232b     232b        0     1 end_block12 = .
+    232b     232b        0     1 end_block13 = .
+    232b     232b        0     1 end_block14 = .
+    232b     232b        0     1 end_block15 = .
+    232b     232b        0     1 end_block16 = .
+    232b     232b        0     1 end_block17 = .
+    232b     232b        0     1 end_block18 = .
+    232b     232b        0     1 end_block19 = .
+    232b     232b        0     1 end_block20 = .
+    232b     232b        0     1 end_block21 = .
+    232b     232b        0     1 end_block22 = .
+    232b     232b        0     1 end_block23 = .
    10000    10000       94    16 .pal
    10000    10000       94    16         gfxDemo.lto.o:(.pal)
    10000    10000        0     1                 pal_start
@@ -214,11 +227,21 @@
    4ac00    4ac00        0     1                 bird_start
    4b000    4b000        0     1                 bird_end
    4b000    4b000        0     1 end_bird = .
+   4b000    4b000       94    16 .sunset
+   4b000    4b000       94    16         gfxDemo.lto.o:(.sunset)
+   4b000    4b000        0     1                 sunset_start
+   4b094    4b094        0     1                 sunset_end
+   4b094    4b094        0     1 end_sunset = .
+   4b400    4b400      b00    16 .tile3
+   4b400    4b400      b00    16         gfxDemo.lto.o:(.tile3)
+   4b400    4b400        0     1                 tile3_start
+   4bf00    4bf00        0     1                 tile3_end
+   4bf00    4bf00        0     1 end_tile3 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      a80     4 .symtab
-       0        0      a80     4         <internal>:(.symtab)
-       0        0       8a     1 .shstrtab
-       0        0       8a     1         <internal>:(.shstrtab)
-       0        0      725     1 .strtab
-       0        0      725     1         <internal>:(.strtab)
+       0        0      bb0     4 .symtab
+       0        0      bb0     4         <internal>:(.symtab)
+       0        0       99     1 .shstrtab
+       0        0       99     1         <internal>:(.shstrtab)
+       0        0      7f3     1 .strtab
+       0        0      7f3     1         <internal>:(.strtab)

@@ -53,97 +53,98 @@
        0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
        0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
-      30      300       27     1 .zp.data
+      30      300        f     1 .zp.data
       30      300        0     1         __zp_data_start = .
-      30      300       27     1         opl3.lto.o:(.zp.data)
-      30      300       18     1                 opl3_fnums
-      57      327        0     1 __zp_data_load_start = LOADADDR(.zp.data)
-      57      327        0     1 __zp_data_size = SIZEOF(.zp.data)
-      57       57        b     1 .zp.bss
-      57       57        0     1         __zp_bss_start = .
-      57       57        b     1         opl3.lto.o:(.zp.bss)
-      57       57        7     1                 kernelEventData
-      5e       5e        1     1                 _col
-      5f       5f        1     1                 _row
-      60       60        2     1                 __putchar.s
-      62       62        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      62       62        d     1 .zp
-      62       62        d     1         opl3.lto.o:(.zp.noinit)
-     327      327      714     1 .text
-     327      327        0     1         _init = .
-     327      327        0     1         _start = .
-     327      327        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
-     327      327        0     1                 __do_init_stack
-     32f      32f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
-     32f      32f        0     1                 __do_zero_bss
-     332      332        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
-     332      332        0     1                 __do_zero_zp_bss
-     335      335        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
-     335      335        0     1                 __do_copy_zp_data
-     338      338        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
-     33b      33b        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
-     33b      33b        0     1                 __after_main
-     33e      33e        0     1         _fini = .
-     33e      33e        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     33f      33f       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     33f      33f       13     1                 __zero_bss
-     352      352       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     352      352       13     1                 __zero_zp_bss
-     365      365       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     365      365       17     1                 __copy_zp_data
-     37c      37c      49d     1         opl3.lto.o:(.text.main)
-     37c      37c      49d     1                 main
-     819      819      1ba     1         opl3.lto.o:(.text.__putchar)
-     819      819      1ba     1                 __putchar
-     9d3      9d3        5     1         opl3.lto.o:(.text.exit)
-     9d3      9d3        5     1                 exit
-     9d8      9d8       17     1         opl3.lto.o:(.text.puts)
-     9d8      9d8       17     1                 puts
-     9ef      9ef       2c     1         opl3.lto.o:(.text.memcpy)
-     9ef      9ef       2c     1                 memcpy
-     a1b      a1b       20     1         opl3.lto.o:(.text.__memset)
-     a1b      a1b       20     1                 __memset
-     a3b      a3b        0     1         __init_array_start = .
-     a3b      a3b        0     1         __init_array_end = .
-     a3b      a3b        0     1         __fini_array_start = .
-     a3b      a3b        0     1         __fini_array_end = .
-     a3b      a3b       30     1 .rodata
-     a3b      a3b       30     1         opl3.lto.o:(.rodata.textColors)
-     a3b      a3b       30     1                 textColors
-     a6b      a6b        0     1 .data
-     a6b      a6b        0     1         __data_start = .
-     a6b      a6b        0     1         __data_end = .
-     a6b      a6b        0     1 __data_load_start = LOADADDR(.data)
-     a6b      a6b        0     1 __data_size = SIZEOF(.data)
-     a6b      a6b        1     1 .bss
-     a6b      a6b        0     1         __bss_start = .
-     a6b      a6b        1     1         opl3.lto.o:(.bss.kernelError)
-     a6b      a6b        1     1                 kernelError
-     a6c      a6c        0     1         __bss_end = .
-     a6c      a6c        0     1 __bss_size = SIZEOF(.bss)
-     a6c      a6c        0     1 .noinit
-     a6c      a6c        0     1         __heap_start = ALIGN(., 2)
-     a6c      a6c        0     1 end_block8 = .
-     a6c      a6c        0     1 end_block9 = .
-     a6c      a6c        0     1 end_block10 = .
-     a6c      a6c        0     1 end_block11 = .
-     a6c      a6c        0     1 end_block12 = .
-     a6c      a6c        0     1 end_block13 = .
-     a6c      a6c        0     1 end_block14 = .
-     a6c      a6c        0     1 end_block15 = .
-     a6c      a6c        0     1 end_block16 = .
-     a6c      a6c        0     1 end_block17 = .
-     a6c      a6c        0     1 end_block18 = .
-     a6c      a6c        0     1 end_block19 = .
-     a6c      a6c        0     1 end_block20 = .
-     a6c      a6c        0     1 end_block21 = .
-     a6c      a6c        0     1 end_block22 = .
-     a6c      a6c        0     1 end_block23 = .
+      30      300        f     1         opl3.lto.o:(.zp.data)
+      3f      30f        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      3f      30f        0     1 __zp_data_size = SIZEOF(.zp.data)
+      3f       3f        b     1 .zp.bss
+      3f       3f        0     1         __zp_bss_start = .
+      3f       3f        b     1         opl3.lto.o:(.zp.bss)
+      3f       3f        7     1                 kernelEventData
+      46       46        1     1                 _col
+      47       47        1     1                 _row
+      48       48        2     1                 __putchar.s
+      4a       4a        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      4a       4a        9     1 .zp
+      4a       4a        9     1         opl3.lto.o:(.zp.noinit)
+     30f      30f     118b     1 .text
+     30f      30f        0     1         _init = .
+     30f      30f        0     1         _start = .
+     30f      30f        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     30f      30f        0     1                 __do_init_stack
+     317      317        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     317      317        0     1                 __do_zero_bss
+     31a      31a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     31a      31a        0     1                 __do_zero_zp_bss
+     31d      31d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     31d      31d        0     1                 __do_copy_zp_data
+     320      320        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     323      323        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     323      323        0     1                 __after_main
+     326      326        0     1         _fini = .
+     326      326        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     327      327       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     327      327       13     1                 __zero_bss
+     33a      33a       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     33a      33a       13     1                 __zero_zp_bss
+     34d      34d       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     34d      34d       17     1                 __copy_zp_data
+     364      364     10e5     1         opl3.lto.o:(.text.main)
+     364      364     10e5     1                 main
+    1449     1449        5     1         opl3.lto.o:(.text.exit)
+    1449     1449        5     1                 exit
+    144e     144e       2c     1         opl3.lto.o:(.text.memcpy)
+    144e     144e       2c     1                 memcpy
+    147a     147a       20     1         opl3.lto.o:(.text.__memset)
+    147a     147a       20     1                 __memset
+    149a     149a        0     1         __init_array_start = .
+    149a     149a        0     1         __init_array_end = .
+    149a     149a        0     1         __fini_array_start = .
+    149a     149a        0     1         __fini_array_end = .
+    149a     149a       30     1 .rodata
+    149a     149a       30     1         opl3.lto.o:(.rodata.textColors)
+    149a     149a       30     1                 textColors
+    14ca     14ca        0     1 .data
+    14ca     14ca        0     1         __data_start = .
+    14ca     14ca        0     1         __data_end = .
+    14ca     14ca        0     1 __data_load_start = LOADADDR(.data)
+    14ca     14ca        0     1 __data_size = SIZEOF(.data)
+    14ca     14ca        d     1 .bss
+    14ca     14ca        0     1         __bss_start = .
+    14ca     14ca        1     1         opl3.lto.o:(.bss.kernelError)
+    14ca     14ca        1     1                 kernelError
+    14cb     14cb        4     1         opl3.lto.o:(.bss._BITMAP_BASE.0)
+    14cb     14cb        4     1                 _BITMAP_BASE.0
+    14cf     14cf        4     1         opl3.lto.o:(.bss._BITMAP_BASE.1)
+    14cf     14cf        4     1                 _BITMAP_BASE.1
+    14d3     14d3        4     1         opl3.lto.o:(.bss._BITMAP_BASE.2)
+    14d3     14d3        4     1                 _BITMAP_BASE.2
+    14d7     14d7        0     1         __bss_end = .
+    14d7     14d7        0     1 __bss_size = SIZEOF(.bss)
+    14d7     14d7        0     1 .noinit
+    14d7     14d7        0     1         __heap_start = ALIGN(., 2)
+    14d7     14d7        0     1 end_block8 = .
+    14d7     14d7        0     1 end_block9 = .
+    14d7     14d7        0     1 end_block10 = .
+    14d7     14d7        0     1 end_block11 = .
+    14d7     14d7        0     1 end_block12 = .
+    14d7     14d7        0     1 end_block13 = .
+    14d7     14d7        0     1 end_block14 = .
+    14d7     14d7        0     1 end_block15 = .
+    14d7     14d7        0     1 end_block16 = .
+    14d7     14d7        0     1 end_block17 = .
+    14d7     14d7        0     1 end_block18 = .
+    14d7     14d7        0     1 end_block19 = .
+    14d7     14d7        0     1 end_block20 = .
+    14d7     14d7        0     1 end_block21 = .
+    14d7     14d7        0     1 end_block22 = .
+    14d7     14d7        0     1 end_block23 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
        0        0      730     4 .symtab
        0        0      730     4         <internal>:(.symtab)
        0        0       5a     1 .shstrtab
        0        0       5a     1         <internal>:(.shstrtab)
-       0        0      4df     1 .strtab
-       0        0      4df     1         <internal>:(.strtab)
+       0        0      4f2     1 .strtab
+       0        0      4f2     1         <internal>:(.strtab)

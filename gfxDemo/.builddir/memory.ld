@@ -7,3 +7,5 @@
   thing : ORIGIN = __thing_lma, LENGTH = __thing_size
   level3 : ORIGIN = __level3_lma, LENGTH = __level3_size
   bird : ORIGIN = __bird_lma, LENGTH = __bird_size
+  sunset : ORIGIN = __sunset_lma, LENGTH = __sunset_size
+  tile3 : ORIGIN = __tile3_lma, LENGTH = __tile3_size

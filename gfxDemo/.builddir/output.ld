@@ -42,3 +42,15 @@
   BYTE((end_bird - __bird_lma)>>16)
   TRIM(bird)
 
+  SHORT(ORIGIN(sunset))
+  BYTE(ORIGIN(sunset)>>16)
+  SHORT(end_sunset - __sunset_lma)
+  BYTE((end_sunset - __sunset_lma)>>16)
+  TRIM(sunset)
+
+  SHORT(ORIGIN(tile3))
+  BYTE(ORIGIN(tile3)>>16)
+  SHORT(end_tile3 - __tile3_lma)
+  BYTE((end_tile3 - __tile3_lma)>>16)
+  TRIM(tile3)
+

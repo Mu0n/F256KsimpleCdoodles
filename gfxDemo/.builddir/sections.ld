@@ -7,3 +7,5 @@
   .thing : { *(.thing .thing*) } >thing end_thing = .;
   .level3 : { *(.level3 .level3*) } >level3 end_level3 = .;
   .bird : { *(.bird .bird*) } >bird end_bird = .;
+  .sunset : { *(.sunset .sunset*) } >sunset end_sunset = .;
+  .tile3 : { *(.tile3 .tile3*) } >tile3 end_tile3 = .;

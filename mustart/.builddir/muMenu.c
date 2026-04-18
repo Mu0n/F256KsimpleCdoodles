@@ -242,7 +242,7 @@ void displayCats(uint8_t x, uint8_t y, uint8_t cat)
 	{
 		if(cat == i) textSetColor(7,6);
 		else textSetColor(15,0);
-		textGotoXY(x+3+8*i,y+11);
+		textGotoXY(x+3+8*i,y+13);
 		printf("%s", catNames[i]);
 	}
 	

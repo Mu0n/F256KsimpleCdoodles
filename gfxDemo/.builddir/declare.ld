@@ -21,3 +21,9 @@
   __bird_lma  = 0x4ac00;
   __bird_size = 0x400;
 
+  __sunset_lma  = 0x4b000;
+  __sunset_size = 0x94;
+
+  __tile3_lma  = 0x4b400;
+  __tile3_size = 0xb00;
+

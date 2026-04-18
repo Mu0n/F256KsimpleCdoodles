@@ -66,29 +66,32 @@
       31      301       12     1                 selectableChan
       43      313        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       43      313        0     1 __zp_data_size = SIZEOF(.zp.data)
-      43       43       38     1 .zp.bss
+      43       43       3b     1 .zp.bss
       43       43        0     1         __zp_bss_start = .
-      43       43       38     1         vgmplayer2.lto.o:(.zp.bss)
+      43       43       3b     1         vgmplayer2.lto.o:(.zp.bss)
       43       43        1     1                 chipAct.0
       44       44       12     1                 polyOPL3Buffer
       56       56        4     1                 tooBigWait
-      5a       5a        4     1                 gd3Location
-      5e       5e        4     1                 needle
-      62       62        7     1                 kernelEventData
-      69       69        1     1                 kernelError
-      6a       6a        1     1                 _col
-      6b       6b        1     1                 _row
-      6c       6c        2     1                 __putchar.s
-      6e       6e        7     1                 gMID
-      75       75        1     1                 playChan
-      76       76        1     1                 chip_VT_PERC
-      77       77        1     1                 chip_OPL3_PAIRS
-      78       78        2     1                 theFile
-      7a       7a        1     1                 comeRightTrough
-      7b       7b        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      7b       7b       75     1 .zp
-      7b       7b       75     1         vgmplayer2.lto.o:(.zp.noinit)
-     314      314     97a9     2 .text
+      5a       5a        1     1                 oneLoop
+      5b       5b        4     1                 gd3Location
+      5f       5f        4     1                 needle
+      63       63        1     1                 chip_enable
+      64       64        1     1                 chip_NOTESEL
+      65       65        7     1                 kernelEventData
+      6c       6c        1     1                 kernelError
+      6d       6d        1     1                 _col
+      6e       6e        1     1                 _row
+      6f       6f        2     1                 __putchar.s
+      71       71        7     1                 gMID
+      78       78        1     1                 playChan
+      79       79        1     1                 chip_VT_PERC
+      7a       7a        1     1                 chip_OPL3_PAIRS
+      7b       7b        2     1                 theFile
+      7d       7d        1     1                 comeRightTrough
+      7e       7e        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      7e       7e       72     1 .zp
+      7e       7e       72     1         vgmplayer2.lto.o:(.zp.noinit)
+     314      314     c1de     2 .text
      314      314        0     1         _init = .
      314      314        0     1         _start = .
      314      314        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -117,162 +120,156 @@
      5ad      5ad       46     1         vgmplayer2.lto.o:(.text)
      5ad      5ad        0     1                 PEEK24
      5cf      5cf        0     1                 POKE24
-     5f3      5f3      5da     1         vgmplayer2.lto.o:(.text.readDirectory_far)
-     5f3      5f3      5da     1                 readDirectory_far
-     bcd      bcd      5b7     1         vgmplayer2.lto.o:(.text.sortFileList_far)
-     bcd      bcd      5b7     1                 sortFileList_far
-    1184     1184      4dc     1         vgmplayer2.lto.o:(.text.displayFileList_far)
-    1184     1184      4dc     1                 displayFileList_far
-    1660     1660     1029     1         vgmplayer2.lto.o:(.text.pickFile_far)
-    1660     1660     1029     1                 pickFile_far
-    2689     2689      122     1         vgmplayer2.lto.o:(.text.reprepFPR_far)
-    2689     2689      122     1                 reprepFPR_far
-    27ab     27ab      13a     1         vgmplayer2.lto.o:(.text.endsWithExt)
-    27ab     27ab      13a     1                 endsWithExt
-    28e5     28e5      4a4     1         vgmplayer2.lto.o:(.text.displayImage)
-    28e5     28e5      4a4     1                 displayImage
-    2d89     2d89      1bf     1         vgmplayer2.lto.o:(.text.opl3_initialize)
-    2d89     2d89      1bf     1                 opl3_initialize
-    2f48     2f48      423     1         vgmplayer2.lto.o:(.text.opl3_setInstrumentAllChannels)
-    2f48     2f48      423     1                 opl3_setInstrumentAllChannels
-    336b     336b      83e     1         vgmplayer2.lto.o:(.text.opl3_set4OPS)
-    336b     336b      83e     1                 opl3_set4OPS
-    3ba9     3ba9      5cc     1         vgmplayer2.lto.o:(.text.opl3_shadow)
-    3ba9     3ba9      5cc     1                 opl3_shadow
-    4175     4175      1f4     1         vgmplayer2.lto.o:(.text.copyToRAM)
-    4175     4175      1f4     1                 copyToRAM
-    4369     4369       a8     1         vgmplayer2.lto.o:(.text.textUI)
-    4369     4369       a8     1                 textUI
-    4411     4411      3db     1         vgmplayer2.lto.o:(.text.axes_info)
-    4411     4411      3db     1                 axes_info
-    47ec     47ec      31b     1         vgmplayer2.lto.o:(.text.wipe_inst)
-    47ec     47ec      31b     1                 wipe_inst
-    4b07     4b07      13f     1         vgmplayer2.lto.o:(.text.show_all_inst)
-    4b07     4b07      13f     1                 show_all_inst
-    4c46     4c46      3cd     1         vgmplayer2.lto.o:(.text.show_inst)
-    4c46     4c46      3cd     1                 show_inst
-    5013     5013       21     1         vgmplayer2.lto.o:(.text.FAR_PEEK)
-    5013     5013       21     1                 FAR_PEEK
-    5034     5034       2a     1         vgmplayer2.lto.o:(.text.FAR_PEEKW)
-    5034     5034       2a     1                 FAR_PEEKW
-    505e     505e       23     1         vgmplayer2.lto.o:(.text.FAR_POKE)
-    505e     505e       23     1                 FAR_POKE
-    5081     5081       1c     1         vgmplayer2.lto.o:(.text.FAR_POKEW)
-    5081     5081       1c     1                 FAR_POKEW
-    509d     509d      48d     1         vgmplayer2.lto.o:(.text.main)
-    509d     509d      48d     1                 main
-    552a     552a     2b4d     1         vgmplayer2.lto.o:(.text.f256main)
-    552a     552a     2b4d     1                 f256main
-    8077     8077      179     1         vgmplayer2.lto.o:(.text.fileRead)
-    8077     8077      179     1                 fileRead
-    81f0     81f0      134     1         vgmplayer2.lto.o:(.text.fileOpen)
-    81f0     81f0      134     1                 fileOpen
-    8324     8324       11     1         vgmplayer2.lto.o:(.text.textGotoXY)
-    8324     8324       11     1                 textGotoXY
-    8335     8335      1f9     1         vgmplayer2.lto.o:(.text.textPrint)
-    8335     8335      1f9     1                 textPrint
-    852e     852e       f3     1         vgmplayer2.lto.o:(.text.fileReadDir)
-    852e     852e       f3     1                 fileReadDir
-    8621     8621        5     1         vgmplayer2.lto.o:(.text.exit)
-    8621     8621        5     1                 exit
-    8626     8626      b76     1         vgmplayer2.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
-    8626     8626      b76     1                 (anonymous namespace)::print(char const*, Status*)
-    919c     919c       df     1         vgmplayer2.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    919c     919c       df     1                 (anonymous namespace)::put(char, Status*)
-    927b     927b      10f     1         vgmplayer2.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    927b     927b      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-    938a     938a       90     1         vgmplayer2.lto.o:(.text.printf)
-    938a     938a       90     1                 printf
-    941a     941a       e2     1         vgmplayer2.lto.o:(.text.sprintf)
-    941a     941a       e2     1                 sprintf
-    94fc     94fc      1e8     1         vgmplayer2.lto.o:(.text.malloc)
-    94fc     94fc      1e8     1                 malloc
-    96e4     96e4      18d     1         vgmplayer2.lto.o:(.text.free)
-    96e4     96e4      18d     1                 free
-    9871     9871       2c     1         vgmplayer2.lto.o:(.text.memcpy)
-    9871     9871       2c     1                 memcpy
-    989d     989d       20     1         vgmplayer2.lto.o:(.text.__memset)
-    989d     989d       20     1                 __memset
-    98bd     98bd       b9     1         vgmplayer2.lto.o:(.text.__udivhi3)
-    98bd     98bd       b9     1                 __udivhi3
-    9976     9976       d7     1         vgmplayer2.lto.o:(.text.__udivmodhi4)
-    9976     9976       d7     1                 __udivmodhi4
-    9a4d     9a4d       70     1         vgmplayer2.lto.o:(.text.__mulsi3)
-    9a4d     9a4d       70     1                 __mulsi3
-    9abd     9abd        0     1         __init_array_start = .
-    9abd     9abd        0     1         __init_array_end = .
-    9abd     9abd        0     1         __fini_array_start = .
-    9abd     9abd        0     1         __fini_array_end = .
-    9abd     9abd      772     1 .rodata
-    9abd     9abd       50     1         vgmplayer2.lto.o:(.rodata.pickFile_far)
-    9b0d     9b0d      1ec     1         vgmplayer2.lto.o:(.rodata.opl3_shadow)
-    9cf9     9cf9      1c6     1         vgmplayer2.lto.o:(.rodata.f256main)
-    9ebf     9ebf       16     1         vgmplayer2.lto.o:(.rodata.fileReadDir)
-    9ed5     9ed5       3a     1         vgmplayer2.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
-    9f0f     9f0f      280     1         <internal>:(.rodata.str1.1)
-    a18f     a18f       58     1         vgmplayer2.lto.o:(.rodata.noteColors)
-    a18f     a18f       58     1                 noteColors
-    a1e7     a1e7       18     1         vgmplayer2.lto.o:(.rodata.opl3_fnums)
-    a1e7     a1e7       18     1                 opl3_fnums
-    a1ff     a1ff       30     1         vgmplayer2.lto.o:(.rodata.textColors)
-    a1ff     a1ff       30     1                 textColors
-    a22f     a22f        0     1 .data
-    a22f     a22f        0     1         __data_start = .
-    a22f     a22f        0     1         __data_end = .
-    a22f     a22f        0     1 __data_load_start = LOADADDR(.data)
-    a22f     a22f        0     1 __data_size = SIZEOF(.data)
-    a22f     a22f      2a9     1 .bss
-    a22f     a22f        0     1         __bss_start = .
-    a22f     a22f        1     1         vgmplayer2.lto.o:(.bss.oneLoop)
-    a22f     a22f        1     1                 oneLoop
-    a230     a230        4     1         vgmplayer2.lto.o:(.bss.totalWait)
-    a230     a230        4     1                 totalWait
-    a234     a234        4     1         vgmplayer2.lto.o:(.bss.loopBackTo)
-    a234     a234        4     1                 loopBackTo
-    a238     a238        4     1         vgmplayer2.lto.o:(.bss.samplesSoFar)
-    a238     a238        4     1                 samplesSoFar
-    a23c     a23c        1     1         vgmplayer2.lto.o:(.bss.chip_enable)
-    a23c     a23c        1     1                 chip_enable
-    a23d     a23d        1     1         vgmplayer2.lto.o:(.bss.chip_NOTESEL)
-    a23d     a23d        1     1                 chip_NOTESEL
-    a23e     a23e        4     1         vgmplayer2.lto.o:(.bss._BITMAP_BASE.0)
-    a23e     a23e        4     1                 _BITMAP_BASE.0
-    a242     a242        8     1         vgmplayer2.lto.o:(.bss._dirStream)
-    a242     a242        8     1                 _dirStream
-    a24a     a24a      102     1         vgmplayer2.lto.o:(.bss.fileReadDir.fileDirEntS)
-    a24a     a24a      102     1                 fileReadDir.fileDirEntS
-    a34c     a34c      10e     1         vgmplayer2.lto.o:(.bss.opl3_instrument_defs)
-    a34c     a34c      10e     1                 opl3_instrument_defs
-    a45a     a45a       78     1         vgmplayer2.lto.o:(.bss.name)
-    a45a     a45a       78     1                 name
-    a4d2     a4d2        1     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
-    a4d2     a4d2        1     1                 (anonymous namespace)::initialized
-    a4d3     a4d3        1     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
-    a4d3     a4d3        1     1                 (anonymous namespace)::last_free
-    a4d4     a4d4        2     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
-    a4d4     a4d4        2     1                 (anonymous namespace)::free_size
-    a4d6     a4d6        2     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
-    a4d6     a4d6        2     1                 (anonymous namespace)::free_list
-    a4d8     a4d8        0     1         __bss_end = .
-    a4d8     a4d8        0     1 __bss_size = SIZEOF(.bss)
-    a4d8     a4d8        0     1 .noinit
-    a4d8     a4d8        0     1         __heap_start = ALIGN(., 2)
-    a4d8     a4d8        0     1 end_block8 = .
-    a4d8     a4d8        0     1 end_block9 = .
-    a4d8     a4d8        0     1 end_block10 = .
-    a4d8     a4d8        0     1 end_block11 = .
-    a4d8     a4d8        0     1 end_block12 = .
-    a4d8     a4d8        0     1 end_block13 = .
-    a4d8     a4d8        0     1 end_block14 = .
-    a4d8     a4d8        0     1 end_block15 = .
-    a4d8     a4d8        0     1 end_block16 = .
-    a4d8     a4d8        0     1 end_block17 = .
-    a4d8     a4d8        0     1 end_block18 = .
-    a4d8     a4d8        0     1 end_block19 = .
-    a4d8     a4d8        0     1 end_block20 = .
-    a4d8     a4d8        0     1 end_block21 = .
-    a4d8     a4d8        0     1 end_block22 = .
-    a4d8     a4d8        0     1 end_block23 = .
+     5f3      5f3      605     1         vgmplayer2.lto.o:(.text.readDirectory_far)
+     5f3      5f3      605     1                 readDirectory_far
+     bf8      bf8      5e4     1         vgmplayer2.lto.o:(.text.sortFileList_far)
+     bf8      bf8      5e4     1                 sortFileList_far
+    11dc     11dc      44f     1         vgmplayer2.lto.o:(.text.displayFileList_far)
+    11dc     11dc      44f     1                 displayFileList_far
+    162b     162b     1029     1         vgmplayer2.lto.o:(.text.pickFile_far)
+    162b     162b     1029     1                 pickFile_far
+    2654     2654      3ef     1         vgmplayer2.lto.o:(.text.wipeArea_far)
+    2654     2654      3ef     1                 wipeArea_far
+    2a43     2a43      144     1         vgmplayer2.lto.o:(.text.endsWithExt)
+    2a43     2a43      144     1                 endsWithExt
+    2b87     2b87      4a4     1         vgmplayer2.lto.o:(.text.displayImage)
+    2b87     2b87      4a4     1                 displayImage
+    302b     302b      1bf     1         vgmplayer2.lto.o:(.text.opl3_initialize)
+    302b     302b      1bf     1                 opl3_initialize
+    31ea     31ea      897     1         vgmplayer2.lto.o:(.text.opl3_setInstrumentAllChannels)
+    31ea     31ea      897     1                 opl3_setInstrumentAllChannels
+    3a81     3a81      83e     1         vgmplayer2.lto.o:(.text.opl3_set4OPS)
+    3a81     3a81      83e     1                 opl3_set4OPS
+    42bf     42bf      5c9     1         vgmplayer2.lto.o:(.text.opl3_shadow)
+    42bf     42bf      5c9     1                 opl3_shadow
+    4888     4888      494     1         vgmplayer2.lto.o:(.text.load_VGM_file)
+    4888     4888      494     1                 load_VGM_file
+    4d1c     4d1c      1f4     1         vgmplayer2.lto.o:(.text.copyToRAM)
+    4d1c     4d1c      1f4     1                 copyToRAM
+    4f10     4f10       a8     1         vgmplayer2.lto.o:(.text.textUI)
+    4f10     4f10       a8     1                 textUI
+    4fb8     4fb8      3db     1         vgmplayer2.lto.o:(.text.axes_info)
+    4fb8     4fb8      3db     1                 axes_info
+    5393     5393      31b     1         vgmplayer2.lto.o:(.text.wipe_inst)
+    5393     5393      31b     1                 wipe_inst
+    56ae     56ae      13d     1         vgmplayer2.lto.o:(.text.show_all_inst)
+    56ae     56ae      13d     1                 show_all_inst
+    57eb     57eb      3cd     1         vgmplayer2.lto.o:(.text.show_inst)
+    57eb     57eb      3cd     1                 show_inst
+    5bb8     5bb8       21     1         vgmplayer2.lto.o:(.text.FAR_PEEK)
+    5bb8     5bb8       21     1                 FAR_PEEK
+    5bd9     5bd9       2a     1         vgmplayer2.lto.o:(.text.FAR_PEEKW)
+    5bd9     5bd9       2a     1                 FAR_PEEKW
+    5c03     5c03       23     1         vgmplayer2.lto.o:(.text.FAR_POKE)
+    5c03     5c03       23     1                 FAR_POKE
+    5c26     5c26       1c     1         vgmplayer2.lto.o:(.text.FAR_POKEW)
+    5c26     5c26       1c     1                 FAR_POKEW
+    5c42     5c42      4c9     1         vgmplayer2.lto.o:(.text.main)
+    5c42     5c42      4c9     1                 main
+    610b     610b     4cca     1         vgmplayer2.lto.o:(.text.f256main)
+    610b     610b     4cca     1                 f256main
+    add5     add5       11     1         vgmplayer2.lto.o:(.text.textGotoXY)
+    add5     add5       11     1                 textGotoXY
+    ade6     ade6      379     1         vgmplayer2.lto.o:(.text.textPrint)
+    ade6     ade6      379     1                 textPrint
+    b15f     b15f      179     1         vgmplayer2.lto.o:(.text.fileRead)
+    b15f     b15f      179     1                 fileRead
+    b2d8     b2d8       f3     1         vgmplayer2.lto.o:(.text.fileReadDir)
+    b2d8     b2d8       f3     1                 fileReadDir
+    b3cb     b3cb        5     1         vgmplayer2.lto.o:(.text.exit)
+    b3cb     b3cb        5     1                 exit
+    b3d0     b3d0      b76     1         vgmplayer2.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    b3d0     b3d0      b76     1                 (anonymous namespace)::print(char const*, Status*)
+    bf46     bf46       df     1         vgmplayer2.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    bf46     bf46       df     1                 (anonymous namespace)::put(char, Status*)
+    c025     c025      10f     1         vgmplayer2.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    c025     c025      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    c134     c134       90     1         vgmplayer2.lto.o:(.text.printf)
+    c134     c134       90     1                 printf
+    c1c4     c1c4       e2     1         vgmplayer2.lto.o:(.text.sprintf)
+    c1c4     c1c4       e2     1                 sprintf
+    c2a6     c2a6       2c     1         vgmplayer2.lto.o:(.text.memcpy)
+    c2a6     c2a6       2c     1                 memcpy
+    c2d2     c2d2       20     1         vgmplayer2.lto.o:(.text.__memset)
+    c2d2     c2d2       20     1                 __memset
+    c2f2     c2f2       b9     1         vgmplayer2.lto.o:(.text.__udivhi3)
+    c2f2     c2f2       b9     1                 __udivhi3
+    c3ab     c3ab       d7     1         vgmplayer2.lto.o:(.text.__udivmodhi4)
+    c3ab     c3ab       d7     1                 __udivmodhi4
+    c482     c482       70     1         vgmplayer2.lto.o:(.text.__mulsi3)
+    c482     c482       70     1                 __mulsi3
+    c4f2     c4f2        0     1         __init_array_start = .
+    c4f2     c4f2        0     1         __init_array_end = .
+    c4f2     c4f2        0     1         __fini_array_start = .
+    c4f2     c4f2        0     1         __fini_array_end = .
+    c4f2     c4f2      772     1 .rodata
+    c4f2     c4f2       50     1         vgmplayer2.lto.o:(.rodata.pickFile_far)
+    c542     c542      1ec     1         vgmplayer2.lto.o:(.rodata.opl3_shadow)
+    c72e     c72e      1c6     1         vgmplayer2.lto.o:(.rodata.f256main)
+    c8f4     c8f4       16     1         vgmplayer2.lto.o:(.rodata.fileReadDir)
+    c90a     c90a       3a     1         vgmplayer2.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    c944     c944      280     1         <internal>:(.rodata.str1.1)
+    cbc4     cbc4       58     1         vgmplayer2.lto.o:(.rodata.noteColors)
+    cbc4     cbc4       58     1                 noteColors
+    cc1c     cc1c       18     1         vgmplayer2.lto.o:(.rodata.opl3_fnums)
+    cc1c     cc1c       18     1                 opl3_fnums
+    cc34     cc34       30     1         vgmplayer2.lto.o:(.rodata.textColors)
+    cc34     cc34       30     1                 textColors
+    cc64     cc64        0     1 .data
+    cc64     cc64        0     1         __data_start = .
+    cc64     cc64        0     1         __data_end = .
+    cc64     cc64        0     1 __data_load_start = LOADADDR(.data)
+    cc64     cc64        0     1 __data_size = SIZEOF(.data)
+    cc64     cc64      2ae     1 .bss
+    cc64     cc64        0     1         __bss_start = .
+    cc64     cc64        4     1         vgmplayer2.lto.o:(.bss.totalWait)
+    cc64     cc64        4     1                 totalWait
+    cc68     cc68        4     1         vgmplayer2.lto.o:(.bss.loopBackTo)
+    cc68     cc68        4     1                 loopBackTo
+    cc6c     cc6c        4     1         vgmplayer2.lto.o:(.bss.samplesSoFar)
+    cc6c     cc6c        4     1                 samplesSoFar
+    cc70     cc70        4     1         vgmplayer2.lto.o:(.bss._BITMAP_BASE.0)
+    cc70     cc70        4     1                 _BITMAP_BASE.0
+    cc74     cc74        4     1         vgmplayer2.lto.o:(.bss._BITMAP_BASE.1)
+    cc74     cc74        4     1                 _BITMAP_BASE.1
+    cc78     cc78        4     1         vgmplayer2.lto.o:(.bss._BITMAP_BASE.2)
+    cc78     cc78        4     1                 _BITMAP_BASE.2
+    cc7c     cc7c        8     1         vgmplayer2.lto.o:(.bss._dirStream)
+    cc7c     cc7c        8     1                 _dirStream
+    cc84     cc84      102     1         vgmplayer2.lto.o:(.bss.fileReadDir.fileDirEntS)
+    cc84     cc84      102     1                 fileReadDir.fileDirEntS
+    cd86     cd86      10e     1         vgmplayer2.lto.o:(.bss.opl3_instrument_defs)
+    cd86     cd86      10e     1                 opl3_instrument_defs
+    ce94     ce94       78     1         vgmplayer2.lto.o:(.bss.name)
+    ce94     ce94       78     1                 name
+    cf0c     cf0c        1     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_111initializedE)
+    cf0c     cf0c        1     1                 (anonymous namespace)::initialized
+    cf0d     cf0d        1     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    cf0d     cf0d        1     1                 (anonymous namespace)::last_free
+    cf0e     cf0e        2     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    cf0e     cf0e        2     1                 (anonymous namespace)::free_size
+    cf10     cf10        2     1         vgmplayer2.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    cf10     cf10        2     1                 (anonymous namespace)::free_list
+    cf12     cf12        0     1         __bss_end = .
+    cf12     cf12        0     1 __bss_size = SIZEOF(.bss)
+    cf12     cf12        0     1 .noinit
+    cf12     cf12        0     1         __heap_start = ALIGN(., 2)
+    cf12     cf12        0     1 end_block8 = .
+    cf12     cf12        0     1 end_block9 = .
+    cf12     cf12        0     1 end_block10 = .
+    cf12     cf12        0     1 end_block11 = .
+    cf12     cf12        0     1 end_block12 = .
+    cf12     cf12        0     1 end_block13 = .
+    cf12     cf12        0     1 end_block14 = .
+    cf12     cf12        0     1 end_block15 = .
+    cf12     cf12        0     1 end_block16 = .
+    cf12     cf12        0     1 end_block17 = .
+    cf12     cf12        0     1 end_block18 = .
+    cf12     cf12        0     1 end_block19 = .
+    cf12     cf12        0     1 end_block20 = .
+    cf12     cf12        0     1 end_block21 = .
+    cf12     cf12        0     1 end_block22 = .
+    cf12     cf12        0     1 end_block23 = .
    10000    10000      3fc    16 .pianopal
    10000    10000      3fc    16         vgmplayer2.lto.o:(.pianopal)
    10000    10000        0     1                 pianopal_start
@@ -294,5 +291,5 @@
        0        0      c60     4         <internal>:(.symtab)
        0        0       72     1 .shstrtab
        0        0       72     1         <internal>:(.shstrtab)
-       0        0      982     1 .strtab
-       0        0      982     1         <internal>:(.strtab)
+       0        0      998     1 .strtab
+       0        0      998     1         <internal>:(.strtab)

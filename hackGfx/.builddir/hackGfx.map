@@ -1,0 +1,200 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __pal_lma = 0x10000
+       0        0        0     1 __pal_size = 0x80
+       0        0        0     1 __tile3_lma = 0x4b400
+       0        0        0     1 __tile3_size = 0x500
+      30      300       31     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       31     1         hackGfx.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        1     1                 wantText
+      61      331        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      61      331        0     1 __zp_data_size = SIZEOF(.zp.data)
+      61       61       3d     1 .zp.bss
+      61       61        0     1         __zp_bss_start = .
+      61       61       3d     1         hackGfx.lto.o:(.zp.bss)
+      61       61        1     1                 _col
+      62       62        1     1                 _row
+      63       63        4     1                 _BITMAP_BASE.0
+      67       67        4     1                 _BITMAP_BASE.1
+      6b       6b        4     1                 _BITMAP_BASE.2
+      6f       6f        1     1                 _tileSize.1
+      70       70        1     1                 _tileSize.2
+      71       71        2     1                 tm_xf
+      73       73        1     1                 tm_x
+      74       74        2     1                 tm_xf1
+      76       76        1     1                 tm_x1
+      77       77        1     1                 wantSound
+      78       78        1     1                 tileAnim.1
+      79       79        2     1                 theFile
+      7b       7b        7     1                 kernelEventData
+      82       82        1     1                 kernelError
+      83       83        4     1                 tooBigWait
+      87       87        4     1                 gd3Location
+      8b       8b        4     1                 loopBackTo
+      8f       8f        4     1                 needle
+      93       93        4     1                 samplesSoFar
+      97       97        1     1                 comeRightTrough
+      98       98        1     1                 (anonymous namespace)::initialized
+      99       99        1     1                 (anonymous namespace)::last_free
+      9a       9a        2     1                 (anonymous namespace)::free_size
+      9c       9c        2     1                 (anonymous namespace)::free_list
+      9e       9e        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      9e       9e        e     1 .zp
+      9e       9e        e     1         hackGfx.lto.o:(.zp.noinit)
+     332      332     2d6b     2 .text
+     332      332        0     1         _init = .
+     332      332        0     1         _start = .
+     332      332        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     332      332        0     1                 __do_init_stack
+     33a      33a        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     33a      33a        0     1                 __do_zero_bss
+     33d      33d        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     33d      33d        0     1                 __do_zero_zp_bss
+     340      340        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     340      340        0     1                 __do_copy_zp_data
+     343      343        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     346      346        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     346      346        0     1                 __after_main
+     349      349        0     1         _fini = .
+     349      349        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     34a      34a      14b     2         hackGfx.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     34a      34a      14b     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     495      495       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     495      495       13     1                 __zero_bss
+     4a8      4a8       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     4a8      4a8       13     1                 __zero_zp_bss
+     4bb      4bb       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     4bb      4bb       17     1                 __copy_zp_data
+     4d2      4d2       46     1         hackGfx.lto.o:(.text)
+     4d2      4d2        0     1                 PEEK24
+     4f4      4f4        0     1                 POKE24
+     518      518     1f11     1         hackGfx.lto.o:(.text.main)
+     518      518     1f11     1                 main
+    2429     2429      376     1         hackGfx.lto.o:(.text.textPrint)
+    2429     2429      376     1                 textPrint
+    279f     279f      179     1         hackGfx.lto.o:(.text.fileRead)
+    279f     279f      179     1                 fileRead
+    2918     2918      42b     1         hackGfx.lto.o:(.text.opl3_shadow)
+    2918     2918      42b     1                 opl3_shadow
+    2d43     2d43      1f4     1         hackGfx.lto.o:(.text.copyToRAM)
+    2d43     2d43      1f4     1                 copyToRAM
+    2f37     2f37        5     1         hackGfx.lto.o:(.text.exit)
+    2f37     2f37        5     1                 exit
+    2f3c     2f3c       2c     1         hackGfx.lto.o:(.text.memcpy)
+    2f3c     2f3c       2c     1                 memcpy
+    2f68     2f68       20     1         hackGfx.lto.o:(.text.__memset)
+    2f68     2f68       20     1                 __memset
+    2f88     2f88       a5     1         hackGfx.lto.o:(.text.__umodhi3)
+    2f88     2f88       a5     1                 __umodhi3
+    302d     302d       70     1         hackGfx.lto.o:(.text.__mulsi3)
+    302d     302d       70     1                 __mulsi3
+    309d     309d        0     1         __init_array_start = .
+    309d     309d        0     1         __init_array_end = .
+    309d     309d        0     1         __fini_array_start = .
+    309d     309d        0     1         __fini_array_end = .
+    309d     309d      3d9     1 .rodata
+    309d     309d      19c     1         hackGfx.lto.o:(.rodata.main)
+    3239     3239      1ec     1         hackGfx.lto.o:(.rodata.opl3_shadow)
+    3425     3425       51     1         <internal>:(.rodata.str1.1)
+    3476     3476        0     1 .data
+    3476     3476        0     1         __data_start = .
+    3476     3476        0     1         __data_end = .
+    3476     3476        0     1 __data_load_start = LOADADDR(.data)
+    3476     3476        0     1 __data_size = SIZEOF(.data)
+    3476     3476      10e     1 .bss
+    3476     3476        0     1         __bss_start = .
+    3476     3476      10e     1         hackGfx.lto.o:(.bss.opl3_instrument_defs)
+    3476     3476      10e     1                 opl3_instrument_defs
+    3584     3584        0     1         __bss_end = .
+    3584     3584        0     1 __bss_size = SIZEOF(.bss)
+    3584     3584        0     1 .noinit
+    3584     3584        0     1         __heap_start = ALIGN(., 2)
+    3584     3584        0     1 end_block8 = .
+    3584     3584        0     1 end_block9 = .
+    3584     3584        0     1 end_block10 = .
+    3584     3584        0     1 end_block11 = .
+    3584     3584        0     1 end_block12 = .
+    3584     3584        0     1 end_block13 = .
+    3584     3584        0     1 end_block14 = .
+    3584     3584        0     1 end_block15 = .
+    3584     3584        0     1 end_block16 = .
+    3584     3584        0     1 end_block17 = .
+    3584     3584        0     1 end_block18 = .
+    3584     3584        0     1 end_block19 = .
+    3584     3584        0     1 end_block20 = .
+    3584     3584        0     1 end_block21 = .
+    3584     3584        0     1 end_block22 = .
+    3584     3584        0     1 end_block23 = .
+   10000    10000       80    16 .pal
+   10000    10000       80    16         hackGfx.lto.o:(.pal)
+   10000    10000        0     1                 pal_start
+   10080    10080        0     1                 pal_end
+   10080    10080        0     1 end_pal = .
+   4b400    4b400      500    16 .tile3
+   4b400    4b400      500    16         hackGfx.lto.o:(.tile3)
+   4b400    4b400        0     1                 tile3_start
+   4b900    4b900        0     1                 tile3_end
+   4b900    4b900        0     1 end_tile3 = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      9a0     4 .symtab
+       0        0      9a0     4         <internal>:(.symtab)
+       0        0       66     1 .shstrtab
+       0        0       66     1         <internal>:(.shstrtab)
+       0        0      6e7     1 .strtab
+       0        0      6e7     1         <internal>:(.strtab)

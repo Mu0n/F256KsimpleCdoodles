@@ -10,10 +10,6 @@
 #define TIMER_LILPAUSE_COOKIE 100
 #define TIMER_PAD_DELAY 2
 
-
-
-
-
 #define CHUNK8K 0x2000
 #define CHUNK4K 0x1000
 #define CHUNK2K 0x0800
@@ -21,7 +17,6 @@
 #define CHUNK128B 0x80
 #define CHUNK64B 0x40
 #define CHUNK32B 0x20
-
 
 #define SPEED_BASE 1
 #define DASH_DISPLACE 24

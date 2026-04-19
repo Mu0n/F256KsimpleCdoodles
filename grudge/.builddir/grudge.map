@@ -84,9 +84,9 @@
       3e       3e        2     1                 (anonymous namespace)::free_size
       40       40        2     1                 (anonymous namespace)::free_list
       42       42        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      42       42       6f     1 .zp
-      42       42       6f     1         grudge.lto.o:(.zp.noinit)
-     300      300     2e40     2 .text
+      42       42       71     1 .zp
+      42       42       71     1         grudge.lto.o:(.zp.noinit)
+     300      300     3822     2 .text
      300      300        0     1         _init = .
      300      300        0     1         _start = .
      300      300        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -106,78 +106,82 @@
      461      461       13     1                 __zero_bss
      474      474       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
      474      474       13     1                 __zero_zp_bss
-     487      487      cc3     1         grudge.lto.o:(.text.main)
-     487      487      cc3     1                 main
-    114a     114a      617     1         grudge.lto.o:(.text.checkPads)
-    114a     114a      617     1                 checkPads
-    1761     1761      1c5     1         grudge.lto.o:(.text.updateFrames)
-    1761     1761      1c5     1                 updateFrames
-    1926     1926      3d4     1         grudge.lto.o:(.text.mySpriteDefine)
-    1926     1926      3d4     1                 mySpriteDefine
-    1cfa     1cfa        5     1         grudge.lto.o:(.text.exit)
-    1cfa     1cfa        5     1                 exit
-    1cff     1cff       d7     1         grudge.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
-    1cff     1cff       d7     1                 (anonymous namespace)::put(char, Status*)
-    1dd6     1dd6      10f     1         grudge.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
-    1dd6     1dd6      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
-    1ee5     1ee5      d31     1         grudge.lto.o:(.text.printf)
-    1ee5     1ee5      d31     1                 printf
-    2c16     2c16      1e0     1         grudge.lto.o:(.text.putchar)
-    2c16     2c16      1e0     1                 putchar
-    2df6     2df6      2cc     1         grudge.lto.o:(.text.malloc)
-    2df6     2df6      2cc     1                 malloc
-    30c2     30c2       2c     1         grudge.lto.o:(.text.memcpy)
-    30c2     30c2       2c     1                 memcpy
-    30ee     30ee       20     1         grudge.lto.o:(.text.__memset)
-    30ee     30ee       20     1                 __memset
-    310e     310e       32     1         grudge.lto.o:(.text.__mulhi3)
-    310e     310e       32     1                 __mulhi3
-    3140     3140        0     1         __init_array_start = .
-    3140     3140        0     1         __init_array_end = .
-    3140     3140        0     1         __fini_array_start = .
-    3140     3140        0     1         __fini_array_end = .
-    3140     3140     250a     1 .rodata
-    3140     3140       3a     1         grudge.lto.o:(.rodata.printf)
-    317a     317a       30     1         grudge.lto.o:(.rodata.textColors)
-    317a     317a       30     1                 textColors
-    31aa     31aa       24     1         <internal>:(.rodata.str1.1)
-    31ce     31ce        6     1         grudge.lto.o:(.rodata.stateDelays)
-    31ce     31ce        6     1                 stateDelays
-    31d4     31d4     2476     1         grudge.lto.o:(.rodata.bigpatch)
-    31d4     31d4     2476     1                 bigpatch
-    564a     564a        0     1 .data
-    564a     564a        0     1         __data_start = .
-    564a     564a        0     1         __data_end = .
-    564a     564a        0     1 __data_load_start = LOADADDR(.data)
-    564a     564a        0     1 __data_size = SIZEOF(.data)
-    564a     564a      221     1 .bss
-    564a     564a        0     1         __bss_start = .
-    564a     564a       40     1         grudge.lto.o:(.bss._spriteCtl)
-    564a     564a       40     1                 _spriteCtl
-    568a     568a      1e0     1         grudge.lto.o:(.bss.spriteStatuses)
-    568a     568a      1e0     1                 spriteStatuses
-    586a     586a        1     1         grudge.lto.o:(.bss.kernelError)
-    586a     586a        1     1                 kernelError
-    586b     586b        0     1         __bss_end = .
-    586b     586b        0     1 __bss_size = SIZEOF(.bss)
-    586b     586b        0     1 .noinit
-    586b     586b        0     1         __heap_start = ALIGN(., 2)
-    586b     586b        0     1 end_block8 = .
-    586b     586b        0     1 end_block9 = .
-    586b     586b        0     1 end_block10 = .
-    586b     586b        0     1 end_block11 = .
-    586b     586b        0     1 end_block12 = .
-    586b     586b        0     1 end_block13 = .
-    586b     586b        0     1 end_block14 = .
-    586b     586b        0     1 end_block15 = .
-    586b     586b        0     1 end_block16 = .
-    586b     586b        0     1 end_block17 = .
-    586b     586b        0     1 end_block18 = .
-    586b     586b        0     1 end_block19 = .
-    586b     586b        0     1 end_block20 = .
-    586b     586b        0     1 end_block21 = .
-    586b     586b        0     1 end_block22 = .
-    586b     586b        0     1 end_block23 = .
+     487      487     18ac     1         grudge.lto.o:(.text.main)
+     487      487     18ac     1                 main
+    1d33     1d33      63a     1         grudge.lto.o:(.text.checkPads)
+    1d33     1d33      63a     1                 checkPads
+    236d     236d      340     1         grudge.lto.o:(.text.updateFrames)
+    236d     236d      340     1                 updateFrames
+    26ad     26ad        5     1         grudge.lto.o:(.text.exit)
+    26ad     26ad        5     1                 exit
+    26b2     26b2       d7     1         grudge.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    26b2     26b2       d7     1                 (anonymous namespace)::put(char, Status*)
+    2789     2789      10f     1         grudge.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    2789     2789      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    2898     2898      d31     1         grudge.lto.o:(.text.printf)
+    2898     2898      d31     1                 printf
+    35c9     35c9      20f     1         grudge.lto.o:(.text.putchar)
+    35c9     35c9      20f     1                 putchar
+    37d8     37d8      2cc     1         grudge.lto.o:(.text.malloc)
+    37d8     37d8      2cc     1                 malloc
+    3aa4     3aa4       2c     1         grudge.lto.o:(.text.memcpy)
+    3aa4     3aa4       2c     1                 memcpy
+    3ad0     3ad0       20     1         grudge.lto.o:(.text.__memset)
+    3ad0     3ad0       20     1                 __memset
+    3af0     3af0       32     1         grudge.lto.o:(.text.__mulhi3)
+    3af0     3af0       32     1                 __mulhi3
+    3b22     3b22        0     1         __init_array_start = .
+    3b22     3b22        0     1         __init_array_end = .
+    3b22     3b22        0     1         __fini_array_start = .
+    3b22     3b22        0     1         __fini_array_end = .
+    3b22     3b22     250a     1 .rodata
+    3b22     3b22       3a     1         grudge.lto.o:(.rodata.printf)
+    3b5c     3b5c       30     1         grudge.lto.o:(.rodata.textColors)
+    3b5c     3b5c       30     1                 textColors
+    3b8c     3b8c       24     1         <internal>:(.rodata.str1.1)
+    3bb0     3bb0        6     1         grudge.lto.o:(.rodata.stateDelays)
+    3bb0     3bb0        6     1                 stateDelays
+    3bb6     3bb6     2476     1         grudge.lto.o:(.rodata.bigpatch)
+    3bb6     3bb6     2476     1                 bigpatch
+    602c     602c        0     1 .data
+    602c     602c        0     1         __data_start = .
+    602c     602c        0     1         __data_end = .
+    602c     602c        0     1 __data_load_start = LOADADDR(.data)
+    602c     602c        0     1 __data_size = SIZEOF(.data)
+    602c     602c      22d     1 .bss
+    602c     602c        0     1         __bss_start = .
+    602c     602c        4     1         grudge.lto.o:(.bss._BITMAP_BASE.0)
+    602c     602c        4     1                 _BITMAP_BASE.0
+    6030     6030        4     1         grudge.lto.o:(.bss._BITMAP_BASE.1)
+    6030     6030        4     1                 _BITMAP_BASE.1
+    6034     6034        4     1         grudge.lto.o:(.bss._BITMAP_BASE.2)
+    6034     6034        4     1                 _BITMAP_BASE.2
+    6038     6038       40     1         grudge.lto.o:(.bss._spriteCtl)
+    6038     6038       40     1                 _spriteCtl
+    6078     6078      1e0     1         grudge.lto.o:(.bss.spriteStatuses)
+    6078     6078      1e0     1                 spriteStatuses
+    6258     6258        1     1         grudge.lto.o:(.bss.kernelError)
+    6258     6258        1     1                 kernelError
+    6259     6259        0     1         __bss_end = .
+    6259     6259        0     1 __bss_size = SIZEOF(.bss)
+    6259     6259        0     1 .noinit
+    6259     6259        0     1         __heap_start = ALIGN(., 2)
+    6259     6259        0     1 end_block8 = .
+    6259     6259        0     1 end_block9 = .
+    6259     6259        0     1 end_block10 = .
+    6259     6259        0     1 end_block11 = .
+    6259     6259        0     1 end_block12 = .
+    6259     6259        0     1 end_block13 = .
+    6259     6259        0     1 end_block14 = .
+    6259     6259        0     1 end_block15 = .
+    6259     6259        0     1 end_block16 = .
+    6259     6259        0     1 end_block17 = .
+    6259     6259        0     1 end_block18 = .
+    6259     6259        0     1 end_block19 = .
+    6259     6259        0     1 end_block20 = .
+    6259     6259        0     1 end_block21 = .
+    6259     6259        0     1 end_block22 = .
+    6259     6259        0     1 end_block23 = .
    10000    10000      400    16 .palgrudge
    10000    10000      400    16         grudge.lto.o:(.palgrudge)
    10000    10000        0     1                 palgrudge_start
@@ -215,9 +219,9 @@
    13800    13800        0     1 end_dash = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      a30     4 .symtab
-       0        0      a30     4         <internal>:(.symtab)
+       0        0      a50     4 .symtab
+       0        0      a50     4         <internal>:(.symtab)
        0        0       8a     1 .shstrtab
        0        0       8a     1         <internal>:(.shstrtab)
-       0        0      773     1 .strtab
-       0        0      773     1         <internal>:(.strtab)
+       0        0      791     1 .strtab
+       0        0      791     1         <internal>:(.strtab)

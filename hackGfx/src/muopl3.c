@@ -42,6 +42,8 @@ void opl3_initialize_defs() {
 		opl3_instrument_defs[i].KEYHIT = 0x00;
 	}
 }
+
+
 void opl3_initialize() {
 	uint8_t i;
 	
@@ -63,24 +65,20 @@ void opl3_initialize() {
 	}
 	opl3_quietAll();
 }
+
+
 void opl3_quietAll()
 {	
 	uint8_t channel;
 	for(channel=0;channel<9;channel++) 
 	{
-		//opl3_write(OPL_CH_F_LO   | channel, opl3_instrument_defs[channel].CHAN_FRLO); //channels 0 to 8
-		opl3_write(OPL_CH_KBF_HI | channel, opl3_instrument_defs[channel].CHAN_FNUM & 0xDF); //channels 0 to 8 remove key on
-		
-		//textGotoXY(START_X_VIS+60   ,channel+START_HEIGHT_VIS_ALT);printf(" %02x ",opl3_instrument_defs[channel].CHAN_FNUM & 0xDF);
-		//opl3_write(OPL_CH_F_LO   | channel, 0x00); //channels 0 to 8
+		opl3_write(OPL_CH_KBF_HI | channel, 0x00); //channels 0 to 8 remove key on
+		opl3_write(OPL_CH_F_LO   | channel, 0x00); //channels 0 to 8
 	}
 	for(channel=0;channel<9;channel++) 
 	{
-		//opl3_write(0x0100 | (uint16_t)OPL_CH_F_LO   | (uint16_t)channel, opl3_instrument_defs[channel+9].CHAN_FRLO); //channels 9 to 17
-		opl3_write(0x0100 | (uint16_t)OPL_CH_KBF_HI | (uint16_t)channel, opl3_instrument_defs[channel+9].CHAN_FNUM & 0xDF); //channels 9 to 17 remove key on
-		//textGotoXY(START_X_VIS+60   ,channel+9+START_HEIGHT_VIS_ALT);printf(" %02x ",opl3_instrument_defs[channel+9].CHAN_FNUM & 0xDF);
-		
-		//opl3_write(0x0100 | (uint16_t)OPL_CH_F_LO   | (uint16_t)channel, 0x00); //channels 9 to 17
+		opl3_write(0x0100 | (uint16_t)OPL_CH_KBF_HI | (uint16_t)channel, 0x00); //channels 9 to 17 remove key on
+		opl3_write(0x0100 | (uint16_t)OPL_CH_F_LO   | (uint16_t)channel, 0x00); //channels 9 to 17
 	}
 		
 }

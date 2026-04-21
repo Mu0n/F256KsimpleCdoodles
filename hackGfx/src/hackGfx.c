@@ -7,8 +7,8 @@
 
 #define PAL_BASE    0x10000
 #define TIL_L2_MAP  0x20000 //40*17*2 = 1360 bytes
-#define TIL_SET     0x4B400
-#define TIL_L3_MAP  0x4BF00 //40*17*2 = 1360 bytes
+#define TIL_SET     0x3B400
+#define TIL_L3_MAP  0x3BF00 //40*17*2 = 1360 bytes
 
 #define SCROLL_COOKIE 0
 #define SCROLL_DELAY 2
@@ -22,7 +22,7 @@
 #define END_Y_SCROLL 30
 
 EMBED(pal,    "../assets/gfxHack.pal", 0x10000); //1024 b
-EMBED(tile3, "../assets/gfxHack.bin", 0x4B400);// 1024 b
+EMBED(tile3, "../assets/gfxHack.bin", 0x3B400);// 1024 b
 
 uint16_t tm_xf = 0; //fine scroll for tile map 2
 uint8_t tm_x = 0; //crude scroll for tile map 2
@@ -31,7 +31,7 @@ uint8_t tm_x1 = 0;
 bool wantText = true;
 bool wantSound = true;
 
-FILE *theFile;
+FILE *theFile = NULL;
 
 struct timer_t tileAnim;
 
@@ -41,13 +41,13 @@ if(wantText)
 {
 	wantText = false;
 // DIS GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-POKE(VKY_MSTR_CTRL_0, 0b01111110); //sprite,graph,overlay,text
+POKE(VKY_MSTR_CTRL_0, 0b01011110); //sprite,graph,overlay,text
 }	
 else
 {
 	wantText = true;
 // DIS GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-POKE(VKY_MSTR_CTRL_0, 0b01111111); //sprite,graph,overlay,text
+POKE(VKY_MSTR_CTRL_0, 0b01011111); //sprite,graph,overlay,text
 }
 }
 
@@ -107,9 +107,9 @@ void setup()
 //sets the gfx vicky mode
 POKE(MMU_IO_CTRL, 0x00);
 // DIS GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-POKE(VKY_MSTR_CTRL_0, 0b01111111); //sprite,graph,overlay,text
+POKE(VKY_MSTR_CTRL_0, 0b01011111); //sprite,graph,overlay,text
 // MT_Bk MT_En FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
-POKE(VKY_MSTR_CTRL_1, 0b00010000); //font overlay, 320x240 at 60 Hz;
+POKE(VKY_MSTR_CTRL_1, 0b00000000); //font overlay, 320x240 at 60 Hz;
 
 POKE(VKY_LAYER_CTRL_0, 0b01010000); //bitmap 0 in layer 0, tile 1 in layer 1
 POKE(VKY_LAYER_CTRL_1, 0b00000110); //tile 2 in layer 2
@@ -129,6 +129,23 @@ POKE(0xD00E,0x00);
 POKE(0xD00F,0x00);
 
 
+//empty out text matrix and text color matrix
+wipeTextLayer();
+
+//CODEC
+
+	POKE(0xD620, 0x1F); //R21 enable all analog in
+	POKE(0xD621, 0x2A);
+	POKE(0xD622, 0x01);
+	while(PEEK(0xD622) & 0x01);
+	
+	POKE(0xD620, 0x19); //R12 master mode control
+	POKE(0xD621, 0xD5);
+	POKE(0xD622, 0x01);
+	while(PEEK(0xD622) & 0x01);
+	
+	
+	
 //tiles
 
 tileDefineTileMap(1, TIL_L2_MAP, 8, 80, 31); //40x15 map of 16x16, tile map2, making sure it's twice as large as the screen. B[AB]A data repetition for endless scroll
@@ -174,32 +191,53 @@ tileSetScroll(1, 0, 20, 0, 0);
 tileSetScroll(2, 0, 0, 0, 0);
 tileSetVisible(2,true);
 tileSetVisible(1,true);
+tileSetVisible(0,false);
 
+bitmapSetActive(0);
+bitmapClear();
+bitmapSetActive(1);
+bitmapClear();
+bitmapSetActive(2);
+bitmapClear();
 
-POKE(MMU_IO_CTRL,0x00); //MMU I/O to page 0
+	bitmapSetVisible(0,false);
+	bitmapSetVisible(1,false);
+	bitmapSetVisible(2,false);
 
+textEnableBackgroundColors(false);
+textClear();
+
+theFile = NULL;	
 opl3_initialize();
 theFile = load_VGM_file("media/vgm/sshockt.vgm");
+//theFile = load_VGM_file("media/vgm/Adlib Music Synth/001 Highways.vgm");
+if(theFile == NULL)
+{
+	printf("error loading file at media/vgm/sshockt.vgm");
+	while(true)
+		;
+}
 checkVGMHeader(theFile);
 
+comeRightTrough = true; //to kickstart it
+	
 textGotoXY(10,10);textPrint("Make yourself comfortable, hacker. Stay a while.");
 textGotoXY(20,12);textPrint("-Shodan");
-
-
-tileAnim.units = TIMER_FRAMES;
-tileAnim.cookie = SCROLL_COOKIE;
-tileAnim.absolute = getTimerAbsolute(TIMER_FRAMES) + SCROLL_DELAY;
-setTimer(&tileAnim);
-
 }
 
 
 int main(int argc, char *argv[]) {
 int8_t playbackReturn ;
 
+
+
 setup();
 
-	
+tileAnim.units = TIMER_FRAMES;
+tileAnim.cookie = SCROLL_COOKIE;
+tileAnim.absolute = getTimerAbsolute(TIMER_FRAMES) + SCROLL_DELAY;
+setTimer(&tileAnim);
+
 while(true)//main play and input loop
 	{
 		if(wantSound) playback(theFile, true, false);

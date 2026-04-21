@@ -2,6 +2,7 @@
 #define MUVGMPLAY_H
 
 #define VGM_BODY 0x100000
+#define VGM_END_OFFS 0x22D8
 
 void copyToRAM(FILE *);
 FILE *load_VGM_file(char *);

@@ -55,7 +55,7 @@
        0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
        0        0        0     1 __pal_lma = 0x10000
        0        0        0     1 __pal_size = 0x80
-       0        0        0     1 __tile3_lma = 0x4b400
+       0        0        0     1 __tile3_lma = 0x3b400
        0        0        0     1 __tile3_size = 0x500
       30      300       31     1 .zp.data
       30      300        0     1         __zp_data_start = .
@@ -64,39 +64,37 @@
       60      330        1     1                 wantText
       61      331        0     1 __zp_data_load_start = LOADADDR(.zp.data)
       61      331        0     1 __zp_data_size = SIZEOF(.zp.data)
-      61       61       3d     1 .zp.bss
+      61       61       33     1 .zp.bss
       61       61        0     1         __zp_bss_start = .
-      61       61       3d     1         hackGfx.lto.o:(.zp.bss)
+      61       61       33     1         hackGfx.lto.o:(.zp.bss)
       61       61        1     1                 _col
       62       62        1     1                 _row
-      63       63        4     1                 _BITMAP_BASE.0
-      67       67        4     1                 _BITMAP_BASE.1
-      6b       6b        4     1                 _BITMAP_BASE.2
-      6f       6f        1     1                 _tileSize.1
-      70       70        1     1                 _tileSize.2
-      71       71        2     1                 tm_xf
-      73       73        1     1                 tm_x
-      74       74        2     1                 tm_xf1
-      76       76        1     1                 tm_x1
-      77       77        1     1                 wantSound
-      78       78        1     1                 tileAnim.1
-      79       79        2     1                 theFile
-      7b       7b        7     1                 kernelEventData
-      82       82        1     1                 kernelError
-      83       83        4     1                 tooBigWait
-      87       87        4     1                 gd3Location
-      8b       8b        4     1                 loopBackTo
-      8f       8f        4     1                 needle
-      93       93        4     1                 samplesSoFar
-      97       97        1     1                 comeRightTrough
-      98       98        1     1                 (anonymous namespace)::initialized
-      99       99        1     1                 (anonymous namespace)::last_free
-      9a       9a        2     1                 (anonymous namespace)::free_size
-      9c       9c        2     1                 (anonymous namespace)::free_list
-      9e       9e        0     1 __zp_bss_size = SIZEOF(.zp.bss)
-      9e       9e        e     1 .zp
-      9e       9e        e     1         hackGfx.lto.o:(.zp.noinit)
-     332      332     2d6b     2 .text
+      63       63        1     1                 _active
+      64       64        1     1                 _color
+      65       65        1     1                 _tileSize.1
+      66       66        1     1                 _tileSize.2
+      67       67        2     1                 __putchar.s
+      69       69        2     1                 tm_xf
+      6b       6b        1     1                 tm_x
+      6c       6c        2     1                 tm_xf1
+      6e       6e        1     1                 tm_x1
+      6f       6f        1     1                 wantSound
+      70       70        1     1                 tileAnim.1
+      71       71        7     1                 kernelEventData
+      78       78        1     1                 kernelError
+      79       79        4     1                 tooBigWait
+      7d       7d        1     1                 oneLoop
+      7e       7e        4     1                 gd3Location
+      82       82        4     1                 totalWait
+      86       86        4     1                 loopBackTo
+      8a       8a        4     1                 needle
+      8e       8e        4     1                 samplesSoFar
+      92       92        1     1                 comeRightTrough
+      93       93        1     1                 (anonymous namespace)::initialized
+      94       94        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      94       94       5c     1 .zp
+      94       94       5c     1         hackGfx.lto.o:(.zp.noinit)
+     332      332     41f1     2 .text
      332      332        0     1         _init = .
      332      332        0     1         _start = .
      332      332        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
@@ -112,89 +110,112 @@
      346      346        0     1                 __after_main
      349      349        0     1         _fini = .
      349      349        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
-     34a      34a      14b     2         hackGfx.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
-     34a      34a      14b     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
-     495      495       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
-     495      495       13     1                 __zero_bss
-     4a8      4a8       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
-     4a8      4a8       13     1                 __zero_zp_bss
-     4bb      4bb       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
-     4bb      4bb       17     1                 __copy_zp_data
-     4d2      4d2       46     1         hackGfx.lto.o:(.text)
-     4d2      4d2        0     1                 PEEK24
-     4f4      4f4        0     1                 POKE24
-     518      518     1f11     1         hackGfx.lto.o:(.text.main)
-     518      518     1f11     1                 main
-    2429     2429      376     1         hackGfx.lto.o:(.text.textPrint)
-    2429     2429      376     1                 textPrint
-    279f     279f      179     1         hackGfx.lto.o:(.text.fileRead)
-    279f     279f      179     1                 fileRead
-    2918     2918      42b     1         hackGfx.lto.o:(.text.opl3_shadow)
-    2918     2918      42b     1                 opl3_shadow
-    2d43     2d43      1f4     1         hackGfx.lto.o:(.text.copyToRAM)
-    2d43     2d43      1f4     1                 copyToRAM
-    2f37     2f37        5     1         hackGfx.lto.o:(.text.exit)
-    2f37     2f37        5     1                 exit
-    2f3c     2f3c       2c     1         hackGfx.lto.o:(.text.memcpy)
-    2f3c     2f3c       2c     1                 memcpy
-    2f68     2f68       20     1         hackGfx.lto.o:(.text.__memset)
-    2f68     2f68       20     1                 __memset
-    2f88     2f88       a5     1         hackGfx.lto.o:(.text.__umodhi3)
-    2f88     2f88       a5     1                 __umodhi3
-    302d     302d       70     1         hackGfx.lto.o:(.text.__mulsi3)
-    302d     302d       70     1                 __mulsi3
-    309d     309d        0     1         __init_array_start = .
-    309d     309d        0     1         __init_array_end = .
-    309d     309d        0     1         __fini_array_start = .
-    309d     309d        0     1         __fini_array_end = .
-    309d     309d      3d9     1 .rodata
-    309d     309d      19c     1         hackGfx.lto.o:(.rodata.main)
-    3239     3239      1ec     1         hackGfx.lto.o:(.rodata.opl3_shadow)
-    3425     3425       51     1         <internal>:(.rodata.str1.1)
-    3476     3476        0     1 .data
-    3476     3476        0     1         __data_start = .
-    3476     3476        0     1         __data_end = .
-    3476     3476        0     1 __data_load_start = LOADADDR(.data)
-    3476     3476        0     1 __data_size = SIZEOF(.data)
-    3476     3476      10e     1 .bss
-    3476     3476        0     1         __bss_start = .
-    3476     3476      10e     1         hackGfx.lto.o:(.bss.opl3_instrument_defs)
-    3476     3476      10e     1                 opl3_instrument_defs
-    3584     3584        0     1         __bss_end = .
-    3584     3584        0     1 __bss_size = SIZEOF(.bss)
-    3584     3584        0     1 .noinit
-    3584     3584        0     1         __heap_start = ALIGN(., 2)
-    3584     3584        0     1 end_block8 = .
-    3584     3584        0     1 end_block9 = .
-    3584     3584        0     1 end_block10 = .
-    3584     3584        0     1 end_block11 = .
-    3584     3584        0     1 end_block12 = .
-    3584     3584        0     1 end_block13 = .
-    3584     3584        0     1 end_block14 = .
-    3584     3584        0     1 end_block15 = .
-    3584     3584        0     1 end_block16 = .
-    3584     3584        0     1 end_block17 = .
-    3584     3584        0     1 end_block18 = .
-    3584     3584        0     1 end_block19 = .
-    3584     3584        0     1 end_block20 = .
-    3584     3584        0     1 end_block21 = .
-    3584     3584        0     1 end_block22 = .
-    3584     3584        0     1 end_block23 = .
+     34a      34a      153     2         hackGfx.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     34a      34a      153     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     49e      49e       f0     2         hackGfx.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     49e      49e       f0     1                 (anonymous namespace)::FreeChunk::remove()
+     58e      58e       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     58e      58e       13     1                 __zero_bss
+     5a1      5a1       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     5a1      5a1       13     1                 __zero_zp_bss
+     5b4      5b4       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     5b4      5b4       17     1                 __copy_zp_data
+     5cb      5cb       46     1         hackGfx.lto.o:(.text)
+     5cb      5cb        0     1                 PEEK24
+     5ed      5ed        0     1                 POKE24
+     611      611     200c     1         hackGfx.lto.o:(.text.main)
+     611      611     200c     1                 main
+    261d     261d      2dc     1         hackGfx.lto.o:(.text.bitmapClear)
+    261d     261d      2dc     1                 bitmapClear
+    28f9     28f9      205     1         hackGfx.lto.o:(.text.textPrint)
+    28f9     28f9      205     1                 textPrint
+    2afe     2afe      179     1         hackGfx.lto.o:(.text.fileRead)
+    2afe     2afe      179     1                 fileRead
+    2c77     2c77      40c     1         hackGfx.lto.o:(.text.opl3_shadow)
+    2c77     2c77      40c     1                 opl3_shadow
+    3083     3083      1f4     1         hackGfx.lto.o:(.text.copyToRAM)
+    3083     3083      1f4     1                 copyToRAM
+    3277     3277        5     1         hackGfx.lto.o:(.text.exit)
+    3277     3277        5     1                 exit
+    327c     327c       df     1         hackGfx.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    327c     327c       df     1                 (anonymous namespace)::put(char, Status*)
+    335b     335b      10f     1         hackGfx.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    335b     335b      10f     1                 (anonymous namespace)::print_string(char const*, Status*)
+    346a     346a      d72     1         hackGfx.lto.o:(.text.printf)
+    346a     346a      d72     1                 printf
+    41dc     41dc      1e6     1         hackGfx.lto.o:(.text.malloc)
+    41dc     41dc      1e6     1                 malloc
+    43c2     43c2       2c     1         hackGfx.lto.o:(.text.memcpy)
+    43c2     43c2       2c     1                 memcpy
+    43ee     43ee       20     1         hackGfx.lto.o:(.text.__memset)
+    43ee     43ee       20     1                 __memset
+    440e     440e       a5     1         hackGfx.lto.o:(.text.__umodhi3)
+    440e     440e       a5     1                 __umodhi3
+    44b3     44b3       70     1         hackGfx.lto.o:(.text.__mulsi3)
+    44b3     44b3       70     1                 __mulsi3
+    4523     4523        0     1         __init_array_start = .
+    4523     4523        0     1         __init_array_end = .
+    4523     4523        0     1         __fini_array_start = .
+    4523     4523        0     1         __fini_array_end = .
+    4523     4523      43f     1 .rodata
+    4523     4523      19c     1         hackGfx.lto.o:(.rodata.main)
+    46bf     46bf      1ec     1         hackGfx.lto.o:(.rodata.opl3_shadow)
+    48ab     48ab       3a     1         hackGfx.lto.o:(.rodata.printf)
+    48e5     48e5       7d     1         <internal>:(.rodata.str1.1)
+    4962     4962        0     1 .data
+    4962     4962        0     1         __data_start = .
+    4962     4962        0     1         __data_end = .
+    4962     4962        0     1 __data_load_start = LOADADDR(.data)
+    4962     4962        0     1 __data_size = SIZEOF(.data)
+    4962     4962      121     1 .bss
+    4962     4962        0     1         __bss_start = .
+    4962     4962        c     1         hackGfx.lto.o:(.bss._BITMAP_BASE)
+    4962     4962        c     1                 _BITMAP_BASE
+    496e     496e        2     1         hackGfx.lto.o:(.bss.theFile)
+    496e     496e        2     1                 theFile
+    4970     4970      10e     1         hackGfx.lto.o:(.bss.opl3_instrument_defs)
+    4970     4970      10e     1                 opl3_instrument_defs
+    4a7e     4a7e        1     1         hackGfx.lto.o:(.bss._ZN12_GLOBAL__N_19last_freeE)
+    4a7e     4a7e        1     1                 (anonymous namespace)::last_free
+    4a7f     4a7f        2     1         hackGfx.lto.o:(.bss._ZN12_GLOBAL__N_19free_sizeE)
+    4a7f     4a7f        2     1                 (anonymous namespace)::free_size
+    4a81     4a81        2     1         hackGfx.lto.o:(.bss._ZN12_GLOBAL__N_19free_listE)
+    4a81     4a81        2     1                 (anonymous namespace)::free_list
+    4a83     4a83        0     1         __bss_end = .
+    4a83     4a83        0     1 __bss_size = SIZEOF(.bss)
+    4a83     4a83        0     1 .noinit
+    4a83     4a83        0     1         __heap_start = ALIGN(., 2)
+    4a83     4a83        0     1 end_block8 = .
+    4a83     4a83        0     1 end_block9 = .
+    4a83     4a83        0     1 end_block10 = .
+    4a83     4a83        0     1 end_block11 = .
+    4a83     4a83        0     1 end_block12 = .
+    4a83     4a83        0     1 end_block13 = .
+    4a83     4a83        0     1 end_block14 = .
+    4a83     4a83        0     1 end_block15 = .
+    4a83     4a83        0     1 end_block16 = .
+    4a83     4a83        0     1 end_block17 = .
+    4a83     4a83        0     1 end_block18 = .
+    4a83     4a83        0     1 end_block19 = .
+    4a83     4a83        0     1 end_block20 = .
+    4a83     4a83        0     1 end_block21 = .
+    4a83     4a83        0     1 end_block22 = .
+    4a83     4a83        0     1 end_block23 = .
    10000    10000       80    16 .pal
    10000    10000       80    16         hackGfx.lto.o:(.pal)
    10000    10000        0     1                 pal_start
    10080    10080        0     1                 pal_end
    10080    10080        0     1 end_pal = .
-   4b400    4b400      500    16 .tile3
-   4b400    4b400      500    16         hackGfx.lto.o:(.tile3)
-   4b400    4b400        0     1                 tile3_start
-   4b900    4b900        0     1                 tile3_end
-   4b900    4b900        0     1 end_tile3 = .
+   3b400    3b400      500    16 .tile3
+   3b400    3b400      500    16         hackGfx.lto.o:(.tile3)
+   3b400    3b400        0     1                 tile3_start
+   3b900    3b900        0     1                 tile3_end
+   3b900    3b900        0     1 end_tile3 = .
        0        0      138     1 .comment
        0        0      138     1         <internal>:(.comment)
-       0        0      9a0     4 .symtab
-       0        0      9a0     4         <internal>:(.symtab)
+       0        0      a30     4 .symtab
+       0        0      a30     4         <internal>:(.symtab)
        0        0       66     1 .shstrtab
        0        0       66     1         <internal>:(.shstrtab)
-       0        0      6e7     1 .strtab
-       0        0      6e7     1         <internal>:(.strtab)
+       0        0      77f     1 .strtab
+       0        0      77f     1         <internal>:(.strtab)

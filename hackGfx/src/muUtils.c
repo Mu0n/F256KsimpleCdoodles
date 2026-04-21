@@ -54,6 +54,20 @@ asm (
     "   rts                 \n"
 );
 
+void wipeTextLayer()
+{
+POKE(MMU_IO_CTRL,2);  //MMU I/O to page 2
+for(uint16_t y=0;y<61;y++)
+{
+	for(uint16_t x=0; x<80; x++) POKE(0xC000 + x + y*80, 0x20);
+}
+POKE(MMU_IO_CTRL,3);  //MMU I/O to page 3
+for(uint16_t y=0;y<61;y++)
+{
+	for(uint16_t x=0; x<80; x++) POKE(0xC000 + x + y*80, 0x00);
+}
+POKE(MMU_IO_CTRL, 0);
+}
 void lilpause(uint8_t timedelay)
 {
 	struct timer_t pauseTimer;

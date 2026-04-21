@@ -3,6 +3,6 @@
   __pal_lma  = 0x10000;
   __pal_size = 0x80;
 
-  __tile3_lma  = 0x4b400;
+  __tile3_lma  = 0x3b400;
   __tile3_size = 0x500;
 

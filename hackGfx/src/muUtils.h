@@ -11,6 +11,7 @@
 
 uint8_t PEEK24(uint32_t addr);
 uint8_t POKE24(uint32_t addr, uint8_t value);
+void wipeTextLayer(void);
 void lilpause(uint8_t);
 void wipeBitmapBackground(uint8_t, uint8_t, uint8_t);
 bool setTimer(const struct timer_t *);

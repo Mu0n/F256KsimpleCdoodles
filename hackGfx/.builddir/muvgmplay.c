@@ -6,7 +6,6 @@
 #include "../src/muUtils.h" //useful routines
 #include "../src/muvgmplay.h" //useful routines
 
-#define FUDGEEND VGM_BODY + 0x22E0
 uint32_t tooBigWait = 0x00000000; //keeps track of too big delays between events between vgmplay loop dips
 bool comeRightTrough; //lets a chain of 0 delay events happen when returning to a new passthrough of playback()
 uint32_t needle; //pointer to high ram available in 2x only.
@@ -53,19 +52,6 @@ void copyToRAM(FILE *theVGMfile)
 			}
 		soFar+= bytesRead;
 	}
-	/*
-	bitmapSetVisible(0,false);
-	textGotoXY(0,0);
-	for(uint8_t i =0; i<25; i++)
-	{
-		for(uint8_t j=0;j<16; j++)
-		{
-			printf("%02x",PEEK24(VGM_BODY+(uint32_t)j+((uint32_t)i*(uint32_t)16)));
-		}
-		printf("\n");
-	}
-	hitspace();
-*/
 }
 
 void checkVGMHeader(FILE *theVGMfile)
@@ -111,20 +97,19 @@ void checkVGMHeader(FILE *theVGMfile)
 			}
 	
 		}
-/*
-	textGotoXY(0,3);printf("                                                                                ");
-	textGotoXY(0,4);printf("                                                                                ");
-	*/
+	//textGotoXY(0,2);textSetColor(1,0);printf("Using v%04x %s",version, isOPL3?"OPL3":"OPL2");
+
 	//copy to high ramhitspace();
 	fileSeek(theVGMfile,(uint32_t)dataOffset, SEEK_SET);
 	copyToRAM(theVGMfile);
 
 	//header no, no longer need the file
 
-
+	
 	needle = VGM_BODY;
 	if(loopBackTo!=0) loopBackTo = VGM_BODY + (uint32_t)loopBackTo - (uint32_t)dataOffset;
 	if(gd3Location != 0) gd3Location = VGM_BODY + gd3Location - (uint32_t)dataOffset + (uint32_t)0x14;
+	//gd3Location = VGM_BODY + VGM_END_OFFS;
 	//textGotoXY(40,0);printf("\ndata offset %02x, total %08lx loopBack %08lx gd3 %08lx",dataOffset, totalWait, loopBackTo, gd3Location);
 	samplesSoFar=0;
 	
@@ -166,13 +151,16 @@ int8_t playback(FILE *theVGMfile, bool iRT, bool pReq)
 			comeRightTrough = false;
 			//countRead = fileRead(&nextRead, sizeof(uint8_t), 1, theVGMfile);
 	
-			if(needle >= FUDGEEND)
+			if((samplesSoFar >= totalWait || needle >= gd3Location) && gd3Location != 0)
 			{
-				//if(loopBackTo == 0 || oneLoop == true) return -1; //end of file, there was no loop to do
-				needle = VGM_BODY; //loop is performed here
+				if(loopBackTo == 0 || oneLoop == true) return -1; //end of file, there was no loop to do
+				needle = loopBackTo; //loop is performed here
 				samplesSoFar = 0;
 				oneLoop = true;
 			}
+	
+			if(needle >	VGM_BODY + VGM_END_OFFS) needle = VGM_BODY;
+	
 			nextRead = PEEK24(needle++);
 			countRead = 1; //bypass old file read check
 	

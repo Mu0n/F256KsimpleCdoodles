@@ -132,7 +132,7 @@ POKE(0xD00F,0x00);
 
 
 //empty out text matrix and text color matrix
-wipeTextLayer();
+//wipeTextLayer();
 
 //CODEC
 

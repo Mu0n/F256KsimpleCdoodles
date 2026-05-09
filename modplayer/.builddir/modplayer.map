@@ -1,0 +1,353 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 PROVIDE(__stack = 0xA000)
+       0        0        0     1 PROVIDE(__f256_start = 0x300)
+       0        0        0     1 PROVIDE(__BLOCK_SIZE = 0x2000)
+       0        0        0     1 PROVIDE(__SLOT_ADDR = 0xA000)
+       0        0        0     1 __rc0 = 0x10
+       0        0        0     1 __rc1 = __rc0 + 1
+       0        0        0     1 PROVIDE(__rc2 = __rc1 + 1)
+       0        0        0     1 __rc3 = __rc2 + 1
+       0        0        0     1 PROVIDE(__rc4 = __rc3 + 1)
+       0        0        0     1 __rc5 = __rc4 + 1
+       0        0        0     1 PROVIDE(__rc6 = __rc5 + 1)
+       0        0        0     1 __rc7 = __rc6 + 1
+       0        0        0     1 PROVIDE(__rc8 = __rc7 + 1)
+       0        0        0     1 __rc9 = __rc8 + 1
+       0        0        0     1 PROVIDE(__rc10 = __rc9 + 1)
+       0        0        0     1 __rc11 = __rc10 + 1
+       0        0        0     1 PROVIDE(__rc12 = __rc11 + 1)
+       0        0        0     1 __rc13 = __rc12 + 1
+       0        0        0     1 PROVIDE(__rc14 = __rc13 + 1)
+       0        0        0     1 __rc15 = __rc14 + 1
+       0        0        0     1 PROVIDE(__rc16 = __rc15 + 1)
+       0        0        0     1 __rc17 = __rc16 + 1
+       0        0        0     1 PROVIDE(__rc18 = __rc17 + 1)
+       0        0        0     1 __rc19 = __rc18 + 1
+       0        0        0     1 PROVIDE(__rc20 = __rc19 + 1)
+       0        0        0     1 __rc21 = __rc20 + 1
+       0        0        0     1 PROVIDE(__rc22 = __rc21 + 1)
+       0        0        0     1 __rc23 = __rc22 + 1
+       0        0        0     1 PROVIDE(__rc24 = __rc23 + 1)
+       0        0        0     1 __rc25 = __rc24 + 1
+       0        0        0     1 PROVIDE(__rc26 = __rc25 + 1)
+       0        0        0     1 __rc27 = __rc26 + 1
+       0        0        0     1 PROVIDE(__rc28 = __rc27 + 1)
+       0        0        0     1 __rc29 = __rc28 + 1
+       0        0        0     1 PROVIDE(__rc30 = __rc29 + 1)
+       0        0        0     1 __rc31 = __rc30 + 1
+       0        0        0     1 
+       0        0        0     1 
+       0        0        0     1 __block8_lma = ( 8<<24)|__SLOT_ADDR
+       0        0        0     1 __block9_lma = ( 9<<24)|__SLOT_ADDR
+       0        0        0     1 __block10_lma = (10<<24)|__SLOT_ADDR
+       0        0        0     1 __block11_lma = (11<<24)|__SLOT_ADDR
+       0        0        0     1 __block12_lma = (12<<24)|__SLOT_ADDR
+       0        0        0     1 __block13_lma = (13<<24)|__SLOT_ADDR
+       0        0        0     1 __block14_lma = (14<<24)|__SLOT_ADDR
+       0        0        0     1 __block15_lma = (15<<24)|__SLOT_ADDR
+       0        0        0     1 __block16_lma = (16<<24)|__SLOT_ADDR
+       0        0        0     1 __block17_lma = (17<<24)|__SLOT_ADDR
+       0        0        0     1 __block18_lma = (18<<24)|__SLOT_ADDR
+       0        0        0     1 __block19_lma = (19<<24)|__SLOT_ADDR
+       0        0        0     1 __block20_lma = (20<<24)|__SLOT_ADDR
+       0        0        0     1 __block21_lma = (21<<24)|__SLOT_ADDR
+       0        0        0     1 __block22_lma = (22<<24)|__SLOT_ADDR
+       0        0        0     1 __block23_lma = (23<<24)|__SLOT_ADDR
+       0        0        0     1 __pianopal_lma = 0x10000
+       0        0        0     1 __pianopal_size = 0x3fc
+       0        0        0     1 __keys_lma = 0x10400
+       0        0        0     1 __keys_size = 0x12c00
+       0        0        0     1 __lcdimg_lma = 0x40000
+       0        0        0     1 __lcdimg_size = 0x20d00
+      30      300       44     1 .zp.data
+      30      300        0     1         __zp_data_start = .
+      30      300       44     1         modplayer.lto.o:(.zp.data)
+      30      300       30     1                 textColors
+      60      330        1     1                 _MAX_COL
+      61      331        1     1                 _MAX_ROW
+      62      332        1     1                 _ccolor
+      70      340        2     1                 stdout
+      72      342        2     1                 (anonymous namespace)::heap_limit
+      74      344        0     1 __zp_data_load_start = LOADADDR(.zp.data)
+      74      344        0     1 __zp_data_size = SIZEOF(.zp.data)
+      74       74       4c     1 .zp.bss
+      74       74        0     1         __zp_bss_start = .
+      74       74       4c     1         modplayer.lto.o:(.zp.bss)
+      74       74        2     1                 kernelArgs
+      76       76        1     1                 _col
+      77       77        1     1                 _row
+      78       78        c     1                 _BITMAP_BASE
+      84       84        1     1                 _active
+      85       85        1     1                 _color
+      86       86        1     1                 _MAX_X
+      87       87        1     1                 _MAX_Y
+      88       88        3     1                 _BITMAP_CLUT
+      8b       8b        3     1                 _tileSize
+      8e       8e        8     1                 _dirStream
+      96       96        2     1                 theFile
+      98       98        4     1                 tooBigWait
+      9c       9c        1     1                 oneLoop
+      9d       9d        1     1                 comeRightTrough
+      9e       9e        4     1                 samplesSoFar
+      a2       a2        4     1                 totalWait
+      a6       a6        4     1                 needle
+      aa       aa        4     1                 gd3Location
+      ae       ae        4     1                 loopBackTo
+      b2       b2        7     1                 kernelEventData
+      b9       b9        1     1                 kernelError
+      ba       ba        1     1                 (anonymous namespace)::initialized
+      bb       bb        1     1                 (anonymous namespace)::last_free
+      bc       bc        2     1                 (anonymous namespace)::free_size
+      be       be        2     1                 (anonymous namespace)::free_list
+      c0       c0        0     1 __zp_bss_size = SIZEOF(.zp.bss)
+      c0       c0       15     1 .zp
+      c0       c0       15     1         modplayer.lto.o:(.zp.noinit)
+     344      344     6318     2 .text
+     344      344        0     1         _init = .
+     344      344        0     1         _start = .
+     344      344        8     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(init-stack.S.obj):(.init.100)
+     344      344        0     1                 __do_init_stack
+     34c      34c        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.init.200)
+     34c      34c        0     1                 __do_zero_bss
+     34f      34f        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.init.200)
+     34f      34f        0     1                 __do_zero_zp_bss
+     352      352        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.init.200)
+     352      352        0     1                 __do_copy_zp_data
+     355      355        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.call_main)
+     358      358        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(exit-custom.S.obj):(.after_main)
+     358      358        0     1                 __after_main
+     35b      35b        0     1         _fini = .
+     35b      35b        1     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\crt0.o:(.fini_rts)
+     35c      35c      14b     2         modplayer.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6insertEPvj)
+     35c      35c      14b     1                 (anonymous namespace)::FreeChunk::insert(void*, unsigned int)
+     4a8      4a8       e8     2         modplayer.lto.o:(.text._ZN12_GLOBAL__N_19FreeChunk6removeEv)
+     4a8      4a8       e8     1                 (anonymous namespace)::FreeChunk::remove()
+     590      590        3     2         modplayer.lto.o:(.text._ZN6__impl6VarInt4makeEPvc)
+     590      590        3     1                 __impl::VarInt::make(void*, char)
+     594      594        d     2         modplayer.lto.o:(.text._ZNK6__impl6VarInt8high_bitEv)
+     594      594        d     1                 __impl::VarInt::high_bit() const
+     5a2      5a2        d     2         modplayer.lto.o:(.text._ZNK6__impl6VarInt8negativeEv)
+     5a2      5a2        d     1                 __impl::VarInt::negative() const
+     5b0      5b0       47     2         modplayer.lto.o:(.text._ZN6__impl6VarInt6negateEv)
+     5b0      5b0       47     1                 __impl::VarInt::negate()
+     5f8      5f8       3b     2         modplayer.lto.o:(.text._ZN6__impl6VarInt3shlEv)
+     5f8      5f8       3b     1                 __impl::VarInt::shl()
+     633      633        3     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/common/lib\libcrt.a(call-indir.S.obj):(.text)
+     633      633        0     1                 __call_indir
+     636      636       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-bss.c.obj):(.text.__zero_bss)
+     636      636       13     1                 __zero_bss
+     649      649       13     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(zero-zp-bss.c.obj):(.text.__zero_zp_bss)
+     649      649       13     1                 __zero_zp_bss
+     65c      65c       17     1         D:\F256\llvm-mos\f256dev\llvm-mos\bin/../mos-platform/f256/lib\libcrt0.a(copy-zp-data.c.obj):(.text.__copy_zp_data)
+     65c      65c       17     1                 __copy_zp_data
+     673      673       46     1         modplayer.lto.o:(.text)
+     673      673        0     1                 PEEK24
+     695      695        0     1                 POKE24
+     6b9      6b9      17c     1         modplayer.lto.o:(.text.f256Init)
+     6b9      6b9      17c     1                 f256Init
+     835      835      18a     1         modplayer.lto.o:(.text.textReset)
+     835      835      18a     1                 textReset
+     9bf      9bf      156     1         modplayer.lto.o:(.text.bitmapReset)
+     9bf      9bf      156     1                 bitmapReset
+     b15      b15       21     1         modplayer.lto.o:(.text.FAR_PEEK)
+     b15      b15       21     1                 FAR_PEEK
+     b36      b36       2a     1         modplayer.lto.o:(.text.FAR_PEEKW)
+     b36      b36       2a     1                 FAR_PEEKW
+     b60      b60       23     1         modplayer.lto.o:(.text.FAR_POKE)
+     b60      b60       23     1                 FAR_POKE
+     b83      b83       29     1         modplayer.lto.o:(.text.FAR_POKEW)
+     b83      b83       29     1                 FAR_POKEW
+     bac      bac       51     1         modplayer.lto.o:(.text.main)
+     bac      bac       51     1                 main
+     bfd      bfd      787     1         modplayer.lto.o:(.text.f256main)
+     bfd      bfd      787     1                 f256main
+    1384     1384      1f1     1         modplayer.lto.o:(.text.fileRead)
+    1384     1384      1f1     1                 fileRead
+    1575     1575      109     1         modplayer.lto.o:(.text.fileOpen)
+    1575     1575      109     1                 fileOpen
+    167e     167e       7f     1         modplayer.lto.o:(.text.dealPressedKey)
+    167e     167e       7f     1                 dealPressedKey
+    16fd     16fd       11     1         modplayer.lto.o:(.text.textGotoXY)
+    16fd     16fd       11     1                 textGotoXY
+    170e     170e       15     1         modplayer.lto.o:(.text.textEnableBackgroundColors)
+    170e     170e       15     1                 textEnableBackgroundColors
+    1723     1723      27d     1         modplayer.lto.o:(.text.textPrint)
+    1723     1723      27d     1                 textPrint
+    19a0     19a0        c     1         modplayer.lto.o:(.text.textSetColor)
+    19a0     19a0        c     1                 textSetColor
+    19ac     19ac       4c     1         modplayer.lto.o:(.text.fileClose)
+    19ac     19ac       4c     1                 fileClose
+    19f8     19f8       76     1         modplayer.lto.o:(.text.fileCloseDir)
+    19f8     19f8       76     1                 fileCloseDir
+    1a6e     1a6e      116     1         modplayer.lto.o:(.text.fileOpenDir)
+    1a6e     1a6e      116     1                 fileOpenDir
+    1b84     1b84      155     1         modplayer.lto.o:(.text.fileReadDir)
+    1b84     1b84      155     1                 fileReadDir
+    1cd9     1cd9        e     1         modplayer.lto.o:(.text.__putchar)
+    1cd9     1cd9        e     1                 __putchar
+    1ce7     1ce7       52     1         modplayer.lto.o:(.text.fpr_set_currentPath)
+    1ce7     1ce7       52     1                 fpr_set_currentPath
+    1d39     1d39       36     1         modplayer.lto.o:(.text.initFPR)
+    1d39     1d39       36     1                 initFPR
+    1d6f     1d6f      1f6     1         modplayer.lto.o:(.text.getTheFile_far)
+    1d6f     1d6f      1f6     1                 getTheFile_far
+    1f65     1f65      448     1         modplayer.lto.o:(.text.filePickModal_far)
+    1f65     1f65      448     1                 filePickModal_far
+    23ad     23ad      15d     1         modplayer.lto.o:(.text.reprepFPR_far)
+    23ad     23ad      15d     1                 reprepFPR_far
+    250a     250a      305     1         modplayer.lto.o:(.text.readDirectory_far)
+    250a     250a      305     1                 readDirectory_far
+    280f     280f      5ea     1         modplayer.lto.o:(.text.sortFileList_far)
+    280f     280f      5ea     1                 sortFileList_far
+    2df9     2df9      485     1         modplayer.lto.o:(.text.displayFileList_far)
+    2df9     2df9      485     1                 displayFileList_far
+    327e     327e     1029     1         modplayer.lto.o:(.text.pickFile_far)
+    327e     327e     1029     1                 pickFile_far
+    42a7     42a7       d2     1         modplayer.lto.o:(.text.backUpDirectory_far)
+    42a7     42a7       d2     1                 backUpDirectory_far
+    4379     4379      22e     1         modplayer.lto.o:(.text.isExtensionAllowed_far)
+    4379     4379      22e     1                 isExtensionAllowed_far
+    45a7     45a7        b     1         modplayer.lto.o:(.text.load_MOD_file)
+    45a7     45a7        b     1                 load_MOD_file
+    45b2     45b2       a0     1         modplayer.lto.o:(.text.checkMODHeader)
+    45b2     45b2       a0     1                 checkMODHeader
+    4652     4652      450     1         modplayer.lto.o:(.text.playbackMOD)
+    4652     4652      450     1                 playbackMOD
+    4aa2     4aa2       1c     1         modplayer.lto.o:(.text.setTimer0)
+    4aa2     4aa2       1c     1                 setTimer0
+    4abe     4abe       60     1         modplayer.lto.o:(.text.lilpause)
+    4abe     4abe       60     1                 lilpause
+    4b1e     4b1e       2d     1         modplayer.lto.o:(.text.hitspace)
+    4b1e     4b1e       2d     1                 hitspace
+    4b4b     4b4b       2f     1         modplayer.lto.o:(.text.instructions)
+    4b4b     4b4b       2f     1                 instructions
+    4b7a     4b7a       bb     1         modplayer.lto.o:(.text.textUI)
+    4b7a     4b7a       bb     1                 textUI
+    4c35     4c35       11     1         modplayer.lto.o:(.text.eraseLine)
+    4c35     4c35       11     1                 eraseLine
+    4c46     4c46        e     1         modplayer.lto.o:(.text.exit)
+    4c46     4c46        e     1                 exit
+    4c54     4c54        2     1         modplayer.lto.o:(.text._Exit)
+    4c54     4c54        2     1                 _Exit
+    4c56     4c56        d     1         modplayer.lto.o:(.text.tolower)
+    4c56     4c56        d     1                 tolower
+    4c63     4c63      21c     1         modplayer.lto.o:(.text.vfprintf)
+    4c63     4c63      21c     1                 vfprintf
+    4e7f     4e7f      b69     1         modplayer.lto.o:(.text._ZN12_GLOBAL__N_15printEPKcP6Status)
+    4e7f     4e7f      b69     1                 (anonymous namespace)::print(char const*, Status*)
+    59e8     59e8       e5     1         modplayer.lto.o:(.text._ZN12_GLOBAL__N_13putEcP6Status)
+    59e8     59e8       e5     1                 (anonymous namespace)::put(char, Status*)
+    5acd     5acd      174     1         modplayer.lto.o:(.text._ZN12_GLOBAL__N_112print_stringEPKcP6Status)
+    5acd     5acd      174     1                 (anonymous namespace)::print_string(char const*, Status*)
+    5c41     5c41       57     1         modplayer.lto.o:(.text.printf)
+    5c41     5c41       57     1                 printf
+    5c98     5c98      2b1     1         modplayer.lto.o:(.text.vsnprintf)
+    5c98     5c98      2b1     1                 vsnprintf
+    5f49     5f49       4a     1         modplayer.lto.o:(.text.sprintf)
+    5f49     5f49       4a     1                 sprintf
+    5f93     5f93        3     1         modplayer.lto.o:(.text.fputc)
+    5f93     5f93        3     1                 fputc
+    5f96     5f96       28     1         modplayer.lto.o:(.text.putchar)
+    5f96     5f96       28     1                 putchar
+    5fbe     5fbe        7     1         modplayer.lto.o:(.text.putchar_wrapper)
+    5fbe     5fbe        7     1                 putchar_wrapper
+    5fc5     5fc5        3     1         modplayer.lto.o:(.text.putc)
+    5fc5     5fc5        3     1                 putc
+    5fc8     5fc8        b     1         modplayer.lto.o:(.text.__from_ascii)
+    5fc8     5fc8        b     1                 __from_ascii
+    5fd3     5fd3      110     1         modplayer.lto.o:(.text.malloc)
+    5fd3     5fd3      110     1                 malloc
+    60e3     60e3       b6     1         modplayer.lto.o:(.text._ZN12_GLOBAL__N_119allocate_free_chunkEPNS_9FreeChunkEj)
+    60e3     60e3       b6     1                 (anonymous namespace)::allocate_free_chunk((anonymous namespace)::FreeChunk*, unsigned int)
+    6199     6199      188     1         modplayer.lto.o:(.text.free)
+    6199     6199      188     1                 free
+    6321     6321       2c     1         modplayer.lto.o:(.text.memcpy)
+    6321     6321       2c     1                 memcpy
+    634d     634d       20     1         modplayer.lto.o:(.text.__memset)
+    634d     634d       20     1                 __memset
+    636d     636d       84     1         modplayer.lto.o:(.text.strncpy)
+    636d     636d       84     1                 strncpy
+    63f1     63f1       39     1         modplayer.lto.o:(.text.strlen)
+    63f1     63f1       39     1                 strlen
+    642a     642a       28     1         modplayer.lto.o:(.text.strcmp)
+    642a     642a       28     1                 strcmp
+    6452     6452       3a     1         modplayer.lto.o:(.text.strrchr)
+    6452     6452       3a     1                 strrchr
+    648c     648c       75     1         modplayer.lto.o:(.text.__simple_strtoui)
+    648c     648c       75     1                 __simple_strtoui
+    6501     6501       b9     1         modplayer.lto.o:(.text.__udivhi3)
+    6501     6501       b9     1                 __udivhi3
+    65ba     65ba       32     1         modplayer.lto.o:(.text.__mulhi3)
+    65ba     65ba       32     1                 __mulhi3
+    65ec     65ec       70     1         modplayer.lto.o:(.text.__mulsi3)
+    65ec     65ec       70     1                 __mulsi3
+    665c     665c        0     1         __init_array_start = .
+    665c     665c        0     1         __init_array_end = .
+    665c     665c        0     1         __fini_array_start = .
+    665c     665c        0     1         __fini_array_end = .
+    665c     665c      3bb     1 .rodata
+    665c     665c       22     1         modplayer.lto.o:(.rodata.dealPressedKey)
+    667e     667e       16     1         modplayer.lto.o:(.rodata.fileReadDir)
+    6694     6694        8     1         modplayer.lto.o:(.rodata.filePickModal_far)
+    669c     669c       50     1         modplayer.lto.o:(.rodata.pickFile_far)
+    66ec     66ec      190     1         modplayer.lto.o:(.rodata.playbackMOD)
+    687c     687c       3a     1         modplayer.lto.o:(.rodata._ZN12_GLOBAL__N_15printEPKcP6Status)
+    68b6     68b6      161     1         <internal>:(.rodata.str1.1)
+    6a17     6a17        0     1 .data
+    6a17     6a17        0     1         __data_start = .
+    6a17     6a17        0     1         __data_end = .
+    6a17     6a17        0     1 __data_load_start = LOADADDR(.data)
+    6a17     6a17        0     1 __data_size = SIZEOF(.data)
+    6a17     6a17      1bc     1 .bss
+    6a17     6a17        0     1         __bss_start = .
+    6a17     6a17       40     1         modplayer.lto.o:(.bss._spriteCtl)
+    6a17     6a17       40     1                 _spriteCtl
+    6a57     6a57      102     1         modplayer.lto.o:(.bss.fileReadDir.fileDirEntS)
+    6a57     6a57      102     1                 fileReadDir.fileDirEntS
+    6b59     6b59        2     1         modplayer.lto.o:(.bss.__putchar.s)
+    6b59     6b59        2     1                 __putchar.s
+    6b5b     6b5b       78     1         modplayer.lto.o:(.bss.name)
+    6b5b     6b5b       78     1                 name
+    6bd3     6bd3        0     1         __bss_end = .
+    6bd3     6bd3        0     1 __bss_size = SIZEOF(.bss)
+    6bd3     6bd3        0     1 .noinit
+    6bd3     6bd3        0     1         __heap_start = ALIGN(., 2)
+    6bd3     6bd3        0     1 end_block8 = .
+    6bd3     6bd3        0     1 end_block9 = .
+    6bd3     6bd3        0     1 end_block10 = .
+    6bd3     6bd3        0     1 end_block11 = .
+    6bd3     6bd3        0     1 end_block12 = .
+    6bd3     6bd3        0     1 end_block13 = .
+    6bd3     6bd3        0     1 end_block14 = .
+    6bd3     6bd3        0     1 end_block15 = .
+    6bd3     6bd3        0     1 end_block16 = .
+    6bd3     6bd3        0     1 end_block17 = .
+    6bd3     6bd3        0     1 end_block18 = .
+    6bd3     6bd3        0     1 end_block19 = .
+    6bd3     6bd3        0     1 end_block20 = .
+    6bd3     6bd3        0     1 end_block21 = .
+    6bd3     6bd3        0     1 end_block22 = .
+    6bd3     6bd3        0     1 end_block23 = .
+   10000    10000      3fc    16 .pianopal
+   10000    10000      3fc    16         modplayer.lto.o:(.pianopal)
+   10000    10000        0     1                 pianopal_start
+   103fc    103fc        0     1                 pianopal_end
+   103fc    103fc        0     1 end_pianopal = .
+   10400    10400    12c00    16 .keys
+   10400    10400    12c00    16         modplayer.lto.o:(.keys)
+   10400    10400        0     1                 keys_start
+   23000    23000        0     1                 keys_end
+   23000    23000        0     1 end_keys = .
+   40000    40000    20d00    16 .lcdimg
+   40000    40000    20d00    16         modplayer.lto.o:(.lcdimg)
+   40000    40000        0     1                 lcdimg_start
+   60d00    60d00        0     1                 lcdimg_end
+   60d00    60d00        0     1 end_lcdimg = .
+       0        0      138     1 .comment
+       0        0      138     1         <internal>:(.comment)
+       0        0      e80     4 .symtab
+       0        0      e80     4         <internal>:(.symtab)
+       0        0       72     1 .shstrtab
+       0        0       72     1         <internal>:(.shstrtab)
+       0        0      b67     1 .strtab
+       0        0      b67     1         <internal>:(.strtab)

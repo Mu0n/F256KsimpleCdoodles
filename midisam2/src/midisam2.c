@@ -379,7 +379,11 @@ int main(int argc, char *argv[]) {
 	machineDependent();
 	zeroOutStuff();
 	setColors();		
-	
+	//background color layer
+POKE(0xD00D,0x00); //force black graphics background
+POKE(0xD00E,0x00);
+POKE(0xD00F,0x00);
+
 	bitmapSetActive(0);
 	bitmapSetCLUT(0);
 	bitmapSetColor(0);

@@ -2,3 +2,5 @@
 
   .cozyLCD : { *(.cozyLCD .cozyLCD*) } >cozyLCD end_cozyLCD = .;
   .midiinst : { *(.midiinst .midiinst*) } >midiinst end_midiinst = .;
+  .midigfxbounce : { *(.midigfxbounce .midigfxbounce*) } >midigfxbounce end_midigfxbounce = .;
+  .midigfxpal : { *(.midigfxpal .midigfxpal*) } >midigfxpal end_midigfxpal = .;

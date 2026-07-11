@@ -2,3 +2,5 @@
 
   cozyLCD : ORIGIN = __cozyLCD_lma, LENGTH = __cozyLCD_size
   midiinst : ORIGIN = __midiinst_lma, LENGTH = __midiinst_size
+  midigfxbounce : ORIGIN = __midigfxbounce_lma, LENGTH = __midigfxbounce_size
+  midigfxpal : ORIGIN = __midigfxpal_lma, LENGTH = __midigfxpal_size

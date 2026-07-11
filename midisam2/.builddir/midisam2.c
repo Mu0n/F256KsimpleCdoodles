@@ -11,9 +11,10 @@
 #include "../src/muTimer0Int.h"  //contains basic cpu based timer0 functions I often use
 #include "../src/muTextUI.h" //text dialogs and file directory and file picking
 #include "../src/mulcd.h"
+#include "../src/midibouncergfx.h"
 
 #define MIDI_PARSED 0x50000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
-
+#define BITMAP_BASE 0x12000
 #define MUSIC_BASE 0x50000
 
 #define TIMER_FRAMES 0
@@ -26,7 +27,9 @@
 #define CLONE_TO_UART_EMWHITE 0
 #define ACTIVITY_CHAN_X 4
 EMBED(cozyLCD, "../assets/cozyLCD", 0x30000);
-EMBED(midiinst, "../assets/midi_instruments.bin", 0x20000);
+EMBED(midiinst, "../assets/midi_instruments.bin", 0x25400);
+EMBED(midigfxbounce, "../assets/midiLogo.bin", 0x24C00);
+EMBED(midigfxpal, "../assets/midiLogo.pal", 0x25000);
 
 //STRUCTS
 struct timer_t playbackTimer, shimmerTimer;
@@ -37,7 +40,7 @@ bool isLightShow = false; //to enable case RGB lights
 
 struct midiRecord myRecord;
 
-FILE *theMIDIfile;
+uint8_t fileOpenedErrorCode;
 //filePickRecord fpr;
 	
 bool repeatFlag = false;
@@ -50,6 +53,48 @@ char currentFilePicked[32];
 
 
 //FUNCTIONS
+
+int readLine(FILE *fp, char *buf, int max) {
+    int i = 0;
+    char c;
+
+    while (fileRead(&c, 1, 1, fp) == 1) {
+		if (c == 0x0a) //line feed control detected
+            continue;
+	
+        if (c == 0x0d) //carriage return detected
+            break;
+
+        if (i < max - 1)
+            buf[i++] = c;
+    }
+
+    if (i == 0 && c != 0x0d)
+        return 0; // EOF
+
+    buf[i] = '\0';
+    return 1;
+}
+
+void fetchNextPLEntry(FILE *playlistFile, uint16_t *curLine, uint16_t nbLines)
+{
+if(playlistFile == NULL) return; //not normal to not have a playlist when using this function
+
+for(uint8_t z=0;z<MAX_FILENAME_LEN;z++)
+	{
+	name[z]=0; //empty out the global extern name
+	}
+readLine(playlistFile, name, MAX_FILENAME_LEN);
+lilpause(1);
+*curLine = (*curLine)++;
+if(*curLine == nbLines)
+	{
+	fseek(playlistFile, 0, SEEK_SET);
+	*curLine=0;
+	}
+}
+
+
 bool isK2(void)
 {
 	uint8_t value = PEEK(0xD6A7) & 0x1F;
@@ -70,10 +115,14 @@ void wipeShimmer()
 		for(uint8_t j=0;j<40;j++)  __putchar(32);
 		}
 }
-short optimizedMIDIShimmering() {
+
+
+short optimizedMIDIShimmering() { //deals with textchar animations, but ballooned into deal with key presses during playback too
 
 	if(kernelEventData.type == kernelEvent(timer.EXPIRED))
 	{
+	
+		if(!isPaused)updateMIDISprite();
 		switch(kernelEventData.timer.cookie)
 		{
 			case TIMER_SHIMMER_COOKIE:
@@ -106,6 +155,8 @@ short optimizedMIDIShimmering() {
 		{
 			if(kernelEventData.key.raw == 0x83) //F3
 				{
+	
+					/*
 					if(isPaused==false)
 					{
 						midiShutAllChannels(true);
@@ -141,6 +192,14 @@ short optimizedMIDIShimmering() {
 					{textSetColor(1,0);
 					textGotoXY(31,MENU_Y);textPrint("Light Show");
 					}
+					*/
+					return 2;
+				}
+	
+			if(kernelEventData.key.raw == 0x93) //tab
+				{
+	
+					return 3;
 				}
 			if(kernelEventData.key.raw == 146) //esc
 				{
@@ -170,7 +229,17 @@ short optimizedMIDIShimmering() {
 					textGotoXY(31,MENU_Y);textPrint("Light Show");
 					isLightShow = false;
 	
-					POKE(0xD6A0,PEEK(0xD6A0) & 0x9C);//turn off
+	
+					for(uint8_t i=0; i<3; i++)
+						{
+						POKE(0xD6A7+i,0x00); //power
+						POKE(0xD6AA+i,0x00); //SD
+						POKE(0xD6AD+i,0x00); //caps
+						POKE(0xD6B3+i,0x00); //netw
+						}
+					POKE(0xD6A8,0x5F); //turn power green like before
+						lilpause(1);
+					POKE(0xD6A0,PEEK(0xD6A0)& 0x9D); //turn off control
 					}
 				else
 					{
@@ -178,7 +247,16 @@ short optimizedMIDIShimmering() {
 					textGotoXY(31,MENU_Y);textPrint("Light Show");
 					isLightShow = true;
 	
-					POKE(0xD6A0,PEEK(0xD6A0) | 0x63); //turn on
+					POKE(0xD6A0,PEEK(0xD6A0) | 0x63); //turn on control
+	
+					for(uint8_t i=0; i<3; i++)
+						{
+						POKE(0xD6A7+i,0x00); //power
+						POKE(0xD6AA+i,0x00); //SD
+						POKE(0xD6AD+i,0x00); //caps
+						POKE(0xD6B3+i,0x00); //netw
+						}
+	
 					}
 
 	
@@ -204,10 +282,10 @@ short optimizedMIDIShimmering() {
 				repeatFlag = !repeatFlag;
 				if(repeatFlag)
 				{
-				textSetColor(1,0);textGotoXY(3,26);textPrint("[r]");
+				textSetColor(1,0);textGotoXY(3,27);textPrint("[r]");
 				}
 				else {
-				textSetColor(0,0);textGotoXY(3,26);textPrint("[r]");
+				textSetColor(0,0);textGotoXY(3,27);textPrint("[r]");
 					}
 				}
 			if(kernelEventData.key.raw == 0x2E) //.
@@ -277,7 +355,10 @@ void zeroOutStuff()
 int main(int argc, char *argv[]) {
 
 	bool cliFile = false; //first time it loads, next times it keeps the cursor position
+	bool isPlayListing = false; //becomes true if a .spl simple playlist file has been opened and is being dealt with
 	
+	FILE *playlistFile;
+
 	K2LCD();
 	
 	midiChip = false;
@@ -290,13 +371,30 @@ int main(int argc, char *argv[]) {
 	//wipeBitmapBackground(0x2F,0x2F,0x2F);
 	POKE(MMU_IO_CTRL, 0x00);
 	// XXX GAMMA  SPRITE   TILE  | BITMAP  GRAPH  OVRLY  TEXT
-	POKE(VKY_MSTR_CTRL_0, 0b00000001); //sprite,graph,overlay,text
+	POKE(VKY_MSTR_CTRL_0, 0b00101111); //sprite,graph,overlay,text
 	// XXX XXX  FON_SET FON_OVLY | MON_SLP DBL_Y  DBL_X  CLK_70
 	POKE(VKY_MSTR_CTRL_1, 0b00000100); //font overlay, double height text, 320x240 at 60 Hz;
 	
+	POKE(VKY_LAYER_CTRL_0, 0b00010000); //bitmap 0 in layer 0, bitmap 1 in layer 1
+	POKE(VKY_LAYER_CTRL_1, 0b00000010); //bitmap 2 in layer 2
+
 	machineDependent();
 	zeroOutStuff();
 	setColors();
+	
+	bitmapSetActive(0);
+	bitmapSetCLUT(0);
+	bitmapSetColor(0);
+	
+	bitmapClear();
+	
+	bitmapSetVisible(0,false);
+	bitmapSetVisible(1,false);
+	bitmapSetVisible(2,false);
+	
+	initMIDISprite();
+	
+	drawBouncingBox();
 	
 	/*
 	uint8_t v =0;
@@ -371,46 +469,95 @@ int main(int argc, char *argv[]) {
 		else fpr_set_currentPath("0:");
 		}
 	
-	if(cliFile == false)
-	{
-	
-	if(getTheFile_far(name)!=0) return 0;
-	
-	setColors();textGotoXY(0,25);printf("->Currently Loading file %s...",name);
-	loadSMFile(name, MUSIC_BASE);
-	lilpause(1);
 
-	}
+	
+uint16_t nbLines = 538; //these 2 params are to keep track of current playlist position
+uint16_t curLine = 0;
+
+	while(!isTrulyDone)
+	{
+	bool foundOne = false;
+	fileOpenedErrorCode = 1; //assume an error opening a file
 	
 	wipeText();
-	detectStructure(0, &myRecord);
-	displayInfo(&myRecord);
 	resetInstruments(midiChip); //resets all channels to piano, for sam2695
 	midiShutUp(true); //ends trailing previous notes if any, for sam2695
 	midiShutUp(false); //ends trailing previous notes if any, for sam2695
-
 	midiShutAllChannels(true);
 	midiShutAllChannels(false);
 	
-    initTrack(MUSIC_BASE);
+		bitmapSetVisible(0,false);
+		spriteSetVisible(0,false);
+	while(!foundOne)
+		{
+		if(cliFile == false) //force ea file pick if the command line args were not setColors
+			{
+			if(isPlayListing) //will not enter this block the first time around since a playlist has to be chosen during runtime to get to one
+				{
+				fetchNextPLEntry(playlistFile, &curLine, nbLines); //next .mid fetched from an active opened playlist file
+				}
+			else
+				{
+				if(getTheFile_far(name) !=0) return 0; //calls the file picker and force the user to pick something, either .mid or .spl
+				}
+			//update the text UI
+			setColors();textGotoXY(0,26);printf("->Currently Loading file %s...",name);
+							//at this point, must determine if it's a .VGM or a .SPL
+			const char *extension = name + strlen(name) - 3; //gets last 3 characters
 	
-//find what to do and exhaust all zero delay events at the start
-	for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
+			if(strcmp(extension,"spl") == 0) //it's a playlist that has been picked for the first time, feed a .mid into the name string
+				{
+				isPlayListing = true;
+				playlistFile = fileOpen(name,"r");
+	
+				fetchNextPLEntry(playlistFile, &curLine, nbLines); //next .mid gets fetched from an active opened playlist file
+				}
+			fileOpenedErrorCode = loadSMFile(name, MUSIC_BASE); //reaching this point, name WILL carry a .mid file name and it must be opened.
+			lilpause(1);
+			} //end of cliFile not found
+		else loadSMFile(name, MUSIC_BASE); //if there was a CL arg, use fetched name to load the mid file
+		if(fileOpenedErrorCode == 0) foundOne = true;
+		else { //not supposed to happen
+			textGotoXY(0,2);printf("error opening");
+			hitspace();
+			}
+		} //end of while foundOne
 
-	resetTimer0();
-	shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
-	setTimer(&shimmerTimer);
-	while(!isTrulyDone)
-	{
-			wipeStatus();
-			superExtraInfo(&myRecord, midiChip);
+		//reset stuff in between file plays, stuff to do after a .mid has been selected
+		wipeStatus();
 	
-			initProgress();
-			setColors();
+		detectStructure(0, &myRecord);
+		displayInfo(&myRecord);
+		initTrack(MUSIC_BASE);
+			//find what to do and exhaust all zero delay events at the start
+		for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
+		resetTimer0();
+		shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
+		setTimer(&shimmerTimer);
+	
+		superExtraInfo(&myRecord, midiChip);
+	
+		initProgress();
+		setColors();
+	
+	
+		bitmapSetVisible(0,true);
+		spriteSetVisible(0, true);
+		//file playing
+		isPaused = false;
+	
 			for(;;)
 				{
 				kernelNextEvent();
-				if(optimizedMIDIShimmering()) break;
+				int8_t loopStatus = optimizedMIDIShimmering();
+				if(loopStatus == 1) break; //ESC quits the program
+				if(loopStatus == 2) //F3 load was pressed
+					{
+					isPlayListing = false; //break out of playlist playing mode and load something
+					break;
+					}
+				if(loopStatus == 3) break; //skips to next tune
+
 				if(!isPaused)
 					{
 
@@ -427,9 +574,9 @@ int main(int argc, char *argv[]) {
 	
 					}
 				if(theOne.isMasterDone >= theOne.nbTracks)
-				{
-					if(repeatFlag)
 					{
+					if(repeatFlag)
+						{
 	
 					midiShutAllChannels(true);
 					midiShutAllChannels(false);
@@ -439,23 +586,20 @@ int main(int argc, char *argv[]) {
 	
 					detectStructure(0, &myRecord);
 					initTrack(MUSIC_BASE);
-					textSetColor(1,0);textGotoXY(3,26);textPrint("[r]");
+					textSetColor(1,0);textGotoXY(3,27);textPrint("[r]");
 
 	
 					shimmerTimer.absolute = getTimerAbsolute(TIMER_FRAMES)+TIMER_SHIMMER_DELAY;
 					setTimer(&shimmerTimer);
-					}
+						}
 					else
-					{
-						isPaused = true;
+						{
+						//isPaused = true;
 						break; //really quit no matter what
+						}
 					}
-				}
 	
-				}
-	
-	midiShutAllChannels(true);
-	midiShutAllChannels(false);
+				} //end main playing loop
 	}
 	return 0;
 }

@@ -96,7 +96,7 @@ uint8_t getTheFile_far(char *name)
     // ---------------------------------------------------------
     uint8_t wantsQuit =
         filePickModal_far(DIRECTORY_X, DIRECTORY_Y,
-                          "mid", "", "", "", true);
+                          "mid", "spl", "", "", true);
 
     if (wantsQuit == 1)
         return 1;

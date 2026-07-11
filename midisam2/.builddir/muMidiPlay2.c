@@ -37,7 +37,7 @@ void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool w
 		{
 			shimmerBuffer[chan]=21;
 			//SET_BIT(shimmerBuffer[chan][bufferLocation],bitLocation);
-			POKE(disp[chan],255);
+			//POKE(disp[chan],255);
 		}
 	else if((msg0 & 0xF0) == 0xC0)
 	{

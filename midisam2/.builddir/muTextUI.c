@@ -6,7 +6,7 @@
 #include "../src/setup.h"
 #include <string.h>
 
-char nameVersion[] = {" CozyMIDI  v2.7 by Mu0n, January 2026                                    "};
+char nameVersion[] = {" CozyMIDI  v2.9 by Mu0n, July 2026                                       "};
 
 void directory(uint16_t tlx, uint8_t tly, struct filePick *fP)
 {
@@ -82,7 +82,7 @@ void displayInfo(struct midiRecord *rec) {
 	}
 	textGotoXY(INST_NAME_X,8+9);textSetColor(10,0);textPrint("Percussion");
 	
-	textGotoXY(0,25);printf(" ->Currently parsing file %s...",name);
+	textGotoXY(0,26);printf(" ->Currently parsing file %s...",name);
 }
 
 void extraInfo(struct midiRecord *rec,struct bigParsedEventList *list) {
@@ -116,8 +116,10 @@ void superExtraInfo(struct midiRecord *rec, uint8_t mChip) {
 	textSetColor(0,0);textPrint("Load ");
 	textSetColor(1,0);textPrint("[F5]:");
 	textSetColor(0,0);textPrint("SAM2695 VS1053b");
-	textGotoXY(1,26);textPrint("  [r] toggle repeat when done");
-	textGotoXY(0,25);printf("%s",nameVersion);
+	textGotoXY(1,27);textPrint("  [r] toggle repeat when done ");
+	textSetColor(1,0);textPrint("[tab]");
+	textSetColor(0,0);textPrint(" skip");
+	textGotoXY(0,26);printf("%s",nameVersion);
 	textSetColor(1,0);
 	if(mChip==0) {textGotoXY(57,MENU_Y);textPrint("SAM2695");}
 	else {textGotoXY(65,MENU_Y);textPrint("VS1053b");}

@@ -15,7 +15,7 @@
 
 #define INST_NAME_X 6
 #define MENU_Y 29
-#define MIDI_INST_NAME 0x20000
+#define MIDI_INST_NAME 0x25400
 
 
 typedef struct filePick {

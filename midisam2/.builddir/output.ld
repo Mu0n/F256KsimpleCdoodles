@@ -12,3 +12,15 @@
   BYTE((end_midiinst - __midiinst_lma)>>16)
   TRIM(midiinst)
 
+  SHORT(ORIGIN(midigfxbounce))
+  BYTE(ORIGIN(midigfxbounce)>>16)
+  SHORT(end_midigfxbounce - __midigfxbounce_lma)
+  BYTE((end_midigfxbounce - __midigfxbounce_lma)>>16)
+  TRIM(midigfxbounce)
+
+  SHORT(ORIGIN(midigfxpal))
+  BYTE(ORIGIN(midigfxpal)>>16)
+  SHORT(end_midigfxpal - __midigfxpal_lma)
+  BYTE((end_midigfxpal - __midigfxpal_lma)>>16)
+  TRIM(midigfxpal)
+

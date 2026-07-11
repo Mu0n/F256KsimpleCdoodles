@@ -8,7 +8,7 @@
 #define MAXFILE 40
 
 #define MAXARGS 4
-#define MAXITEMS 12
+#define MAXITEMS 13
 #define NBCATS 4
 #define MENUTOPX 7
 #define MENUTOPY 10

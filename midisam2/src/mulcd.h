@@ -28,5 +28,6 @@
 
 
 void displayImage(uint32_t, uint8_t);
+void FAR8_displayImage(uint32_t, uint8_t);
 
 #endif // MULCD_H

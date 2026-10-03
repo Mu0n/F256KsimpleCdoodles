@@ -22,13 +22,21 @@ typedef struct MIDIParser {
 	struct MIDITrackParser *tracks;
 } MIDP;
 
+
+uint8_t PEEK24(uint32_t addr);
+uint8_t POKE24(uint32_t addr, uint8_t value);
+
 void detectStructure(uint16_t, struct midiRecord *);
 uint8_t loadSMFile(char *, uint32_t);
+//uint16_t sendSyxFile(uint32_t);
+int16_t sendSyxStream(char *name);
 uint8_t FAR8_loadSMFile(char *, uint32_t);
 uint16_t readBigEndian16(uint32_t);
 uint32_t readBigEndian32(uint32_t);
 uint32_t divide32by16(uint32_t, uint16_t);
 uint32_t mul32x32_low32(uint32_t, uint32_t);
+bool hasSyxExt(const char *);
+size_t my_strlen(const char *);
 
 uint8_t readMIDIEvent(uint8_t);
 uint32_t readDelta(uint8_t);
@@ -46,6 +54,7 @@ uint8_t readMIDIEvent(uint8_t);
 void sniffNextMIDI(void);
 uint32_t shift_add_mul(uint32_t, uint32_t);
 void sendAME(uint8_t, uint8_t, uint8_t, uint8_t, bool);
+void armTimer0(void);
 
 extern struct MIDIParser theOne;
 extern bool midiChip;

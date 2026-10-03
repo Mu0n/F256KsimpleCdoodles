@@ -7,9 +7,22 @@
 //in that order, pixel by pixel
 //look for my instructions in https://wiki.f256foenix.com/index.php?title=Use_the_K2_LCD
 
+
 #pragma clang optimize off
-void displayImage(uint32_t addr, uint8_t boost)
+__attribute__((noinline))
+void displayImage(uint32_t addr, uint8_t boost) {
+    volatile unsigned char ___mmu = (unsigned char)*(volatile unsigned char *)0x000d;
+    *(volatile unsigned char *)0x000d = 8;
+    FAR8_displayImage(addr, boost);
+    *(volatile unsigned char *)0x000d = ___mmu;
+}
+#pragma clang optimize on
+
+#pragma clang optimize off
+__attribute__((noinline, section(".block8")))
+void FAR8_displayImage(uint32_t addr, uint8_t boost)
 {
+	
 	uint32_t i;
 	uint32_t j;
 	uint32_t index = 0;
@@ -54,6 +67,7 @@ void displayImage(uint32_t addr, uint8_t boost)
 			index+=skip; //default 2
 		}
 	}
+	
 }
 #pragma clang optimize on
 

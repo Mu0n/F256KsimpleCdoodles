@@ -12,10 +12,6 @@
 #define TIMER_LILPAUSE_COOKIE 100
 #define TIMER_PAD_DELAY 2
 
-
-
-
-
 #define CHUNK8K 0x2000
 #define CHUNK4K 0x1000
 #define CHUNK2K 0x0800

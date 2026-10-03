@@ -21,7 +21,61 @@ uint8_t vals[16] = {0,0,0,0,
 uint8_t shimmerBuffer[16];
 struct MIDIParser theOne;
 
+
 bool midiChip;
+
+asm (
+    ".text                  \n"
+    ".global PEEK24         \n"
+    "PEEK24:                \n"
+    "   sta     $5          \n"
+    "   stx     $6          \n"
+    "   lda     __rc2       \n"
+    "   sta     $7          \n"
+    "   ldx     $0          \n"
+    "   ldy     $1          \n"
+    "   txa                 \n"
+    "   ora     #$8         \n"
+    "   php                 \n"
+    "   sei                 \n"
+    "   sta     $0          \n"
+    "   tya                 \n"
+    "   ora     #48         \n"
+    "   sta     $1          \n"
+    "   .byte   0xa7,0x05   \n"
+    "   stx     $0          \n"
+    "   sty     $1          \n"
+    "   plp                 \n"
+    "   ldx     #0          \n"
+    "   rts                 \n"
+);
+
+asm (
+    ".text                  \n"
+    ".global POKE24         \n"
+    "POKE24:                \n"
+    "   sta     $5          \n"
+    "   stx     $6          \n"
+    "   lda     __rc2       \n"
+    "   sta     $7          \n"
+    "   ldx     $0          \n"
+    "   ldy     $1          \n"
+    "   txa                 \n"
+    "   ora     #$8         \n"
+    "   php                 \n"
+    "   sei                 \n"
+    "   sta     $0          \n"
+    "   tya                 \n"
+    "   ora     #$48         \n"
+    "   sta     $1          \n"
+    "   lda     __rc4       \n"
+    "   .byte   0x87,0x05   \n"
+    "   stx     $0          \n"
+    "   sty     $1          \n"
+    "   plp                 \n"
+    "   ldx     #0          \n"
+    "   rts                 \n"
+);
 
 //sends a MIDI event message, either a 2-byte or 3-byte one
 void sendAME(uint8_t msg0, uint8_t msg1, uint8_t msg2, uint8_t byteCount, bool wantAlt) {
@@ -96,13 +150,102 @@ uint8_t FAR8_loadSMFile(char *name, uint32_t targetAddress) {
 			//dump the buffer into a special RAM area
 			for(i=0;i<bytesRead;i++)
 				{
-				FAR_POKE((uint32_t)targetAddress+(uint32_t)totalBytesRead+(uint32_t)i,buffer[i]);
+				POKE24((uint32_t)targetAddress+(uint32_t)totalBytesRead+(uint32_t)i,buffer[i]);
 				}
 			totalBytesRead += (uint32_t) bytesRead;
-			if(bytesRead < 250) break;
+			//if(bytesRead < 250) break;
 			}
 	fileClose(theMIDIfile);
 	return 0;
+}
+
+/*
+//Sends every complete F0...F7 message found in a raw .syx image already loaded at base.
+//Returns how many messages were sent.
+uint16_t sendSyxFile(uint32_t base) {
+	uint32_t pos = 0, end, i;
+	uint16_t count = 0;
+	uint8_t b;
+
+	for(;;)
+		{
+		b = PEEK24(base + pos);
+		if(b == 0xFF) break;          //end marker
+		if(b != 0xF0) { pos++; continue; } //skip stray bytes between messages
+
+		end = pos + 1;
+		while((b = PEEK24(base + end)) != 0xF7 && b != 0xFF) end++;
+		if(b == 0xFF) break;          //truncated message, don't send half of it
+
+		for(i = pos; i <= end; i++)
+			POKE(0xDDA1, PEEK24(base + i));
+
+		count++;
+		textGotoXY(0, 27); printf("Sending SysEx %u", count);
+	
+		lilpause(8);
+		pos = end + 1;
+		}
+	return count;
+}
+*/
+// Custom strlen implementation
+size_t my_strlen(const char *str) {
+    size_t length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+bool hasSyxExt(const char *n) {
+	size_t L = my_strlen(n);
+	return L >= 4 && n[L-4] == '.' && (n[L-3]|0x20) == 's' && (n[L-2]|0x20) == 'y' && (n[L-1]|0x20) == 'x';
+}
+
+//Streams a raw .syx file from disk straight to MIDI out (0xDDA1).
+//Returns -1 if the file can't be opened or doesn't start with 0xF0 (caller should treat it as a
+//normal .mid), otherwise the number of F0...F7 messages sent.
+__attribute__((noinline))
+int16_t sendSyxStream(char *name) {
+	FILE *f;
+	uint8_t buffer[64];
+	size_t bytesRead, i;
+	uint8_t b;
+	bool inMsg = false;
+	bool first = true;
+	int16_t count = 0;
+
+	f = fileOpen(name, "r");
+	if(f == NULL) return -1;
+
+	while((bytesRead = fileRead(buffer, sizeof(uint8_t), sizeof(buffer), f)) > 0)
+		{
+		for(i = 0; i < bytesRead; i++)
+			{
+			b = buffer[i];
+			if(first)
+				{
+				if(b != 0xF0) { fileClose(f); return -1; } //not a sysex file
+				first = false;
+				}
+			if(b == 0xF0) inMsg = true;
+			if(!inMsg) continue; //ignore stray bytes between messages
+
+			POKE(0xDDA1, b);
+			if(b == 0xF7)
+				{
+				inMsg = false;
+				count++;
+				textGotoXY(0,27); printf("Sending SysEx %d   ", count);
+				lilpause(8); //gap before the next message
+				}
+			}
+		}
+	fileClose(f);
+	if(first) return -1;               //empty file
+	if(inMsg) POKE(0xDDA1, 0xF7);      //file ended mid-message: close it so the MT-32 doesn't swallow the next bytes
+	return count;
 }
 
 
@@ -117,20 +260,20 @@ void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
 	i+=4; //skip SIZE which is always 6 anyway
 
     rec->format =
-     	           (uint16_t) (FAR_PEEK(rec->baseAddr+i+1))
-    			  |(uint16_t) (FAR_PEEK(rec->baseAddr+i)<<8)
+     	           (uint16_t) (PEEK24(rec->baseAddr+i+1))
+    			  |(uint16_t) (PEEK24(rec->baseAddr+i)<<8)
     			  ;
     i+=2;
  
     rec->trackcount =
-     	           (uint16_t)(FAR_PEEK(rec->baseAddr+i+1))
-    			  |(uint16_t)((FAR_PEEK(rec->baseAddr+i)<<8))
+     	           (uint16_t)(PEEK24(rec->baseAddr+i+1))
+    			  |(uint16_t)((PEEK24(rec->baseAddr+i)<<8))
     			  ;
     i+=2;
  
     rec->tick =
-     	           (uint16_t)(FAR_PEEK(rec->baseAddr+i+1))
-    			  |(uint16_t)((FAR_PEEK(rec->baseAddr+i)<<8))
+     	           (uint16_t)(PEEK24(rec->baseAddr+i+1))
+    			  |(uint16_t)((PEEK24(rec->baseAddr+i)<<8))
     			  ;
     i+=2;
 
@@ -142,10 +285,10 @@ void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
 	    	currentTrack++;
 	    	i+=4; //skips the MTrk string
 	
-	    	trackLength =  (((uint32_t)(FAR_PEEK(rec->baseAddr+i)))<<24)
-		             | (((uint32_t)(FAR_PEEK(rec->baseAddr+i+1)))<<16)
-					 | (((uint32_t)(FAR_PEEK(rec->baseAddr+i+2)))<<8)
-					 |  ((uint32_t)(FAR_PEEK(rec->baseAddr+i+3)));
+	    	trackLength =  (((uint32_t)(PEEK24(rec->baseAddr+i)))<<24)
+		             | (((uint32_t)(PEEK24(rec->baseAddr+i+1)))<<16)
+					 | (((uint32_t)(PEEK24(rec->baseAddr+i+2)))<<8)
+					 |  ((uint32_t)(PEEK24(rec->baseAddr+i+3)));
 	        i+=4;
 	
 	        i+=trackLength;
@@ -156,8 +299,8 @@ void detectStructure(uint16_t startIndex, struct midiRecord *rec) {
 	
 uint16_t readBigEndian16(uint32_t where) {
     uint8_t bytes[2];
-	bytes[0] = FAR_PEEK(where);
-	bytes[1] = FAR_PEEK(where+1);
+	bytes[0] = PEEK24(where);
+	bytes[1] = PEEK24(where+1);
 	
     return ((uint16_t)bytes[0] << 8) |
            (uint16_t)bytes[1];
@@ -167,10 +310,10 @@ uint16_t readBigEndian16(uint32_t where) {
 uint32_t readBigEndian32(uint32_t where) {
     uint8_t bytes[4];
 
-	bytes[0] = FAR_PEEK(where);
-	bytes[1] = FAR_PEEK(where+1);
-	bytes[2] = FAR_PEEK(where+2);
-	bytes[3] = FAR_PEEK(where+3);
+	bytes[0] = PEEK24(where);
+	bytes[1] = PEEK24(where+1);
+	bytes[2] = PEEK24(where+2);
+	bytes[3] = PEEK24(where+3);
 	
     return (((uint32_t)bytes[0]) << 24) |
            (((uint32_t)bytes[1]) << 16) |
@@ -222,62 +365,17 @@ uint32_t readDelta(uint8_t track) {
 	uint8_t temp;
 	
 	//min count needed for describing the delta: 1; max is 4
-	temp = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset++);
+	temp = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset++);
 	while(temp & 0x80) //keep reading after this one
 		{
 		temp &= 0x7F; //only keep lowest 7 bits
 		value += (uint32_t) temp; //add it to the pile
 		value <<= 7; //shift the pile 7 spots to make room
-		temp = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset++); //get the next one
+		temp = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset++); //get the next one
 		}
 	value += (uint32_t)temp; //final addition to close it off
 	return value;
 	
-	//old clunky version
-	/*
-	uint32_t nValue, nValue2, nValue3, nValue4;
-	uint8_t temp;
-	
-	nValue = 0x00000000;
-	nValue2 = 0x00000000;
-	nValue3 = 0x00000000;
-	nValue4 = 0x00000000;
-	
-	temp = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset++);
-	nValue = (uint32_t)temp;
-	
-	if(nValue & 0x00000080)
-		{
-		nValue &= 0x0000007F;
-		nValue <<= 7;
-	
-	
-		temp = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset++);
-		nValue2 = (uint32_t)temp;
-	
-		if(nValue2 & 0x00000080)
-			{
-			nValue2 &= 0x0000007F;
-			nValue2 <<= 7;
-			nValue <<= 7;
-	
-			temp = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset++);
-			nValue3 = (uint32_t)temp;
-	
-			if(nValue3 & 0x00000080)
-				{
-				nValue3 &= 0x0000007F;
-				nValue3 <<= 7;
-				nValue2 <<= 7;
-				nValue <<= 7;
-	
-				temp = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset++);
-				nValue4 = (uint32_t)temp;
-				} //end of getting to nValue4
-			} //end of getting to nValue3
-		} //end of getting to nValue2
-	return nValue | nValue2 | nValue3 | nValue4;
-	*/
 }
 
 uint8_t readMIDICmd(uint8_t track) {
@@ -288,12 +386,12 @@ uint8_t readMIDICmd(uint8_t track) {
 
 //	printf("\nT%d start at: %08lx + %08lx", track, theOne.tracks[track].start, theOne.tracks[track].offset);
 	
-	status_byte = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset);
-	extra_byte = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)1);
-	extra_byte2 = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)2);
-	extra_byte3 = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)3);
-	extra_byte4 = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)4);
-	extra_byte5 = FAR_PEEK(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)5);
+	status_byte = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset);
+	extra_byte = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)1);
+	extra_byte2 = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)2);
+	extra_byte3 = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)3);
+	extra_byte4 = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)4);
+	extra_byte5 = PEEK24(theOne.tracks[track].start + theOne.tracks[track].offset + (uint32_t)5);
 	theOne.tracks[track].cmd[0] = status_byte;
 	theOne.tracks[track].cmd[1] = extra_byte;
 	theOne.tracks[track].cmd[2] = extra_byte2;
@@ -325,7 +423,17 @@ uint8_t readMIDICmd(uint8_t track) {
 			theOne.tracks[track].cmd[4] = extra_byte4;
 			theOne.tracks[track].cmd[5] = extra_byte5;
 			}
-		skipWhenFFCmd(track, extra_byte, extra_byte2); //makes the parser offset advance properly for next commands
+		uint32_t p = theOne.tracks[track].start + theOne.tracks[track].offset + 1;
+		uint32_t p0 = p;
+		uint32_t mlen = 0;
+		uint8_t mb;
+		do
+			{
+			mb = PEEK24(p++);
+			mlen = (mlen << 7) | (mb & 0x7F);
+			} while(mb & 0x80);
+		theOne.tracks[track].offset += 1 + (p - p0) + mlen;
+		//skipWhenFFCmd(track, extra_byte, extra_byte2); //makes the parser offset advance properly for next commands
 		return 0;
 		}
 //Third, deal with regular MIDI commands
@@ -358,12 +466,58 @@ uint8_t readMIDICmd(uint8_t track) {
 			{
 			status_byte = status_byte & 0x8F;	//sometimes note offs are note ons with 0 velocity, quirk of some midi sequencers
 			extra_byte2 = 0x7F;
+	
+			theOne.tracks[track].cmd[0] = status_byte & 0x8F;
+			theOne.tracks[track].cmd[2] = 0x40;
 			}
 	
 	
 		theOne.tracks[track].offset+=2; //complete the 3 byte advance in the offset (or 2 if run-on)
 		theOne.tracks[track].is2B = false;
 		return 0;
+		}
+	//Fourth, deal with SysEx events: 0xF0 (start) and 0xF7 (escape/continuation)
+	else if(status_byte == 0xF0 || status_byte == 0xF7)
+		{
+		//offset was already advanced past the status byte, so we're now at the VLQ length
+		uint32_t pos = theOne.tracks[track].start + theOne.tracks[track].offset;
+		uint32_t startPos = pos;
+		uint32_t len = 0;
+		uint8_t b;
+
+		do
+			{
+			b = PEEK24(pos++);
+			len = (len << 7) | (b & 0x7F);
+			} while(b & 0x80);
+
+		theOne.tracks[track].cmd[0] = status_byte;
+		//theOne.tracks[track].sysexStart = pos;   //address of first data byte (new field, uint32_t)
+		//theOne.tracks[track].sysexLen = len;     //number of data bytes (new field, uint32_t)
+
+		//================ MIDI OUT PASSTHROUGH ================
+		if(status_byte == 0xF0)
+			POKE(0xDDA1,0xF0);          //F0 form: the status byte is sent first
+		                                  //F7 form: raw bytes only, no status byte
+		//printf("%02x",0xF0);
+		for(uint32_t i = 0; i < len; i++)
+		{
+		uint8_t newB = PEEK24(pos + i);
+		//printf(" %02x",newB);
+		POKE(0xDDA1,newB); //payload (normally ends with 0xF7)
+		}
+	
+		if(len > 0 && PEEK24(pos + len - 1) == 0xF7)
+				lilpause(8);
+	
+	
+		//printf("\n");
+		//================================================================
+	
+		//skip the VLQ bytes plus the payload so the next event parses correctly
+		theOne.tracks[track].offset += (pos - startPos) + len;
+		//note: SysEx does not touch lastCmd
+		return 1;
 		}
 	else
 		{
@@ -374,42 +528,6 @@ uint8_t readMIDICmd(uint8_t track) {
 
 uint8_t skipWhenFFCmd(uint8_t track, uint8_t meta_byte, uint8_t data_byte) {
 	theOne.tracks[track].offset+=(uint32_t)(2+data_byte);
-	/*
-	if(meta_byte == MetaSequence || meta_byte == MetaChannelPrefix || meta_byte == MetaChangePort)
-		{
-		theOne.tracks[track].offset+=(uint32_t)3;
-		}
-	else if(meta_byte == MetaText || meta_byte == MetaCopyright || meta_byte == MetaTrackName || meta_byte == MetaInstrumentName
-			 || meta_byte == MetaLyrics || meta_byte == MetaMarker || meta_byte == MetaCuePoint)
-		{
-		theOne.tracks[track].offset+=(uint32_t)2+(uint32_t)data_byte;
-		}
-	else if(meta_byte == MetaEndOfTrack)
-		{
-		theOne.tracks[track].offset+=(uint32_t)2;
-		}
-	else if(meta_byte == MetaSetTempo)
-		{
-		theOne.tracks[track].offset+=(uint32_t)5;
-		}
-	else if(meta_byte == MetaSMPTEOffset)
-		{
-		theOne.tracks[track].offset+=(uint32_t)7;
-		}
-	else if(meta_byte == MetaTimeSignature)
-		{
-
-		theOne.tracks[track].offset+=(uint32_t)6;
-		}
-	else if(meta_byte == MetaKeySignature)
-		{
-		theOne.tracks[track].offset+=(uint32_t)4;
-		}
-	else if(meta_byte == MetaSequencerSpecific)
-		{
-		}
-		*/
-	
 	
 	return 0;
 }
@@ -498,19 +616,9 @@ void playMidi()
 {
 	//POKE(INT_PENDING_0,0x10);
 //play stuff
-	if(theOne.cuedDelta > 0x00FFFFFF) //0x00FFFFFF is the max value of the timer0 we can do
-		{
-			//delay up to maximum of 0x00FFFFFF = 2/3rds of a second
-		theOne.cuedDelta -= 0x00FFFFFF; //reduce the max value one by one until there is a remainder smaller than the max amount
-	
-		setTimer0(theOne.cuedDelta);
-		return;
-		}
-	//do the last delay that's under 2/3rds of a second
 	if(theOne.cuedDelta > 0)
 		{
-		setTimer0(theOne.cuedDelta);
-		theOne.cuedDelta = 0;
+		armTimer0();
 		return;
 		}
 	performMIDICmd(theOne.cuedIndex);
@@ -555,6 +663,12 @@ void initTrack(uint32_t BASE_ADDR){
 	
 	//read tick
 	theOne.ticks = readBigEndian16(BASE_ADDR+(uint32_t)12);
+	
+	if(theOne.ticks == 0 || (theOne.ticks & 0x8000)) theOne.ticks = 48;
+	{
+		uint32_t usPerTick = (uint32_t)500000 / (uint32_t)theOne.ticks;
+		theOne.timer0PerTick = (usPerTick<<3)+(usPerTick<<2);
+	}
 	
 	for(uint16_t i=0; i<theOne.nbTracks; i++)
 	{
@@ -634,7 +748,16 @@ void sniffNextMIDI(){
 					}
 				}
 
-			if(theOne.cuedDelta > 0) theOne.cuedDelta = theOne.cuedDelta * theOne.timer0PerTick;
-			setTimer0(theOne.cuedDelta);
+			if(theOne.cuedDelta > 0)
+					theOne.cuedDelta = (theOne.cuedDelta * theOne.timer0PerTick) << 1; //<<1 keeps your current effective speed
+			armTimer0();
 	
+}
+
+//substract time left in chunks, comparing to the maximum you can substract
+void armTimer0(void)
+{
+	uint32_t step = (theOne.cuedDelta > 0x00FFFFFF) ? 0x00FFFFFF : theOne.cuedDelta;
+	theOne.cuedDelta -= step;
+	setTimer0(step);
 }

@@ -8,7 +8,7 @@
 #define BMP_L1      0x10400
 #define PAL_THING   0x22A70
 #define BMP_L2      0x24000
-#define SPR_THING   0x36C00
+#define SPR_THING   0x37001
 #define BMP_L3      0x38000
 #define SPR_BIRD    0x4AC00
 #define PAL_SUNSET  0x4B000
@@ -53,7 +53,7 @@ EMBED(pal,    "../assets/gfxDemoL1.pal", 0x10000); //1024 b
 EMBED(level1, "../assets/gfxDemoL1.bin", 0x10400); //76800 b
 EMBED(gpal, "../assets/grudge.pal", 0x23000);//1kb
 EMBED(level2, "../assets/gfxDemoL2.bin", 0x24000); //76800 b
-EMBED(thing, "../assets/thing.bin", 0x36C00);//1kb
+EMBED(thing, "../assets/thing.bin", 0x37000);//1kb
 EMBED(level3, "../assets/gfxDemoL3.bin", 0x38000); //76800 b
 EMBED(bird, "../assets/bird.bin", 0x4AC00);//1kb
 EMBED(sunset, "../assets/gfxSunset.pal", 0x4B000);//1kb
@@ -214,7 +214,7 @@ void dealTimer(uint8_t cookie)
 			spriteSetPosition(z, x, y);
 			if(sprFrame[z]==0) sprFrame[z] =1;
 			else sprFrame[z] = 0;
-			POKEA(VKY_SP0_CTRL + (z*8)+ OFF_SPR_ADL_L, (SPR_THING + SPR_SIZE_SQUARED * sprFrame[z]));
+			POKEA(VKY_SP0_CTRL + (uint32_t)(z*8)+ (uint32_t)OFF_SPR_ADL_L, (SPR_THING + SPR_SIZE_SQUARED * sprFrame[z]));
 	
 			}
 	
@@ -231,7 +231,7 @@ void dealTimer(uint8_t cookie)
 			spriteSetPosition(z, x, y);
 			sprBirdFrame[z-3]++;
 			if(sprBirdFrame[z-3]>3) sprBirdFrame[z-3]=0;
-			POKEA(VKY_SP0_CTRL + (z*8)+ OFF_SPR_ADL_L, (SPR_BIRD + SPR_SIZE_SQUARED * sprFrame[z-3]));
+			POKEA(VKY_SP0_CTRL + (uint32_t)(z*8)+ (uint32_t)OFF_SPR_ADL_L, (SPR_BIRD + SPR_SIZE_SQUARED * sprFrame[z-3]));
 			}
 			sprBirdAnim.absolute = getTimerAbsolute(TIMER_FRAMES) + SPR_BIRD_DELAY;
 			setTimer(&sprBirdAnim);

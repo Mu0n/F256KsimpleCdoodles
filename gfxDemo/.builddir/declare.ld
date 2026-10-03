@@ -12,7 +12,7 @@
   __level2_lma  = 0x24000;
   __level2_size = 0x12c00;
 
-  __thing_lma  = 0x36c00;
+  __thing_lma  = 0x37000;
   __thing_size = 0x400;
 
   __level3_lma  = 0x38000;

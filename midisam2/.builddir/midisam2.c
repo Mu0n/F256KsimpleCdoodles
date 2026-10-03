@@ -13,9 +13,9 @@
 #include "../src/mulcd.h"
 #include "../src/midibouncergfx.h"
 
-#define MIDI_PARSED 0x50000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
+#define MIDI_PARSED 0x100000 //end of ram is 0x7FFFF, gives a nice 256kb of parsed midi
 #define BITMAP_BASE 0x12000
-#define MUSIC_BASE 0x50000
+#define MUSIC_BASE 0x100000
 
 #define TIMER_FRAMES 0
 #define TIMER_SECONDS 1
@@ -411,7 +411,7 @@ POKE(0xD00F,0x00);
 	*/
 	
 
-
+/*
 	if(argc == 3)
 		{
 		uint8_t i=0, j=0,m=0;
@@ -463,6 +463,7 @@ POKE(0xD00F,0x00);
 		}
 	else
 		{
+			*/
 	//check if the midi directory is here, if not, target the root
 		char *dirOpenResult = fileOpenDir("media/midi");
 		if(dirOpenResult != NULL)
@@ -471,25 +472,41 @@ POKE(0xD00F,0x00);
 			fileCloseDir(dirOpenResult);
 			}
 		else fpr_set_currentPath("0:");
-		}
+	
+	
+		/*}*/
 	
 
 	
 uint16_t nbLines = 538; //these 2 params are to keep track of current playlist position
 uint16_t curLine = 0;
+bool skipResets = false;
 
 	while(!isTrulyDone)
 	{
 	bool foundOne = false;
+	bool syxOnly = false;
 	fileOpenedErrorCode = 1; //assume an error opening a file
 	
+	destroyTrack();
+	
 	wipeText();
+	if(!skipResets)
+		{
+		resetInstruments(midiChip);
+		midiShutUp(true);
+		midiShutUp(false);
+		midiShutAllChannels(true);
+		midiShutAllChannels(false);
+		}
+	skipResets = false;
+	/*
 	resetInstruments(midiChip); //resets all channels to piano, for sam2695
 	midiShutUp(true); //ends trailing previous notes if any, for sam2695
 	midiShutUp(false); //ends trailing previous notes if any, for sam2695
 	midiShutAllChannels(true);
 	midiShutAllChannels(false);
-	
+	*/
 		bitmapSetVisible(0,false);
 		spriteSetVisible(0,false);
 	while(!foundOne)
@@ -509,6 +526,7 @@ uint16_t curLine = 0;
 							//at this point, must determine if it's a .VGM or a .SPL
 			const char *extension = name + strlen(name) - 3; //gets last 3 characters
 			lilpause(10);
+	
 			if(strcmp(extension,"spl") == 0) //it's a playlist that has been picked for the first time, feed a .mid into the name string
 				{
 				isPlayListing = true;
@@ -516,12 +534,26 @@ uint16_t curLine = 0;
 	
 				fetchNextPLEntry(playlistFile, &curLine, nbLines); //next .mid gets fetched from an active opened playlist file
 				}
-			fileOpenedErrorCode = loadSMFile(name, MUSIC_BASE); //reaching this point, name WILL carry a .mid file name and it must be opened.
-			//textGotoXY(0,3);printf("Error Code %d...",fileOpenedErrorCode);
 	
+			if(hasSyxExt(name))
+				{
+				if(sendSyxStream(name) >= 0)
+					{
+					fileOpenedErrorCode = 0;
+					syxOnly = true;
+					}
+				//else: named .syx but not a sysex file, fileOpenedErrorCode stays 1 -> "error opening"
+				}
+			else
+				fileOpenedErrorCode = loadSMFile(name, MUSIC_BASE); //reaching this point, name WILL carry a .mid file name and it must be opened.
+			//textGotoXY(0,3);printf("Error Code %d...",fileOpenedErrorCode);
+
 			lilpause(1);
 			} //end of cliFile not found
-		else loadSMFile(name, MUSIC_BASE); //if there was a CL arg, use fetched name to load the mid file
+		else
+			{
+			loadSMFile(name, MUSIC_BASE); //if there was a CL arg, use fetched name to load the mid file
+			}
 		if(fileOpenedErrorCode == 0) foundOne = true;
 		else { //not supposed to happen
 			textGotoXY(0,2);printf("error opening");
@@ -529,6 +561,11 @@ uint16_t curLine = 0;
 			}
 		} //end of while foundOne
 
+		if(syxOnly)
+			{
+			skipResets = true;
+			continue;
+			}
 		//reset stuff in between file plays, stuff to do after a .mid has been selected
 		wipeStatus();
 		//textGotoXY(0,3);printf(".W");
@@ -536,11 +573,16 @@ uint16_t curLine = 0;
 		//textGotoXY(2,3);printf(".D");
 		displayInfo(&myRecord);
 		initTrack(MUSIC_BASE);
-	
+		if(theOne.nbTracks == 0)
+			{
+			textGotoXY(0,2); printf("not a valid .mid"); hitspace();
+			continue;
+			}
 		//textGotoXY(4,3);printf(".i");
 			//find what to do and exhaust all zero delay events at the start
 		for(uint16_t i=0;i<theOne.nbTracks;i++)	exhaustZeroes(i);
 	
+	if(theOne.isMasterDone >= theOne.nbTracks) {skipResets = true; continue;}
 	
 		superExtraInfo(&myRecord, midiChip);
 	

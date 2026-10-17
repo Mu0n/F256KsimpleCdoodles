@@ -4,16 +4,9 @@
 #include "f256lib.h"
 #include "../src/muUtils.h"
 #include "../src/muVS1053b.h"
-
-
-#define CHUNK8K 0x2000
-#define CHUNK4K 0x1000
-#define CHUNK2K 0x0800
-#define CHUNK1K 0x0400
-#define CHUNK128B 0x80
-#define CHUNK64B 0x40
-#define CHUNK32B 0x20
-
+#include "../src/muMP3Play.h"
+#include "../src/muFileDiplomacy.h"
+#include "../src/muTimer0Int.h"
 
 #define SET_PIXEL 7
 #define CLEAR_PIXEL 32
@@ -33,14 +26,6 @@ void initNibbleTable(void)
     }
 }
 
-void read8KChunk(void *buf, FILE *f)
-{
-	uint16_t i;
-	for(i=0;i<64;i++)
-		{
-		fread((void *)(buf+i*0x80), sizeof(uint8_t), 128, f); //read 128 bytes at a time, since there's a hard limit of 255 reads at a time. 64x128 = 8k = 8192 bytes
-		}
-}
 
 void flipPixels(uint8_t x, uint8_t y, uint8_t count)
 {
@@ -102,7 +87,7 @@ static inline void writePixelsForByte(uint8_t value, uint16_t vramAddr)
     dst[7] = srcLo[3];
 }
 
-__attribute__((optnone))
+
 int main(int argc, char *argv[]) {
 FILE *fileNum =0;
 FILE *theMP3file =0;
@@ -111,17 +96,10 @@ uint8_t sBuffer[80*60]; //screen buffer, the characters that are on screen
 uint8_t bytesRead;
 bool isDone = false;
 uint16_t target=0,bTarget=0,sTarget=0;
-
+uint16_t frameOff = 0;          // 0, 200, 400, wrap at 600
 
 uint16_t i=0,j=0;
-uint16_t bufferIndex=0; //index for the local 8k buffer register
-char buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
-uint16_t rawFIFOCount=0;
-uint16_t bytesToTopOff=0;
-uint16_t multipleOf128b = 0;
 bool finished = false;
-uint8_t deliveredBytes=0;
-uint16_t readEntryBufferIndex = 0;
 
 //wipeBitmapBackground(0x2F,0x2F,0x2F);
 POKE(MMU_IO_CTRL, 0x00);
@@ -150,134 +128,56 @@ if(fileNum == NULL)
 	return 1;
 	}
 	
-	
-theMP3file = fileOpen("demos/ba_audio.mp3","r");
 
-if(theMP3file == NULL)
+if(prepMP3ForPlay("demos/ba_audio.mp3"))
 	{
 	printf("Can't open demos/ba_audio.mp3");
 	hitspace();
 	return 1;
 	}
-read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file
-read8KChunk((void *)buffer, theMP3file); //read the first 8k chunk from the .mp3 file
-	
-//buffer in initial mp3 data
-for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
-		{
-		POKE(VS_FIFO_DATA, buffer[i]);
-		}
-	bufferIndex+=CHUNK2K;
-	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
-		{
-		POKE(VS_FIFO_DATA, buffer[i]);
-		}
-bufferIndex+=CHUNK2K;
+
 	
 for(uint16_t e=0; e<80*60;e++)
 {
 	sBuffer[e]=0xFF;
 }
+
+
+setTimer1(1);
 while(!isDone)
-	{
-	//animation
-	target = 0xC000;
-	sTarget=0;
-	
-	for(uint8_t a=0;a<3;a++) //each frame is 600 bytes, so read every third chunk, 200 bytes
-		{
-		bTarget=0;
-		POKE(MMU_IO_CTRL, 0);
-		bytesRead = fileRead(tBuffer, sizeof(uint8_t), 200, fileNum);
-		POKE(MMU_IO_CTRL, 2);
+{
+    if(PEEK(INT_PENDING_0) & 0x20)
+    {
+        POKE(INT_PENDING_0, 0x20);
+        setTimer1(1);                       // re-arm right away
 
-		if(bytesRead == 0) isDone = true;
-		else
-			{
-			for(uint8_t c=0;c<200;c++)
-				{
-					uint8_t old = sBuffer[sTarget];
-					uint8_t new = tBuffer[bTarget];
+        POKE(MMU_IO_CTRL, 0);
+        bytesRead = fileRead(tBuffer, 1, 200, fileNum);
+        if(bytesRead == 0) { isDone = true; break; }
 
+        POKE(MMU_IO_CTRL, 2);
+        uint16_t target = 0xC000 + frameOff * 8;
+        for(uint8_t c = 0; c < bytesRead; c++)
+        {
+            uint8_t nw = tBuffer[c];
+            if(sBuffer[frameOff + c] != nw)
+            {
+                sBuffer[frameOff + c] = nw;
+                uint8_t *dst = (uint8_t *)target;
+                const uint8_t *h = expandNibble[nw >> 4];
+                const uint8_t *l = expandNibble[nw & 0x0F];
+                dst[0]=h[0]; dst[1]=h[1]; dst[2]=h[2]; dst[3]=h[3];
+                dst[4]=l[0]; dst[5]=l[1]; dst[6]=l[2]; dst[7]=l[3];
+            }
+            target += 8;
+        }
+        POKE(MMU_IO_CTRL, 0);
 
-					if(old == new) {sTarget++; target+=8; bTarget++; continue;}
-					sBuffer[sTarget] = new; //backup
-	
-	
-	uint8_t hi = new >> 4;     // upper nibble  (0–15)
-    uint8_t lo = new & 0x0F;   // lower nibble  (0–15)
-
-    uint8_t *dst = (uint8_t *)target;
-
-    const uint8_t *srcHi = expandNibble[hi];
-    const uint8_t *srcLo = expandNibble[lo];
-
-    dst[0] = srcHi[0];
-    dst[1] = srcHi[1];
-    dst[2] = srcHi[2];
-    dst[3] = srcHi[3];
-
-    dst[4] = srcLo[0];
-    dst[5] = srcLo[1];
-    dst[6] = srcLo[2];
-    dst[7] = srcLo[3];
-	
-	/*
-					 writePixelsForByte(new, target);
-	
-					if((new&0x80)==0x80) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x40)==0x40) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x20)==0x20) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x10)==0x10) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x08)==0x08) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x04)==0x04) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x02)==0x02) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-					if((new&0x01)==0x01) POKE(target++,CLEAR_PIXEL); else POKE(target++,SET_PIXEL);
-	*/
-					bTarget++;
-					sTarget++;
-					target+=8;
-
-				}
-			}
-
-		}
-	POKE(MMU_IO_CTRL, 0);
-	//audio
-	//Check the health of the FIFO buffer
-	
-	rawFIFOCount = PEEKW(VS_FIFO_COUNT);
-	bytesToTopOff = CHUNK2K - (rawFIFOCount&0x07FF); //found how many bytes are left in the 2KB buffer
-	multipleOf128b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
-	
-	for(i=0; i<multipleOf128b; i++)
-			{
-			if(finished) isDone = true;			//make sure we intercept key presses during copying
-	
-			//Copy a chunk from the application buffer to the VS' buffer
-			for(j=0; j<CHUNK64B; j++) {
-				POKE(VS_FIFO_DATA, buffer[bufferIndex+j]);
-				}
-
-			//advance the application buffer index
-			bufferIndex+=CHUNK64B;
-			if(bufferIndex == CHUNK8K) bufferIndex = 0; //warp over if the 8KB limit is reached
-	
-			//read more of the file to replace an equivalent chunk to the application buffer
-			deliveredBytes = fread((void *)(buffer+readEntryBufferIndex), sizeof(uint8_t), 64, theMP3file); //Check if we're getting to the end of the file
-			if(deliveredBytes !=64)
-				{
-				//finished = true;
-				readEntryBufferIndex+=deliveredBytes;
-				}
-			else
-				{
-				readEntryBufferIndex+=CHUNK64B; //keep track of where we're at so we can finish the file
-				if(readEntryBufferIndex== CHUNK8K) readEntryBufferIndex = 0; //keep track of where we're at so we can finish the file
-				}
-			}
-	
-	}
+        frameOff += 200;
+        if(frameOff >= 600) frameOff = 0;
+    }
+    if(MP3LoopPass()) break;
+}
 fileClose(fileNum);
 //fileClose(theMP3file);
 return 0;}

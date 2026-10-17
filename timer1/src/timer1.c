@@ -73,7 +73,7 @@ while(true)
 		{
 		noteOnMIDI();
 		writeStars();
-		POKE(INT_PENDING_0,0x20); //clear pending timer0 
+		POKE(INT_PENDING_0,0x20); //clear pending timer1 
   //do stuff at the end of the delay
 		setTimer1(0x0000003F); //set a 24-bit value from 0 to 0x00FFFFFF. Real world time is from 0s to 0.6666s. if you need more, set regular companion variables like a uint8_t that can cycle through 255 of these 2/3rds of a second. you get the idea.
   //and resend it once more, set the argument to taste

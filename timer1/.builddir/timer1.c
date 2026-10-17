@@ -18,7 +18,7 @@ is set in the T1_PEND register
 #define T1_CMP_L    0xD65D //24 bit target value for comparison
 #define T1_CMP_M    0xD65E
 #define T1_CMP_H    0xD65F
-#define INT_PENDING_0  0xD660
+#define INT_PENDING_0  0xD660 //timer1 is still in the interrupt group 0, same as timer0
 
 #define CTR_INTEN   0x80  //present only for timer1? or timer0 as well?
 #define CTR_ENABLE  0x01

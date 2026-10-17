@@ -7,18 +7,9 @@
 #include "../src/muVS1053b.h"
 #include "../src/muFilePicker.h"
 #include "../src/muTextUI.h" //text dialogs and file directory and file picking
-
-
-#define CHUNK8K 0x2000
-#define CHUNK4K 0x1000
-#define CHUNK2K 0x0800
-#define CHUNK1K 0x0400
-#define CHUNK128B 0x80
-#define CHUNK64B 0x40
-#define CHUNK32B 0x20
-
-#define DIRECTORY_X 1
-#define DIRECTORY_Y 5
+#include "../src/muFileDiplomacy.h"
+#include "../src/muMP3Play.h"
+#include "../src/muTimer0Int.h"
 
 #define LCD_BAND_WIDTH    2
 #define LCD_BAND_INTERV   8
@@ -60,13 +51,8 @@
 #define VSPLUGIN 0x59000
 
 //main color text LUT setup
-
-FILE *theMP3file;
-filePickRecord fpr;
 char finalName[64];
 
-
-void read8KChunk(uint8_t *, FILE *);
 uint8_t openMP3File(char *);
 void setTextLUT1(void);
 void setTextLUT2(void);
@@ -86,22 +72,6 @@ EMBED(popo, "../assets/mainlogo.raw", 0x43400);
 EMBED(patch, "../assets/bigpatch.bin", 0x56000);
 EMBED(saplug, "../assets/saplugin2.bin", 0x59000);
 
-void read8KChunk(uint8_t *buf, FILE *f) {
-	uint16_t i;
-	for(i=0;i<64;i++)
-		{
-		fileRead((buf+i*0x80), sizeof(uint8_t), 128, f); //read 128 bytes at a time, since there's a hard limit of 255 reads at a time. 64x128 = 8k = 8192 bytes
-		}
-}
-
-uint8_t openMP3File(char *name) {
-	theMP3file = fileOpen(name,"rb"); // open file in read mode
-	if(theMP3file == NULL)
-	{
-		return 1;
-	}
-	return 0;
-}
 
 //main color text LUT setup
 void setTextLUT1() {
@@ -305,15 +275,15 @@ void setLCDReverseY() {
 void writeTopRight(bool wantCmds)
 {
 	textSetColor(5,0);
-	textGotoXY(66,1);textPrint("F256Amp v2.3");
-	textGotoXY(67,2);textPrint("November 2025");
+	textGotoXY(66,1);textPrint("F256Amp v2.4");
+	textGotoXY(67,2);textPrint("October 2026");
 	textGotoXY(71,3);textPrint("by Mu0n");
 	textGotoXY(62,8);textPrint("[ESC]Quit");
 	
 	if(wantCmds)
 	{
 	textGotoXY(0,0);
-	printf("Currently playing %s                               ",fpr.selectedFile);
+	printf("Currently playing %s                               ",name);
 	textGotoXY(62,9);textPrint("[F1]Color Change");
 	textGotoXY(62,10);textPrint("[F3]Load File");
 	}
@@ -329,35 +299,21 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 	uint16_t i=0,j=0;
-	uint16_t bufferIndex=0; //index for the local 8k buffer register
-    uint16_t readEntryBufferIndex = 0;//parser for the opened file
-	uint16_t rawFIFOCount=0;
-	uint16_t bytesToTopOff=0;
-	uint16_t multipleOf64b = 0;
 	uint16_t saVals[NB_BANDS];
 	uint16_t oldVals[NB_BANDS];
 	uint16_t charSABase = 0xC921;
 	uint8_t savedIO;
 	uint16_t peak;
-	uint8_t deliveredBytes=0;
-	bool finished = false;
-	bool wantFinishing = false;
-	uint16_t endZone = 2048;
 	bool startHear = false; //gives permission to do spectrum analysis bars when the sound gets going
 	bool colorToggler = false;
 	bool greenLCD = true; //send SA to LCD
 	bool greenScreen = true; //send SA to Main screen
 	uint16_t lcdStartY=0;
-	uint8_t storedRawKey=0;
-	bool dealWithStoredKey = false;
 	bool firstTime = true; //first time it loads, next times it keeps the cursor position
 	bool cliFile = false; //first time it loads, next times it keeps the cursor position
-
-	uint8_t buffer[CHUNK8K]; //4x the size of the VS FIFO buffer
-	char zeroes[64]; //0's at the end
+	bool finished = false;
 	
 
-	
     backgroundSetup();
 	wrongMachineTest(); //test wave 2
 
@@ -366,51 +322,22 @@ int main(int argc, char *argv[]) {
 lilpause(1);
 	if(greenLCD == true) setLCDReverseY();
 
-
+	initFPR();
+	
 	openAllCODEC();
 	boostVSClock();
 	writeTopRight(false);
+
 	
-	//check if the mp3 directory is here, if not, target the root
-	char *dirOpenResult = fileOpenDir("media/mp3");
-	if(dirOpenResult != NULL)
-	{
-		strncpy(fpr.currentPath, "media/mp3", MAX_PATH_LEN);
-		fileCloseDir(dirOpenResult);
-	}
-	else strncpy(fpr.currentPath, "0:", MAX_PATH_LEN);
-	
-	if(argc > 1)
-	{
-		i=0;
-		char fileName[64];
-	
-		if(argv[1][0] != '-')
-			{
-			while(argv[1][i] != '\0')
-				{
-					fileName[i] = argv[1][i];
-					i++;
-				}
-			fileName[i] = '\0';
-	
-			cliFile = true;
-			sprintf(finalName, "%s", fileName);
-			sprintf(fpr.selectedFile, "%s", fileName);
-			}
-	}
-	
-for(;;) {
     initBigPatch(VSPATCH);
 	initSpectrum(VSPLUGIN);
+	setTimer1(1);
+	kqReset();
+	
+for(;;) {
 	//prep stuff and re-prep if loading after the first file
-	finished = false;
-	wantFinishing = false;
-	readEntryBufferIndex = 0;
-	bufferIndex=0;
+	finished=false;
 	startHear=false;
-	dealWithStoredKey = false;
-	endZone = 2048;
 	if(colorToggler == false) setTextLUT1();
 	else setTextLUT2();
 	colMatrixSetup();
@@ -420,42 +347,28 @@ for(;;) {
 		saVals[i]=0;
 		oldVals[i]=0;
 		}
-	for(i=0;i<64;i++) zeroes[i]=0;
 	
 	textGotoXY(0,0);
-	if(cliFile == false) if(filePickModal(&fpr, DIRECTORY_X, DIRECTORY_Y, "mp3", "wav", "ogg", "wma", firstTime) == 1) return 0; //pick a file if we didn't get one from a cli parameter
+	if(cliFile == false) if(getTheFile_far(name) == 1) return 0; //pick a file if we didn't get one from a cli parameter
 	
 	
 	firstTime = false;
 	writeTopRight(false);
 	
 	textGotoXY(0,0);
-	printf("Currently loading %s                               ",fpr.selectedFile);
+	printf("Currently loading %s                               ",name);
     if(colorToggler == false) setTextLUT1();
 	else setTextLUT2();
 	colMatrixSetup();
-	if(cliFile == false) sprintf(finalName, "%s%s%s", fpr.currentPath, "/",fpr.selectedFile);
 
-	if(openMP3File(finalName)) printf("error loading file");
+	if(prepMP3ForPlay(name)) printf("error loading file");
 	
 	
 	cliFile = false; //never skip this for next playbacks
-	read8KChunk(buffer, theMP3file); //read the first 8k chunk from the .mp3 file
 
-	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
-		{
-		POKE(VS_FIFO_DATA, buffer[i]);
-		}
-	bufferIndex+=CHUNK2K;
-	for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
-		{
-		POKE(VS_FIFO_DATA, buffer[i]);
-		}
-	bufferIndex+=CHUNK2K;
-	while(true)
+	while(true) //playback is occuring
 		{
 	
-		getCenterSAValues(NB_BANDS, saVals);
 		//when a non-zero value is detected for the first time, mark that it's now playing.
 		if(startHear==false)
 			{
@@ -467,13 +380,14 @@ for(;;) {
 			}
 	
 		//keyboard presses
-		kernelNextEvent();
+		while(pullEventB())
+		{
 		if(kernelEventData.type == kernelEvent(key.PRESSED))
 			{
 				switch(kernelEventData.key.raw)
 				{
 				case 146: //esc
-					fileClose(theMP3file);
+					closeDownMp3File();
 					return 0;
 				case 129: //F1
 					if(colorToggler)
@@ -488,37 +402,21 @@ for(;;) {
 						}
 					break;
 				case 0x83: //F3
-					wantFinishing = true;
+					finished=true;
 					break;
 				}
 			}
-		if(dealWithStoredKey)
-			{
-			switch(storedRawKey)
-				{
-				case 146: //esc
-					fileClose(theMP3file);
-					return 0;
-				case 129: //F1
-					if(colorToggler)
-						{
-						setTextLUT1();
-						colorToggler = false;
-						}
-					else
-						{
-						setTextLUT2();
-						colorToggler = true;
-						}
-					dealWithStoredKey=false;
-					break;
-				case 0x83: //F3
-					wantFinishing = true;
-					break;
-				}
-			}
+		}
+		//Visuals tied to time1, related to frames 60Hz
 	
-		//Visuals
+		if(PEEK(INT_PENDING_0)&0x20) //when the timer1 delay is up, go here
+		{
+		POKE(INT_PENDING_0,0x20); //clear pending timer1
+	
+	
+		getCenterSAValues(NB_BANDS, saVals);
+	
+	
 		for(j=1;j<NB_BANDS;j++)
 			{
 			peak=(saVals[j]&31);
@@ -576,89 +474,25 @@ for(;;) {
 	
 				oldVals[j] = peak;
 			}
-	
+		setTimer1(1); //pump it back and establish it at 30 fps
+		}
 	
 
 		//Check the health of the FIFO buffer
-		rawFIFOCount = PEEKW(VS_FIFO_COUNT);
-		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x07FF); //found how many bytes are left in the 2KB buffer
-		multipleOf64b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
-
-		for(i=0; i<multipleOf64b; i++)
-			{
-			if(finished) break;			//make sure we intercept key presses during copying
-			if(dealWithStoredKey == false)
-			{
-				kernelNextEvent();
-				if(kernelEventData.type == kernelEvent(key.PRESSED) && dealWithStoredKey == false)
-					{
-					dealWithStoredKey = true;
-					storedRawKey=kernelEventData.key.raw;
-					}
-			}
 	
-			//Copy a chunk from the application buffer to the VS' buffer
-			for(j=0; j<CHUNK64B; j++) {
-				POKE(VS_FIFO_DATA, buffer[bufferIndex+j]);
-				}
-
-			//advance the application buffer index
-			bufferIndex+=CHUNK64B;
-			if(bufferIndex == CHUNK8K)
-			{
-				bufferIndex = 0; //warp over if the 8KB limit is reached
-				if(wantFinishing)
-					{
-						wantFinishing = false;
-						finished = true;
-						break;
-					}
-			}
-	
-			//read more of the file to replace an equivalent chunk to the application buffer
-			deliveredBytes = fread((void *)(buffer+readEntryBufferIndex), sizeof(uint8_t), 64, theMP3file); //Check if we're getting to the end of the file
-			if(deliveredBytes !=64)
-				{
-				finished = true;
-				readEntryBufferIndex+=deliveredBytes;
-				}
-			else
-				{
-				readEntryBufferIndex+=CHUNK64B; //keep track of where we're at so we can finish the file
-				if(readEntryBufferIndex== CHUNK8K)
-					{
-						readEntryBufferIndex = 0; //keep track of where we're at so we can finish the file
-					}
-				}
-			}
-		if(finished) break;
-		}
-	//end is reached, gracefully fill the buffer with 0's now.
-	/*
-	while(endZone !=0)
-		{
-			*/
-			/*
-		rawFIFOCount = PEEKW(VS_FIFO_COUNT);
-		bytesToTopOff = CHUNK2K - (rawFIFOCount&0x07FF); //found how many bytes are left in the 2KB buffer
-		multipleOf64b = bytesToTopOff>>6; //multiples of 64 bytes of stuff to top off the FIFO buffer
-		for(i=0; i<multipleOf64b; i++)
-			{
-			for(j=0; j<CHUNK64B; j++) POKE(VS_FIFO_DATA, zeroes[j]);
-			endZone -= CHUNK64B;
-			}
-			*/
-	
-		for(i=bufferIndex;i<bufferIndex+CHUNK2K;i++) //fill the first 2k chunk into the full size of the buffer
-			{
-			POKE(VS_FIFO_DATA,0);
-			}
-		/*
-		}
+		if(MP3LoopPass()) break;
+		 /*
+		 textGotoXY(0,23);
+   printf("t=%02x r=%02x m=%02x p=%02x h=%u t=%u  ",
+          kernelEventData.type, kernelEventData.key.raw,
+          PEEK(INT_MASK_0), PEEK(INT_PENDING_0), kqHead, kqTail);
 		*/
 
-	fileClose(theMP3file);
+		if(finished) break;
+		} //playback loop
+
+	closeDownMp3File();
 	
-}//end usage loop
+}//end main loop
 	return 0;
-}
+}//end main

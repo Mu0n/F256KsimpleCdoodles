@@ -2,7 +2,7 @@
 #include "../src/muTextUI.h"
 #include <string.h>
 
-char nameVersion[] = {"  F256Amp  v2.3 by Mu0n, November 2025                                    "};
+char nameVersion[] = {"  F256Amp  v2.4 by Mu0n, October 2026                                   "};
 
 
 void modalHelp(char *textBuffer[], uint16_t size)
